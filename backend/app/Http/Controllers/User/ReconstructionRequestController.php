@@ -49,7 +49,7 @@ class ReconstructionRequestController extends Controller
 
     public function update(
         UpdateReconstructionRequest $request,
-                                    $id
+        $id
     ) {
 
         $reconstructionRequest =
