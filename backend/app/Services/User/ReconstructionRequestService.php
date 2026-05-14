@@ -119,4 +119,26 @@ class ReconstructionRequestService
 
         $reconstructionRequest->delete();
     }
+    //فلترة حسب المنطقة
+    public function contractorRequests($location = null)
+    {
+        $query = ReconstructionRequest::with([
+
+            'images',
+
+            'user.profile'
+        ]);
+
+        if ($location) {
+
+            $query->where(
+                'location',
+                $location
+            );
+        }
+
+        return $query
+            ->latest()
+            ->get();
+    }
 }

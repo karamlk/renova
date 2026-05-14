@@ -70,4 +70,17 @@ class User extends Authenticatable
             ContractorProfile::class
         );
     }
+    public function contractorPosts()
+    {
+        return $this->hasMany(
+            ContractorPost::class
+        );
+    }
+    public function inspectionRequests()
+    {
+        return $this->hasMany(
+            InspectionRequest::class,
+            'contractor_id'
+        );
+    }
 }

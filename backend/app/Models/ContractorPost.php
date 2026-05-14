@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ReconstructionRequest extends Model
+class ContractorPost extends Model
 {
-    //
     use HasFactory;
 
     protected $fillable = [
@@ -18,12 +17,11 @@ class ReconstructionRequest extends Model
 
         'description',
 
-        'location',
-
-        'type',
-
         'status',
+
+        'progress',
     ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -32,13 +30,7 @@ class ReconstructionRequest extends Model
     public function images()
     {
         return $this->hasMany(
-            ReconstructionRequestImage::class
-        );
-    }
-    public function inspectionRequests()
-    {
-        return $this->hasMany(
-            InspectionRequest::class
+            ContractorPostImage::class
         );
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ContractorRejectedMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -47,6 +48,10 @@ class ContractorController extends Controller
         $user->update([
             'status' => 'rejected'
         ]);
+        Mail::to($user->email)
+            ->send(
+                new ContractorRejectedMail($user)
+            );
 
         return response()->json([
             'message' => 'تم رفض المتعهد'
