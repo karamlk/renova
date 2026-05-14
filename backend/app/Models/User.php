@@ -64,4 +64,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(ReconstructionRequest::class);
     }
+    public function contractorProfile()
+    {
+        return $this->hasOne(
+            ContractorProfile::class
+        );
+    }
 }

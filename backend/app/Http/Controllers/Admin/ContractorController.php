@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContractorApprovedMail;
 
 class ContractorController extends Controller
 {
@@ -28,7 +30,10 @@ class ContractorController extends Controller
         $user->update([
             'status' => 'approved'
         ]);
-
+        Mail::to($user->email)
+            ->send(
+                new ContractorApprovedMail($user)
+            );
         return response()->json([
             'message' => 'تم قبول المتعهد'
         ]);

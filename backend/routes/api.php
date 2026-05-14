@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AccountDeletionController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\Contractor\ContractorProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -82,5 +83,13 @@ Route::middleware('auth:sanctum')->group(function () {
         [ReconstructionRequestController::class, 'destroy']
     );
 
+
+});
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post(
+        '/contractor/profile',
+        [ContractorProfileController::class, 'store']
+    );
 
 });
