@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Contractor;
+namespace App\Http\Requests\Contractor\ContractorPost;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreContractorProfileRequest extends FormRequest
+class StoreContractorPostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,20 +23,20 @@ class StoreContractorProfileRequest extends FormRequest
     {
         return [
             //
-            'first_name' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
 
-            'last_name' => 'required|string|max:255',
+            'description' => 'required|string',
 
-            'phone' => 'nullable|string',
+            'status' =>
+                'required|in:completed,in_progress',
 
-            'image' => 'nullable|image',
+            'progress' =>
+                'nullable|integer|min:0|max:100',
 
-            'location' => 'nullable|string',
+            'images' => 'required|array',
 
-            'company_name' => 'nullable|string|max:255',
-
-            'commercial_record' =>
-                'required|file|mimes:pdf,jpg,jpeg,png',
+            'images.*' =>
+                'image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
 }

@@ -6,7 +6,9 @@ use App\Http\Controllers\Auth\AccountDeletionController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\Contractor\ContractorPostController;
 use App\Http\Controllers\Contractor\ContractorProfileController;
+use App\Http\Controllers\InspectionRequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -91,5 +93,76 @@ Route::middleware('auth:sanctum')->group(function () {
         '/contractor/profile',
         [ContractorProfileController::class, 'store']
     );
+    Route::get(
+        '/contractor/profile',
+        [ContractorProfileController::class, 'show']
+    );
+
+    Route::post(
+        '/contractor/profile/update',
+        [ContractorProfileController::class, 'update']
+    );
 
 });
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post(
+        '/contractor/posts',
+        [ContractorPostController::class, 'store']
+    );
+    Route::post(
+        '/contractor/posts/{id}',
+        [ContractorPostController::class, 'update']
+    );
+
+    Route::delete(
+        '/contractor/posts/{id}',
+        [ContractorPostController::class, 'delete']
+    );
+
+});
+
+Route::get(
+    '/contractor/posts',
+    [ContractorPostController::class, 'index']
+);
+
+Route::get(
+    '/contractor/posts/{id}',
+    [ContractorPostController::class, 'show']
+);
+
+Route::get(
+    '/contractors/{id}/posts',
+    [ContractorPostController::class, 'contractorPosts']
+);
+Route::middleware('auth:sanctum')->group(function () {
+
+    // إرسال طلب زيارة
+    Route::post(
+        '/inspection-requests',
+        [InspectionRequestController::class,
+            'store']
+    );
+
+    // قبول
+    Route::post(
+        '/inspection-requests/{id}/accept',
+        [InspectionRequestController::class,
+            'accept']
+    );
+
+    // رفض
+    Route::post(
+        '/inspection-requests/{id}/reject',
+        [InspectionRequestController::class,
+            'reject']
+    );
+});
+
+// عرض طلبات الزيارة لطلب معين
+Route::get(
+    '/requests/{id}/inspection-requests',
+    [InspectionRequestController::class,
+        'requestInspections']
+);

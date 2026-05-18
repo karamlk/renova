@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Contractor;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Contractor\profile\StoreContractorProfileRequest;
 use App\Services\Contractor\ContractorProfileService;
-use App\Http\Requests\Contractor\StoreContractorProfileRequest;
 
 class ContractorProfileController extends Controller
 {
@@ -29,6 +29,31 @@ class ContractorProfileController extends Controller
                 'تم إرسال طلبك للإدارة',
 
             'data' => $profile
+        ]);
+    }
+    public function show()
+    {
+        return response()->json([
+
+            'data' => $this->profileService->show()
+
+        ]);
+    }
+
+    public function update(
+        \App\Http\Requests\Contractor\profile\UpdateContractorProfileRequest $request
+    ) {
+
+        $profile =
+            $this->profileService->update($request);
+
+        return response()->json([
+
+            'message' =>
+                'تم تعديل البروفايل',
+
+            'data' => $profile
+
         ]);
     }
 }
