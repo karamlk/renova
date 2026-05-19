@@ -14,72 +14,78 @@ class Login extends StatelessWidget {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: Scaffold(
-        backgroundColor: const Color(0XFFFEFCFF),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Column(
-                  children: [
-                    SizedBox(height: 100),
-                    Image.asset("assets/images/icon.jpg", height: 150, width: 500),
-                    SizedBox(height: 50),
-                    TextField(
-                      controller: emailnamecontroller,
-                      decoration: InputDecoration(
-                        labelText: "Enter your Email",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          backgroundColor: const Color(0XFFFEFCFF),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(height: 100),
+                      Image.asset("assets/images/icon.jpg", height: 150, width: 500),
+                      SizedBox(height: 50),
+                      TextField(
+                        controller: emailnamecontroller,
+                        decoration: InputDecoration(
+                          labelText: "البريد الإلكتروني",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 20),
-                    TextField(
-                      controller: emailnamecontroller,
-                      decoration: InputDecoration(
-                        labelText: "Enter your Password",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                      SizedBox(height: 20),
+                      TextField(
+                        controller: emailnamecontroller,
+                        decoration: InputDecoration(
+                          labelText: "كلمة المرور",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {},
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {},
 
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        backgroundColor: Color(0xFF3b414c),
-                        foregroundColor: Color(0xFFF59B4A),
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          backgroundColor: Color(0xFF3b414c),
+                          foregroundColor: Color(0xFFF59B4A),
+                        ),
+                        child: Text("تسجيل الدخول", style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
-                      child: Text("Login"),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text("Forget Password?"),
-                      style: TextButton.styleFrom(minimumSize: Size(0, 0)),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Text("OR", style: TextStyle(fontWeight: FontWeight.bold)),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    Get.to(() => Registerscreen());
-                  },
-                  child: Text("Make new account"),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    backgroundColor: Color(0xFF3b414c),
-                    foregroundColor: Color(0xFFb8bcbf),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          "نسيت كلمة المرور؟",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        style: TextButton.styleFrom(minimumSize: Size(0, 0)),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                  SizedBox(height: 10),
+                  Text("أو", style: TextStyle(fontWeight: FontWeight.bold)),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.to(() => Registerscreen());
+                    },
+                    child: Text("إنشار حساب جديد", style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      backgroundColor: Color(0xFF3b414c),
+                      foregroundColor: Color(0xFFb8bcbf),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
