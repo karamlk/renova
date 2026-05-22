@@ -76,7 +76,7 @@ class Login extends StatelessWidget {
                     onPressed: () {
                       Get.to(() => Registerscreen());
                     },
-                    child: Text("إنشار حساب جديد", style: TextStyle(fontWeight: FontWeight.bold)),
+                    child: Text("إنشاء حساب جديد", style: TextStyle(fontWeight: FontWeight.bold)),
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

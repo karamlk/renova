@@ -14,7 +14,10 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       home: Login(),
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF3b414c))),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF3b414c)),
+      ),
     );
   }
 }

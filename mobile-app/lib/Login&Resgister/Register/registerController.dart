@@ -1,15 +1,16 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:get/get_connect.dart';
 import 'package:get/state_manager.dart';
 import 'package:renova/Extras/link.dart';
+import 'package:renova/Extras/sharedpreferences.dart';
 import 'package:renova/Login&Resgister/Register/registerclass.dart';
 import 'package:http/http.dart' as http;
 
 class Registercontroller extends GetxController {
   var isLoading = false.obs;
-
+  var role = "".obs;
+  var selectedrole = ''.obs;
+  final roles = {"user": "مستخدم", "contractor": "متعهد"};
   final TextEditingController namecontroller = TextEditingController();
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
@@ -32,6 +33,12 @@ class Registercontroller extends GetxController {
         headers: {"Accept": "application/json", "Content-Type": "application/json"},
         body: jsonEncode(register.toJson()),
       );
+      final data = jsonDecode(respose.body);
+      if (respose.statusCode == 200 || respose.statusCode == 201) {
+        String token = data['user']['token'];
+        await storeToken(token);
+        print(token);
+      }
       return respose;
     } catch (e) {
       print(e);

@@ -37,6 +37,7 @@ dependencies:
   get: ^4.7.3
   shared_preferences: ^2.5.5
   http: ^1.6.0
+  dropdown_search: ^7.0.0
 
 dev_dependencies:
   flutter_test:
