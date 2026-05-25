@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -47,11 +49,29 @@ class Verifyscreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Obx(() {
-                  bool isValid = verifycontroller.otp.value.length == 6;
+                  bool isValid =
+                      verifycontroller.otp.value.length == 6 && !verifycontroller.isexpired.value;
                   return ElevatedButton(
                     onPressed: isValid
-                        ? () {
-                            verifycontroller.verify();
+                        ? () async {
+                            final response = await verifycontroller.verify();
+                            if (response == null) {
+                              print('No response');
+                            }
+                            final error = jsonDecode(response!.body);
+                            if (response.statusCode != 200 || response.statusCode != 201) {
+                              String message = error['message'];
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    message,
+                                    textAlign: TextAlign.right,
+                                    textDirection: TextDirection.rtl,
+                                  ),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
                           }
                         : null,
 
@@ -62,7 +82,9 @@ class Verifyscreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
 
-                    child: Text('Verify'),
+                    child: verifycontroller.isLoading.value
+                        ? CircularProgressIndicator(strokeWidth: 4, color: Color(0xFFF59B4A))
+                        : Text('Verify'),
                   );
                 }),
                 SizedBox(height: 10),
@@ -86,7 +108,14 @@ class Verifyscreen extends StatelessWidget {
                         : null,
 
                     child: verifycontroller.isexpired.value
-                        ? Text('Resend')
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 5,
+                            children: [
+                              Icon(Icons.refresh, fontWeight: FontWeight.bold),
+                              Text('Resend'),
+                            ],
+                          )
                         : Text(verifycontroller.formattedTime),
                   ),
                 ),

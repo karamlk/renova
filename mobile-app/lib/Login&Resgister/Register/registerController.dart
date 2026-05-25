@@ -28,18 +28,18 @@ class Registercontroller extends GetxController {
     isLoading.value = true;
 
     try {
-      final respose = await http.post(
+      final response = await http.post(
         Uri.parse("$link/api/register"),
         headers: {"Accept": "application/json", "Content-Type": "application/json"},
         body: jsonEncode(register.toJson()),
       );
-      final data = jsonDecode(respose.body);
-      if (respose.statusCode == 200 || respose.statusCode == 201) {
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
         String token = data['user']['token'];
         await storeToken(token);
         print(token);
       }
-      return respose;
+      return response;
     } catch (e) {
       print(e);
       return null;

@@ -1,13 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/state_manager.dart';
+import 'package:renova/Login&Resgister/Login/loginController.dart';
+import 'package:renova/Login&Resgister/Register/registerController.dart';
 import 'package:renova/Login&Resgister/Register/registerScreen.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
 
-  final TextEditingController emailnamecontroller = TextEditingController();
-  final TextEditingController passwordcontroller = TextEditingController();
+  final Logincontroller logincontroller = Get.put(Logincontroller());
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -29,7 +34,7 @@ class Login extends StatelessWidget {
                       Image.asset("assets/images/icon.jpg", height: 150, width: 500),
                       SizedBox(height: 50),
                       TextField(
-                        controller: emailnamecontroller,
+                        controller: logincontroller.emailnamecontroller,
                         decoration: InputDecoration(
                           labelText: "البريد الإلكتروني",
                           border: OutlineInputBorder(
@@ -39,7 +44,7 @@ class Login extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       TextField(
-                        controller: emailnamecontroller,
+                        controller: logincontroller.passwordcontroller,
                         decoration: InputDecoration(
                           labelText: "كلمة المرور",
                           border: OutlineInputBorder(
@@ -48,16 +53,56 @@ class Login extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {},
+                      Obx(
+                        () => ElevatedButton(
+                          onPressed: logincontroller.isLoading.value
+                              ? null
+                              : () async {
+                                  FocusScope.of(context).unfocus();
+                                  final response = await logincontroller.login();
+                                  if (response == null) {
+                                    print("No response");
+                                    return;
+                                  }
+                                  final result = jsonDecode(response.body);
+                                  if (response.statusCode == 200 || response.statusCode == 201) {
+                                    String success = result['message'];
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          success,
+                                          textAlign: TextAlign.right,
+                                          textDirection: TextDirection.rtl,
+                                        ),
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                  } else {
+                                    String error = result['message'];
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          error,
+                                          textAlign: TextAlign.right,
+                                          textDirection: TextDirection.rtl,
+                                        ),
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                  }
+                                },
 
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(double.infinity, 50),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          backgroundColor: Color(0xFF3b414c),
-                          foregroundColor: Color(0xFFF59B4A),
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size(double.infinity, 60),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            backgroundColor: Color(0xFF3b414c),
+                            foregroundColor: Color(0xFFF59B4A),
+                            disabledBackgroundColor: Color(0xFF3b414c),
+                          ),
+                          child: logincontroller.isLoading.value
+                              ? CircularProgressIndicator(strokeWidth: 4, color: Color(0xFFF59B4A))
+                              : Text("تسجيل الدخول", style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
-                        child: Text("تسجيل الدخول", style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                       TextButton(
                         onPressed: () {},
@@ -78,7 +123,7 @@ class Login extends StatelessWidget {
                     },
                     child: Text("إنشاء حساب جديد", style: TextStyle(fontWeight: FontWeight.bold)),
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 50),
+                      minimumSize: Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       backgroundColor: Color(0xFF3b414c),
                       foregroundColor: Color(0xFFb8bcbf),

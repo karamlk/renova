@@ -50,7 +50,13 @@ class Verifycontroller extends GetxController {
         headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
         body: {"otp": otpcontroller.text},
       );
+
       final data = jsonDecode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        String token = data['token'];
+        await storeToken(token);
+        print(token);
+      }
       return response;
     } catch (e) {
       print(e);
