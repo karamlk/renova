@@ -1,6 +1,6 @@
 {
-    "name": "renova",
-    "short_name": "renova",
+    "name": "renove_provider",
+    "short_name": "renove_provider",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

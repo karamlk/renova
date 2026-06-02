@@ -1,4 +1,4 @@
-package com.example.renova
+package com.example.renove_provider
 
 import io.flutter.embedding.android.FlutterActivity
 

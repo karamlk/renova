@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:renova/Login&Resgister/Login/loginScreen.dart';
-import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:renove_provider/providers/auth_provider.dart';
+import 'package:renove_provider/screens/login_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (context) => AuthProvider())],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -11,13 +17,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      home: Login(),
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF3b414c)),
-      ),
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: LoginScreen());
   }
 }

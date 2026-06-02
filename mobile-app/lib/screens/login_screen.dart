@@ -1,20 +1,16 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/state_manager.dart';
-import 'package:renova/Login&Resgister/Login/loginController.dart';
-import 'package:renova/Login&Resgister/Register/registerController.dart';
-import 'package:renova/Login&Resgister/Register/registerScreen.dart';
+import 'package:provider/provider.dart';
+import 'package:renove_provider/providers/auth_provider.dart';
+import 'package:renove_provider/screens/register_screen.dart';
 
-class Login extends StatelessWidget {
-  Login({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
-  final Logincontroller logincontroller = Get.put(Logincontroller());
   @override
   Widget build(BuildContext context) {
+    final TextEditingController emailcontroller = TextEditingController();
+    final TextEditingController passwordcontroller = TextEditingController();
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -31,10 +27,10 @@ class Login extends StatelessWidget {
                   Column(
                     children: [
                       SizedBox(height: 100),
-                      Image.asset("assets/images/icon.jpg", height: 150, width: 500),
+                      Image.asset("assets/icon.jpg", height: 150, width: 500),
                       SizedBox(height: 50),
                       TextField(
-                        controller: logincontroller.emailnamecontroller,
+                        controller: emailcontroller,
                         decoration: InputDecoration(
                           labelText: "البريد الإلكتروني",
                           border: OutlineInputBorder(
@@ -44,7 +40,7 @@ class Login extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       TextField(
-                        controller: logincontroller.passwordcontroller,
+                        controller: passwordcontroller,
                         decoration: InputDecoration(
                           labelText: "كلمة المرور",
                           border: OutlineInputBorder(
@@ -53,13 +49,17 @@ class Login extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 20),
-                      Obx(
-                        () => ElevatedButton(
-                          onPressed: logincontroller.isLoading.value
+                      Consumer<AuthProvider>(
+                        builder: (context, provider, child) => ElevatedButton(
+                          onPressed: provider.isLoading
                               ? null
                               : () async {
                                   FocusScope.of(context).unfocus();
-                                  final response = await logincontroller.login();
+                                  final scaffold = ScaffoldMessenger.of(context);
+                                  final response = await context.read<AuthProvider>().login(
+                                    emailcontroller.text,
+                                    passwordcontroller.text,
+                                  );
                                   if (response == null) {
                                     print("No response");
                                     return;
@@ -67,7 +67,7 @@ class Login extends StatelessWidget {
                                   final result = jsonDecode(response.body);
                                   if (response.statusCode == 200 || response.statusCode == 201) {
                                     String success = result['message'];
-                                    ScaffoldMessenger.of(context).showSnackBar(
+                                    scaffold.showSnackBar(
                                       SnackBar(
                                         content: Text(
                                           success,
@@ -79,7 +79,7 @@ class Login extends StatelessWidget {
                                     );
                                   } else {
                                     String error = result['message'];
-                                    ScaffoldMessenger.of(context).showSnackBar(
+                                    scaffold.showSnackBar(
                                       SnackBar(
                                         content: Text(
                                           error,
@@ -99,18 +99,20 @@ class Login extends StatelessWidget {
                             foregroundColor: Color(0xFFF59B4A),
                             disabledBackgroundColor: Color(0xFF3b414c),
                           ),
-                          child: logincontroller.isLoading.value
+                          child: provider.isLoading
                               ? CircularProgressIndicator(strokeWidth: 4, color: Color(0xFFF59B4A))
                               : Text("تسجيل الدخول", style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                       ),
+
                       TextButton(
                         onPressed: () {},
+
+                        style: TextButton.styleFrom(minimumSize: Size(0, 0)),
                         child: Text(
                           "نسيت كلمة المرور؟",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        style: TextButton.styleFrom(minimumSize: Size(0, 0)),
                       ),
                     ],
                   ),
@@ -119,15 +121,19 @@ class Login extends StatelessWidget {
                   SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
-                      Get.to(() => Registerscreen());
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegisterScreen()),
+                      );
                     },
-                    child: Text("إنشاء حساب جديد", style: TextStyle(fontWeight: FontWeight.bold)),
+
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       backgroundColor: Color(0xFF3b414c),
                       foregroundColor: Color(0xFFb8bcbf),
                     ),
+                    child: Text("إنشاء حساب جديد", style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),

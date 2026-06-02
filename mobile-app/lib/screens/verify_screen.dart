@@ -1,15 +1,27 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:renova/Extras/theme.dart';
-import 'package:renova/Login&Resgister/Register/verifyController.dart';
+import 'package:provider/provider.dart';
+import 'package:renove_provider/extras/theme.dart';
+import 'package:renove_provider/providers/auth_provider.dart';
 
-class Verifyscreen extends StatelessWidget {
-  Verifyscreen({super.key});
-  final verifycontroller = Get.put(Verifycontroller());
+class Verifyscreen extends StatefulWidget {
+  Verifyscreen({super.key, required this.email});
+  final String email;
+
+  @override
+  State<Verifyscreen> createState() => _VerifyscreenState();
+}
+
+class _VerifyscreenState extends State<Verifyscreen> {
+  final TextEditingController verifycontroller = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      context.read<AuthProvider>().startTimer();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +39,16 @@ class Verifyscreen extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: 200),
-                Obx(
-                  () => TextField(
+                Consumer<AuthProvider>(
+                  builder: (context, value, child) => TextField(
                     onChanged: (value) {
-                      verifycontroller.otp.value = value;
+                      context.read<AuthProvider>().setOtp(value);
                     },
                     keyboardType: TextInputType.number,
                     maxLength: 6,
 
-                    controller: verifycontroller.otpcontroller,
-                    enabled: !verifycontroller.isexpired.value,
+                    controller: verifycontroller,
+                    enabled: !value.isExpired,
 
                     decoration: InputDecoration(
                       labelText: 'OTP',
@@ -47,24 +59,22 @@ class Verifyscreen extends StatelessWidget {
                     ),
                   ),
                 ),
+
                 SizedBox(height: 20),
-                Obx(() {
-                  bool isValid =
-                      verifycontroller.otp.value.length == 6 && !verifycontroller.isexpired.value;
-                  return ElevatedButton(
-                    onPressed: isValid
+
+                Consumer<AuthProvider>(
+                  builder: (context, value, child) => ElevatedButton(
+                    onPressed: (value.isValid && !value.isExpired && !value.isVerifying)
                         ? () async {
-                            final response = await verifycontroller.verify();
-                            if (response == null) {
-                              print('No response');
-                            }
-                            final error = jsonDecode(response!.body);
+                            final scaffold = ScaffoldMessenger.of(context);
+                            final response = await context.read<AuthProvider>().verify(value.otp);
+                            if (response == null) return;
+                            final data = jsonDecode(response.body);
                             if (response.statusCode != 200 || response.statusCode != 201) {
-                              String message = error['message'];
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              scaffold.showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    message,
+                                    data['message'],
                                     textAlign: TextAlign.right,
                                     textDirection: TextDirection.rtl,
                                   ),
@@ -76,38 +86,44 @@ class Verifyscreen extends StatelessWidget {
                         : null,
 
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: isValid ? primarycolor2 : Colors.grey,
-                      foregroundColor: isValid ? primarycolor1 : Colors.grey,
+                      backgroundColor: value.isValid ? primarycolor2 : Colors.white,
+                      foregroundColor: value.isValid ? primarycolor1 : Colors.white,
                       minimumSize: Size(double.infinity, 60),
+
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
 
-                    child: verifycontroller.isLoading.value
+                    child: value.isVerifying
                         ? CircularProgressIndicator(strokeWidth: 4, color: Color(0xFFF59B4A))
                         : Text('Verify'),
-                  );
-                }),
+                  ),
+                ),
+
                 SizedBox(height: 10),
-                Obx(
-                  () => ElevatedButton(
+
+                Consumer<AuthProvider>(
+                  builder: (context, resend, child) => ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(200, 60),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      backgroundColor: verifycontroller.isexpired.value
-                          ? primarycolor2
-                          : Colors.grey,
-                      foregroundColor: verifycontroller.isexpired.value
-                          ? primarycolor1
-                          : Colors.grey,
+                      backgroundColor: resend.isExpired ? primarycolor2 : Colors.grey,
+                      foregroundColor: resend.isExpired ? primarycolor1 : Colors.white,
                     ),
 
-                    onPressed: verifycontroller.isexpired.value
-                        ? () {
-                            verifycontroller.resendOtp();
+                    onPressed: resend.isExpired && !resend.isResending
+                        ? () async {
+                            final scaffold = ScaffoldMessenger.of(context);
+                            final response = await context.read<AuthProvider>().resendOtp(
+                              widget.email,
+                            );
+                            verifycontroller.clear();
+                            if (response == null) return;
+                            final result = jsonDecode(response.body);
+                            scaffold.showSnackBar(SnackBar(content: Text(result['message'])));
                           }
                         : null,
 
-                    child: verifycontroller.isexpired.value
+                    child: resend.isExpired
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             spacing: 5,
@@ -116,7 +132,7 @@ class Verifyscreen extends StatelessWidget {
                               Text('Resend'),
                             ],
                           )
-                        : Text(verifycontroller.formattedTime),
+                        : Text(resend.formattedTime),
                   ),
                 ),
               ],

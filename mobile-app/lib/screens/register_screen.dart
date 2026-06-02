@@ -1,15 +1,18 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:renova/Extras/theme.dart';
-import 'package:renova/Login&Resgister/Register/registerController.dart';
-import 'package:renova/Login&Resgister/Register/verifyScreen.dart';
+import 'package:provider/provider.dart';
+import 'package:renove_provider/extras/theme.dart';
+import 'package:renove_provider/models/register_model.dart';
+import 'package:renove_provider/providers/auth_provider.dart';
+import 'package:renove_provider/screens/verify_screen.dart';
 
-class Registerscreen extends StatelessWidget {
-  Registerscreen({super.key});
-  final Registercontroller registercontroller = Get.put(Registercontroller());
+class RegisterScreen extends StatelessWidget {
+  RegisterScreen({super.key});
+  final TextEditingController namecontroller = TextEditingController();
+  final TextEditingController emailcontroller = TextEditingController();
+  final TextEditingController passwordcontroller = TextEditingController();
+  final TextEditingController passwordconfirmcontroller = TextEditingController();
+  final TextEditingController rolecontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class Registerscreen extends StatelessWidget {
                 children: [
                   SizedBox(height: 20),
                   TextField(
-                    controller: registercontroller.namecontroller,
+                    controller: namecontroller,
                     decoration: InputDecoration(
                       labelText: "الاسم",
                       border: OutlineInputBorder(
@@ -40,7 +43,7 @@ class Registerscreen extends StatelessWidget {
                     ),
                   ),
                   TextField(
-                    controller: registercontroller.emailcontroller,
+                    controller: emailcontroller,
                     decoration: InputDecoration(
                       labelText: "البريد الالكتروني",
                       border: OutlineInputBorder(
@@ -49,7 +52,7 @@ class Registerscreen extends StatelessWidget {
                     ),
                   ),
                   TextField(
-                    controller: registercontroller.passwordcontroller,
+                    controller: passwordcontroller,
                     decoration: InputDecoration(
                       labelText: "كلمة المرور",
                       border: OutlineInputBorder(
@@ -58,7 +61,7 @@ class Registerscreen extends StatelessWidget {
                     ),
                   ),
                   TextField(
-                    controller: registercontroller.passwordconfirmcontroller,
+                    controller: passwordconfirmcontroller,
                     decoration: InputDecoration(
                       labelText: "كلمة المرور مرة أخرى",
                       border: OutlineInputBorder(
@@ -66,51 +69,53 @@ class Registerscreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Obx(
-                    () => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              registercontroller.rolecontroller.text = 'user';
-                              registercontroller.selectedrole.value = 'user';
-                            },
 
-                            child: Text('مستخدم'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Consumer<AuthProvider>(
+                          builder: (context, provider, child) => ElevatedButton(
+                            onPressed: () {
+                              rolecontroller.text = 'user';
+                              context.read<AuthProvider>().setRole('user');
+                            },
                             style: ElevatedButton.styleFrom(
                               side: BorderSide(
-                                color: registercontroller.selectedrole.value == 'user'
+                                color: provider.selectedrole == 'user'
                                     ? primarycolor1
                                     : Colors.black,
-                                width: registercontroller.selectedrole.value == "user" ? 2 : 1,
+                                width: provider.selectedrole == "user" ? 2 : 1,
                               ),
-                              backgroundColor: registercontroller.selectedrole.value == "user"
+                              backgroundColor: provider.selectedrole == "user"
                                   ? primarycolor2
                                   : Colors.white,
-                              foregroundColor: registercontroller.selectedrole.value == "user"
+                              foregroundColor: provider.selectedrole == "user"
                                   ? primarycolor1
                                   : primarycolor2,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
+
+                            child: Text('مستخدم'),
                           ),
                         ),
-                        SizedBox(width: 20),
-                        Expanded(
-                          child: ElevatedButton(
+                      ),
+                      SizedBox(width: 20),
+                      Expanded(
+                        child: Consumer<AuthProvider>(
+                          builder: (context, provider, child) => ElevatedButton(
                             onPressed: () {
-                              registercontroller.rolecontroller.text = 'contractor';
-                              registercontroller.selectedrole.value = 'contractor';
+                              rolecontroller.text = 'contractor';
+                              context.read<AuthProvider>().setRole('contractor');
                             },
-                            child: Text('متعهد'),
                             style: ElevatedButton.styleFrom(
-                              foregroundColor: registercontroller.selectedrole.value == "contractor"
+                              foregroundColor: provider.selectedrole == "contractor"
                                   ? primarycolor1
                                   : Colors.black,
 
-                              backgroundColor: registercontroller.selectedrole.value == "contractor"
+                              backgroundColor: provider.selectedrole == "contractor"
                                   ? primarycolor2
                                   : Colors.white,
 
@@ -118,27 +123,36 @@ class Registerscreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               side: BorderSide(
-                                color: registercontroller.selectedrole.value == 'contractor'
+                                color: provider.selectedrole == 'contractor'
                                     ? primarycolor1
                                     : primarycolor2,
-                                width: registercontroller.selectedrole.value == "contractor"
-                                    ? 2
-                                    : 1,
+                                width: provider.selectedrole == "contractor" ? 2 : 1,
                               ),
                             ),
+                            child: Text('متعهد'),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
 
-                  Obx(
-                    () => ElevatedButton(
-                      onPressed: registercontroller.isLoading.value
+                  Consumer<AuthProvider>(
+                    builder: (context, value, child) => ElevatedButton(
+                      onPressed: value.isLoading
                           ? null
                           : () async {
                               FocusScope.of(context).unfocus();
-                              final response = await registercontroller.register();
+                              final navigator = Navigator.of(context);
+                              final scaffold = ScaffoldMessenger.of(context);
+                              final response = await context.read<AuthProvider>().register(
+                                RegisterModel(
+                                  name: namecontroller.text,
+                                  email: emailcontroller.text,
+                                  password: passwordcontroller.text,
+                                  passwordconfirmation: passwordconfirmcontroller.text,
+                                  role: rolecontroller.text,
+                                ),
+                              );
                               if (response == null) {
                                 print("No response");
                                 return;
@@ -146,7 +160,7 @@ class Registerscreen extends StatelessWidget {
                               final result = jsonDecode(response.body);
                               if (response.statusCode == 200 || response.statusCode == 201) {
                                 String success = result['message'];
-                                ScaffoldMessenger.of(context).showSnackBar(
+                                scaffold.showSnackBar(
                                   SnackBar(
                                     content: Text(
                                       success,
@@ -156,10 +170,14 @@ class Registerscreen extends StatelessWidget {
                                     behavior: SnackBarBehavior.floating,
                                   ),
                                 );
-                                Get.to(() => Verifyscreen());
+                                navigator.push(
+                                  MaterialPageRoute(
+                                    builder: (context) => Verifyscreen(email: emailcontroller.text),
+                                  ),
+                                );
                               } else {
                                 String error = result['message'];
-                                ScaffoldMessenger.of(context).showSnackBar(
+                                scaffold.showSnackBar(
                                   SnackBar(
                                     content: Text(error),
                                     behavior: SnackBarBehavior.floating,
@@ -175,7 +193,7 @@ class Registerscreen extends StatelessWidget {
                         foregroundColor: Color(0xFFF59B4A),
                         disabledBackgroundColor: Color(0xFF3b414c),
                       ),
-                      child: registercontroller.isLoading.value
+                      child: value.isLoading
                           ? CircularProgressIndicator(strokeWidth: 4, color: Color(0xFFF59B4A))
                           : Text("إنشاء الحساب", style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
