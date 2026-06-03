@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
+import 'package:renove_provider/screens/profile_screen.dart';
 
 class Verifyscreen extends StatefulWidget {
   Verifyscreen({super.key, required this.email});
@@ -67,6 +68,7 @@ class _VerifyscreenState extends State<Verifyscreen> {
                     onPressed: (value.isValid && !value.isExpired && !value.isVerifying)
                         ? () async {
                             final scaffold = ScaffoldMessenger.of(context);
+                            final navigator = Navigator.of(context);
                             final response = await context.read<AuthProvider>().verify(value.otp);
                             if (response == null) return;
                             final data = jsonDecode(response.body);
@@ -80,6 +82,9 @@ class _VerifyscreenState extends State<Verifyscreen> {
                                   ),
                                   behavior: SnackBarBehavior.floating,
                                 ),
+                              );
+                              navigator.push(
+                                MaterialPageRoute(builder: (context) => ProfileScreen()),
                               );
                             }
                           }

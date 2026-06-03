@@ -26,7 +26,7 @@ class StoreProfileRequest extends FormRequest
             'first_name'=>'required|string|max:255',
             'last_name'=>'required|string|max:255',
             'phone'=>'nullable|string',
-            'image'=>'nullable|string',
+            'image'=>'nullable|file',
             'location'=>'nullable|string',
 
 
