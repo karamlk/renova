@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class ProfileModel {
   final String firstName;
   final String lastName;
