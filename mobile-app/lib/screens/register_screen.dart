@@ -170,7 +170,7 @@ class RegisterScreen extends StatelessWidget {
                                     behavior: SnackBarBehavior.floating,
                                   ),
                                 );
-                                value.resendOtp(emailcontroller.text);
+
                                 navigator.push(
                                   MaterialPageRoute(
                                     builder: (context) => Verifyscreen(email: emailcontroller.text),

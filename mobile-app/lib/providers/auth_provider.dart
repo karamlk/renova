@@ -11,7 +11,7 @@ class AuthProvider extends ChangeNotifier {
   bool isLoading = false;
   bool isVerifying = false;
   bool isResending = false;
-
+  bool isLoggedin = false;
   String? selectedrole;
   int seconds = 90;
   bool isExpired = false;
@@ -36,6 +36,16 @@ class AuthProvider extends ChangeNotifier {
     return "$m:$s";
   }
 
+  Future<void> loadUser() async {
+    String? token = await getToken();
+    if (token != null && token.isNotEmpty) {
+      isLoggedin = true;
+    } else {
+      isLoggedin = false;
+    }
+    notifyListeners();
+  }
+
   Future<http.Response?> login(String email, String password) async {
     isLoading = true;
     notifyListeners();
@@ -48,6 +58,7 @@ class AuthProvider extends ChangeNotifier {
       final data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         String token = data['token'];
+
         print(token);
       }
       return response;
@@ -74,6 +85,7 @@ class AuthProvider extends ChangeNotifier {
       if (respose.statusCode == 200 || respose.statusCode == 201) {
         String token = data['user']['token'];
         await storeToken(token);
+
         print(token);
       }
       return respose;

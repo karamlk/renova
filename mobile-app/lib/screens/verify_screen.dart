@@ -6,7 +6,7 @@ import 'package:renove_provider/providers/auth_provider.dart';
 import 'package:renove_provider/screens/profile_screen.dart';
 
 class Verifyscreen extends StatefulWidget {
-  Verifyscreen({super.key, required this.email});
+  const Verifyscreen({super.key, required this.email});
   final String email;
 
   @override
@@ -91,8 +91,9 @@ class _VerifyscreenState extends State<Verifyscreen> {
                         : null,
 
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: value.isValid ? primarycolor2 : Colors.white,
-                      foregroundColor: value.isValid ? primarycolor1 : Colors.white,
+                      backgroundColor: primarycolor2,
+                      foregroundColor: primarycolor1,
+                      disabledBackgroundColor: primarycolor2,
                       minimumSize: Size(double.infinity, 60),
 
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

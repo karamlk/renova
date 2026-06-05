@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/models/profile_model.dart';
 import 'package:renove_provider/providers/profile_provider.dart';
+import 'package:renove_provider/screens/home_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
@@ -111,6 +112,7 @@ class ProfileScreen extends StatelessWidget {
                                   : () async {
                                       FocusScope.of(context).unfocus();
                                       final scaffold = ScaffoldMessenger.of(context);
+                                      final navigator = Navigator.of(context);
                                       final response = await context
                                           .read<ProfileProvider>()
                                           .fillProfile(
@@ -134,6 +136,12 @@ class ProfileScreen extends StatelessWidget {
                                           behavior: SnackBarBehavior.floating,
                                         ),
                                       );
+                                      if (response.statusCode == 200 ||
+                                          response.statusCode == 201) {
+                                        navigator.push(
+                                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                                        );
+                                      }
                                     },
 
                               style: ElevatedButton.styleFrom(
