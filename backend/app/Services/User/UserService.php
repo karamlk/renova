@@ -46,8 +46,24 @@ class UserService
     {
         $user = User::where('email', $data['email'])->first();
 
-        if (! $user || ! Hash::check($data['password'], $user->password)) {
-            throw new \Exception('الإيميل أو كلمة المرور غير صحيحة.');
+//        if (! $user || ! Hash::check($data['password'], $user->password)) {
+//            throw new \Exception('الإيميل أو كلمة المرور غير صحيحة.');
+//        }
+        if (! $user) {
+
+            throw new \Exception(
+                'الإيميل غير موجود'
+            );
+        }
+
+        if (! Hash::check(
+            $data['password'],
+            $user->password
+        )) {
+
+            throw new \Exception(
+                'كلمة المرور غير صحيحة'
+            );
         }
 
         if (

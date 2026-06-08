@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth_Requests\LoginRequest;
 use App\Http\Requests\Auth_Requests\RegisterRequest;
 use App\Http\Requests\Auth_Requests\VerifyOtpRequest;
+use App\Models\User;
 use App\Services\Auth\OtpService;
 use App\Services\User\UserService;
 use Illuminate\Http\JsonResponse;
@@ -32,10 +33,12 @@ class AuthController extends Controller
        // dd('reached register');
 
         $user = $this->userService->register($request->validated());
+         //$user->load('role');
 
         return response()->json([
             'message' => 'تم إنشاء الحساب بنجاح، وتم إرسال رمز التحقق إلى بريدك الإلكتروني.',
-            'user' => $user,
+             'user' => $user,
+             'role'=>$user['user']->role->name,
         ], 201);
     }
 
@@ -105,10 +108,14 @@ class AuthController extends Controller
             $token = $this->userService->login(
                 $request->validated()
             );
-
+            $user = User::with('role')->
+                where('email',$request->email)
+                ->first();
             return response()->json([
                 'message' => 'تم تسجيل الدخول بنجاح.',
-                'token' => $token
+                'token' => $token,
+                'role'=>$user->role->name
+
             ]);
 
         } catch (\Exception $e) {

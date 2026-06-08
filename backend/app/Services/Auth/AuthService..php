@@ -9,14 +9,30 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
+    //غير مستخدم ____________________________________
     public function login(array $data)
     {
         $user = User::where('email', $data['email'])->first();
 
-        if (!$user || !Hash::check($data['password'], $user->password)) {
-            return response()->json(['message' => 'بيانات الدخول غير صحيحة.'], 401);
+//        if (!$user || !Hash::check($data['password'], $user->password)) {
+//            return response()->json(['message' => 'بيانات الدخول غير صحيحة.'], 401);
+//        }
+        if (! $user) {
+
+            throw new \Exception(
+                'الإيميل غير موجود'
+            );
         }
 
+        if (! Hash::check(
+            $data['password'],
+            $user->password
+        )) {
+
+            throw new \Exception(
+                'كلمة المرور غير صحيحة'
+            );
+        }
         // تحقق من الجهاز
         $deviceId = request()->userAgent();
         $otpRequired = !Otp::where('user_id', $user->id)
