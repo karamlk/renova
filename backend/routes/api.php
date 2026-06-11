@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Contractor\ContractorPostController;
 use App\Http\Controllers\Contractor\ContractorProfileController;
+use App\Http\Controllers\Contractor\ScheduleController;
 use App\Http\Controllers\InspectionRequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -166,3 +167,12 @@ Route::get(
     [InspectionRequestController::class,
         'requestInspections']
 );
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post(
+        '/contractor/schedules',
+        [ScheduleController::class, 'store']
+    );
+
+});

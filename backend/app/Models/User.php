@@ -83,4 +83,11 @@ class User extends Authenticatable
             'contractor_id'
         );
     }
+    public function schedules()
+    {
+        return $this->hasMany(
+            ContractorSchedule::class,
+            'contractor_id'
+        );
+    }
 }

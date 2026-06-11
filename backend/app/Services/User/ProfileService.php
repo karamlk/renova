@@ -28,9 +28,14 @@ class ProfileService{
 
     public function show()
     {
-        return auth()->user()->load('profile');
-    }
+        $user = auth()->user()->load('profile');
 
+//        if ($user->profile && $user->profile->image) {
+//            $user->profile->image = asset('storage/' . $user->profile->image);
+//        }
+
+        return $user;
+    }
     public function update($request)
     {
         $profile = auth()->user()->profile;
@@ -41,8 +46,11 @@ class ProfileService{
 
             $data['image'] = $this->uploadImage($request);
         }
-
         $profile->update($data);
+
+//        $profile->image = $profile->image
+//            ? asset('storage/' . $profile->image)
+//            : null;
 
         return $profile;
     }

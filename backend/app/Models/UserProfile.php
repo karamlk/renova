@@ -19,4 +19,14 @@ class UserProfile extends Model
     {
         return $this->belongsTo(User::class);
     }
+    // UserProfile.php
+
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image
+            ? '/storage/' . $this->image
+            : null;
+    }
 }
