@@ -12,6 +12,7 @@ class ContractorSchedule extends Model
         'day_of_week',
         'start_time',
         'end_time',
+        'is_booked',
     ];
 
     public function contractor()

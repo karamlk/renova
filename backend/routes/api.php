@@ -174,5 +174,22 @@ Route::middleware('auth:sanctum')->group(function () {
         '/contractor/schedules',
         [ScheduleController::class, 'store']
     );
+    Route::get(
+        '/contractor/schedules',
+        [ScheduleController::class, 'index']
+    );
+
+    Route::get(
+        '/contractor/schedule/{schedule}',
+        [ScheduleController::class, 'show']
+    );
+    Route::delete(
+        '/contractor/schedules/{schedule}',
+        [ScheduleController::class, 'destroy']
+    );
+    Route::post(
+        '/contractor/schedules/update/{scheduleId}',
+        [ScheduleController::class, 'update']
+    );
 
 });
