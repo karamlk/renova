@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
-import 'package:renove_provider/screens/profile_screen.dart';
+import 'package:renove_provider/screens/CreateProfile/createprofile_user_screen.dart';
 
 class Verifyscreen extends StatefulWidget {
   const Verifyscreen({super.key, required this.email});
@@ -72,7 +72,7 @@ class _VerifyscreenState extends State<Verifyscreen> {
                             final response = await context.read<AuthProvider>().verify(value.otp);
                             if (response == null) return;
                             final data = jsonDecode(response.body);
-                            if (response.statusCode != 200 || response.statusCode != 201) {
+                            if (response.statusCode == 200 || response.statusCode == 201) {
                               scaffold.showSnackBar(
                                 SnackBar(
                                   content: Text(
@@ -86,6 +86,17 @@ class _VerifyscreenState extends State<Verifyscreen> {
                               navigator.push(
                                 MaterialPageRoute(builder: (context) => ProfileScreen()),
                               );
+                            } else {
+                              scaffold.showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    data['message'],
+                                    textAlign: TextAlign.right,
+                                    textDirection: TextDirection.rtl,
+                                  ),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
                             }
                           }
                         : null,
@@ -94,6 +105,7 @@ class _VerifyscreenState extends State<Verifyscreen> {
                       backgroundColor: primarycolor2,
                       foregroundColor: primarycolor1,
                       disabledBackgroundColor: primarycolor2,
+
                       minimumSize: Size(double.infinity, 60),
 
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -101,7 +113,7 @@ class _VerifyscreenState extends State<Verifyscreen> {
 
                     child: value.isVerifying
                         ? CircularProgressIndicator(strokeWidth: 4, color: Color(0xFFF59B4A))
-                        : Text('Verify'),
+                        : Text('Verify', style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ),
 
@@ -135,7 +147,7 @@ class _VerifyscreenState extends State<Verifyscreen> {
                             spacing: 5,
                             children: [
                               Icon(Icons.refresh, fontWeight: FontWeight.bold),
-                              Text('Resend'),
+                              Text('Resend', style: TextStyle(fontWeight: FontWeight.bold)),
                             ],
                           )
                         : Text(resend.formattedTime),

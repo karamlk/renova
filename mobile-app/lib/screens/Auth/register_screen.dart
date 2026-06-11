@@ -4,14 +4,24 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/models/register_model.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
-import 'package:renove_provider/screens/verify_screen.dart';
+import 'package:renove_provider/screens/Auth/verify_screen.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController namecontroller = TextEditingController();
+
   final TextEditingController emailcontroller = TextEditingController();
+
   final TextEditingController passwordcontroller = TextEditingController();
+
   final TextEditingController passwordconfirmcontroller = TextEditingController();
+
   final TextEditingController rolecontroller = TextEditingController();
 
   @override

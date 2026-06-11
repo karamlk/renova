@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:renove_provider/extras/link.dart';
@@ -37,7 +36,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> loadUser() async {
-    String? token = await getToken();
+    String? token = await getPrefs('token');
     if (token != null && token.isNotEmpty) {
       isLoggedin = true;
     } else {
@@ -58,8 +57,15 @@ class AuthProvider extends ChangeNotifier {
       final data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         String token = data['token'];
-
+        await storePrefs('token', token);
+        String role = data['role'];
+        await storePrefs('role', role);
+        print(role);
         print(token);
+        String? tokenAfter = await getPrefs('token');
+        print(tokenAfter);
+        String? roleafter = await getPrefs('role');
+        print(roleafter);
       }
       return response;
     } catch (e) {
@@ -84,7 +90,7 @@ class AuthProvider extends ChangeNotifier {
       final data = jsonDecode(respose.body);
       if (respose.statusCode == 200 || respose.statusCode == 201) {
         String token = data['user']['token'];
-        await storeToken(token);
+        await storePrefs('token', token);
 
         print(token);
       }
@@ -124,20 +130,22 @@ class AuthProvider extends ChangeNotifier {
     isVerifying = true;
     notifyListeners();
     try {
-      String? token = await getToken();
-      final response = await http.post(
-        Uri.parse("$link/api/otp/verify"),
-        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
-        body: {"otp": otp},
-      );
+      String? token = await getPrefs('token');
+      if (token != null) {
+        final response = await http.post(
+          Uri.parse("$link/api/otp/verify"),
+          headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+          body: {"otp": otp},
+        );
 
-      final data = jsonDecode(response.body);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        String token = data['token'];
-        await storeToken(token);
-        print(token);
+        final data = jsonDecode(response.body);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          String token = data['token'];
+          await storePrefs('token', token);
+          print(token);
+        }
+        return response;
       }
-      return response;
     } catch (e) {
       print(e);
       return null;
@@ -152,7 +160,7 @@ class AuthProvider extends ChangeNotifier {
     isResending = true;
     notifyListeners();
 
-    String? token = await getToken();
+    String? token = await getPrefs('token');
     print(token);
 
     try {
@@ -175,6 +183,34 @@ class AuthProvider extends ChangeNotifier {
       return null;
     } finally {
       isResending = false;
+      notifyListeners();
+    }
+  }
+
+  Future<http.Response?> logout() async {
+    isLoading = true;
+    notifyListeners();
+    String? token = await getPrefs('token');
+
+    try {
+      final response = await http.post(
+        Uri.parse('$link/api/logout'),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(response);
+        await clearTPrefs('token');
+      }
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    } finally {
+      isLoading = false;
       notifyListeners();
     }
   }

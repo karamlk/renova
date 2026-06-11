@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
-import 'package:renove_provider/screens/register_screen.dart';
+import 'package:renove_provider/screens/Auth/register_screen.dart';
+import 'package:renove_provider/screens/User/home_screens/home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -56,6 +57,7 @@ class LoginScreen extends StatelessWidget {
                               : () async {
                                   FocusScope.of(context).unfocus();
                                   final scaffold = ScaffoldMessenger.of(context);
+                                  final navigate = Navigator.of(context);
                                   final response = await context.read<AuthProvider>().login(
                                     emailcontroller.text,
                                     passwordcontroller.text,
@@ -67,6 +69,11 @@ class LoginScreen extends StatelessWidget {
                                   final result = jsonDecode(response.body);
                                   if (response.statusCode == 200 || response.statusCode == 201) {
                                     String success = result['message'];
+
+                                    navigate.push(
+                                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                                    );
+                                    Future.delayed(Duration(microseconds: 5));
                                     scaffold.showSnackBar(
                                       SnackBar(
                                         content: Text(

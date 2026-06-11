@@ -5,13 +5,22 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/models/profile_model.dart';
 import 'package:renove_provider/providers/profile_provider.dart';
-import 'package:renove_provider/screens/home_screen.dart';
+import 'package:renove_provider/screens/User/home_screens/home_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController firstNameController = TextEditingController();
+
   final TextEditingController lastNameController = TextEditingController();
+
   final TextEditingController locationController = TextEditingController();
+
   final TextEditingController phonecontroller = TextEditingController();
 
   @override

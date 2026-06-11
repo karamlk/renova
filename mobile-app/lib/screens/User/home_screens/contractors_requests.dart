@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Home2Tab extends StatelessWidget {
-  const Home2Tab({super.key});
+class ContractorsRequests extends StatelessWidget {
+  const ContractorsRequests({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:renove_provider/Extras/link.dart';
-import 'package:renove_provider/Extras/shared_preferneces.dart';
+import 'package:renove_provider/extras/shared_preferneces.dart';
 import 'package:renove_provider/models/profile_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,7 +19,7 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      String? token = await getToken();
+      String? token = await getPrefs('token');
       var request = http.MultipartRequest('POST', Uri.parse('$link/api/user/profile'));
       request.headers.addAll({"Accept": "application/json", "Authorization": "Bearer $token"});
       request.fields['first_name'] = profile.firstName;
@@ -41,4 +41,8 @@ class ProfileProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  //Future <http.Response?> getProfile(ProfileModel profile){
+
+  ///}
 }
