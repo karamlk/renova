@@ -26,7 +26,7 @@ class UserProfile extends Model
     public function getImageUrlAttribute()
     {
         return $this->image
-            ? '/storage/' . $this->image
+            ? asset('storage/' . $this->image)
             : null;
     }
 }

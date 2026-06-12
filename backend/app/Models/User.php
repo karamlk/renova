@@ -76,13 +76,6 @@ class User extends Authenticatable
             ContractorPost::class
         );
     }
-    public function inspectionRequests()
-    {
-        return $this->hasMany(
-            InspectionRequest::class,
-            'contractor_id'
-        );
-    }
     protected $appends = ['image_url'];
 
     public function getImageUrlAttribute()
@@ -90,5 +83,12 @@ class User extends Authenticatable
         return $this->image
             ? asset('storage/' . $this->image)
             : null;
+    }
+    public function schedules()
+    {
+        return $this->hasMany(
+            ContractorSchedule::class,
+            'contractor_id'
+        );
     }
 }
