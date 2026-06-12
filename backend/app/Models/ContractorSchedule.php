@@ -12,7 +12,7 @@ class ContractorSchedule extends Model
         'day_of_week',
         'start_time',
         'end_time',
-        'is_booked',
+
     ];
 
     public function contractor()
@@ -20,6 +20,13 @@ class ContractorSchedule extends Model
         return $this->belongsTo(
             User::class,
             'contractor_id'
+        );
+    }
+    public function siteVisits()
+    {
+        return $this->hasMany(
+            iteisit::class,
+            'schedule_id'
         );
     }
 }

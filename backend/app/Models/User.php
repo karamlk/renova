@@ -83,11 +83,12 @@ class User extends Authenticatable
             'contractor_id'
         );
     }
-    public function schedules()
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
     {
-        return $this->hasMany(
-            ContractorSchedule::class,
-            'contractor_id'
-        );
+        return $this->image
+            ? asset('storage/' . $this->image)
+            : null;
     }
 }
