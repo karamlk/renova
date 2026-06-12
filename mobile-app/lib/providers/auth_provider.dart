@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/shared_preferneces.dart';
+import 'package:renove_provider/models/change_password_model.dart';
 import 'package:renove_provider/models/register_model.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -11,6 +12,9 @@ class AuthProvider extends ChangeNotifier {
   bool isVerifying = false;
   bool isResending = false;
   bool isLoggedin = false;
+  bool isRequesting = false;
+  bool isDeleting = false;
+  bool isChanging = false;
   String? selectedrole;
   int seconds = 90;
   bool isExpired = false;
@@ -18,6 +22,7 @@ class AuthProvider extends ChangeNotifier {
   Timer? timer;
 
   bool get isValid => (otp.length == 6) && !isExpired;
+  bool get isValidDelete => (otp.length == 6);
 
   void setOtp(String value) {
     otp = value;
@@ -211,6 +216,90 @@ class AuthProvider extends ChangeNotifier {
       return null;
     } finally {
       isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<http.Response?> deleteRequest() async {
+    isRequesting = true;
+    notifyListeners();
+    String? token = await getPrefs('token');
+
+    try {
+      final response = await http.post(
+        Uri.parse('$link/api/delete-request'),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(response.body);
+      }
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    } finally {
+      isRequesting = false;
+      notifyListeners();
+    }
+  }
+
+  Future<http.Response?> confirmDeletion(String otp) async {
+    isDeleting = true;
+    notifyListeners();
+    String? token = await getPrefs('token');
+
+    try {
+      final response = await http.post(
+        Uri.parse('$link/api/confirm-deletion'),
+        headers: {"Authorization": "Bearer $token"},
+        body: {'otp': otp},
+      );
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(data);
+        await clearTPrefs('token');
+      }
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    } finally {
+      isDeleting = false;
+      notifyListeners();
+    }
+  }
+
+  Future<http.Response?> changePassword(String old, String newpass, String repeat) async {
+    isChanging = true;
+    notifyListeners();
+    final token = getPrefs('token');
+    try {
+      final response = await http.post(
+        Uri.parse(
+          '$link/api/password/change?current_password=&new_password=&new_password_confirmation=',
+        ),
+        headers: {"Authorization": "Bearer $token"},
+        body: {
+          'current_password': old,
+          'new_password': newpass,
+          'new_password_confirmation': repeat,
+        },
+      );
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(data);
+      }
+      return response;
+    } catch (e) {
+      print('exeption HERE');
+      print(e);
+      return null;
+    } finally {
+      isChanging = false;
       notifyListeners();
     }
   }

@@ -1,5 +1,3 @@
-import 'package:renove_provider/extras/link.dart';
-
 class ShowProfileModel {
   String firstName;
   String lastName;
@@ -24,8 +22,7 @@ class ShowProfileModel {
       email: json['data']['email'],
       phone: json['data']['profile']['phone'],
       location: json['data']['profile']['location'],
-      image: json['data']['profile']['image'],
+      image: json['data']['profile']['image_url'],
     );
   }
-  String get fullImageUrl => '$link/storage/$image';
 }

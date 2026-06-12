@@ -8,7 +8,7 @@ import 'package:renove_provider/providers/profile_provider.dart';
 import 'package:renove_provider/screens/User/home_screens/home_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({super.key});
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();

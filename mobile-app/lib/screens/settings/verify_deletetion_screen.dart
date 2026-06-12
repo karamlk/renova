@@ -3,24 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
-import 'package:renove_provider/screens/CreateProfile/createprofile_user_screen.dart';
+import 'package:renove_provider/screens/Auth/login_screen.dart';
 
-class Verifyscreen extends StatefulWidget {
-  const Verifyscreen({super.key, required this.email});
-  final String email;
+class VerifyDeletetionScreen extends StatefulWidget {
+  const VerifyDeletetionScreen({super.key});
 
   @override
-  State<Verifyscreen> createState() => _VerifyscreenState();
+  State<VerifyDeletetionScreen> createState() => _VerifyDeletetionScreenState();
 }
 
-class _VerifyscreenState extends State<Verifyscreen> {
-  final TextEditingController verifycontroller = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-
-    context.read<AuthProvider>().startTimer();
-  }
+class _VerifyDeletetionScreenState extends State<VerifyDeletetionScreen> {
+  final TextEditingController deletion = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +39,8 @@ class _VerifyscreenState extends State<Verifyscreen> {
                     keyboardType: TextInputType.number,
                     maxLength: 6,
 
-                    controller: verifycontroller,
-                    enabled: !value.isExpired,
+                    controller: deletion,
+                    enabled: !value.isDeleting,
 
                     decoration: InputDecoration(
                       labelText: 'OTP',
@@ -63,11 +56,13 @@ class _VerifyscreenState extends State<Verifyscreen> {
 
                 Consumer<AuthProvider>(
                   builder: (context, value, child) => ElevatedButton(
-                    onPressed: (value.isValid && !value.isExpired && !value.isVerifying)
+                    onPressed: (value.isValidDelete && !value.isDeleting)
                         ? () async {
                             final scaffold = ScaffoldMessenger.of(context);
                             final navigator = Navigator.of(context);
-                            final response = await context.read<AuthProvider>().verify(value.otp);
+                            final response = await context.read<AuthProvider>().confirmDeletion(
+                              value.otp,
+                            );
                             if (response == null) return;
                             final data = jsonDecode(response.body);
                             if (response.statusCode == 200 || response.statusCode == 201) {
@@ -81,8 +76,9 @@ class _VerifyscreenState extends State<Verifyscreen> {
                                   behavior: SnackBarBehavior.floating,
                                 ),
                               );
-                              navigator.push(
-                                MaterialPageRoute(builder: (context) => ProfileScreen()),
+                              navigator.pushAndRemoveUntil(
+                                MaterialPageRoute(builder: (context) => LoginScreen()),
+                                (route) => false,
                               );
                             } else {
                               scaffold.showSnackBar(
@@ -100,57 +96,20 @@ class _VerifyscreenState extends State<Verifyscreen> {
                         : null,
 
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: primarycolor2,
-                      foregroundColor: primarycolor1,
-                      disabledBackgroundColor: primarycolor2,
-
                       minimumSize: Size(double.infinity, 60),
 
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      backgroundColor: primarycolor2,
+                      foregroundColor: primarycolor1,
                     ),
 
-                    child: value.isVerifying
+                    child: value.isDeleting
                         ? CircularProgressIndicator(strokeWidth: 4, color: Color(0xFFF59B4A))
                         : Text('Verify', style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ),
 
                 SizedBox(height: 10),
-
-                Consumer<AuthProvider>(
-                  builder: (context, resend, child) => ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(200, 60),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      backgroundColor: resend.isExpired ? primarycolor2 : Colors.grey,
-                      foregroundColor: resend.isExpired ? primarycolor1 : Colors.white,
-                    ),
-
-                    onPressed: resend.isExpired && !resend.isResending
-                        ? () async {
-                            final scaffold = ScaffoldMessenger.of(context);
-                            final response = await context.read<AuthProvider>().resendOtp(
-                              widget.email,
-                            );
-                            verifycontroller.clear();
-                            if (response == null) return;
-                            final result = jsonDecode(response.body);
-                            scaffold.showSnackBar(SnackBar(content: Text(result['message'])));
-                          }
-                        : null,
-
-                    child: resend.isExpired
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            spacing: 5,
-                            children: [
-                              Icon(Icons.refresh, fontWeight: FontWeight.bold),
-                              Text('Resend', style: TextStyle(fontWeight: FontWeight.bold)),
-                            ],
-                          )
-                        : Text(resend.formattedTime),
-                  ),
-                ),
               ],
             ),
           ),

@@ -1,17 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/shared_preferneces.dart';
-import 'package:renove_provider/models/profile_model.dart';
+
 import 'package:renove_provider/models/show_profile_model.dart';
 
 class ShowprofileProvider extends ChangeNotifier {
   ShowProfileModel? showProfileModel;
   bool isLoading = false;
   File? image;
+  Uint8List? imagebytes;
 
   void setImage(File img) {
     image = img;
@@ -30,7 +31,6 @@ class ShowprofileProvider extends ChangeNotifier {
       );
       final data = jsonDecode(response.body);
       print(data);
-      //print(data['data']['profile']);
 
       showProfileModel = ShowProfileModel.fromJson(data);
     } catch (e) {
@@ -38,6 +38,23 @@ class ShowprofileProvider extends ChangeNotifier {
     } finally {
       isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> fetchImage() async {
+    try {
+      String? token = await getPrefs('token');
+      final response = await http.get(
+        Uri.parse(showProfileModel!.image),
+        headers: {"Authorization": "Bearer $token"},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        imagebytes = response.bodyBytes;
+        notifyListeners();
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -53,7 +70,6 @@ class ShowprofileProvider extends ChangeNotifier {
       request.files.add(await http.MultipartFile.fromPath('image', image!.path));
       final respone = await request.send();
       final res = await http.Response.fromStream(respone);
-      final data = jsonDecode(res.body);
 
       if (res.statusCode == 200 || res.statusCode == 201) {
         showProfileModel = ShowProfileModel(

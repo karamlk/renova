@@ -6,7 +6,6 @@ import 'package:renove_provider/providers/auth_provider.dart';
 import 'package:renove_provider/providers/navigation_provider.dart';
 import 'package:renove_provider/providers/profile_provider.dart';
 import 'package:renove_provider/providers/show_profile_provider.dart';
-
 import 'package:renove_provider/screens/Auth/login_screen.dart';
 import 'package:renove_provider/screens/User/home_screens/home_screen.dart';
 
@@ -34,6 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AuthProvider>(
       builder: (context, auth, child) => MaterialApp(
+        locale: const Locale('ar'),
         debugShowCheckedModeBanner: false,
         home: auth.isLoggedin ? HomeScreen() : LoginScreen(),
         theme: ThemeData(

@@ -7,7 +7,7 @@ import 'package:renove_provider/screens/User/home_screens/contractors_requests.d
 import 'package:renove_provider/screens/User/home_screens/requests.dart';
 import 'package:renove_provider/screens/User/home_screens/my_projects.dart';
 import 'package:renove_provider/screens/User/home_screens/home_main.dart';
-import 'package:renove_provider/screens/settings.dart';
+import 'package:renove_provider/screens/settings/settings.dart';
 import 'package:renove_provider/screens/User/show_profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {

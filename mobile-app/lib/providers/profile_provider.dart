@@ -41,8 +41,4 @@ class ProfileProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  //Future <http.Response?> getProfile(ProfileModel profile){
-
-  ///}
 }
