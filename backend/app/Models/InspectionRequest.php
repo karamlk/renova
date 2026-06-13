@@ -33,4 +33,10 @@ class InspectionRequest extends Model
             'contractor_id'
         );
     }
+    public function getImageUrlAttribute()
+    {
+        return $this->image
+            ? '/storage/' . $this->image
+            : null;
+    }
 }
