@@ -3,6 +3,7 @@
 namespace App\Services\Contractor;
 
 use App\Models\InspectionRequest;
+use App\Models\SiteVisit;
 
 class InspectionRequestService
 {
@@ -35,13 +36,17 @@ class InspectionRequestService
     }
 
     // قبول
-    public function accept($id)
+    public function accept(array $data)
     {
-        $inspection =
-            InspectionRequest::findOrFail($id);
+        $inspection = InspectionRequest::findOrFail(
+            $data['inspection_request_id']
+        );
+        SiteVisit::create([
+            'inspection_request_id' => $inspection->id,
+            'schedule_id' => $data['schedule_id'],
+        ]);
 
         $inspection->update([
-
             'status' => 'accepted'
         ]);
 
@@ -53,6 +58,7 @@ class InspectionRequestService
     {
         $inspection =
             InspectionRequest::findOrFail($id);
+
 
         $inspection->update([
 

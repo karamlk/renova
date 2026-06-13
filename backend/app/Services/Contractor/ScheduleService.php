@@ -217,4 +217,16 @@ class ScheduleService
 
         $schedule->delete();
     }
+
+    public function availableSchedules(
+        int $contractorId
+    )
+    {
+        return ContractorSchedule::where(
+            'contractor_id',
+            $contractorId
+        )
+            ->whereDoesntHave('siteVisit')
+            ->get();
+    }
 }

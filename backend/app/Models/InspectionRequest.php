@@ -39,4 +39,11 @@ class InspectionRequest extends Model
             ? '/storage/' . $this->image
             : null;
     }
+
+    public function siteVisit()
+    {
+        return $this->hasOne(
+            SiteVisit::class
+        );
+    }
 }

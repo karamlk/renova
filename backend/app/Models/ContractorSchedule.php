@@ -22,10 +22,10 @@ class ContractorSchedule extends Model
             'contractor_id'
         );
     }
-    public function siteVisits()
+    public function siteVisit()
     {
-        return $this->hasMany(
-            iteisit::class,
+        return $this->hasOne(
+            SiteVisit::class,
             'schedule_id'
         );
     }
