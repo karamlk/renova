@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/shared_preferneces.dart';
-import 'package:renove_provider/models/change_password_model.dart';
+
 import 'package:renove_provider/models/register_model.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -276,7 +276,7 @@ class AuthProvider extends ChangeNotifier {
   Future<http.Response?> changePassword(String old, String newpass, String repeat) async {
     isChanging = true;
     notifyListeners();
-    final token = getPrefs('token');
+    final token = await getPrefs('token');
     try {
       final response = await http.post(
         Uri.parse(
@@ -292,6 +292,7 @@ class AuthProvider extends ChangeNotifier {
       final data = jsonDecode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         print(data);
+        print(response.statusCode);
       }
       return response;
     } catch (e) {

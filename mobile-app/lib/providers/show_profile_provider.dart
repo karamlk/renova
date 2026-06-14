@@ -13,6 +13,7 @@ class ShowprofileProvider extends ChangeNotifier {
   bool isLoading = false;
   File? image;
   Uint8List? imagebytes;
+  bool isImageLoading = false;
 
   void setImage(File img) {
     image = img;
@@ -45,7 +46,7 @@ class ShowprofileProvider extends ChangeNotifier {
     try {
       String? token = await getPrefs('token');
       final response = await http.get(
-        Uri.parse(showProfileModel!.image),
+        Uri.parse('$link${showProfileModel!.image}'),
         headers: {"Authorization": "Bearer $token"},
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -59,12 +60,12 @@ class ShowprofileProvider extends ChangeNotifier {
   }
 
   Future<void> updateImage() async {
-    isLoading = true;
+    isImageLoading = true;
     notifyListeners();
 
     try {
       String? token = await getPrefs('token');
-      var request = http.MultipartRequest('POST', Uri.parse('$link/api/profile/image'));
+      var request = http.MultipartRequest('POST', Uri.parse('$link/api/user/profile/update'));
       request.headers['Authorization'] = 'Bearer $token';
       request.headers['Accept'] = 'application/json';
       request.files.add(await http.MultipartFile.fromPath('image', image!.path));
@@ -72,6 +73,7 @@ class ShowprofileProvider extends ChangeNotifier {
       final res = await http.Response.fromStream(respone);
 
       if (res.statusCode == 200 || res.statusCode == 201) {
+        print(res.statusCode);
         showProfileModel = ShowProfileModel(
           firstName: showProfileModel!.firstName,
           lastName: showProfileModel!.lastName,
@@ -85,7 +87,7 @@ class ShowprofileProvider extends ChangeNotifier {
     } catch (e) {
       print(e);
     } finally {
-      isLoading = false;
+      isImageLoading = false;
       notifyListeners();
     }
   }

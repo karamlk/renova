@@ -40,6 +40,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
                   style: TextStyle(fontSize: 20),
                   textAlign: TextAlign.center,
+                  textDirection: TextDirection.rtl,
                 ),
 
                 Text(
@@ -101,13 +102,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                       foregroundColor: primarycolor1,
                     ),
                     onPressed: () async {
+                      final scaffold = ScaffoldMessenger.of(context);
+                      final navigate = Navigator.of(context);
                       FocusScope.of(context).unfocus();
                       final response = await context.read<AuthProvider>().changePassword(
                         oldpasswordcontroller.text,
                         newpasswordcontroller.text,
                         repeatedpasswordcontroller.text,
                       );
-                      final scaffold = ScaffoldMessenger.of(context);
 
                       if (response == null) {
                         print("No response");
@@ -116,10 +118,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                       final result = jsonDecode(response.body);
                       String message = result['message'];
                       if (response.statusCode == 200 || response.statusCode == 201) {
+                        navigate.pop();
                         scaffold.showSnackBar(
                           SnackBar(
                             content: Text(
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: Colors.black),
                               message,
                               textAlign: TextAlign.right,
                               textDirection: TextDirection.rtl,
