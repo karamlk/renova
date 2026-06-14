@@ -41,4 +41,5 @@ class ReconstructionRequest extends Model
             InspectionRequest::class
         );
     }
+
 }

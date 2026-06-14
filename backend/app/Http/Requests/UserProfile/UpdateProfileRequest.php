@@ -29,11 +29,11 @@ class UpdateProfileRequest extends FormRequest
 
                  'last_name' => 'sometimes|string|max:255',
 
-                 'phone' => 'nullable|string',
+                 'phone' => 'sometimes|string',
 
-                 'image' => 'nullable|image',
+                 'image' => 'sometimes|image',
 
-                 'location' => 'nullable|string',
+                 'location' => 'sometimes|string',
 
         ];
     }

@@ -149,7 +149,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // قبول
     Route::post(
-        '/inspection-requests/{id}/accept',
+        '/inspection-requests/accept',
         [InspectionRequestController::class,
             'accept']
     );

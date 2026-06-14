@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\AcceptInspectionRequest;
 use App\Services\Contractor\InspectionRequestService;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class InspectionRequestController
     extends Controller
@@ -45,20 +47,20 @@ class InspectionRequestController
                     ->requestInspections($id)
         ]);
     }
-
+   // protected InspectionRequestService $inspectionRequestService;
     // قبول
-    public function accept($id)
+    public function accept(
+        AcceptInspectionRequest $request
+    ): JsonResponse
     {
-        $inspection =
-            $this->inspectionService
-                ->accept($id);
+
+        $this->inspectionService
+            ->accept(
+                $request->validated()
+            );
 
         return response()->json([
-
-            'message' =>
-                'تم قبول طلب الزيارة',
-
-            'data' => $inspection
+            'message' => 'تم قبول طلب الزيارة وتحديد الموعد'
         ]);
     }
 
