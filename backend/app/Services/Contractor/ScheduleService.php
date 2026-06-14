@@ -218,15 +218,37 @@ class ScheduleService
         $schedule->delete();
     }
 
-    public function availableSchedules(
-        int $contractorId
-    )
+    public function availableSchedules($contractorId)
     {
+
         return ContractorSchedule::where(
             'contractor_id',
             $contractorId
         )
-            ->whereDoesntHave('siteVisit')
-            ->get();
+           // ->whereDoesntHave('siteVisit')
+            ->get()
+            ->map(function ($schedule) {
+
+                return [
+
+                    'id' => $schedule->id,
+
+                    'date' => Carbon::now()
+                        ->next($schedule->day_of_week)
+                        ->format('Y-m-d'),
+
+                    'day' => ucfirst(
+                        $schedule->day_of_week
+                    ),
+
+                    'start_time' => Carbon::parse(
+                        $schedule->start_time
+                    )->format('h:i A'),
+
+                    'end_time' => Carbon::parse(
+                        $schedule->end_time
+                    )->format('h:i A'),
+                ];
+            });
     }
 }

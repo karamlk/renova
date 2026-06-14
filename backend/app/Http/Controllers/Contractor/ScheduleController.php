@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Contractor;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Contractor\Schedule\UpdateRequest;
+use App\Models\InspectionRequest;
 use App\Services\Contractor\ScheduleService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -71,6 +72,20 @@ class ScheduleController extends Controller
             'message' => 'تم تعديل الموعد بنجاح',
             'data' => $schedule
         ]);
+    }
+
+    public function availableSchedules(
+        InspectionRequest $inspectionRequest
+    ): JsonResponse
+    {
+        return response()->json([
+
+            'data' => $this->scheduleService
+                ->availableSchedules(
+                    $inspectionRequest->contractor_id
+                )
+        ]);
+
     }
 
 }
