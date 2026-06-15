@@ -193,4 +193,9 @@ Route::middleware('auth:sanctum')->group(function () {
         [ScheduleController::class, 'update']
     );
 
+    Route::get(
+        '/inspection-requests/{inspectionRequest}/schedules',
+        [ScheduleController::class, 'availableSchedules']
+    );
+
 });

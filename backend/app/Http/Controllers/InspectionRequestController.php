@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\AcceptInspectionRequest;
+use App\Models\InspectionRequest;
 use App\Services\Contractor\InspectionRequestService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -79,4 +80,6 @@ class InspectionRequestController
             'data' => $inspection
         ]);
     }
+
+
 }
