@@ -49,7 +49,9 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
                   radius: 80,
                   backgroundImage: value.image != null
                       ? FileImage(value.image!)
-                      : (value.imagebytes != null ? MemoryImage(value.imagebytes!) : null)
+                      : (value.imagebytes != null
+                                ? MemoryImage(context.watch<ShowprofileProvider>().imagebytes!)
+                                : null)
                             as ImageProvider?,
                   child: value.image == null && value.imagebytes == null
                       ? Icon(Icons.person, size: 60)
@@ -69,6 +71,8 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
                       if (picked != null) {
                         value.setImage(File(picked.path));
                         await value.updateImage();
+                        await value.fetchProfile();
+                        await value.fetchImage();
                       }
                     },
 

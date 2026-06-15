@@ -53,7 +53,7 @@ class _SettingsState extends State<Settings> {
 
                     minimumSize: Size(double.infinity, 60),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    backgroundColor: Color(0xFFe4e6f2),
+                    backgroundColor: primarycolor2,
                     foregroundColor: primarycolor1,
                   ),
                   child: Row(
@@ -61,7 +61,7 @@ class _SettingsState extends State<Settings> {
                     children: [
                       Icon(Icons.arrow_drop_down_sharp, size: 35),
                       Row(
-                        spacing: 5,
+                        spacing: 20,
                         children: [
                           Text(
                             'إعدادات الحساب',
@@ -124,7 +124,7 @@ class _SettingsState extends State<Settings> {
 
                           minimumSize: Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          backgroundColor: Color(0xFFe4e6f2),
+                          backgroundColor: primarycolor2,
                           foregroundColor: primarycolor1,
                         ),
                         child: Row(
@@ -269,7 +269,7 @@ class _SettingsState extends State<Settings> {
 
                           minimumSize: Size(200, 50),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          backgroundColor: Color(0xFFe4e6f2),
+                          backgroundColor: primarycolor2,
                           foregroundColor: primarycolor1,
                         ),
                         child: Row(
@@ -296,7 +296,7 @@ class _SettingsState extends State<Settings> {
 
                           minimumSize: Size(200, 50),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          backgroundColor: Color(0xFFe4e6f2),
+                          backgroundColor: primarycolor2,
                           foregroundColor: primarycolor1,
                         ),
                         onPressed: () {

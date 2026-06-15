@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:renove_provider/extras/link.dart';
@@ -18,6 +19,7 @@ class AuthProvider extends ChangeNotifier {
   String? selectedrole;
   int seconds = 90;
   bool isExpired = false;
+  bool isVerifyingForget = false;
   String otp = "";
   Timer? timer;
 
@@ -42,6 +44,10 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> loadUser() async {
     String? token = await getPrefs('token');
+    String? temptoken = await getPrefs('temp_token');
+    print(token);
+    print(temptoken);
+
     if (token != null && token.isNotEmpty) {
       isLoggedin = true;
     } else {
@@ -136,21 +142,49 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
     try {
       String? token = await getPrefs('token');
-      if (token != null) {
-        final response = await http.post(
-          Uri.parse("$link/api/otp/verify"),
-          headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
-          body: {"otp": otp},
-        );
 
-        final data = jsonDecode(response.body);
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          String token = data['token'];
-          await storePrefs('token', token);
-          print(token);
-        }
-        return response;
+      final response = await http.post(
+        Uri.parse("$link/api/otp/verify"),
+        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+        body: {"otp": otp},
+      );
+
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        String token = data['token'];
+        await storePrefs('token', token);
+        print(token);
       }
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    } finally {
+      isVerifying = false;
+      notifyListeners();
+    }
+  }
+
+  Future<http.Response?> verifyTemp(String otp) async {
+    isVerifying = true;
+    notifyListeners();
+    try {
+      String? token = await getPrefs('temp_token');
+
+      final response = await http.post(
+        Uri.parse("$link/api/otp/verify"),
+        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+        body: {"otp": otp},
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        String token = data['token'];
+
+        await storePrefs('token', token);
+      }
+      return response;
     } catch (e) {
       print(e);
       return null;
@@ -200,14 +234,10 @@ class AuthProvider extends ChangeNotifier {
     try {
       final response = await http.post(
         Uri.parse('$link/api/logout'),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
+        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print(response);
+        print(response.body);
         await clearTPrefs('token');
       }
       return response;
@@ -301,6 +331,33 @@ class AuthProvider extends ChangeNotifier {
       return null;
     } finally {
       isChanging = false;
+      notifyListeners();
+    }
+  }
+
+  Future<http.Response?> forgetPassword(String email) async {
+    isVerifyingForget = true;
+    notifyListeners();
+
+    try {
+      final response = await http.post(
+        Uri.parse('$link/api/password/forgot'),
+        headers: {"Accept": "application/json"},
+        body: {'email': email},
+      );
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(data);
+        final tempToken = data['temp_token'];
+        await storePrefs('temp_token', tempToken);
+        print(tempToken);
+      }
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    } finally {
+      isVerifyingForget = false;
       notifyListeners();
     }
   }
