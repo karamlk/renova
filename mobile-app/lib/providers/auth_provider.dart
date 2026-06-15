@@ -44,9 +44,8 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> loadUser() async {
     String? token = await getPrefs('token');
-    String? temptoken = await getPrefs('temp_token');
+
     print(token);
-    print(temptoken);
 
     if (token != null && token.isNotEmpty) {
       isLoggedin = true;

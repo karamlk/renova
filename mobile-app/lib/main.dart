@@ -4,10 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
 import 'package:renove_provider/providers/navigation_provider.dart';
-import 'package:renove_provider/providers/profile_provider.dart';
-import 'package:renove_provider/providers/show_profile_provider.dart';
+import 'package:renove_provider/providers/User/create_profile_provider.dart';
+import 'package:renove_provider/providers/User/show_profile_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';
-import 'package:renove_provider/screens/User/home_screens/home_screen.dart';
+import 'package:renove_provider/screens/Contractor/home_screen_contractor.dart';
+import 'package:renove_provider/screens/User/home_screens/home_main_user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +18,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: authProvider),
-        ChangeNotifierProvider(create: (_) => ProfileProvider()),
+        ChangeNotifierProvider(create: (_) => CreateProfileProvider()),
         ChangeNotifierProvider(create: (_) => NavigationProvider()),
         ChangeNotifierProvider(create: (_) => ShowprofileProvider()),
       ],
@@ -35,7 +36,10 @@ class MyApp extends StatelessWidget {
       builder: (context, auth, child) => MaterialApp(
         locale: const Locale('ar'),
         debugShowCheckedModeBanner: false,
-        home: auth.isLoggedin ? HomeScreen() : LoginScreen(),
+        home: auth.isLoggedin
+            ? (auth.roleLogin == 'user' ? HomeMainUser() : HomeScreenContractor())
+            : LoginScreen(),
+
         theme: ThemeData(
           useMaterial3: true,
           textTheme: GoogleFonts.cairoTextTheme(),
