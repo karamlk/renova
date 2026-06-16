@@ -34,4 +34,21 @@ class ContractorProfile extends Model
     {
         return $this->belongsTo(User::class);
     }
+    protected $appends = ['image_url','commercial_record_url'];
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image
+            ? '/storage/' . $this->image
+            : null;
+    }
+    //protected $append = ['commercial_record_url'];
+
+    public function getCommercialRecordUrlAttribute()
+    {
+        // تأكد أن الحقل يحتوي على قيمة قبل بناء الرابط
+        return $this->commercial_record
+            ? '/storage/' . $this->commercial_record
+            : null;
+    }
 }

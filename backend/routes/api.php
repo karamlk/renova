@@ -10,6 +10,7 @@ use App\Http\Controllers\Contractor\ContractorPostController;
 use App\Http\Controllers\Contractor\ContractorProfileController;
 use App\Http\Controllers\Contractor\ScheduleController;
 use App\Http\Controllers\InspectionRequestController;
+use App\Http\Controllers\SiteVisitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -198,4 +199,14 @@ Route::middleware('auth:sanctum')->group(function () {
         [ScheduleController::class, 'availableSchedules']
     );
 
+    Route::get(
+        '/contractor/visits',
+        [SiteVisitController::class,
+            'contractorVisits']
+    );
+    Route::get(
+        '/user/visits',
+        [SiteVisitController::class,
+            'userVisits']
+    );
 });

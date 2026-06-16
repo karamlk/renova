@@ -91,4 +91,13 @@ class User extends Authenticatable
             'contractor_id'
         );
     }
+    protected $append = ['commercial_record_url'];
+
+    public function getCommercialRecordUrlAttribute()
+    {
+        // تأكد أن الحقل يحتوي على قيمة قبل بناء الرابط
+        return $this->commercial_record
+            ? asset('storage/' . $this->commercial_record)
+            : null;
+    }
 }
