@@ -3,6 +3,7 @@
 namespace App\Services\Contractor;
 
 use App\Models\ContractorSchedule;
+use App\Models\SiteVisit;
 use Carbon\Carbon;
 
 class ScheduleService
@@ -251,4 +252,5 @@ class ScheduleService
                 ];
             });
     }
+
 }
