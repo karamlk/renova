@@ -13,6 +13,7 @@ class AuthProvider extends ChangeNotifier {
   bool isVerifying = false;
   bool isResending = false;
   bool isLoggedin = false;
+  String? roleLogin;
   bool isRequesting = false;
   bool isDeleting = false;
   bool isChanging = false;
@@ -44,8 +45,15 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> loadUser() async {
     String? token = await getPrefs('token');
+    String? role = await getPrefs('role');
 
     print(token);
+    print(role);
+    if (role == 'user') {
+      roleLogin = 'user';
+    } else {
+      roleLogin = 'contractor';
+    }
 
     if (token != null && token.isNotEmpty) {
       isLoggedin = true;

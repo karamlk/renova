@@ -10,9 +10,11 @@ class HomeMain extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         foregroundColor: primarycolor2,
         backgroundColor: primarycolor1,
-        child: Icon(Icons.add),
+
         isExtended: true,
+
         onPressed: () {},
+        child: Icon(Icons.add),
       ),
     );
   }

@@ -5,7 +5,7 @@ import 'package:renove_provider/Extras/theme.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
 import 'package:renove_provider/screens/Auth/register_screen.dart';
 import 'package:renove_provider/screens/Auth/verfiy_forget_password.dart';
-import 'package:renove_provider/screens/User/home_screens/home_screen.dart';
+import 'package:renove_provider/screens/User/home_screens/home_main_user.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     String success = result['message'];
 
                                     navigate.push(
-                                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                                      MaterialPageRoute(builder: (context) => HomeMainUser()),
                                     );
                                     Future.delayed(Duration(microseconds: 5));
                                     scaffold.showSnackBar(

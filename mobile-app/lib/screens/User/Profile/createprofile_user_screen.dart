@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/models/profile_model.dart';
-import 'package:renove_provider/providers/profile_provider.dart';
-import 'package:renove_provider/screens/User/home_screens/home_screen.dart';
+import 'package:renove_provider/providers/User/create_profile_provider.dart';
+import 'package:renove_provider/screens/User/home_screens/home_main_user.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -37,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: Consumer<ProfileProvider>(
+              child: Consumer<CreateProfileProvider>(
                 builder: (context, value, child) => Column(
                   children: [
                     GestureDetector(
@@ -113,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           SizedBox(height: 15),
-                          Consumer<ProfileProvider>(
+                          Consumer<CreateProfileProvider>(
                             builder: (context, value, child) => ElevatedButton(
                               onPressed: value.isLoading
                                   ? null
@@ -122,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       final scaffold = ScaffoldMessenger.of(context);
                                       final navigator = Navigator.of(context);
                                       final response = await context
-                                          .read<ProfileProvider>()
+                                          .read<CreateProfileProvider>()
                                           .fillProfile(
                                             ProfileModel(
                                               firstName: firstNameController.text,
@@ -147,7 +147,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       if (response.statusCode == 200 ||
                                           response.statusCode == 201) {
                                         navigator.push(
-                                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                                          MaterialPageRoute(builder: (context) => HomeMainUser()),
                                         );
                                       }
                                     },

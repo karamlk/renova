@@ -3,15 +3,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/navigation_provider.dart';
-import 'package:renove_provider/screens/User/home_screens/contractors_requests.dart';
-import 'package:renove_provider/screens/User/home_screens/requests.dart';
-import 'package:renove_provider/screens/User/home_screens/my_projects.dart';
-import 'package:renove_provider/screens/User/home_screens/home_main.dart';
+import 'package:renove_provider/screens/User/home_screens/contractors_requests_user.dart';
+import 'package:renove_provider/screens/User/home_screens/requests_user.dart';
+import 'package:renove_provider/screens/User/home_screens/my_projects_user.dart';
+import 'package:renove_provider/screens/User/home_screens/home_screen_user.dart';
 import 'package:renove_provider/screens/settings/settings.dart';
-import 'package:renove_provider/screens/User/show_profile_screen.dart';
+import 'package:renove_provider/screens/User/Profile/show_profile_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeMainUser extends StatelessWidget {
+  const HomeMainUser({super.key});
   final List<Widget> pages = const [HomeMain(), Requests(), MyProjects(), ContractorsRequests()];
 
   @override

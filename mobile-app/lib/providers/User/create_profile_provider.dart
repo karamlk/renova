@@ -5,7 +5,7 @@ import 'package:renove_provider/extras/shared_preferneces.dart';
 import 'package:renove_provider/models/profile_model.dart';
 import 'package:http/http.dart' as http;
 
-class ProfileProvider extends ChangeNotifier {
+class CreateProfileProvider extends ChangeNotifier {
   bool isLoading = false;
   File? image;
 

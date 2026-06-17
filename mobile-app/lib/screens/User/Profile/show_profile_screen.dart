@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
-import 'package:renove_provider/providers/show_profile_provider.dart';
+import 'package:renove_provider/providers/User/show_profile_provider.dart';
 
 class ShowprofileScreen extends StatefulWidget {
   const ShowprofileScreen({super.key});

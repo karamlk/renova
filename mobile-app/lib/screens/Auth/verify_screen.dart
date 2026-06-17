@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
-import 'package:renove_provider/screens/CreateProfile/createprofile_user_screen.dart';
+import 'package:renove_provider/screens/User/Profile/createprofile_user_screen.dart';
 
 class Verifyscreen extends StatefulWidget {
   const Verifyscreen({super.key, required this.email});
