@@ -18,8 +18,9 @@ class _VerifyscreenState extends State<Verifyscreen> {
   @override
   void initState() {
     super.initState();
-
-    context.read<AuthProvider>().startTimer();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AuthProvider>().startTimer();
+    });
   }
 
   @override
@@ -102,7 +103,6 @@ class _VerifyscreenState extends State<Verifyscreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primarycolor2,
                       foregroundColor: primarycolor1,
-                      disabledBackgroundColor: primarycolor2,
 
                       minimumSize: Size(double.infinity, 60),
 

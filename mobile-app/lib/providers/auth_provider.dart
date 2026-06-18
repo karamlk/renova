@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:renove_provider/extras/link.dart';
@@ -49,10 +48,10 @@ class AuthProvider extends ChangeNotifier {
 
     print(token);
     print(role);
-    if (role == 'user') {
-      roleLogin = 'user';
+    if (role == "user") {
+      roleLogin = "user";
     } else {
-      roleLogin = 'contractor';
+      roleLogin = "contractor";
     }
 
     if (token != null && token.isNotEmpty) {
@@ -108,7 +107,9 @@ class AuthProvider extends ChangeNotifier {
       final data = jsonDecode(respose.body);
       if (respose.statusCode == 200 || respose.statusCode == 201) {
         String token = data['user']['token'];
+        String role = data['role'];
         await storePrefs('token', token);
+        await storePrefs('role', role);
 
         print(token);
       }

@@ -8,13 +8,13 @@ class HomeMain extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        foregroundColor: primarycolor2,
-        backgroundColor: primarycolor1,
+        foregroundColor: primarycolor1,
+        backgroundColor: primarycolor2,
 
         isExtended: true,
 
         onPressed: () {},
-        child: Icon(Icons.add),
+        child: Icon(Icons.add, size: 40),
       ),
     );
   }

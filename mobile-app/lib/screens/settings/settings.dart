@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/theme.dart';
+import 'package:renove_provider/providers/User/show_profile_provider.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';
 import 'package:renove_provider/screens/settings/change_password.dart';
@@ -20,11 +23,13 @@ class _SettingsState extends State<Settings> {
   void initState() {
     super.initState();
     expansibleController = ExpansibleController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ShowprofileProvider>().fetchProfile();
+    });
   }
 
   @override
   void dispose() {
-    // Always dispose your controllers to avoid memory leaks
     expansibleController.dispose();
     super.dispose();
   }
@@ -37,6 +42,49 @@ class _SettingsState extends State<Settings> {
         padding: const EdgeInsets.all(20),
         child: ListView(
           children: [
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+
+                minimumSize: Size(double.infinity, 100),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                backgroundColor: primarycolor2,
+                foregroundColor: primarycolor1,
+              ),
+              child: Consumer<ShowprofileProvider>(
+                builder: (context, value, child) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(40),
+                        child: CachedNetworkImage(
+                          imageUrl: '$link${value.showProfileModel?.image ?? ""}',
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                          httpHeaders: {
+                            'Authorization': 'Bearer ${value.token}',
+                            'Accept': 'image/*',
+                          },
+                          placeholder: (context, url) => CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => const Icon(Icons.person, size: 60),
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(value.showProfileModel!.firstName),
+                          Text(value.showProfileModel!.email),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 10),
             Expansible(
               controller: expansibleController,
               headerBuilder: (context, animation) {

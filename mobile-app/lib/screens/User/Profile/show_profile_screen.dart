@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/User/show_profile_provider.dart';
 
@@ -18,7 +20,6 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ShowprofileProvider>().fetchImage();
       context.read<ShowprofileProvider>().fetchProfile();
     });
   }
@@ -35,27 +36,19 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
           children: [
             Consumer<ShowprofileProvider>(
               builder: (context, value, child) {
-                if (value.isLoading || value.showProfileModel == null) {
-                  return Center(child: CircularProgressIndicator());
-                }
-
-                final profile = value.showProfileModel;
-
-                if (profile == null) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                return CircleAvatar(
-                  radius: 80,
-                  backgroundImage: value.image != null
-                      ? FileImage(value.image!)
-                      : (value.imagebytes != null
-                                ? MemoryImage(context.watch<ShowprofileProvider>().imagebytes!)
-                                : null)
-                            as ImageProvider?,
-                  child: value.image == null && value.imagebytes == null
-                      ? Icon(Icons.person, size: 60)
-                      : null,
+                return Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(80),
+                    child: CachedNetworkImage(
+                      imageUrl: '$link${value.showProfileModel?.image ?? ""}',
+                      width: 160,
+                      height: 160,
+                      fit: BoxFit.cover,
+                      httpHeaders: {'Authorization': 'Bearer ${value.token}', 'Accept': 'image/*'},
+                      placeholder: (context, url) => CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => const Icon(Icons.person, size: 60),
+                    ),
+                  ),
                 );
               },
             ),
@@ -67,12 +60,16 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
                   return ElevatedButton(
                     onPressed: () async {
                       final picker = ImagePicker();
-                      final picked = await picker.pickImage(source: ImageSource.gallery);
+                      final picked = await picker.pickImage(
+                        source: ImageSource.gallery,
+                        imageQuality: 50,
+                        maxWidth: 400,
+                        maxHeight: 400,
+                      );
                       if (picked != null) {
                         value.setImage(File(picked.path));
                         await value.updateImage();
                         await value.fetchProfile();
-                        await value.fetchImage();
                       }
                     },
 

@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         locale: const Locale('ar'),
         debugShowCheckedModeBanner: false,
         home: auth.isLoggedin
-            ? (auth.roleLogin == 'user' ? HomeMainUser() : HomeScreenContractor())
+            ? (auth.roleLogin == "user" ? HomeMainUser() : HomeScreenContractor())
             : LoginScreen(),
 
         theme: ThemeData(

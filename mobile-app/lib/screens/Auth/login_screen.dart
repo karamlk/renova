@@ -5,6 +5,7 @@ import 'package:renove_provider/Extras/theme.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
 import 'package:renove_provider/screens/Auth/register_screen.dart';
 import 'package:renove_provider/screens/Auth/verfiy_forget_password.dart';
+import 'package:renove_provider/screens/Contractor/home_screen_contractor.dart';
 import 'package:renove_provider/screens/User/home_screens/home_main_user.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -80,10 +81,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                   final result = jsonDecode(response.body);
                                   if (response.statusCode == 200 || response.statusCode == 201) {
                                     String success = result['message'];
+                                    String role = result['role'];
 
-                                    navigate.push(
-                                      MaterialPageRoute(builder: (context) => HomeMainUser()),
-                                    );
+                                    if (role == 'user') {
+                                      navigate.push(
+                                        MaterialPageRoute(builder: (context) => HomeMainUser()),
+                                      );
+                                    } else {
+                                      navigate.push(
+                                        MaterialPageRoute(
+                                          builder: (context) => HomeScreenContractor(),
+                                        ),
+                                      );
+                                    }
                                     Future.delayed(Duration(microseconds: 5));
                                     scaffold.showSnackBar(
                                       SnackBar(

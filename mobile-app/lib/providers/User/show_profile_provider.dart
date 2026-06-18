@@ -14,6 +14,7 @@ class ShowprofileProvider extends ChangeNotifier {
   File? image;
   Uint8List? imagebytes;
   bool isImageLoading = false;
+  String? token;
 
   void setImage(File img) {
     image = img;
@@ -25,7 +26,7 @@ class ShowprofileProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      String? token = await getPrefs('token');
+      token = await getPrefs('token');
       final response = await http.get(
         Uri.parse('$link/api/user/profile'),
         headers: {"Accept": "application/json", "Authorization": "Bearer $token"},

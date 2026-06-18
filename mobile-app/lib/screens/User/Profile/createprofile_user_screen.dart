@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/models/profile_model.dart';
@@ -60,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     children: [
                                       Icon(Icons.camera_alt, size: 80),
                                       Text(
-                                        'Browse for A photo',
+                                        'اضغط لاستعراض صورة',
                                         style: TextStyle(fontWeight: FontWeight.bold),
                                       ),
                                     ],
@@ -73,103 +74,108 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.all(10),
-                      child: Column(
-                        spacing: 20,
-                        children: [
-                          TextField(
-                            controller: firstNameController,
-                            decoration: InputDecoration(
-                              labelText: "الاسم الأول",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                            ),
-                          ),
-                          TextField(
-                            controller: lastNameController,
-                            decoration: InputDecoration(
-                              labelText: "اسم العائلة",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                            ),
-                          ),
-                          TextField(
-                            controller: locationController,
-                            decoration: InputDecoration(
-                              labelText: "مكان السكن",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                            ),
-                          ),
-                          TextField(
-                            controller: phonecontroller,
-                            decoration: InputDecoration(
-                              labelText: "رقم الهاتف ",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 15),
-                          Consumer<CreateProfileProvider>(
-                            builder: (context, value, child) => ElevatedButton(
-                              onPressed: value.isLoading
-                                  ? null
-                                  : () async {
-                                      FocusScope.of(context).unfocus();
-                                      final scaffold = ScaffoldMessenger.of(context);
-                                      final navigator = Navigator.of(context);
-                                      final response = await context
-                                          .read<CreateProfileProvider>()
-                                          .fillProfile(
-                                            ProfileModel(
-                                              firstName: firstNameController.text,
-                                              lastName: lastNameController.text,
-                                              location: locationController.text,
-                                              phone: phonecontroller.text,
-                                            ),
-                                            value.image,
-                                          );
-                                      if (response == null) return;
-                                      final result = jsonDecode(response.body);
-                                      scaffold.showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            result['message'],
-                                            textAlign: TextAlign.right,
-                                            textDirection: TextDirection.rtl,
-                                          ),
-                                          behavior: SnackBarBehavior.floating,
-                                        ),
-                                      );
-                                      if (response.statusCode == 200 ||
-                                          response.statusCode == 201) {
-                                        navigator.push(
-                                          MaterialPageRoute(builder: (context) => HomeMainUser()),
-                                        );
-                                      }
-                                    },
-
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: Size(double.infinity, 60),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Column(
+                          spacing: 20,
+                          children: [
+                            TextField(
+                              controller: firstNameController,
+                              decoration: InputDecoration(
+                                labelText: "الاسم الأول",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
                                 ),
-                                backgroundColor: Color(0xFF3b414c),
-                                foregroundColor: Color(0xFFF59B4A),
-                                disabledBackgroundColor: Color(0xFF3b414c),
                               ),
-                              child: value.isLoading
-                                  ? CircularProgressIndicator(
-                                      strokeWidth: 4,
-                                      color: Color(0xFFF59B4A),
-                                    )
-                                  : Text("حفظ", style: TextStyle(fontWeight: FontWeight.bold)),
                             ),
-                          ),
-                        ],
+                            TextField(
+                              controller: lastNameController,
+                              decoration: InputDecoration(
+                                labelText: "اسم العائلة",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                ),
+                              ),
+                            ),
+                            TextField(
+                              controller: locationController,
+                              decoration: InputDecoration(
+                                labelText: "مكان السكن",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                ),
+                              ),
+                            ),
+                            TextField(
+                              controller: phonecontroller,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                labelText: "رقم الهاتف ",
+
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Consumer<CreateProfileProvider>(
+                              builder: (context, value, child) => ElevatedButton(
+                                onPressed: value.isLoading
+                                    ? null
+                                    : () async {
+                                        FocusScope.of(context).unfocus();
+                                        final scaffold = ScaffoldMessenger.of(context);
+                                        final navigator = Navigator.of(context);
+                                        final response = await context
+                                            .read<CreateProfileProvider>()
+                                            .fillProfile(
+                                              ProfileModel(
+                                                firstName: firstNameController.text,
+                                                lastName: lastNameController.text,
+                                                location: locationController.text,
+                                                phone: phonecontroller.text,
+                                              ),
+                                              value.image,
+                                            );
+                                        if (response == null) return;
+                                        final result = jsonDecode(response.body);
+                                        scaffold.showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              result['message'],
+                                              textAlign: TextAlign.right,
+                                              textDirection: TextDirection.rtl,
+                                            ),
+                                            behavior: SnackBarBehavior.floating,
+                                          ),
+                                        );
+                                        if (response.statusCode == 200 ||
+                                            response.statusCode == 201) {
+                                          navigator.push(
+                                            MaterialPageRoute(builder: (context) => HomeMainUser()),
+                                          );
+                                        }
+                                      },
+
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: Size(double.infinity, 60),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  backgroundColor: Color(0xFF3b414c),
+                                  foregroundColor: Color(0xFFF59B4A),
+                                  disabledBackgroundColor: Color(0xFF3b414c),
+                                ),
+                                child: value.isLoading
+                                    ? CircularProgressIndicator(
+                                        strokeWidth: 4,
+                                        color: Color(0xFFF59B4A),
+                                      )
+                                    : Text("حفظ", style: TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
