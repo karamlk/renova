@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,7 @@ import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/User/show_profile_provider.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
+import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';
 import 'package:renove_provider/screens/settings/change_password.dart';
 import 'package:renove_provider/screens/settings/verify_deletetion_screen.dart';
@@ -84,6 +86,31 @@ class _SettingsState extends State<Settings> {
                 },
               ),
             ),
+            SizedBox(height: 20),
+            Consumer<ThemeProvider>(
+              builder: (context, value, child) {
+                return ElevatedButton(
+                  onPressed: () {
+                    context.read<ThemeProvider>().toggleTheme();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 70),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                  ),
+                  child: IgnorePointer(
+                    child: SwitchListTile(
+                      value: value.isDark,
+                      onChanged: (_) {},
+                      title: Text('الوضع الداكن', textDirection: TextDirection.rtl),
+                      secondary: Icon(Icons.dark_mode),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                );
+              },
+            ),
+
             SizedBox(height: 10),
             Expansible(
               controller: expansibleController,

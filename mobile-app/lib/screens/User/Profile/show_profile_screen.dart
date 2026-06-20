@@ -45,8 +45,16 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
                       height: 160,
                       fit: BoxFit.cover,
                       httpHeaders: {'Authorization': 'Bearer ${value.token}', 'Accept': 'image/*'},
-                      placeholder: (context, url) => CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => const Icon(Icons.person, size: 60),
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(color: primarycolor1),
+                      errorWidget: (context, url, error) => Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(80),
+                          color: primarycolor2,
+                        ),
+
+                        child: Icon(Icons.person, size: 80, color: primarycolor1),
+                      ),
                     ),
                   ),
                 );

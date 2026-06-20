@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:renove_provider/extras/theme.dart';
+import 'package:renove_provider/screens/User/home_screens/create_request_dialogue.dart';
 
 class HomeMain extends StatelessWidget {
   const HomeMain({super.key});
@@ -13,7 +14,13 @@ class HomeMain extends StatelessWidget {
 
         isExtended: true,
 
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+            context: context,
+            fullscreenDialog: true,
+            builder: (_) => CreateRequestDialogue(),
+          );
+        },
         child: Icon(Icons.add, size: 40),
       ),
     );
