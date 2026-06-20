@@ -17,11 +17,7 @@
   font-size: 13px;
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.footer-copyright i {
-  color: #f07c1f;
+  gap: 3px;
 }
 
 .footer-links {

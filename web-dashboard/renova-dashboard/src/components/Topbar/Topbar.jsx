@@ -1,24 +1,21 @@
 import "./Topbar.css";
+//// Material UI Icons
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 export default function Topbar() {
     return (
-    <div class="top-bar">
-            <div class="page-title">
+    <div className="top-bar">
+            <div className="title">
                 <h1>مرحباً، <span>أحمد المنصور</span></h1>
                 <p>نظرة عامة على أداء نظام إعادة الإعمار</p>
             </div>
-            <div class="user-section">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="بحث عن مشروع..."/>
+            <div className="user-section">
+                <div className="notification">
+                    <NotificationsIcon />
+                    <div className="notification-badge">3</div>
                 </div>
-                <div class="notification">
-                    <i class="fas fa-bell"></i>
-                    <div class="notification-badge">3</div>
-                </div>
-                <div class="user-card">
-                    <div class="avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
+                <div className="user-card">
+                        <AccountCircleIcon fontSize="large" sx={{ color: '#f07c1f' }} />
                     <span>أحمد المنصور</span>
                 </div>
             </div>
