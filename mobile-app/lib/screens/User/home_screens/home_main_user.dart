@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/navigation_provider.dart';
+import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/User/home_screens/contractors_requests_user.dart';
 
 import 'package:renove_provider/screens/User/home_screens/requests_user.dart';
@@ -25,7 +26,10 @@ class HomeMainUser extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => Settings()));
           },
-          icon: Icon(Icons.settings, color: primarycolor2),
+          icon: Icon(
+            Icons.settings,
+            color: context.watch<ThemeProvider>().isDark ? Colors.white : primarycolor2,
+          ),
         ),
 
         elevation: 10,
@@ -40,7 +44,7 @@ class HomeMainUser extends StatelessWidget {
                 ).push(MaterialPageRoute(builder: (context) => ShowprofileScreen()));
               },
               icon: Icon(Icons.person_rounded),
-              color: primarycolor2,
+              color: context.watch<ThemeProvider>().isDark ? Colors.white : primarycolor2,
             ),
           ),
         ],
@@ -56,17 +60,23 @@ class HomeMainUser extends StatelessWidget {
             if (states.contains(WidgetState.selected)) {
               return IconThemeData(color: primarycolor1);
             }
-            return IconThemeData(color: primarycolor2);
+            return IconThemeData(
+              color: context.watch<ThemeProvider>().isDark ? Colors.white : primarycolor2,
+            );
           }),
           labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((states) {
             if (states.contains(WidgetState.selected)) {
-              return GoogleFonts.cairo(
+              return GoogleFonts.tajawal(
                 color: primarycolor1,
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
               ); //
             }
-            return TextStyle(color: primarycolor2, fontWeight: FontWeight.bold, fontSize: 12); //
+            return TextStyle(
+              color: context.watch<ThemeProvider>().isDark ? Colors.white : primarycolor2,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ); //
           }),
         ),
         child: Consumer<NavigationProvider>(
@@ -93,8 +103,8 @@ class HomeMainUser extends StatelessWidget {
               ),
               NavigationDestination(
                 icon: Icon(Icons.grid_3x3_outlined),
-                selectedIcon: Icon(Icons.grid_3x3),
-                label: "طلبات المعتهدين",
+                selectedIcon: Icon(Icons.request_page_outlined),
+                label: "طلباتي",
               ),
             ],
           ),

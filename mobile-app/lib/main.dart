@@ -11,11 +11,16 @@ import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';
 import 'package:renove_provider/screens/Contractor/home_screen_contractor.dart';
 import 'package:renove_provider/screens/User/home_screens/home_main_user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final authProvider = AuthProvider();
   await authProvider.loadUser();
+  final pref = await SharedPreferences.getInstance();
+
+  final isDark = pref.getBool('darkMode') ?? false;
+
   runApp(
     MultiProvider(
       providers: [
@@ -24,15 +29,16 @@ void main() async {
         ChangeNotifierProvider(create: (_) => NavigationProvider()),
         ChangeNotifierProvider(create: (_) => ShowprofileProvider()),
         ChangeNotifierProvider(create: (_) => ConstructionRequestProvider()),
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider(isDark: isDark)),
       ],
-      child: MyApp(),
+      child: MyApp(isDark: isDark),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.isDark});
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +55,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
 
-          textTheme: GoogleFonts.cairoTextTheme(),
-          primaryTextTheme: GoogleFonts.cairoTextTheme(),
+          textTheme: GoogleFonts.tajawalTextTheme(),
+          primaryTextTheme: GoogleFonts.tajawalTextTheme(),
           colorScheme: ColorScheme.fromSeed(
             seedColor: primarycolor2,
           ).copyWith(primary: primarycolor2, secondary: primarycolor1),
@@ -58,8 +64,8 @@ class MyApp extends StatelessWidget {
         darkTheme: ThemeData(
           useMaterial3: true,
           brightness: Brightness.dark,
-          textTheme: GoogleFonts.cairoTextTheme(ThemeData.dark().textTheme),
-          primaryTextTheme: GoogleFonts.cairoTextTheme(ThemeData.dark().textTheme),
+          textTheme: GoogleFonts.tajawalTextTheme(ThemeData.dark().textTheme),
+          primaryTextTheme: GoogleFonts.tajawalTextTheme(ThemeData.dark().textTheme),
           colorScheme: ColorScheme.fromSeed(
             seedColor: primarycolor2,
             brightness: Brightness.dark,

@@ -44,19 +44,34 @@ class _SettingsState extends State<Settings> {
         padding: const EdgeInsets.all(20),
         child: ListView(
           children: [
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
+            Consumer<ShowprofileProvider>(
+              builder: (context, value, child) {
+                final profile = value.showProfileModel;
+                if (profile == null) {
+                  return Center(
+                    child: Column(
+                      children: [
+                        Icon(Icons.wifi_off_outlined, size: 40),
+                        Text('No internet connection'),
+                      ],
+                    ),
+                  );
+                }
+                if (value.isLoading) {
+                  return Center(child: CircularProgressIndicator(color: primarycolor1));
+                }
+                return ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
 
-                minimumSize: Size(double.infinity, 100),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                backgroundColor: primarycolor2,
-                foregroundColor: primarycolor1,
-              ),
-              child: Consumer<ShowprofileProvider>(
-                builder: (context, value, child) {
-                  return Row(
+                    minimumSize: Size(double.infinity, 100),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    backgroundColor: primarycolor2,
+                    foregroundColor: primarycolor1,
+                  ),
+
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ClipRRect(
@@ -77,35 +92,59 @@ class _SettingsState extends State<Settings> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text(value.showProfileModel!.firstName),
-                          Text(value.showProfileModel!.email),
+                          Text(
+                            profile.firstName,
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          Text(
+                            profile.email,
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                          ),
                         ],
                       ),
                     ],
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
             SizedBox(height: 20),
             Consumer<ThemeProvider>(
               builder: (context, value, child) {
                 return ElevatedButton(
-                  onPressed: () {
-                    context.read<ThemeProvider>().toggleTheme();
-                  },
+                  onPressed: () => value.toggleTheme(),
+
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 70),
+                    elevation: 0,
+
+                    minimumSize: Size(double.infinity, 60),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    backgroundColor: primarycolor2,
+                    foregroundColor: primarycolor1,
                   ),
-                  child: IgnorePointer(
-                    child: SwitchListTile(
-                      value: value.isDark,
-                      onChanged: (_) {},
-                      title: Text('الوضع الداكن', textDirection: TextDirection.rtl),
-                      secondary: Icon(Icons.dark_mode),
-                      contentPadding: EdgeInsets.zero,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Transform.flip(
+                        flipX: true,
+                        child: Switch(
+                          value: value.isDark,
+                          onChanged: (_) => value.toggleTheme(),
+                          focusColor: primarycolor1,
+                          activeThumbColor: Colors.white,
+                          thumbColor: WidgetStatePropertyAll<Color>(primarycolor1),
+                        ),
+                      ),
+                      Row(
+                        spacing: 20,
+                        children: [
+                          Text(
+                            'الوضع الليلي',
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          Icon(Icons.dark_mode_outlined, size: 25),
+                        ],
+                      ),
+                    ],
                   ),
                 );
               },

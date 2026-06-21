@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/User/show_profile_provider.dart';
+import 'package:renove_provider/providers/theme_provider.dart';
 
 class ShowprofileScreen extends StatefulWidget {
   const ShowprofileScreen({super.key});
@@ -85,7 +86,10 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
                       foregroundColor: primarycolor1,
                       backgroundColor: primarycolor2,
                     ),
-                    child: Text('Click to upload new image'),
+                    child: Text(
+                      'اضغط لتحميل صورة جديدة',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   );
                 },
               ),
@@ -115,7 +119,9 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
                       padding: EdgeInsets.all(15),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Color(0xFFe4e6f2),
+                        color: context.watch<ThemeProvider>().isDark
+                            ? primarycolor2
+                            : Color(0xFFe4e6f2),
                       ),
                       child: Text(profile.firstName, textDirection: TextDirection.rtl),
                     ),
@@ -125,7 +131,9 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
                       width: double.infinity,
                       padding: EdgeInsets.all(15),
                       decoration: BoxDecoration(
-                        color: Color(0xFFe4e6f2),
+                        color: context.watch<ThemeProvider>().isDark
+                            ? primarycolor2
+                            : Color(0xFFe4e6f2),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(profile.lastName, textDirection: TextDirection.rtl),
@@ -136,7 +144,9 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
                       width: double.infinity,
                       padding: EdgeInsets.all(15),
                       decoration: BoxDecoration(
-                        color: Color(0xFFe4e6f2),
+                        color: context.watch<ThemeProvider>().isDark
+                            ? primarycolor2
+                            : Color(0xFFe4e6f2),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(profile.email, textDirection: TextDirection.rtl),
@@ -147,7 +157,9 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
                       width: double.infinity,
                       padding: EdgeInsets.all(15),
                       decoration: BoxDecoration(
-                        color: Color(0xFFe4e6f2),
+                        color: context.watch<ThemeProvider>().isDark
+                            ? primarycolor2
+                            : Color(0xFFe4e6f2),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(profile.phone, textDirection: TextDirection.rtl),
@@ -158,7 +170,9 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
                       width: double.infinity,
                       padding: EdgeInsets.all(15),
                       decoration: BoxDecoration(
-                        color: Color(0xFFe4e6f2),
+                        color: context.watch<ThemeProvider>().isDark
+                            ? primarycolor2
+                            : Color(0xFFe4e6f2),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(profile.location, textDirection: TextDirection.rtl),
