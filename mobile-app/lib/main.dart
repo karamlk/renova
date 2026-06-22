@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/User/construction_index_provider.dart';
 import 'package:renove_provider/providers/User/construction_request_provider.dart';
+import 'package:renove_provider/providers/User/request_details_provider.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
 import 'package:renove_provider/providers/navigation_provider.dart';
 import 'package:renove_provider/providers/User/create_profile_provider.dart';
@@ -32,6 +33,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ConstructionRequestProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider(isDark: isDark)),
         ChangeNotifierProvider(create: (_) => ConstructionIndexProvider()),
+        ChangeNotifierProvider(create: (_) => RequestDetailsProvider()),
       ],
       child: MyApp(isDark: isDark),
     ),

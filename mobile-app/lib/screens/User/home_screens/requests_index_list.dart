@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/User/construction_index_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
+import 'package:renove_provider/screens/User/home_screens/requests_details.dart';
 
 class RequestsIndexList extends StatefulWidget {
   const RequestsIndexList({super.key});
@@ -34,6 +35,9 @@ class _RequestsIndexListState extends State<RequestsIndexList> {
       ),
       body: Consumer<ConstructionIndexProvider>(
         builder: (context, value, child) {
+          if (value.isLoading) {
+            return Center(child: CircularProgressIndicator(color: primarycolor1));
+          }
           if (value.requestsIndex.isEmpty) {
             return Padding(
               padding: const EdgeInsets.all(20),
@@ -44,9 +48,6 @@ class _RequestsIndexListState extends State<RequestsIndexList> {
                 ),
               ),
             );
-          }
-          if (value.isLoading) {
-            return Center(child: CircularProgressIndicator(color: primarycolor1));
           }
           return Padding(
             padding: const EdgeInsets.all(15),
@@ -69,7 +70,14 @@ class _RequestsIndexListState extends State<RequestsIndexList> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RequestsDetails(id: req.id),
+                                ),
+                              );
+                            },
                             style: ButtonStyle(
                               backgroundColor: null,
                               iconColor: WidgetStatePropertyAll(Colors.grey),

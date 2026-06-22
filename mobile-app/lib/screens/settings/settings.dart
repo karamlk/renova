@@ -47,6 +47,10 @@ class _SettingsState extends State<Settings> {
             Consumer<ShowprofileProvider>(
               builder: (context, value, child) {
                 final profile = value.showProfileModel;
+
+                if (value.isLoading) {
+                  return Center(child: CircularProgressIndicator(color: primarycolor1));
+                }
                 if (profile == null) {
                   return Center(
                     child: Column(
@@ -56,9 +60,6 @@ class _SettingsState extends State<Settings> {
                       ],
                     ),
                   );
-                }
-                if (value.isLoading) {
-                  return Center(child: CircularProgressIndicator(color: primarycolor1));
                 }
                 return ElevatedButton(
                   onPressed: () {},
