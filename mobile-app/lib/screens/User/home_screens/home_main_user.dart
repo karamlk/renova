@@ -6,7 +6,7 @@ import 'package:renove_provider/providers/navigation_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/User/home_screens/contractors_requests_user.dart';
 
-import 'package:renove_provider/screens/User/home_screens/requests_user.dart';
+import 'package:renove_provider/screens/User/home_screens/requests_index_list.dart';
 import 'package:renove_provider/screens/User/home_screens/my_projects_user.dart';
 import 'package:renove_provider/screens/User/home_screens/home_screen_user.dart';
 import 'package:renove_provider/screens/settings/settings.dart';
@@ -14,7 +14,12 @@ import 'package:renove_provider/screens/User/Profile/show_profile_screen.dart';
 
 class HomeMainUser extends StatelessWidget {
   const HomeMainUser({super.key});
-  final List<Widget> pages = const [HomeMain(), Requests(), MyProjects(), ContractorsRequests()];
+  final List<Widget> pages = const [
+    HomeScreenUser(),
+    RequestsIndexList(),
+    MyProjects(),
+    ContractorsRequests(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +99,7 @@ class HomeMainUser extends StatelessWidget {
               NavigationDestination(
                 icon: Icon(Icons.request_page_outlined),
                 selectedIcon: Icon(Icons.request_page),
-                label: "العروض",
+                label: "الطلبات المرسلة",
               ),
               NavigationDestination(
                 icon: Icon(Icons.work_outline),
@@ -104,7 +109,7 @@ class HomeMainUser extends StatelessWidget {
               NavigationDestination(
                 icon: Icon(Icons.grid_3x3_outlined),
                 selectedIcon: Icon(Icons.request_page_outlined),
-                label: "طلباتي",
+                label: "العروض",
               ),
             ],
           ),

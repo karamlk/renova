@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
+import 'package:renove_provider/providers/User/construction_index_provider.dart';
 import 'package:renove_provider/providers/User/construction_request_provider.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
 import 'package:renove_provider/providers/navigation_provider.dart';
@@ -30,6 +31,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ShowprofileProvider()),
         ChangeNotifierProvider(create: (_) => ConstructionRequestProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider(isDark: isDark)),
+        ChangeNotifierProvider(create: (_) => ConstructionIndexProvider()),
       ],
       child: MyApp(isDark: isDark),
     ),

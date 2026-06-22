@@ -131,6 +131,7 @@ class _SettingsState extends State<Settings> {
                           onChanged: (_) => value.toggleTheme(),
                           focusColor: primarycolor1,
                           activeThumbColor: Colors.white,
+
                           thumbColor: WidgetStatePropertyAll<Color>(primarycolor1),
                         ),
                       ),

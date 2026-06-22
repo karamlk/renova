@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/screens/User/home_screens/create_request_dialogue.dart';
 
-class HomeMain extends StatelessWidget {
-  const HomeMain({super.key});
+class HomeScreenUser extends StatelessWidget {
+  const HomeScreenUser({super.key});
 
   @override
   Widget build(BuildContext context) {
