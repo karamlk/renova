@@ -53,7 +53,7 @@ class ContractorPostService
         return ContractorPost::with([
             'images',
             'user.contractorProfile'
-        ])->latest()->get();
+        ])->withCount('likes')->latest()->get();
     }
 
     public function show($id)
@@ -61,7 +61,7 @@ class ContractorPostService
         return ContractorPost::with([
             'images',
             'user.contractorProfile'
-        ])->findOrFail($id);
+        ])->withCount('likes')->findOrFail($id);
     }
 
     // كل بوستات متعهد معين
@@ -72,6 +72,7 @@ class ContractorPostService
             'user.contractorProfile'
         ])
             ->where('user_id', $contractorId)
+            ->withCount('likes')
             ->latest()
             ->get();
     }

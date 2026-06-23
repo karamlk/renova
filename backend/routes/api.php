@@ -11,6 +11,7 @@ use App\Http\Controllers\Contractor\ContractorProfileController;
 use App\Http\Controllers\Contractor\ScheduleController;
 use App\Http\Controllers\InspectionRequestController;
 use App\Http\Controllers\SiteVisitController;
+use App\Http\Controllers\User\LikeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -208,5 +209,10 @@ Route::middleware('auth:sanctum')->group(function () {
         '/user/visits',
         [SiteVisitController::class,
             'userVisits']
+    );
+//لايكات بوسات المتعهد ------------------------
+    Route::post(
+        '/posts/{post}/like',
+        [LikeController::class, 'toggleLike']
     );
 });

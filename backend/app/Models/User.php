@@ -100,4 +100,10 @@ class User extends Authenticatable
             ? asset('storage/' . $this->commercial_record)
             : null;
     }
+    public function likes()
+    {
+        return $this->hasMany(
+            Like::class
+        );
+    }
 }

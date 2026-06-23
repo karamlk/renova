@@ -33,4 +33,10 @@ class ContractorPost extends Model
             ContractorPostImage::class
         );
     }
+    public function likes()
+    {
+        return $this->hasMany(
+            Like::class
+        );
+    }
 }
