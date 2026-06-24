@@ -49,72 +49,78 @@ class _RequestsIndexListState extends State<RequestsIndexList> {
               ),
             );
           }
-          return Padding(
-            padding: const EdgeInsets.all(15),
-            child: ListView.builder(
-              itemCount: value.requestsIndex.length,
-              itemBuilder: (context, index) {
-                final req = value.requestsIndex[index];
-                return Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Card(
-                    color: context.watch<ThemeProvider>().isDark
-                        ? primarycolor2
-                        : Colors.grey.shade300,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          return RefreshIndicator(
+            color: primarycolor1,
+            onRefresh: () async {
+              context.read<ConstructionIndexProvider>().fetchRequestIndex();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: ListView.builder(
+                itemCount: value.requestsIndex.length,
+                itemBuilder: (context, index) {
+                  final req = value.requestsIndex[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Card(
+                      color: context.watch<ThemeProvider>().isDark
+                          ? primarycolor2
+                          : Colors.grey.shade300,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
 
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RequestsDetails(id: req.id),
-                                ),
-                              );
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: null,
-                              iconColor: WidgetStatePropertyAll(Colors.grey),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RequestsDetails(id: req.id),
+                                  ),
+                                );
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: null,
+                                iconColor: WidgetStatePropertyAll(Colors.grey),
+                              ),
+                              icon: Icon(Icons.arrow_circle_left, size: 60),
                             ),
-                            icon: Icon(Icons.arrow_circle_left, size: 60),
-                          ),
-                          Column(
-                            spacing: 5,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                'عنوان الطلب: ${req.title}',
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
+                            Column(
+                              spacing: 5,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'عنوان الطلب: ${req.title}',
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                ),
 
-                              Row(
-                                spacing: 5,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [Text(req.location), Icon(Icons.location_on_outlined)],
-                              ),
+                                Row(
+                                  spacing: 5,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [Text(req.location), Icon(Icons.location_on_outlined)],
+                                ),
 
-                              Row(
-                                spacing: 14,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text("الحالة: ${req.status}", textDirection: TextDirection.rtl),
-                                  Icon(Icons.arrow_upward),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
+                                Row(
+                                  spacing: 14,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text("الحالة: ${req.status}", textDirection: TextDirection.rtl),
+                                    Icon(Icons.arrow_upward),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           );
         },

@@ -34,4 +34,25 @@ class RequestDetailsProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<http.Response?> silentFetchDetails(int id) async {
+    try {
+      final token = await getPrefs('token');
+
+      final response = await http.get(
+        Uri.parse('$link/api/reconstruction-requests/$id'),
+        headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        details = data['data'];
+        notifyListeners();
+      }
+      print(response.body);
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
 }

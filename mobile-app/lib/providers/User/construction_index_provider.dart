@@ -24,10 +24,7 @@ class ConstructionIndexProvider extends ChangeNotifier {
         print(data);
 
         final List list = data['data'];
-        print('List Length: ${list.length}');
-        for (var item in list) {
-          print(item['id']);
-        }
+
         requestsIndex = list.map((e) => ConstructionRequestIndex.fromJson(e)).toList();
       }
       return response;
