@@ -8,6 +8,7 @@ import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/User/show_profile_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
+import 'package:renove_provider/skeletons/profile_page_skeleton.dart';
 
 class ShowprofileScreen extends StatefulWidget {
   const ShowprofileScreen({super.key});
@@ -100,7 +101,7 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
             Consumer<ShowprofileProvider>(
               builder: (context, value, child) {
                 if (value.isLoading || value.showProfileModel == null) {
-                  return Center(child: CircularProgressIndicator());
+                  return ProfilePageSkeleton();
                 }
 
                 final profile = value.showProfileModel;

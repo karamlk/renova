@@ -241,6 +241,7 @@ class _EditRequestDialogueState extends State<EditRequestDialogue> {
                                   behavior: SnackBarBehavior.floating,
                                 ),
                               );
+
                               context.read<RequestDetailsProvider>().silentFetchDetails(widget.id);
                             }
                           },

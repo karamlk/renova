@@ -7,7 +7,7 @@ import 'package:renove_provider/providers/auth_provider.dart';
 import 'package:renove_provider/screens/Auth/verify_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
-  RegisterScreen({super.key});
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();

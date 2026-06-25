@@ -11,6 +11,7 @@ import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';
 import 'package:renove_provider/screens/settings/change_password.dart';
 import 'package:renove_provider/screens/settings/verify_deletetion_screen.dart';
+import 'package:renove_provider/skeletons/setiings_page_skeleton.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -49,7 +50,7 @@ class _SettingsState extends State<Settings> {
                 final profile = value.showProfileModel;
 
                 if (value.isLoading) {
-                  return Center(child: CircularProgressIndicator(color: primarycolor1));
+                  return const SetiingsPageSkeleton();
                 }
                 if (profile == null) {
                   return Center(
