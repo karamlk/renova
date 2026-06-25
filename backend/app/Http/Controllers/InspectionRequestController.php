@@ -80,6 +80,12 @@ class InspectionRequestController
             'data' => $inspection
         ]);
     }
-
+    public function userOffers(): JsonResponse
+    {
+        return response()->json([
+            'data' => $this->inspectionService
+                ->userOffers()
+        ]);
+    }
 
 }

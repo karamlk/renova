@@ -163,7 +163,10 @@ Route::middleware('auth:sanctum')->group(function () {
             'reject']
     );
 });
-
+Route::get(
+    '/user/offers',
+    [InspectionRequestController::class, 'userOffers']
+);
 // عرض طلبات الزيارة لطلب معين
 Route::get(
     '/requests/{id}/inspection-requests',

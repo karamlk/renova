@@ -37,6 +37,17 @@ class InspectionRequestService
             ->get();
     }
 
+
+
+          public function userOffers()
+    {
+        return InspectionRequest::with([
+            'contractor',
+            'request'
+        ])->get();
+    }
+
+
     // قبول
     public function accept(array $data)
     {
