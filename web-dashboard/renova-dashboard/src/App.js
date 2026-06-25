@@ -1,5 +1,6 @@
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Login from "./pages/Login/Login";
+
 import ProtectedRoute from "./auth/ProtectedRoute";
 import AuthGate from "./auth/AuthGate";
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -8,6 +9,7 @@ import { useState } from "react";
 import Homepage from "./pages/Homepage/Homepage";
 import Settings from "./pages/Settings/Settings";
 import Users from "./pages/Users/Users";
+
 function App() {
   let [isloading, setisloading] = useState(false);
   return (
@@ -22,7 +24,7 @@ function App() {
               </AuthGate>
             }
           />
-          <Route path="logout" element={<Login />} />
+
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />}>
               <Route index element={<Navigate to="homepage" replace />} />

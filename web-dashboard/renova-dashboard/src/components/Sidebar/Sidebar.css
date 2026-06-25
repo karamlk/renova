@@ -18,7 +18,9 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   margin-bottom: 20px;
 }
-
+.logo-text {
+  margin-top: 20px !important;
+}
 .logo-text h2 {
   color: white;
   font-size: 22px;
@@ -31,7 +33,6 @@
 
 .logo-text p {
   color: #b8bcbf;
-
   font-size: 11px;
   margin-top: 4px;
 }

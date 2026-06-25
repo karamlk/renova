@@ -15,6 +15,9 @@
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
+.stat-left {
+  margin-top: 18px;
+}
 .stat-left h2 {
   font-size: 34px;
   font-weight: 800;
@@ -24,7 +27,6 @@
 .stat-left p {
   font-size: 14px;
   color: #3d424c;
-  margin-top: 8px;
   display: flex;
   align-items: center;
   gap: 6px;
