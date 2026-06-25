@@ -37,7 +37,7 @@ export default function Login() {
         <div className="info-side">
           <div className="brand">
             <img src="/assets/images/logo.png" alt="Logo" width="95" height="95" />
-            <div> 
+            <div className="logo-text"> 
             <h2>ري<span>ن</span>وفا</h2>
             <p>نظام إعادة الإعمار الذكي</p>
             </div>

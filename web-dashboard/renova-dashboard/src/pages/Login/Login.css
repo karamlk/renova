@@ -61,6 +61,10 @@
   align-items: center;
 }
 
+.logo-text {
+  margin-top: 15.5px;
+}
+
 .info-side .brand h2 {
   color: white;
   font-size: 30px;

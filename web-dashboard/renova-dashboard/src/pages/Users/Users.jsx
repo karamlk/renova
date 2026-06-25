@@ -45,6 +45,7 @@ export default function User(){
     ];
     return(
         <div>
+<<<<<<< HEAD
             <div class="users-table">
             <div class="table-header">
                 <h3><GroupIcon sx={{ color: "#f07c1f"}}/> المستخدمين</h3>
@@ -55,6 +56,18 @@ export default function User(){
                 </div>
             </div>
             <div class="table-container">
+=======
+            <div className="users-table">
+            <div className="table-header">
+                <h3><GroupIcon sx={{ color: "#f07c1f"}}/> المستخدمين</h3>
+                <div className="table-actions">
+                    <button className="btn-filter"><FilterAltIcon sx={{fontSize: "18px"}}/> فلترة</button>
+                    <button className="btn-refresh"><RefreshIcon sx={{fontSize: "18px"}}/> تحديث</button>
+                    <button className="btn-add"><AddIcon sx={{fontSize: "18px"}}/> إضافة</button>
+                </div>
+            </div>
+            <div className="table-container">
+>>>>>>> 0fe71e9 (resolve merge conflicts keep css files)
                 <table>
                     <thead>
                         <tr>
@@ -84,21 +97,54 @@ export default function User(){
                             <div className="actions">
                             {/* زر العرض */}
                             <Tooltip title="عرض" arrow>
+<<<<<<< HEAD
                                 <IconButton className="action-btn view-btn">
+=======
+                                <IconButton className="action-btn" sx={{
+                                        color: "#2196f3",
+                                        backgroundColor: "rgba(33,150,243,0.1)",
+                                        "&:hover": {
+                                        backgroundColor: "#2196f3",
+                                        color: "white",
+                                        },
+                                    }}>
+>>>>>>> 0fe71e9 (resolve merge conflicts keep css files)
                                 <VisibilityIcon sx={{ fontSize: 24 }} />
                                 </IconButton>
                             </Tooltip>
 
                             {/* زر التعديل */}
                             <Tooltip title="تعديل" arrow>
+<<<<<<< HEAD
                                 <IconButton className="action-btn edit-btn">
+=======
+                                <IconButton className="action-btn " sx={{
+                                        color: "#f07c1f",
+                                        backgroundColor: "rgba(240,124,31,0.1)",
+                                        "&:hover": {
+                                            backgroundColor: "#f07c1f",
+                                            color: "white",
+                                        },
+                                        }}>
+>>>>>>> 0fe71e9 (resolve merge conflicts keep css files)
                                 <EditIcon sx={{ fontSize: 24 }} />
                                 </IconButton>
                             </Tooltip>
 
                             {/* زر الحذف */}
                             <Tooltip title="حذف" arrow>
+<<<<<<< HEAD
                                 <IconButton className="action-btn delete-btn">
+=======
+                                <IconButton className="action-btn" sx={{
+                                        color: "#e53935",
+                                        backgroundColor: "rgba(229,57,53,0.1)",
+                                        "&:hover": {
+                                            backgroundColor: "#e53935",
+                                            color: "white",
+                                        },
+                                        }}>
+>>>>>>> 0fe71e9 (resolve merge conflicts keep css files)
                                 <DeleteIcon sx={{ fontSize: 24 }} />
                                 </IconButton>
                             </Tooltip>

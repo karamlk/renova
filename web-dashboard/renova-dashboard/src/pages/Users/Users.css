@@ -153,33 +153,3 @@ tr:hover td {
 .action-btn:hover {
   transform: translateY(-2px);
 }
-
-.view-btn {
-  color: #2196f3;
-  background: rgba(33, 150, 243, 0.1);
-}
-
-.view-btn:hover {
-  background: #2196f3;
-  color: white;
-}
-
-.edit-btn {
-  color: #f07c1f;
-  background: rgba(240, 124, 31, 0.1);
-}
-
-.edit-btn:hover {
-  background: #f07c1f;
-  color: white;
-}
-
-.delete-btn {
-  color: #e53935;
-  background: rgba(229, 57, 53, 0.1);
-}
-
-.delete-btn:hover {
-  background: #e53935;
-  color: white;
-}
