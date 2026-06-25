@@ -1,31 +1,38 @@
 import "./Login.css";
 import { useState } from "react";
+import { loginRequest } from "../../api/auth";
+import { useNavigate } from "react-router-dom";
+import Errordialog from "../../components/Errordialog/Errordialog";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import WestIcon from '@mui/icons-material/West';
 export default function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  
-
-  const handleSubmit = (e) => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showError, setShowError] = useState(false);
+    async function handleLogin(e){
     e.preventDefault();
-    // هنا ستضيف منطق تسجيل الدخول لاحقاً
-    console.log('Email:', email);
-    console.log('Password:', password);
-   
-    
-    // مثال: توجيه إلى لوحة التحكم
-    // window.location.href = '/dashboard';
-  };
+    try{
+          let response = await loginRequest(email, password);
+          if(response.status >= 200 && response.status < 300 && response.data.token && response.data.role==='admin'){
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('role', response.data.role);
+            navigate('/dashboard', { replace: true });
 
-  const PasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+          }
+
+    }catch(error){
+      setErrorMessage(error.response.data.message);
+      setShowError(true);
+    }
+  } 
        return (
     <div className="login-page">
+      {showError && (<Errordialog message={errorMessage} onClose={() => setShowError(false)}/>)}
       <div className="login-container">
         <div className="info-side">
           <div className="brand">
@@ -51,7 +58,7 @@ export default function Login() {
           <h3>تسجيل الدخول <span>إلى حسابك</span></h3>
           <p className="sub">أدخل بياناتك للوصول إلى لوحة التحكم</p>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleLogin}>
             <div className="form-group">
               <label htmlFor="email">البريد الإلكتروني</label>
               <input
@@ -75,7 +82,7 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                <span className="show-pass" onClick={PasswordVisibility}>
+                <span className="show-pass" onClick={() => {setShowPassword(!showPassword)}}>
                   {showPassword ? (
                     <VisibilityOffIcon sx={{ color: 'rgba(255, 255, 255, 0.6)' }} />
                   ) : (

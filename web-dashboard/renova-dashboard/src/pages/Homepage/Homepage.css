@@ -1,0 +1,7 @@
+.chart-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #3b414c;
+  margin-top: 15px;
+}
