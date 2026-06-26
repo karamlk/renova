@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\AccountDeletionController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ChangePasswordController;
@@ -219,3 +220,36 @@ Route::middleware('auth:sanctum')->group(function () {
         [LikeController::class, 'toggleLike']
     );
 });
+//---------------ادارة مستخدمين
+{
+
+        Route::get(
+            '/users',
+            [UserManagementController::class, 'index']
+        );
+
+        Route::get(
+            '/users/{user}',
+            [UserManagementController::class, 'show']
+        );
+
+        Route::patch(
+            '/users/{user}/status',
+            [UserManagementController::class, 'toggleStatus']
+        );
+
+        Route::delete(
+            '/users/{user}',
+            [UserManagementController::class, 'destroy']
+        );
+
+    Route::get(
+        '/admin/contractors',
+        [UserManagementController::class, 'contractors']
+    );
+
+    Route::get(
+        '/admin/engineers',
+        [UserManagementController::class, 'engineers']
+    );
+    };
