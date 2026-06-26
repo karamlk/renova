@@ -19,7 +19,7 @@ class AdminSeeder extends Seeder
                 'name' => 'john',
                 'role_id' => \App\Models\Role::where('name', 'admin')->first()->id,
                 'status'  => 'approved', 
-                'password' => Hash::make('password123'),
+                'password' => Hash::make('12345678'),
                 'otp_verified' => true,
             ]
         );
