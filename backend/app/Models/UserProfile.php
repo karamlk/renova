@@ -16,25 +16,20 @@ class UserProfile extends Model
         'image',
         'location',
     ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
     // UserProfile.php
 
-    protected $appends = ['image_url'];
+    protected $appends = ['image_url', 'full_image_url'];
 
     public function getImageUrlAttribute()
     {
         return $this->image
             ? '/storage/' . $this->image
             : null;
-    }
-
-    protected function image(): Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => $value ? asset('storage/' . $value) : null,
-        );
     }
 }
