@@ -32,4 +32,9 @@ class UserProfile extends Model
             ? '/storage/' . $this->image
             : null;
     }
-}
+    public function getFullImageUrlAttribute()
+    {
+        return $this->image
+            ? asset('storage/' . $this->image)
+            : null;
+    }}
