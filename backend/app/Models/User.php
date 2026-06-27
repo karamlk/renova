@@ -28,6 +28,7 @@ class User extends Authenticatable
         'pending_delete',
         'role_id',
         'status',
+        'is_active',
     ];
 
     /**

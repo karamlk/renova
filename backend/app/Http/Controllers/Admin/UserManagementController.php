@@ -70,4 +70,13 @@ class UserManagementController extends Controller
             'data' => $this->service->engineers()
         ]);
     }
+    public function toggleActive(
+        User $user
+    )
+    {
+        return response()->json([
+            'data' => $this->service
+                ->toggleActive($user)
+        ]);
+    }
 }

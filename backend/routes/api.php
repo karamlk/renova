@@ -252,4 +252,8 @@ Route::middleware('auth:sanctum')->group(function () {
         '/admin/engineers',
         [UserManagementController::class, 'engineers']
     );
+    Route::patch(
+        '/admin/users/{user}/active',
+        [UserManagementController::class, 'toggleActive']
+    );
     };

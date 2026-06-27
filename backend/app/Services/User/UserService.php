@@ -73,6 +73,12 @@ class UserService
             throw new \Exception('يجب التحقق من OTP أولاً.');
         }
 //
+        if (! $user->is_active) {
+
+            return response()->json([
+                'message' => 'الحساب معطل من قبل الإدارة'
+            ], 403);
+        }
         if (
             $user->role->name === 'contractor'
             && $user->status !== 'approved'
