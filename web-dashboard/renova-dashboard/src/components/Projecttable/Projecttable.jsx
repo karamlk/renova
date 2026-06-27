@@ -1,10 +1,12 @@
 import "./Projecttable.css";
+import { useTranslation } from 'react-i18next';
 //MUI Icons
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RefreshIcon from '@mui/icons-material/Refresh';
 export default function Projecttable() {
+    const [t]=useTranslation();
     const projects = [
   {
     id: 1,
@@ -52,23 +54,23 @@ export default function Projecttable() {
         <div>
         <div class="projects-table">
             <div class="table-header">
-                <h3><AssignmentIcon sx={{ color: "#f07c1f"}}/> أحدث المشاريع</h3>
+                <h3><AssignmentIcon sx={{ color: "#f07c1f"}}/> {t("أحدث المشاريع")}</h3>
                 <div class="table-actions">
-                    <button class="btn-filter"><FilterAltIcon sx={{fontSize: "18px"}}/> فلترة</button>
-                    <button class="btn-outline"><RefreshIcon sx={{fontSize: "18px"}}/> تحديث</button>
+                    <button class="btn-filter"><FilterAltIcon sx={{fontSize: "18px"}}/> {t("فلترة")}</button>
+                    <button class="btn-outline"><RefreshIcon sx={{fontSize: "18px"}}/> {t("تحديث")}</button>
                 </div>
             </div>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
-                            <th>اسم المشروع</th>
-                            <th>صاحب المشروع</th>
-                            <th>الموقع</th>
-                            <th>النوع</th>
-                            <th>الحالة</th>
-                            <th>تاريخ الإنشاء</th>
-                            <th>التقدم</th>
+                            <th>{t("اسم المشروع")}</th>
+                            <th>{t("صاحب المشروع")}</th>
+                            <th>{t("الموقع")}</th>
+                            <th>{t("النوع")}</th>
+                            <th>{t("الحالة")}</th>
+                            <th>{t("تاريخ الإنشاء")}</th>
+                            <th>{t("التقدم")}</th>
                         </tr>
                     </thead>
                    <tbody>

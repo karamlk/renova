@@ -1,14 +1,13 @@
 .sidebar {
-  position: fixed;
-  right: 0;
-  top: 0;
+  position: relative;
   width: 280px;
   height: 100vh;
   background: #0f1f2f;
   z-index: 100;
   overflow-y: auto;
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.08);
-  direction: rtl;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-header {
@@ -39,6 +38,9 @@
 
 .sidebar-menu {
   padding: 5px 15px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .menu-btn {
@@ -86,4 +88,10 @@
 .menu-btn-logout:hover {
   background: rgba(240, 62, 31, 0.12);
   color: #f03b1f;
+}
+.sidebar-language {
+  margin-top: auto;
+  padding: 20px;
+  display: flex;
+  justify-content: flex-end;
 }

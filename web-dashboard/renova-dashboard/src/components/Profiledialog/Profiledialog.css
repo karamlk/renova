@@ -1,0 +1,147 @@
+.dialog-overlay {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.dialog-box1 {
+  background: white;
+  border-radius: 20px;
+  height: 600px;
+  width: 500px;
+  margin-right: 160px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  animation: slideUp 0.3s ease;
+  overflow: hidden;
+}
+
+.dialog-header {
+  padding: 0px 24px 18px 24px;
+  border-bottom: 1px solid #f0f1f3;
+}
+
+.dialog-header .title {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.dialog-header .title h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f1f2f;
+  margin: 0;
+  font-family: "Tajawal", sans-serif;
+}
+
+.dialog-body {
+  padding: 16px 24px 50px 24px;
+}
+
+.profile-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f0f1f3;
+}
+
+.profile-row .info h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f1f2f;
+  margin: 0 0 2px 0;
+  font-family: "Tajawal", sans-serif;
+}
+
+.profile-row .info .role {
+  font-size: 14px;
+  color: #b8bcbf;
+  font-weight: 500;
+  font-family: "Tajawal", sans-serif;
+}
+
+.field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5f5f6;
+}
+
+.field:last-child {
+  border-bottom: none;
+}
+
+.field .label {
+  font-size: 15px;
+  color: #b8bcbf;
+  font-weight: 500;
+  font-family: "Tajawal", sans-serif;
+}
+
+.field .value {
+  font-size: 15px;
+  font-weight: 500;
+  color: #0f1f2f;
+  font-family: "Tajawal", sans-serif;
+}
+
+.dialog-footer {
+  padding: 5px 24px 20px 24px;
+  display: flex;
+  gap: 10px;
+}
+
+.dialog-footer .btn-edit {
+  flex: 1;
+  padding: 10px 0;
+  background: #f07c1f;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.dialog-footer .btn-edit:hover {
+  background: #d96d1a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(240, 124, 31, 0.25);
+}
+
+.dialog-footer .btn-edit:active {
+  transform: scale(0.97);
+}
+
+.dialog-footer .btn-cancel {
+  flex: 1;
+  padding: 10px 0;
+  background: white;
+  border: 1.5px solid #666;
+  border-radius: 10px;
+  color: #666;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  transition: 0.3s;
+  text-align: center;
+}
+
+.dialog-footer .btn-cancel:hover {
+  border-color: #f07c1f;
+  color: #f07c1f;
+  background: rgba(240, 124, 31, 0.04);
+}

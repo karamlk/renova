@@ -1,4 +1,7 @@
 import "./Users.css";
+import { useTranslation } from 'react-i18next';
+import { useState,useEffect } from "react";
+import {getUsersRequest} from "../../api/users";
 import GroupIcon from '@mui/icons-material/Group';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
@@ -10,74 +13,51 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import AddIcon from '@mui/icons-material/Add';
+import Switch from '@mui/material/Switch';
 export default function User(){
-    const users = [
-        { id: 1,
-          image:"", 
-          first_name: "عبدالحكيم",
-          last_name: "الصاج",
-          phone: "0123456789",
-          location: "القاهرة", 
-          role: "متعهد", 
-          created_at: "2023-01-01",
-         },
-         {
-            id: 2,
-            image:"", 
-            first_name: "عبدالحكيم",
-            last_name: "الصاج",
-            phone: "0123456789",
-            location: "القاهرة", 
-            role: "مستخدم", 
-            created_at: "2023-01-01",
-         },
-         {
-            id: 3,
-            image:"", 
-            first_name: "عبدالحكيم",
-            last_name: "الصاج",
-            phone: "0123456789",
-            location: "القاهرة", 
-            role: "متعهد", 
-            created_at: "2023-01-01",
-         }
-
-    ];
+    const [t] = useTranslation();
+    const [users,setUsers] = useState([]);
+     async function getUsers() {
+            let response = await getUsersRequest();
+            setUsers(response.data.data);
+            console.log(response.data.data);
+            }
+    useEffect(()=>{getUsers();},[]);
+    let role ={
+        1:"مدير النظام",
+        2:"مستخدم",
+        3:"متعهد",
+        4:"مهندس"
+    }
+    let status ={
+        approved:"مقبول",
+        rejected:"مرفوض",
+        pending:"قيد الانتظار"
+    }
     return(
         <div>
-<<<<<<< HEAD
-            <div class="users-table">
-            <div class="table-header">
-                <h3><GroupIcon sx={{ color: "#f07c1f"}}/> المستخدمين</h3>
-                <div class="table-actions">
-                    <button class="btn-filter"><FilterAltIcon sx={{fontSize: "18px"}}/> فلترة</button>
-                    <button class="btn-refresh"><RefreshIcon sx={{fontSize: "18px"}}/> تحديث</button>
-                    <button class="btn-add"><AddIcon sx={{fontSize: "18px"}}/> إضافة</button>
-                </div>
-            </div>
-            <div class="table-container">
-=======
             <div className="users-table">
             <div className="table-header">
-                <h3><GroupIcon sx={{ color: "#f07c1f"}}/> المستخدمين</h3>
+                <h3><GroupIcon sx={{ color: "#f07c1f"}}/> {t("المستخدمين")}</h3>
                 <div className="table-actions">
-                    <button className="btn-filter"><FilterAltIcon sx={{fontSize: "18px"}}/> فلترة</button>
-                    <button className="btn-refresh"><RefreshIcon sx={{fontSize: "18px"}}/> تحديث</button>
-                    <button className="btn-add"><AddIcon sx={{fontSize: "18px"}}/> إضافة</button>
+                    <button className="btn-filter"><FilterAltIcon sx={{fontSize: "18px"}}/> {t("فلترة")}</button>
+                    <button className="btn-refresh" onClick={getUsers}><RefreshIcon sx={{fontSize: "18px"}}/> {t("تحديث")}</button>
+                    {/*<button className="btn-add"><AddIcon sx={{fontSize: "18px"}}/> {t("إضافة")}</button>*/}
                 </div>
             </div>
             <div className="table-container">
->>>>>>> 0fe71e9 (resolve merge conflicts keep css files)
                 <table>
                     <thead>
                         <tr>
-                            <th>الصورة</th>
-                            <th>اسم المستخدم</th>
-                            <th>رقم الجوال</th>
-                            <th>مكان السكن</th>
-                            <th>الدور</th>
-                            <th>تاريخ الإنشاء</th>
-                            <th>الاجراءات</th>
+                            <th>{t("الصورة")}</th>
+                            <th>{t("اسم المستخدم")}</th>
+                            <th>{t("رقم الجوال")}</th>
+                            <th>{t("مكان السكن")}</th>
+                            <th>{t("الدور")}</th>
+                            <th>{t("تاريخ الإنشاء")}</th>
+                            <th>{t("الحالة")}</th>
+                            <th>{t("نشط")}</th>
+                            <th>{t("الاجراءات")}</th>
                         </tr>
                     </thead>
                    <tbody>
@@ -85,21 +65,23 @@ export default function User(){
                         <tr key={user.id}>
                         <td>
                             <div className="avatar">
-                            <Avatar  alt="Remy Sharp" src={user.image} sx={{ width: 48, height: 48 , color: "#f07c1f", backgroundColor: "rgba(240, 124, 31, 0.1)"   }} />
+                                {user?.profile?.full_image_url ? <Avatar  src={user?.profile?.full_image_url} alt="img" sx={{ width: 50, height: 50 }} />:<Avatar  alt=""  sx={{ width: 48, height: 48 , color: "#f07c1f", backgroundColor: "rgba(240, 124, 31, 0.1)"   }} />   }
+                            
                             </div>
                         </td>
-                        <td>{user.first_name} {user.last_name}</td>
-                        <td>{user.phone}</td>
-                        <td className="location"><LocationOnIcon sx={{ color: "#f07c1f"}}/>{user.location}</td>
-                        <td>{user.role}</td>
-                        <td>{user.created_at}</td>
+                        <td>{user?.name} </td>
+                        <td>{user?.profile?.phone? user?.profile?.phone : t("غير موجود")}</td>
+                        <td className="location"><LocationOnIcon sx={{ color: "#f07c1f"}}/>{user?.profile?.location ? user?.profile?.location : t("غير موجود")}</td>
+                        <td>{role[user?.role_id]}</td>
+                        <td>{user?.created_at}</td>
+                        <td>{status[user?.status]}</td>
+                        <td><Switch checked={user?.is_active} color="warning" /></td>
                         <td>
                             <div className="actions">
                             {/* زر العرض */}
-                            <Tooltip title="عرض" arrow>
-<<<<<<< HEAD
-                                <IconButton className="action-btn view-btn">
-=======
+                            <Tooltip title={t("عرض")} arrow>
+
+
                                 <IconButton className="action-btn" sx={{
                                         color: "#2196f3",
                                         backgroundColor: "rgba(33,150,243,0.1)",
@@ -108,16 +90,14 @@ export default function User(){
                                         color: "white",
                                         },
                                     }}>
->>>>>>> 0fe71e9 (resolve merge conflicts keep css files)
                                 <VisibilityIcon sx={{ fontSize: 24 }} />
                                 </IconButton>
                             </Tooltip>
 
                             {/* زر التعديل */}
-                            <Tooltip title="تعديل" arrow>
-<<<<<<< HEAD
-                                <IconButton className="action-btn edit-btn">
-=======
+                           {/*<Tooltip title={t("تعديل")} arrow>
+
+
                                 <IconButton className="action-btn " sx={{
                                         color: "#f07c1f",
                                         backgroundColor: "rgba(240,124,31,0.1)",
@@ -126,16 +106,13 @@ export default function User(){
                                             color: "white",
                                         },
                                         }}>
->>>>>>> 0fe71e9 (resolve merge conflicts keep css files)
                                 <EditIcon sx={{ fontSize: 24 }} />
                                 </IconButton>
-                            </Tooltip>
+                            </Tooltip>*/} 
 
                             {/* زر الحذف */}
-                            <Tooltip title="حذف" arrow>
-<<<<<<< HEAD
-                                <IconButton className="action-btn delete-btn">
-=======
+                            <Tooltip title={t("حذف")} arrow>
+
                                 <IconButton className="action-btn" sx={{
                                         color: "#e53935",
                                         backgroundColor: "rgba(229,57,53,0.1)",
@@ -144,7 +121,6 @@ export default function User(){
                                             color: "white",
                                         },
                                         }}>
->>>>>>> 0fe71e9 (resolve merge conflicts keep css files)
                                 <DeleteIcon sx={{ fontSize: 24 }} />
                                 </IconButton>
                             </Tooltip>

@@ -10,8 +10,17 @@ import Homepage from "./pages/Homepage/Homepage";
 import Settings from "./pages/Settings/Settings";
 import Users from "./pages/Users/Users";
 
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 function App() {
   let [isloading, setisloading] = useState(false);
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    const dir = i18n.dir(); // "rtl" or "ltr"
+    document.documentElement.setAttribute("dir", dir);
+  }, [i18n.language]);
+
   return (
     <LoadingContext.Provider value={{ isloading, setisloading }}>
       <div className="App">

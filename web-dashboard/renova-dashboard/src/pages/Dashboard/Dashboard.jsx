@@ -1,3 +1,4 @@
+import "./Dashboard.css";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Topbar from "../../components/Topbar/Topbar";
 import Footer from "../../components/Footer/Footer";
@@ -6,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import {Outlet} from "react-router-dom";
 import { LoadingContext } from "../../Context/Loadingcontext";
 import{useContext,useState,useEffect} from "react";
-import "./Dashboard.css";
+import { useTranslation } from "react-i18next";
 export default function Dashboard() {
   const {isloading}=useContext(LoadingContext);
   const [firstload,setfirstload]=useState(true);
@@ -26,13 +27,19 @@ export default function Dashboard() {
       return (
     <div className="Dashboard">
      {/*AllPage*/}
-      <Grid container spacing={0} style={{ height: "100vh" }}>
+      <Grid container spacing={0} sx={{ height: "100vh"}} >
+        {/*SideBar*/}
+        <Grid size={2}>
+          <Sidebar />
+        </Grid>
         {/*body*/}
         {isloading ? (<Loadingicon/>) : (
-          <Grid size={10}>
+          
+          <Grid size={10} >
+            <div className="body">
           <Grid container spacing={0}>
             {/*TopBar*/}
-            <Grid size={12}>
+            <Grid size={12} >
               <Topbar />
             </Grid>
             {/*MainContent*/}
@@ -46,12 +53,11 @@ export default function Dashboard() {
               <Footer />
             </Grid>
           </Grid>
+          </div>
         </Grid>
+        
       )}
-        {/*SideBar*/}
-        <Grid size={2}>
-          <Sidebar />
-        </Grid>
+        
       </Grid>
       </div>
   )
