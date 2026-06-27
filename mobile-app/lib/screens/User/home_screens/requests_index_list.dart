@@ -25,11 +25,17 @@ class _RequestsIndexListState extends State<RequestsIndexList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Align(
-          alignment: Alignment.centerRight,
-          child: Text(
-            "طلبات الإعمار",
-            style: TextStyle(fontWeight: FontWeight.bold, color: primarycolor1),
+        title: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                "طلبات الإعمار",
+                style: TextStyle(fontWeight: FontWeight.bold, color: primarycolor1),
+              ),
+              Divider(color: primarycolor1, height: 5),
+            ],
           ),
         ),
       ),
