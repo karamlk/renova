@@ -1,7 +1,13 @@
 import './Errordialog.css';
+//MUI Icons
 import RefreshIcon from '@mui/icons-material/Refresh';
 import GppMaybeIcon from '@mui/icons-material/GppMaybe';
+//Hooks
+import { useTranslation } from 'react-i18next';
+
 export default function Errordialog({message ,onClose}){
+    const { t } = useTranslation();
+
     return (
     <div>
         <div className="dialog-overlay" id="dialogOverlay">
@@ -9,11 +15,11 @@ export default function Errordialog({message ,onClose}){
             <div className="icon-wrapper">
                 <GppMaybeIcon sx={{fontSize: 50 , color:"#e53935" ,}}/>
             </div>
-            <h3>فشل المصادقة</h3>
-                <p>{message}</p>
+            <h3>{t("فشل المصادقة")}</h3>
+                <p>{t(message)}</p>
             <button className="btn-primary" onClick={onClose} >
                 <RefreshIcon/>
-                إعادة المحاولة
+               {t("اعادة المحاولة")}
             </button>
         </div>
     </div>

@@ -5,6 +5,7 @@ import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/navigation_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/User/home_screens/contractors_requests_user.dart';
+import 'package:renove_provider/screens/User/home_screens/inspection_index_screen.dart';
 
 import 'package:renove_provider/screens/User/home_screens/requests_index_list.dart';
 import 'package:renove_provider/screens/User/home_screens/my_projects_user.dart';
@@ -17,7 +18,7 @@ class HomeMainUser extends StatelessWidget {
   final List<Widget> pages = const [
     HomeScreenUser(),
     RequestsIndexList(),
-    MyProjects(),
+    InspectionIndexScreen(),
     ContractorsRequests(),
   ];
 
@@ -104,7 +105,7 @@ class HomeMainUser extends StatelessWidget {
               NavigationDestination(
                 icon: Icon(Icons.work_outline),
                 selectedIcon: Icon(Icons.work),
-                label: "مشاريعي",
+                label: "العروض",
               ),
               NavigationDestination(
                 icon: Icon(Icons.grid_3x3_outlined),

@@ -1,8 +1,18 @@
+.Dashboard {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
+.body {
+  overflow-y: auto;
+  height: 100vh;
+  width: 100%;
+}
 .main-content {
-  direction: rtl;
   border-radius: 16px;
   padding: 10px 15px;
   border-radius: 16px;
+  width: 100%;
 }
 
 .loading-page {

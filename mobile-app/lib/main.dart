@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
+import 'package:renove_provider/providers/User/Inspection/inspection_provider.dart';
 import 'package:renove_provider/providers/User/construction_index_provider.dart';
 import 'package:renove_provider/providers/User/construction_request_provider.dart';
 import 'package:renove_provider/providers/User/request_details_provider.dart';
@@ -34,6 +35,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ThemeProvider(isDark: isDark)),
         ChangeNotifierProvider(create: (_) => ConstructionIndexProvider()),
         ChangeNotifierProvider(create: (_) => RequestDetailsProvider()),
+        ChangeNotifierProvider(create: (_) => InspectionProvider()),
       ],
       child: MyApp(isDark: isDark),
     ),

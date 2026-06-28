@@ -43,6 +43,7 @@ dependencies:
   flutter_image_compress: ^2.0.0
   path: ^1.9.1
   shimmer: ^3.0.0
+  intl: ^0.20.3
 
 dev_dependencies:
   flutter_test:

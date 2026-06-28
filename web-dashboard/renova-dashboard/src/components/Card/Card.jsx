@@ -1,6 +1,6 @@
 import "./Card.css"
+//MUI Icons
 import FolderIcon from '@mui/icons-material/Folder';
-
 export default function Card({number, title, iconright}) {
     return (
         <div>

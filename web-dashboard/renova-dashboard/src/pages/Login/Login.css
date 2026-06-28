@@ -7,7 +7,6 @@
   padding: 20px;
   position: relative;
   overflow: hidden;
-  direction: rtl;
 }
 
 .login-page::before {
@@ -207,7 +206,7 @@
 
 .show-pass {
   position: absolute;
-  left: 14px;
+  left: 10px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
@@ -223,7 +222,6 @@
   color: #f07c1f !important;
 }
 
-/* ===== زر تسجيل الدخول ===== */
 .btn-submit {
   width: 100%;
   padding: 14px;
@@ -247,4 +245,10 @@
   background: #d96d1a;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(240, 124, 31, 0.3);
+}
+.login-language {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
 }
