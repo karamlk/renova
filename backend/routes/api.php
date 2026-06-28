@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
-})->middleware('auth:sanctum');
+})->middleware('auth:sanctum', 'active');
 
 Route::post('/register', [AuthController::class, 'register']);
 
@@ -54,7 +54,7 @@ Route::prefix('admin')->group(function () {
 });
 use App\Http\Controllers\User\ProfileController;
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum','active'])->group(function () {
 
     Route::post('/user/profile', [ProfileController::class, 'store']);
     Route::get('/user/profile', [ProfileController::class, 'show']);
@@ -141,7 +141,7 @@ Route::get(
     '/contractors/{id}/posts',
     [ContractorPostController::class, 'contractorPosts']
 );
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum','active'])->group(function () {
 
     // إرسال طلب زيارة
     Route::post(
@@ -175,7 +175,7 @@ Route::get(
         'requestInspections']
 );
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum','active'])->group(function () {
 
     Route::post(
         '/contractor/schedules',
@@ -221,7 +221,12 @@ Route::middleware('auth:sanctum')->group(function () {
     );
 });
 //---------------ادارة مستخدمين
-{
+
+
+    Route::middleware([
+        'auth:sanctum',
+        'active'
+    ])->prefix('admin')->group(function () {
 
         Route::get(
             '/users',
@@ -238,22 +243,24 @@ Route::middleware('auth:sanctum')->group(function () {
             [UserManagementController::class, 'toggleStatus']
         );
 
+        Route::patch(
+            '/users/{user}/active',
+            [UserManagementController::class, 'toggleActive']
+        );
+
         Route::delete(
             '/users/{user}',
             [UserManagementController::class, 'destroy']
         );
 
-    Route::get(
-        '/admin/contractors',
-        [UserManagementController::class, 'contractors']
-    );
+        Route::get(
+            '/contractors',
+            [UserManagementController::class, 'contractors']
+        );
 
-    Route::get(
-        '/admin/engineers',
-        [UserManagementController::class, 'engineers']
-    );
-    Route::patch(
-        '/admin/users/{user}/active',
-        [UserManagementController::class, 'toggleActive']
-    );
-    };
+        Route::get(
+            '/engineers',
+            [UserManagementController::class, 'engineers']
+        );
+    });
+

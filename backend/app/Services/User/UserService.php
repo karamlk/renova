@@ -105,7 +105,10 @@ class UserService
 
             $user->delete();
 
-            throw new \Exception('تم حذف هذا الحساب نهائيًا.');
+            throw new \Symfony\Component\HttpKernel\Exception\HttpException(
+                403,
+                'تم تعطيل هذا الحساب من قبل الإدارة'
+            );
         }
     }
     public function logout(User $user): void
