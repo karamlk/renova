@@ -1,0 +1,81 @@
+/* ===== الخلفية ===== */
+.delete-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* ===== النافذة ===== */
+.delete-dialog {
+  background: white;
+  border-radius: 20px;
+  height: 300x;
+  width: 480px;
+  padding: 24px 28px 24px 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  animation: popIn 0.3s ease;
+  text-align: center;
+}
+
+.delete-dialog h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f1f2f;
+  margin-bottom: 8px;
+}
+
+.delete-dialog p {
+  font-size: 14px;
+  color: #7a7f8a;
+  line-height: 1.7;
+  margin-bottom: 22px;
+}
+
+.delete-dialog .btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+.delete-dialog .btn-group .btn-cancel {
+  flex: 1;
+  padding: 12px;
+  background: #f0f1f3;
+  border: none;
+  border-radius: 12px;
+  color: #3b414c;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.delete-dialog .btn-group .btn-cancel:hover {
+  background: #e8e9eb;
+}
+
+.delete-dialog .btn-group .btn-delete {
+  flex: 1;
+  padding: 12px;
+  background: #e53935;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.delete-dialog .btn-group .btn-delete:hover {
+  background: #c62828;
+}

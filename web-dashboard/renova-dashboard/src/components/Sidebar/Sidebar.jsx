@@ -3,25 +3,19 @@ import "./Sidebar.css";
 import Langswitcher from "../Langswitcher/Langswitcher";
 //Router
 import { NavLink } from "react-router-dom";
-//Hooks
-import{useContext} from "react";
+
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 // Material UI Icons
 import HomeIcon from '@mui/icons-material/Home';
-import SettingsIcon from '@mui/icons-material/Settings';
 import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
-//Context
-import { LoadingContext } from "../../Context/Loadingcontext";
+
 export default function Sidebar() {
- const {setisloading}=useContext(LoadingContext);
+
  const navigate = useNavigate();
  const [t]=useTranslation();
- function LoadingPage() {
-     setisloading(true);
-    setTimeout(() => {setisloading(false)},1500)
- }
+
  function RemoveStorge() {
      localStorage.removeItem("token");
      localStorage.removeItem("role");
@@ -37,12 +31,12 @@ export default function Sidebar() {
                 </div>
         </div>
         <div className="sidebar-menu">
-            <NavLink onClick={LoadingPage} to="homepage" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
+            <NavLink  to="homepage" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
                 <HomeIcon />
                 <span>{t("الصفحة الرئيسية")}</span>
             </NavLink>
 
-            <NavLink onClick={LoadingPage} to="users" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
+            <NavLink  to="users" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
                 <GroupIcon />
                 <span>{t("المستخدمين")}</span>
             </NavLink>
