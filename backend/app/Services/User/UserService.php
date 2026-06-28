@@ -75,9 +75,9 @@ class UserService
 //
         if (! $user->is_active) {
 
-            return response()->json([
-                'message' => 'الحساب معطل من قبل الإدارة'
-            ], 403);
+            throw new \Exception(
+                'تم تعطيل هذا الحساب من قبل الإدارة'
+            );
         }
         if (
             $user->role->name === 'contractor'

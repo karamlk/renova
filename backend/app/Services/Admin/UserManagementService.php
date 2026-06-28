@@ -63,10 +63,18 @@ class UserManagementService
     }
     public function toggleActive(User $user)
     {
+        $newStatus = ! $user->is_active;
+
         $user->update([
-            'is_active' => !$user->is_active
+            'is_active' => $newStatus
         ]);
 
-        return $user;
+        // إذا تم تعطيل الحساب
+        if (! $newStatus) {
+
+            $user->tokens()->delete();
+        }
+
+        return $user->fresh();
     }
 }
