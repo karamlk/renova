@@ -1,4 +1,5 @@
 import "./Footer.css";
+//Hooks
 import { useTranslation } from 'react-i18next';
 
 export default function Footer() {

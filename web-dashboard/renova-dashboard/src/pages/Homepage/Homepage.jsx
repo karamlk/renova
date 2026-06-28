@@ -1,12 +1,14 @@
 import "./Homepage.css";
-import Card from "../../components/Card/Card"
+//MUI
 import { Grid } from '@mui/material';
+//Components
+import Card from "../../components/Card/Card"
 import Cardchart from "../../components/Cardchart/Cardchart";
 import Projecttable from "../../components/Projecttable/Projecttable";
 import Circlechart from "../../components/Charts/Charts";
 import {Linerchart} from "../../components/Charts/Charts";
+//Hooks
 import { useTranslation } from 'react-i18next';
-
 //MUI Icons
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import PersonIcon from '@mui/icons-material/Person';

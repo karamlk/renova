@@ -1,11 +1,13 @@
-import{useState,useEffect} from "react";
-import { getProfileRequest } from "../../api/auth";
 import './Profiledialog.css';
+//api
+import { getProfileRequest } from "../../api/auth";
+//MUI Icons
 import EditIcon from '@mui/icons-material/Edit';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Avatar from '@mui/material/Avatar';
+//Hooks
 import { useTranslation } from 'react-i18next';
-
+import{useState,useEffect} from "react";
 export default function Profiledialog({ onClose }) {
   const [t]=useTranslation();
     let role ={

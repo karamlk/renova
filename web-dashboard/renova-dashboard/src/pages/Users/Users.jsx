@@ -1,7 +1,10 @@
 import "./Users.css";
+//Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect } from "react";
+//api
 import {getUsersRequest} from "../../api/users";
+//MUI Icons
 import GroupIcon from '@mui/icons-material/Group';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';

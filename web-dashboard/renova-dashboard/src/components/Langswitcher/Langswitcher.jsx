@@ -1,7 +1,9 @@
 import "./Langswitcher.css";
-import LanguageIcon from '@mui/icons-material/Language';
-import{useState} from "react";
 import i18n from "../../i18n";
+//MUI Icons
+import LanguageIcon from '@mui/icons-material/Language';
+//Hooks
+import{useState} from "react";
 export default function Langswitcher() {
     let code=localStorage.getItem("i18nextLng");
     const [codelang,setcodelang]=useState(code);

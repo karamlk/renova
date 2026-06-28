@@ -1,10 +1,14 @@
 import "./Login.css";
+//Components
 import Langswitcher from "../../components/Langswitcher/Langswitcher"
-import { useState } from "react";
+import Errordialog from "../../components/Errordialog/Errordialog";
+//api
 import { loginRequest } from "../../api/auth";
+//Hooks
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-import Errordialog from "../../components/Errordialog/Errordialog";
+import { useState } from "react";
+//MUI Icons
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';

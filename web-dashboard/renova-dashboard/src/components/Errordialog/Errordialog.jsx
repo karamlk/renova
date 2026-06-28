@@ -1,6 +1,8 @@
 import './Errordialog.css';
+//MUI Icons
 import RefreshIcon from '@mui/icons-material/Refresh';
 import GppMaybeIcon from '@mui/icons-material/GppMaybe';
+//Hooks
 import { useTranslation } from 'react-i18next';
 
 export default function Errordialog({message ,onClose}){

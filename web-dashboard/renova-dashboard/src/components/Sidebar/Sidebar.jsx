@@ -1,7 +1,9 @@
 import "./Sidebar.css";
+//Components
 import Langswitcher from "../Langswitcher/Langswitcher";
+//Router
 import { NavLink } from "react-router-dom";
-import { LoadingContext } from "../../Context/Loadingcontext";
+//Hooks
 import{useContext} from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
@@ -10,6 +12,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
+//Context
+import { LoadingContext } from "../../Context/Loadingcontext";
 export default function Sidebar() {
  const {setisloading}=useContext(LoadingContext);
  const navigate = useNavigate();
