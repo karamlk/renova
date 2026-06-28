@@ -75,6 +75,7 @@ class UserManagementController extends Controller
     )
     {
         return response()->json([
+            'message'=>'تم تغيير حالة النشاط بنجاح',
             'data' => $this->service
                 ->toggleActive($user)
         ]);
