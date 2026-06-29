@@ -34,7 +34,7 @@ class ContractorProfile extends Model
     {
         return $this->belongsTo(User::class);
     }
-    protected $appends = ['image_url','commercial_record_url'];
+    protected $appends = ['image_url','commercial_record_url','full_commercial_record_url'];
 
     public function getImageUrlAttribute()
     {
@@ -42,13 +42,20 @@ class ContractorProfile extends Model
             ? '/storage/' . $this->image
             : null;
     }
-    //protected $append = ['commercial_record_url'];
+
 
     public function getCommercialRecordUrlAttribute()
     {
         // تأكد أن الحقل يحتوي على قيمة قبل بناء الرابط
         return $this->commercial_record
             ? '/storage/' . $this->commercial_record
+            : null;
+    }
+    public function getfullCommercialRecordUrlAttribute()
+    {
+        // تأكد أن الحقل يحتوي على قيمة قبل بناء الرابط
+        return $this->commercial_record
+            ?asset ('/storage/' . $this->commercial_record)
             : null;
     }
 }

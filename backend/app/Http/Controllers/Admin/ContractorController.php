@@ -14,13 +14,22 @@ class ContractorController extends Controller
     // جلب المتعهدين المعلقين
     public function pending()
     {
-        $contractors = User::where('status', 'pending')
+        $contractors = User::with(
+            'contractorProfile'
+        )
+            ->where('status', 'pending')
             ->whereHas('role', function ($q) {
-                $q->where('name', 'contractor');
+
+                $q->where(
+                    'name',
+                    'contractor'
+                );
             })
             ->get();
 
-        return response()->json($contractors);
+        return response()->json(
+            $contractors
+        );
     }
 
     // قبول متعهد

@@ -142,6 +142,9 @@ Route::get(
     [ContractorPostController::class, 'contractorPosts']
 );
 Route::middleware(['auth:sanctum','active'])->group(function () {
+    Route::get(
+        '/contractor/reconstruction-requests',
+        [ReconstructionRequestController::class, 'index']);
 
     // إرسال طلب زيارة
     Route::post(

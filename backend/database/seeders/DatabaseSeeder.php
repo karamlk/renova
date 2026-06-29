@@ -22,4 +22,14 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
     }
+
 }
+$this->call([
+    UserSeeder::class,
+    ContractorProfileSeeder::class,
+]);
+$this->call([
+    UserSeeder::class,
+    ContractorProfileSeeder::class,
+    ReconstructionRequestSeeder::class,
+]);

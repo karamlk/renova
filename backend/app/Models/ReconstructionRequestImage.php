@@ -22,11 +22,17 @@ class ReconstructionRequestImage extends Model
             ReconstructionRequest::class
         );
     }
-    protected $appends = ['image_url'];
+    protected $appends = ['image_url','full_image_url'];
     public function getImageUrlAttribute()
     {
         return $this->image
             ? '/storage/' . $this->image
+            : null;
+    }
+    public function getfullImageUrlAttribute()
+    {
+        return $this->image
+            ? asset('/storage/' . $this->image)
             : null;
     }
 }
