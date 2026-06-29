@@ -9,7 +9,7 @@ class RequsesteController
     public function index()
     {
         $requests = ReconstructionRequest::with([
-            'user',
+            'user.profile',
             'images'
         ])
             ->latest()
