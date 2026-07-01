@@ -173,7 +173,7 @@ Route::get(
 );
 // عرض طلبات الزيارة لطلب معين
 Route::get(
-    '/requests/{id}/inspection-requests',
+    '/requests/inspection-requests',
     [InspectionRequestController::class,
         'requestInspections']
 );

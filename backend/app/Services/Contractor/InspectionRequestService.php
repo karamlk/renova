@@ -4,6 +4,7 @@ namespace App\Services\Contractor;
 
 use App\Models\ContractorSchedule;
 use App\Models\InspectionRequest;
+use App\Models\ReconstructionRequest;
 use App\Models\SiteVisit;
 use Carbon\Carbon;
 
@@ -12,8 +13,23 @@ class InspectionRequestService
     // إنشاء طلب زيارة
     public function store($request)
     {
-        return InspectionRequest::create([
+        $exists = InspectionRequest::where(
+            'reconstruction_request_id',
+            $request->reconstruction_request_id
+        )
+            ->where(
+                'contractor_id',
+                auth()->id()
+            )
+            ->exists();
 
+        if ($exists) {
+            throw new \Exception(
+                'لقد أرسلت عرضاً لهذا الطلب مسبقاً'
+            );
+        }
+
+        return InspectionRequest::create([
             'reconstruction_request_id' =>
                 $request->reconstruction_request_id,
 
@@ -21,19 +37,15 @@ class InspectionRequestService
                 auth()->id(),
         ]);
     }
-
     // طلبات طلب معين
-    public function requestInspections($requestId)
+    public function requestInspections()
     {
-        return InspectionRequest::with([
 
-            'contractor.contractorProfile'
+        return ReconstructionRequest::with([
+            'inspectionRequests',
+            'inspectionRequests.contractor'
         ])
-            ->where(
-                'reconstruction_request_id',
-                $requestId
-            )
-            ->latest()
+            ->whereHas('inspectionRequests')
             ->get();
     }
 

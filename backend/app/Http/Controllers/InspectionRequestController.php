@@ -39,13 +39,11 @@ class InspectionRequestController
     }
 
     // كل طلبات الزيارة لطلب معين
-    public function requestInspections($id)
+    public function requestInspections()
     {
         return response()->json([
-
-            'data' =>
-                $this->inspectionService
-                    ->requestInspections($id)
+            'data' => $this->inspectionService
+                ->requestInspections()
         ]);
     }
    // protected InspectionRequestService $inspectionRequestService;
