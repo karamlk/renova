@@ -34,12 +34,18 @@ class ContractorProfile extends Model
     {
         return $this->belongsTo(User::class);
     }
-    protected $appends = ['image_url','commercial_record_url','full_commercial_record_url'];
+    protected $appends = ['image_url','full_image_url','commercial_record_url','full_commercial_record_url'];
 
     public function getImageUrlAttribute()
     {
         return $this->image
             ? '/storage/' . $this->image
+            : null;
+    }
+    public function getFullImageUrlAttribute()
+    {
+        return $this->image
+            ? asset('storage/' . $this->image)
             : null;
     }
 

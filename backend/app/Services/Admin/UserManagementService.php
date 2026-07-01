@@ -10,7 +10,8 @@ class UserManagementService
     {
         return User::with([
             'role',
-            'profile'
+            'profile',
+            'contractorProfile'
         ])->get();
     }
 
@@ -18,6 +19,7 @@ class UserManagementService
     {
         return $user->load([
             'role',
+            'contractorProfile',
             'profile'
         ]);
     }
