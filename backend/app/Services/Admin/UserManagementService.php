@@ -18,7 +18,7 @@ class UserManagementService
     {
         return $user->load([
             'role',
-            'profile'
+            'contractorProfile'
         ]);
     }
 
