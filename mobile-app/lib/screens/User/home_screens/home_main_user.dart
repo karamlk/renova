@@ -4,11 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/navigation_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
+
 import 'package:renove_provider/screens/User/home_screens/contractors_requests_user.dart';
 import 'package:renove_provider/screens/User/home_screens/inspection_index_screen.dart';
 
 import 'package:renove_provider/screens/User/home_screens/requests_index_list.dart';
-import 'package:renove_provider/screens/User/home_screens/my_projects_user.dart';
+
 import 'package:renove_provider/screens/User/home_screens/home_screen_user.dart';
 import 'package:renove_provider/screens/settings/settings.dart';
 import 'package:renove_provider/screens/User/Profile/show_profile_screen.dart';
@@ -27,14 +28,14 @@ class HomeMainUser extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 70,
-        backgroundColor: primarycolor2,
+
         leading: IconButton(
           iconSize: 30,
 
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => Settings()));
           },
-          icon: Icon(Icons.settings, color: Color(0xffb8bcbf)),
+          icon: Icon(Icons.settings),
         ),
 
         elevation: 10,
@@ -49,7 +50,6 @@ class HomeMainUser extends StatelessWidget {
                 ).push(MaterialPageRoute(builder: (context) => ShowprofileScreen()));
               },
               icon: Icon(Icons.person_rounded),
-              color: Color(0xffb8bcbf),
             ),
           ),
         ],
@@ -65,7 +65,9 @@ class HomeMainUser extends StatelessWidget {
             if (states.contains(WidgetState.selected)) {
               return IconThemeData(color: primarycolor1);
             }
-            return IconThemeData(color: Color(0xffb8bcbf));
+            return IconThemeData(
+              color: context.watch<ThemeProvider>().isDark ? Colors.white60 : primarycolor2,
+            );
           }),
           labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((states) {
             if (states.contains(WidgetState.selected)) {
@@ -76,7 +78,7 @@ class HomeMainUser extends StatelessWidget {
               ); //
             }
             return GoogleFonts.tajawal(
-              color: Color(0xffb8bcbf), // 👈 Unselected label color
+              color: context.watch<ThemeProvider>().isDark ? Colors.white60 : primarycolor2,
               fontWeight: FontWeight.bold,
               fontSize: 12,
             );
@@ -84,8 +86,6 @@ class HomeMainUser extends StatelessWidget {
         ),
         child: Consumer<NavigationProvider>(
           builder: (context, nav, child) => NavigationBar(
-            backgroundColor: primarycolor2,
-            indicatorColor: Colors.white30,
             selectedIndex: nav.currentIndex,
             onDestinationSelected: (index) {
               context.read<NavigationProvider>().changeIndex(index);
