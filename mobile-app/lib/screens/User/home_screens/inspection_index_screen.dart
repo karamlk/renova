@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/User/Inspection/inspection_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
+import 'package:renove_provider/screens/User/Inspection/inspection_details.dart';
+import 'package:renove_provider/skeletons/inspection_index_skeleton.dart';
 
 class InspectionIndexScreen extends StatefulWidget {
   const InspectionIndexScreen({super.key});
@@ -23,45 +25,52 @@ class _InspectionIndexScreenState extends State<InspectionIndexScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  "العروض",
-                  style: TextStyle(fontWeight: FontWeight.bold, color: primarycolor1),
+    return RefreshIndicator(
+      onRefresh: () => context.read<InspectionProvider>().fetchInspectionIndex(),
+      color: primarycolor1,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    "العروض",
+                    style: TextStyle(fontWeight: FontWeight.bold, color: primarycolor1),
+                  ),
                 ),
-              ),
-              Divider(color: primarycolor1, height: 5),
-            ],
+                Divider(color: primarycolor1, height: 5),
+              ],
+            ),
           ),
         ),
-      ),
-      body: Consumer<InspectionProvider>(
-        builder: (context, value, child) {
-          if (value.isLoading) {
-            return Center(child: CircularProgressIndicator(color: primarycolor1));
-          }
-          if (value.inspectionindex.isEmpty) {
-            return const Center(
-              child: Text(
-                'لا يوجد عروض لك',
+        body: Consumer<InspectionProvider>(
+          builder: (context, value, child) {
+            if (value.isLoading) {
+              return InspectionIndexSkeleton();
+            }
+            if (value.inspectionindex.isEmpty) {
+              return CustomScrollView(
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: Text(
+                        'لا يوجد عروض لك',
 
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
-              ),
-            );
-          }
-          return RefreshIndicator(
-            onRefresh: () => value.fetchInspectionIndex(),
-            child: Padding(
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }
+            return Padding(
               padding: const EdgeInsets.all(15),
               child: ListView.builder(
                 physics: const AlwaysScrollableScrollPhysics(),
-
                 itemCount: value.inspectionindex.length,
                 itemBuilder: (context, index) {
                   final inspectingIndex = value.inspectionindex[index];
@@ -77,7 +86,7 @@ class _InspectionIndexScreenState extends State<InspectionIndexScreen> {
                       child: Padding(
                         padding: EdgeInsets.all(15),
                         child: Column(
-                          spacing: 8,
+                          spacing: 12,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Row(
@@ -147,7 +156,7 @@ class _InspectionIndexScreenState extends State<InspectionIndexScreen> {
                                   spacing: 4,
                                   children: [
                                     Text(
-                                      inspectingIndex.requestLocation,
+                                      inspectingIndex.contractorEmail,
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -155,14 +164,68 @@ class _InspectionIndexScreenState extends State<InspectionIndexScreen> {
                                       ),
                                     ),
                                     Text(
-                                      'الموقع:',
+                                      'البريد الإلكتروني:',
                                       textAlign: TextAlign.right,
                                       textDirection: TextDirection.rtl,
+
                                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
-                                Icon(Icons.location_on_outlined),
+                                Icon(Icons.email_outlined),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(
+                                      context,
+                                    ).push(MaterialPageRoute(builder: (_) => InspectionDetails()));
+                                  },
+
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    backgroundColor: Colors.white30,
+                                    foregroundColor: Color(0xFFF59B4A),
+                                  ),
+                                  child: Text(
+                                    'عرض التفاصيل',
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Row(
+                                  spacing: 4,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Row(
+                                      spacing: 4,
+                                      children: [
+                                        Text(
+                                          inspectingIndex.requestLocation,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: primarycolor1,
+                                          ),
+                                        ),
+                                        Text(
+                                          'الموقع:',
+                                          textAlign: TextAlign.right,
+                                          textDirection: TextDirection.rtl,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Icon(Icons.location_on_outlined),
+                                  ],
+                                ),
                               ],
                             ),
                           ],
@@ -172,9 +235,9 @@ class _InspectionIndexScreenState extends State<InspectionIndexScreen> {
                   );
                 },
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

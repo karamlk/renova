@@ -27,15 +27,14 @@ class HomeMainUser extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 70,
+        backgroundColor: primarycolor2,
         leading: IconButton(
           iconSize: 30,
+
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => Settings()));
           },
-          icon: Icon(
-            Icons.settings,
-            color: context.watch<ThemeProvider>().isDark ? Colors.white : primarycolor2,
-          ),
+          icon: Icon(Icons.settings, color: Color(0xffb8bcbf)),
         ),
 
         elevation: 10,
@@ -50,7 +49,7 @@ class HomeMainUser extends StatelessWidget {
                 ).push(MaterialPageRoute(builder: (context) => ShowprofileScreen()));
               },
               icon: Icon(Icons.person_rounded),
-              color: context.watch<ThemeProvider>().isDark ? Colors.white : primarycolor2,
+              color: Color(0xffb8bcbf),
             ),
           ),
         ],
@@ -66,9 +65,7 @@ class HomeMainUser extends StatelessWidget {
             if (states.contains(WidgetState.selected)) {
               return IconThemeData(color: primarycolor1);
             }
-            return IconThemeData(
-              color: context.watch<ThemeProvider>().isDark ? Colors.white : primarycolor2,
-            );
+            return IconThemeData(color: Color(0xffb8bcbf));
           }),
           labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((states) {
             if (states.contains(WidgetState.selected)) {
@@ -78,15 +75,17 @@ class HomeMainUser extends StatelessWidget {
                 fontSize: 12,
               ); //
             }
-            return TextStyle(
-              color: context.watch<ThemeProvider>().isDark ? Colors.white : primarycolor2,
+            return GoogleFonts.tajawal(
+              color: Color(0xffb8bcbf), // 👈 Unselected label color
               fontWeight: FontWeight.bold,
               fontSize: 12,
-            ); //
+            );
           }),
         ),
         child: Consumer<NavigationProvider>(
           builder: (context, nav, child) => NavigationBar(
+            backgroundColor: primarycolor2,
+            indicatorColor: Colors.white30,
             selectedIndex: nav.currentIndex,
             onDestinationSelected: (index) {
               context.read<NavigationProvider>().changeIndex(index);

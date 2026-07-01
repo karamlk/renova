@@ -66,6 +66,7 @@ class MyApp extends StatelessWidget {
 
         theme: ThemeData(
           useMaterial3: true,
+          scaffoldBackgroundColor: Color(0xfff0f1f3),
           textTheme: GoogleFonts.tajawalTextTheme(),
           primaryTextTheme: GoogleFonts.tajawalTextTheme(),
           colorScheme: ColorScheme.fromSeed(
@@ -74,6 +75,7 @@ class MyApp extends StatelessWidget {
         ),
         darkTheme: ThemeData(
           useMaterial3: true,
+
           brightness: Brightness.dark,
           textTheme: GoogleFonts.tajawalTextTheme(ThemeData.dark().textTheme),
           primaryTextTheme: GoogleFonts.tajawalTextTheme(
