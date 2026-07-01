@@ -46,7 +46,7 @@ class ContractorProfileService
         return auth()
             ->user()
             ->contractorProfile()
-            ->with('user')
+            ->with('user','role')
             ->first();
     }
 

@@ -28,7 +28,7 @@ class ProfileService{
 
     public function show()
     {
-        $user = auth()->user()->load('profile');
+        $user = auth()->user()->load('profile','role');
 
 //        if ($user->profile && $user->profile->image) {
 //            $user->profile->image = asset('storage/' . $user->profile->image);
