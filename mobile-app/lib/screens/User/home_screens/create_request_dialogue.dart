@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +39,7 @@ class _CreateRequestDialogueState extends State<CreateRequestDialogue> {
                   textDirection: TextDirection.rtl,
                   decoration: InputDecoration(
                     labelText: "العنوان",
+                    labelStyle: TextStyle(color: primarycolor1),
 
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                   ),
@@ -51,6 +51,7 @@ class _CreateRequestDialogueState extends State<CreateRequestDialogue> {
                   validator: (value) => value == null || value.isEmpty ? 'يجب إدخال الوصف' : null,
                   controller: descController,
                   decoration: InputDecoration(
+                    labelStyle: TextStyle(color: primarycolor1),
                     labelText: "الوصف",
 
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -63,6 +64,7 @@ class _CreateRequestDialogueState extends State<CreateRequestDialogue> {
                   validator: (value) => value == null || value.isEmpty ? 'يجب إدخال الموقع' : null,
                   controller: locationController,
                   decoration: InputDecoration(
+                    labelStyle: TextStyle(color: primarycolor1),
                     labelText: "الموقع",
 
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -75,10 +77,14 @@ class _CreateRequestDialogueState extends State<CreateRequestDialogue> {
                     textDirection: TextDirection.rtl,
                     child: DropdownButtonFormField<String>(
                       initialValue: provider.selectedType,
-                      hint: Text("اختر النوع"),
+
+                      hint: Text("اختر النوع", style: TextStyle(color: primarycolor1)),
+
                       isExpanded: true,
                       alignment: AlignmentDirectional.centerStart,
                       decoration: InputDecoration(
+                        hintStyle: TextStyle(color: primarycolor1),
+
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
@@ -90,7 +96,11 @@ class _CreateRequestDialogueState extends State<CreateRequestDialogue> {
                           value: entry.key,
                           child: Align(
                             alignment: Alignment.centerRight,
-                            child: Text(entry.value, textDirection: TextDirection.rtl),
+                            child: Text(
+                              entry.value,
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(color: primarycolor1),
+                            ),
                           ),
                         );
                       }).toList(),
@@ -118,7 +128,7 @@ class _CreateRequestDialogueState extends State<CreateRequestDialogue> {
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          backgroundColor: Color(0xFF3b414c),
+                          backgroundColor: primarycolor2,
                           foregroundColor: Color(0xFFF59B4A),
                           disabledBackgroundColor: Color(0xFF3b414c),
                         ),
@@ -180,13 +190,13 @@ class _CreateRequestDialogueState extends State<CreateRequestDialogue> {
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      backgroundColor: Color(0xFF3b414c),
+                      backgroundColor: primarycolor2,
                       foregroundColor: Color(0xFFF59B4A),
                       disabledBackgroundColor: Color(0xFF3b414c),
                     ),
                     child: value.isLoading
                         ? CircularProgressIndicator(color: primarycolor1)
-                        : Text('إدخال'),
+                        : Text('إدخال', style: TextStyle(fontWeight: FontWeight.bold)),
                   );
                 },
               ),

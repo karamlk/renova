@@ -35,9 +35,9 @@ class EditRequestDialogue extends StatefulWidget {
 }
 
 class _EditRequestDialogueState extends State<EditRequestDialogue> {
-  late final titleController;
-  late final descController;
-  late final locationController;
+  late final TextEditingController titleController;
+  late final TextEditingController descController;
+  late final TextEditingController locationController;
   String? selectedType;
   late List<dynamic> remainingNetworkImages;
   final _formKey = GlobalKey<FormState>();

@@ -4,6 +4,7 @@ import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/User/construction_index_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/User/home_screens/requests_details.dart';
+import 'package:renove_provider/skeletons/requests_index_skeleton.dart';
 
 class RequestsIndexList extends StatefulWidget {
   const RequestsIndexList({super.key});
@@ -23,44 +24,54 @@ class _RequestsIndexListState extends State<RequestsIndexList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                "طلبات الإعمار",
-                style: TextStyle(fontWeight: FontWeight.bold, color: primarycolor1),
-              ),
-              Divider(color: primarycolor1, height: 5),
-            ],
+    return RefreshIndicator(
+      color: primarycolor1,
+      onRefresh: () async {
+        context.read<ConstructionIndexProvider>().fetchRequestIndex();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  "طلبات الإعمار",
+                  style: TextStyle(fontWeight: FontWeight.bold, color: primarycolor1),
+                ),
+                Divider(color: primarycolor1, height: 5),
+              ],
+            ),
           ),
         ),
-      ),
-      body: Consumer<ConstructionIndexProvider>(
-        builder: (context, value, child) {
-          if (value.isLoading) {
-            return Center(child: CircularProgressIndicator(color: primarycolor1));
-          }
-          if (value.requestsIndex.isEmpty) {
+        body: Consumer<ConstructionIndexProvider>(
+          builder: (context, value, child) {
+            if (value.isLoading) {
+              return RequestsIndexSkeleton();
+            }
+            if (value.requestsIndex.isEmpty) {
+              return CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: Text(
+                        'لا يوجد أي طلبات',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: primarycolor1,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }
             return Padding(
-              padding: const EdgeInsets.all(20),
-              child: Center(
-                child: Text(
-                  'لا يوجد أي طلبات',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: primarycolor1),
-                ),
-              ),
-            );
-          }
-          return RefreshIndicator(
-            color: primarycolor1,
-            onRefresh: () async {
-              context.read<ConstructionIndexProvider>().fetchRequestIndex();
-            },
-            child: Padding(
               padding: const EdgeInsets.all(15),
               child: ListView.builder(
                 itemCount: value.requestsIndex.length,
@@ -77,10 +88,34 @@ class _RequestsIndexListState extends State<RequestsIndexList> {
 
                       child: Padding(
                         padding: const EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Column(
+                          spacing: 8,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            IconButton(
+                            Text(
+                              'عنوان الطلب: ${req.title}',
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+
+                            Row(
+                              spacing: 5,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(req.location),
+                                Icon(Icons.location_on_outlined, color: primarycolor1),
+                              ],
+                            ),
+
+                            Row(
+                              spacing: 14,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text("الحالة: ${req.status}", textDirection: TextDirection.rtl),
+                                Icon(Icons.arrow_upward, color: primarycolor1),
+                              ],
+                            ),
+                            ElevatedButton(
                               onPressed: () {
                                 Navigator.push(
                                   context,
@@ -89,36 +124,19 @@ class _RequestsIndexListState extends State<RequestsIndexList> {
                                   ),
                                 );
                               },
-                              style: ButtonStyle(
-                                backgroundColor: null,
-                                iconColor: WidgetStatePropertyAll(Colors.grey),
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(double.infinity, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                backgroundColor: Colors.white30,
+                                foregroundColor: primarycolor1,
                               ),
-                              icon: Icon(Icons.arrow_circle_left, size: 60),
-                            ),
-                            Column(
-                              spacing: 5,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'عنوان الطلب: ${req.title}',
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                                ),
 
-                                Row(
-                                  spacing: 5,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [Text(req.location), Icon(Icons.location_on_outlined)],
-                                ),
-
-                                Row(
-                                  spacing: 14,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text("الحالة: ${req.status}", textDirection: TextDirection.rtl),
-                                    Icon(Icons.arrow_upward),
-                                  ],
-                                ),
-                              ],
+                              child: Text(
+                                "عرض التفاصيل",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ],
                         ),
@@ -127,9 +145,9 @@ class _RequestsIndexListState extends State<RequestsIndexList> {
                   );
                 },
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
