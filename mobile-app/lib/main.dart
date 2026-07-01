@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/User/Inspection/inspection_provider.dart';
 import 'package:renove_provider/providers/User/construction_index_provider.dart';
+import 'package:renove_provider/providers/Contractor/show_profile_provider.dart';
+import 'package:renove_provider/providers/Contractor/contractor_provider.dart';
 import 'package:renove_provider/providers/User/construction_request_provider.dart';
 import 'package:renove_provider/providers/User/request_details_provider.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
@@ -12,7 +14,7 @@ import 'package:renove_provider/providers/User/create_profile_provider.dart';
 import 'package:renove_provider/providers/User/show_profile_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';
-import 'package:renove_provider/screens/Contractor/home_screen_contractor.dart';
+import 'package:renove_provider/screens/Contractor/contractor_root_screen.dart';
 import 'package:renove_provider/screens/User/home_screens/home_main_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,6 +38,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ConstructionIndexProvider()),
         ChangeNotifierProvider(create: (_) => RequestDetailsProvider()),
         ChangeNotifierProvider(create: (_) => InspectionProvider()),
+        ChangeNotifierProvider(create: (_) => ContractorShowProfileProvider()),
+        ChangeNotifierProvider(create: (_) => ContractorProvider()),
       ],
       child: MyApp(isDark: isDark),
     ),
@@ -55,7 +59,9 @@ class MyApp extends StatelessWidget {
         themeMode: context.watch<ThemeProvider>().thememode,
 
         home: auth.isLoggedin
-            ? (auth.roleLogin == "user" ? HomeMainUser() : HomeScreenContractor())
+            ? (auth.roleLogin == "user"
+                  ? HomeMainUser()
+                  : const ContractorRootScreen())
             : LoginScreen(),
 
         theme: ThemeData(
@@ -70,7 +76,9 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           brightness: Brightness.dark,
           textTheme: GoogleFonts.tajawalTextTheme(ThemeData.dark().textTheme),
-          primaryTextTheme: GoogleFonts.tajawalTextTheme(ThemeData.dark().textTheme),
+          primaryTextTheme: GoogleFonts.tajawalTextTheme(
+            ThemeData.dark().textTheme,
+          ),
           colorScheme: ColorScheme.fromSeed(
             seedColor: primarycolor2,
             brightness: Brightness.dark,

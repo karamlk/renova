@@ -43,22 +43,11 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> loadUser() async {
-    String? token = await getPrefs('token');
-    String? role = await getPrefs('role');
-
-    print(token);
-    print(role);
-    if (role == "user") {
-      roleLogin = "user";
-    } else {
-      roleLogin = "contractor";
-    }
-
-    if (token != null && token.isNotEmpty) {
-      isLoggedin = true;
-    } else {
-      isLoggedin = false;
-    }
+    final token = await getPrefs('token');
+    final role = await getPrefs('role');
+    isLoggedin = token != null && token.isNotEmpty;
+    roleLogin = role == 'user' || role == 'contractor' ? role : null;
+    if (roleLogin == null) isLoggedin = false;
     notifyListeners();
   }
 
@@ -73,16 +62,12 @@ class AuthProvider extends ChangeNotifier {
       );
       final data = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        String token = data['token'];
+        final String token = data['token'];
+        final String role = data['role'];
         await storePrefs('token', token);
-        String role = data['role'];
         await storePrefs('role', role);
-        print(role);
-        print(token);
-        String? tokenAfter = await getPrefs('token');
-        print(tokenAfter);
-        String? roleafter = await getPrefs('role');
-        print(roleafter);
+        roleLogin = role;
+        isLoggedin = true;
       }
       return response;
     } catch (e) {
@@ -101,7 +86,10 @@ class AuthProvider extends ChangeNotifier {
     try {
       final respose = await http.post(
         Uri.parse('$link/api/register'),
-        headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
         body: jsonEncode(registermodel),
       );
       final data = jsonDecode(respose.body);
@@ -153,7 +141,10 @@ class AuthProvider extends ChangeNotifier {
 
       final response = await http.post(
         Uri.parse("$link/api/otp/verify"),
-        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer $token",
+        },
         body: {"otp": otp},
       );
 
@@ -181,7 +172,10 @@ class AuthProvider extends ChangeNotifier {
 
       final response = await http.post(
         Uri.parse("$link/api/otp/verify"),
-        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer $token",
+        },
         body: {"otp": otp},
       );
 
@@ -242,11 +236,16 @@ class AuthProvider extends ChangeNotifier {
     try {
       final response = await http.post(
         Uri.parse('$link/api/logout'),
-        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer $token",
+        },
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print(response.body);
         await clearTPrefs('token');
+        await clearTPrefs('role');
+        isLoggedin = false;
+        roleLogin = null;
       }
       return response;
     } catch (e) {
@@ -311,7 +310,11 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<http.Response?> changePassword(String old, String newpass, String repeat) async {
+  Future<http.Response?> changePassword(
+    String old,
+    String newpass,
+    String repeat,
+  ) async {
     isChanging = true;
     notifyListeners();
     final token = await getPrefs('token');

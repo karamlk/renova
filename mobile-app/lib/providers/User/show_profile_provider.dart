@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/shared_preferneces.dart';
-
+import 'dart:async';
 import 'package:renove_provider/models/show_profile_model.dart';
+import 'package:renove_provider/screens/Contractor/HomeMainContractor.dart';
 
 class ShowprofileProvider extends ChangeNotifier {
   ShowProfileModel? showProfileModel;
@@ -29,7 +30,10 @@ class ShowprofileProvider extends ChangeNotifier {
       token = await getPrefs('token');
       final response = await http.get(
         Uri.parse('$link/api/user/profile'),
-        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer $token",
+        },
       );
       final data = jsonDecode(response.body);
       print(data);
@@ -66,10 +70,15 @@ class ShowprofileProvider extends ChangeNotifier {
 
     try {
       String? token = await getPrefs('token');
-      var request = http.MultipartRequest('POST', Uri.parse('$link/api/user/profile/update'));
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$link/api/user/profile/update'),
+      );
       request.headers['Authorization'] = 'Bearer $token';
       request.headers['Accept'] = 'application/json';
-      request.files.add(await http.MultipartFile.fromPath('image', image!.path));
+      request.files.add(
+        await http.MultipartFile.fromPath('image', image!.path),
+      );
       final respone = await request.send();
       final res = await http.Response.fromStream(respone);
 
@@ -92,4 +101,29 @@ class ShowprofileProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void startStatusAutoCheck(BuildContext context) {
+    _statusTimer?.cancel();
+
+    _statusTimer = Timer.periodic(const Duration(seconds: 5), (timer) async {
+      await fetchProfile();
+
+      if ((showProfileModel as dynamic?)?.status == "approved") {
+        timer.cancel();
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const HomeMainContractor()),
+          (route) => false,
+        );
+      }
+    });
+  }
+
+  void stopStatusAutoCheck() {
+    _statusTimer?.cancel();
+    _statusTimer = null;
+  }
+
+  Timer? _statusTimer;
 }

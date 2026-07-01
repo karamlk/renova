@@ -56,6 +56,11 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
 
+# Keep Android builds compatible with the installed NDK toolchain.
+# Newer path_provider_android releases pull in JNI and require NDK 28.
+dependency_overrides:
+  path_provider_android: 2.2.15
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
