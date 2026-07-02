@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' hide TextDirection;
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/User/Inspection/inspection_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
-import 'package:renove_provider/screens/User/Inspection/inspection_details.dart';
+import 'package:renove_provider/screens/User/home_screens/Inspection/inspection_details_screen.dart';
 import 'package:renove_provider/skeletons/inspection_index_skeleton.dart';
 
 class InspectionIndexScreen extends StatefulWidget {
@@ -19,14 +18,14 @@ class _InspectionIndexScreenState extends State<InspectionIndexScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<InspectionProvider>().fetchInspectionIndex();
+      context.read<InspectionProvider>().fetchInspections();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () => context.read<InspectionProvider>().fetchInspectionIndex(),
+      onRefresh: () => context.read<InspectionProvider>().fetchInspections(),
       color: primarycolor1,
       child: Scaffold(
         appBar: AppBar(
@@ -47,11 +46,11 @@ class _InspectionIndexScreenState extends State<InspectionIndexScreen> {
           ),
         ),
         body: Consumer<InspectionProvider>(
-          builder: (context, value, child) {
-            if (value.isLoading) {
+          builder: (context, provider, child) {
+            if (provider.isLoading) {
               return InspectionIndexSkeleton();
             }
-            if (value.inspectionindex.isEmpty) {
+            if (provider.requests.isEmpty) {
               return CustomScrollView(
                 slivers: [
                   SliverFillRemaining(
@@ -71,12 +70,9 @@ class _InspectionIndexScreenState extends State<InspectionIndexScreen> {
               padding: const EdgeInsets.all(15),
               child: ListView.builder(
                 physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: value.inspectionindex.length,
+                itemCount: provider.requests.length,
                 itemBuilder: (context, index) {
-                  final inspectingIndex = value.inspectionindex[index];
-                  String date = inspectingIndex.requestDate;
-                  DateTime parse = DateTime.parse(date).toLocal();
-                  String formattedDate = DateFormat('yyyy-MM-dd').format(parse);
+                  final request = provider.requests[index];
                   return Padding(
                     padding: const EdgeInsets.all(5),
                     child: Card(
@@ -84,149 +80,89 @@ class _InspectionIndexScreenState extends State<InspectionIndexScreen> {
                           ? primarycolor2
                           : Colors.grey.shade300,
                       child: Padding(
-                        padding: EdgeInsets.all(15),
+                        padding: EdgeInsets.all(20),
                         child: Column(
                           spacing: 12,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Row(
+                              spacing: 5,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  formattedDate,
+                                  request.title,
                                   style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
                                     color: primarycolor1,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      inspectingIndex.requestTitle,
-                                      style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                        color: primarycolor1,
-                                      ),
-                                    ),
-                                    Text(
-                                      'طلبك: ',
-                                      textAlign: TextAlign.right,
-                                      textDirection: TextDirection.rtl,
-                                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
+                                Text(
+                                  'الطلب:',
+                                  textDirection: TextDirection.rtl,
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
                             Row(
-                              spacing: 4,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Row(
-                                  spacing: 4,
-                                  children: [
-                                    Text(
-                                      inspectingIndex.contractorName,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: primarycolor1,
-                                      ),
-                                    ),
-                                    Text(
-                                      'المتعهد:',
-                                      textAlign: TextAlign.right,
-                                      textDirection: TextDirection.rtl,
-
-                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Icon(Icons.person_2_outlined),
-                              ],
-                            ),
-                            Row(
-                              spacing: 4,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Row(
-                                  spacing: 4,
-                                  children: [
-                                    Text(
-                                      inspectingIndex.contractorEmail,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: primarycolor1,
-                                      ),
-                                    ),
-                                    Text(
-                                      'البريد الإلكتروني:',
-                                      textAlign: TextAlign.right,
-                                      textDirection: TextDirection.rtl,
-
-                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Icon(Icons.email_outlined),
-                              ],
-                            ),
-                            Row(
+                              spacing: 5,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(
-                                      context,
-                                    ).push(MaterialPageRoute(builder: (_) => InspectionDetails()));
-                                  },
-
-                                  style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    backgroundColor: Colors.white30,
-                                    foregroundColor: Color(0xFFF59B4A),
-                                  ),
-                                  child: Text(
-                                    'عرض التفاصيل',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                Text(
+                                  request.location,
+                                  style: TextStyle(
+                                    color: primarycolor1,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Row(
-                                  spacing: 4,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Row(
-                                      spacing: 4,
-                                      children: [
-                                        Text(
-                                          inspectingIndex.requestLocation,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: primarycolor1,
-                                          ),
-                                        ),
-                                        Text(
-                                          'الموقع:',
-                                          textAlign: TextAlign.right,
-                                          textDirection: TextDirection.rtl,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Icon(Icons.location_on_outlined),
-                                  ],
+                                Text(
+                                  'الموقع:',
+                                  textDirection: TextDirection.rtl,
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                 ),
                               ],
+                            ),
+                            Row(
+                              spacing: 5,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  request.status,
+                                  style: TextStyle(
+                                    color: primarycolor1,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'الحالة:',
+                                  textDirection: TextDirection.rtl,
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => InspectionDetailsScreen(request: request),
+                                  ),
+                                );
+                              },
+
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(double.infinity, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                backgroundColor: Colors.white30,
+                                foregroundColor: Color(0xFFF59B4A),
+                              ),
+                              child: Text(
+                                'عرض التفاصيل',
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                              ),
                             ),
                           ],
                         ),

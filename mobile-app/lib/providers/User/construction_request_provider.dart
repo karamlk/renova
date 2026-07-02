@@ -6,7 +6,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:http/http.dart' as http;
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/shared_preferneces.dart';
-import 'package:renove_provider/models/construction_request_model.dart';
+import 'package:renove_provider/models/User/construction_request_model.dart';
 
 class ConstructionRequestProvider extends ChangeNotifier {
   List<File> images = [];
