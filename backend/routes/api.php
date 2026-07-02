@@ -266,4 +266,18 @@ Route::middleware(['auth:sanctum','active'])->group(function () {
             [UserManagementController::class, 'engineers']
         );
     });
+use App\Http\Controllers\ConstructionFormController;
 
+// روابط المتعهد (إنشاء، تعديل، حذف)
+Route::post('construction-forms', [ConstructionFormController::class, 'store']);
+Route::post('construction-forms/{constructionForm}', [ConstructionFormController::class, 'update']);
+Route::delete('construction-forms/{constructionForm}', [ConstructionFormController::class, 'destroy']);
+
+// رابط تدقيق المهندس (قبول/رفض)
+Route::put('construction-forms/{constructionForm}/engineer-review', [ConstructionFormController::class, 'engineerReview']);
+
+// رابط اعتماد المستخدم المتضرر (قبول/رفض)
+Route::put('construction-forms/{constructionForm}/user-review', [ConstructionFormController::class, 'userReview']);
+
+// رابط تحميل المستند الـ PDF النهائي للمتضرر على جواله
+Route::get('construction-forms/{constructionForm}/download-pdf', [ConstructionFormController::class, 'downloadPdf']);

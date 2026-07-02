@@ -5,7 +5,6 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\OtpMail;
 
 
 class Otp extends Model
@@ -34,7 +33,7 @@ class Otp extends Model
         ]);
 
         // إرسال الإيميل
-        Mail::to($user->email)->send(new \App\Mail\OtpMail($code));
+        Mail::to($user->email)->send(new \App\Http\Requests\User\Mail\OtpMail($code));
 
         return response()->json(['message' => 'OTP تم إرساله للإيميل.']);
     }
