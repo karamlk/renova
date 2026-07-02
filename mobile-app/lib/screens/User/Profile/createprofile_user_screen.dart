@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:renove_provider/models/profile_model.dart';
+import 'package:renove_provider/models/User/profile_model.dart';
 import 'package:renove_provider/providers/User/create_profile_provider.dart';
 import 'package:renove_provider/screens/User/home_screens/home_main_user.dart';
 

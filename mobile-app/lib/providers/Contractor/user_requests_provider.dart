@@ -2,16 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:renove_provider/Extras/link.dart';
 import 'package:renove_provider/extras/shared_preferneces.dart';
-import 'package:renove_provider/models/User/inspections/inspection_request_model.dart';
+import 'package:renove_provider/models/Contractor/user_requests_model.dart';
 
-class InspectionProvider extends ChangeNotifier {
+import '../../extras/link.dart';
+
+class ContractorRequestsProvider extends ChangeNotifier {
   bool isLoading = false;
 
-  List<InspectionRequestModel> requests = [];
+  List<ContractorRequestModel> requests = [];
 
-  Future<void> fetchInspections() async {
+  Future<void> fetchRequests() async {
     isLoading = true;
     notifyListeners();
 
@@ -19,14 +20,14 @@ class InspectionProvider extends ChangeNotifier {
       final token = await getPrefs('token');
 
       final response = await http.get(
-        Uri.parse("$link/api/requests/inspection-requests"),
+        Uri.parse("$link/api/contractor/reconstruction-requests"),
         headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
       );
 
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body);
 
-        requests = (body['data'] as List).map((e) => InspectionRequestModel.fromJson(e)).toList();
+        requests = (body['data'] as List).map((e) => ContractorRequestModel.fromJson(e)).toList();
       }
     } finally {
       isLoading = false;

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:renove_provider/Extras/link.dart';
 import 'package:renove_provider/extras/shared_preferneces.dart';
-import 'package:renove_provider/models/profile_model.dart';
+import 'package:renove_provider/models/User/profile_model.dart';
 import 'package:http/http.dart' as http;
 
 class CreateProfileProvider extends ChangeNotifier {

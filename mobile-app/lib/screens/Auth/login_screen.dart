@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/Extras/theme.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
+import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Auth/register_screen.dart';
 import 'package:renove_provider/screens/Auth/verfiy_forget_password.dart';
+import 'package:renove_provider/screens/Contractor/home_screens/home_main_contractor.dart';
+import 'package:renove_provider/screens/User/home_screens/home_main_user.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,8 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final TextEditingController passwordcontroller = TextEditingController();
 
-  final TextEditingController forgetpasswordemailcontroller =
-      TextEditingController();
+  final TextEditingController forgetpasswordemailcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          backgroundColor: const Color(0XFFFEFCFF),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: SingleChildScrollView(
@@ -45,6 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: emailcontroller,
                         decoration: InputDecoration(
                           labelText: "البريد الإلكتروني",
+                          labelStyle: TextStyle(
+                            color: context.watch<ThemeProvider>().isDark
+                                ? primarycolor1
+                                : primarycolor2,
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
@@ -55,6 +61,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: passwordcontroller,
                         decoration: InputDecoration(
                           labelText: "كلمة المرور",
+                          labelStyle: TextStyle(
+                            color: context.watch<ThemeProvider>().isDark
+                                ? primarycolor1
+                                : primarycolor2,
+                          ),
+
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
@@ -67,27 +79,44 @@ class _LoginScreenState extends State<LoginScreen> {
                               ? null
                               : () async {
                                   FocusScope.of(context).unfocus();
-                                  final scaffold = ScaffoldMessenger.of(
-                                    context,
+                                  final scaffold = ScaffoldMessenger.of(context);
+                                  final navigate = Navigator.of(context);
+                                  final response = await context.read<AuthProvider>().login(
+                                    emailcontroller.text,
+                                    passwordcontroller.text,
                                   );
-                                  final response = await context
-                                      .read<AuthProvider>()
-                                      .login(
-                                        emailcontroller.text,
-                                        passwordcontroller.text,
-                                      );
                                   if (response == null) {
                                     print("No response");
                                     return;
                                   }
                                   final result = jsonDecode(response.body);
-                                  if (response.statusCode == 200 ||
-                                      response.statusCode == 201) {
-                                    // AuthProvider updates the persisted session;
-                                    // MaterialApp then switches to the correct home.
-                                    return;
+                                  if (response.statusCode == 200 || response.statusCode == 201) {
+                                    String success = result['message'];
+                                    String role = result['role'];
+
+                                    if (role == 'user') {
+                                      navigate.push(
+                                        MaterialPageRoute(builder: (context) => HomeMainUser()),
+                                      );
+                                    } else {
+                                      navigate.push(
+                                        MaterialPageRoute(
+                                          builder: (context) => HomeMainContractor(),
+                                        ),
+                                      );
+                                    }
+                                    Future.delayed(Duration(microseconds: 5));
+                                    scaffold.showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          success,
+                                          textAlign: TextAlign.right,
+                                          textDirection: TextDirection.rtl,
+                                        ),
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
                                   } else {
-                                    if (!mounted) return;
                                     String error = result['message'];
                                     scaffold.showSnackBar(
                                       SnackBar(
@@ -104,22 +133,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           style: ElevatedButton.styleFrom(
                             minimumSize: Size(double.infinity, 60),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            backgroundColor: Color(0xFF3b414c),
-                            foregroundColor: Color(0xFFF59B4A),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            backgroundColor: primarycolor2,
+                            foregroundColor: primarycolor1,
                             disabledBackgroundColor: Color(0xFF3b414c),
                           ),
                           child: provider.isLoading
-                              ? CircularProgressIndicator(
-                                  strokeWidth: 4,
-                                  color: Color(0xFFF59B4A),
-                                )
-                              : Text(
-                                  "تسجيل الدخول",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
+                              ? CircularProgressIndicator(strokeWidth: 4, color: Color(0xFFF59B4A))
+                              : Text("تسجيل الدخول", style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                       ),
 
@@ -129,10 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text(
-                                  'أدخل بريدك لالكتروني',
-                                  textAlign: TextAlign.end,
-                                ),
+                                title: Text('أدخل بريدك لالكتروني', textAlign: TextAlign.end),
 
                                 actions: [
                                   Directionality(
@@ -144,9 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         label: Text('البريد الالكتروني'),
 
                                         border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(10),
-                                          ),
+                                          borderRadius: BorderRadius.all(Radius.circular(10)),
                                         ),
                                       ),
                                     ),
@@ -155,95 +171,66 @@ class _LoginScreenState extends State<LoginScreen> {
                                   SizedBox(height: 35),
                                   Center(
                                     child: Consumer<AuthProvider>(
-                                      builder: (context, value, child) =>
-                                          ElevatedButton(
-                                            onPressed: () async {
-                                              String email =
-                                                  forgetpasswordemailcontroller
-                                                      .text;
-                                              FocusScope.of(context).unfocus();
+                                      builder: (context, value, child) => ElevatedButton(
+                                        onPressed: () async {
+                                          String email = forgetpasswordemailcontroller.text;
+                                          FocusScope.of(context).unfocus();
 
-                                              final scaffold =
-                                                  ScaffoldMessenger.of(context);
-                                              final navigator = Navigator.of(
-                                                context,
-                                              );
-                                              final response = await context
-                                                  .read<AuthProvider>()
-                                                  .forgetPassword(
-                                                    forgetpasswordemailcontroller
-                                                        .text,
-                                                  );
-                                              if (response == null) return;
-                                              final data = jsonDecode(
-                                                response.body,
-                                              );
-                                              if (response.statusCode == 200 ||
-                                                  response.statusCode == 201) {
-                                                navigator.pop();
-                                                navigator.push(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        VerfiyForgetPassword(
-                                                          email: email,
-                                                        ),
-                                                  ),
-                                                );
-                                                forgetpasswordemailcontroller
-                                                    .clear();
+                                          final scaffold = ScaffoldMessenger.of(context);
+                                          final navigator = Navigator.of(context);
+                                          final response = await context
+                                              .read<AuthProvider>()
+                                              .forgetPassword(forgetpasswordemailcontroller.text);
+                                          if (response == null) return;
+                                          final data = jsonDecode(response.body);
+                                          if (response.statusCode == 200 ||
+                                              response.statusCode == 201) {
+                                            navigator.pop();
+                                            navigator.push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    VerfiyForgetPassword(email: email),
+                                              ),
+                                            );
+                                            forgetpasswordemailcontroller.clear();
 
-                                                scaffold.showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(
-                                                      data['message'],
-                                                      textAlign:
-                                                          TextAlign.right,
-                                                      textDirection:
-                                                          TextDirection.rtl,
-                                                    ),
-                                                    behavior: SnackBarBehavior
-                                                        .floating,
-                                                  ),
-                                                );
-                                              } else {
-                                                scaffold.showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(
-                                                      data['message'],
-                                                      textAlign:
-                                                          TextAlign.right,
-                                                      textDirection:
-                                                          TextDirection.rtl,
-                                                    ),
-                                                    behavior: SnackBarBehavior
-                                                        .floating,
-                                                  ),
-                                                );
-                                              }
-                                            },
+                                            scaffold.showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  data['message'],
+                                                  textAlign: TextAlign.right,
+                                                  textDirection: TextDirection.rtl,
+                                                ),
+                                                behavior: SnackBarBehavior.floating,
+                                              ),
+                                            );
+                                          } else {
+                                            scaffold.showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  data['message'],
+                                                  textAlign: TextAlign.right,
+                                                  textDirection: TextDirection.rtl,
+                                                ),
+                                                behavior: SnackBarBehavior.floating,
+                                              ),
+                                            );
+                                          }
+                                        },
 
-                                            style: ElevatedButton.styleFrom(
-                                              minimumSize: Size(200, 50),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              backgroundColor: Color(
-                                                0xFF3b414c,
-                                              ),
-                                              foregroundColor: Color(
-                                                0xFFF59B4A,
-                                              ),
-                                              disabledBackgroundColor: Color(
-                                                0xFF3b414c,
-                                              ),
-                                            ),
-                                            child: value.isVerifyingForget
-                                                ? CircularProgressIndicator(
-                                                    color: primarycolor1,
-                                                  )
-                                                : Text('موافق'),
+                                        style: ElevatedButton.styleFrom(
+                                          minimumSize: Size(200, 50),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
+                                          backgroundColor: Color(0xFF3b414c),
+                                          foregroundColor: Color(0xFFF59B4A),
+                                          disabledBackgroundColor: Color(0xFF3b414c),
+                                        ),
+                                        child: value.isVerifyingForget
+                                            ? CircularProgressIndicator(color: primarycolor1)
+                                            : Text('موافق'),
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -255,36 +242,40 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextButton.styleFrom(minimumSize: Size(0, 0)),
                         child: Text(
                           "نسيت كلمة المرور؟",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: context.watch<ThemeProvider>().isDark
+                                ? primarycolor1
+                                : primarycolor2,
+                          ),
                         ),
                       ),
                     ],
                   ),
                   SizedBox(height: 10),
-                  Text("أو", style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    "أو",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: context.watch<ThemeProvider>().isDark ? primarycolor1 : primarycolor2,
+                    ),
+                  ),
                   SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => RegisterScreen(),
-                        ),
+                        MaterialPageRoute(builder: (context) => RegisterScreen()),
                       );
                     },
 
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(double.infinity, 60),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       backgroundColor: Color(0xFF3b414c),
                       foregroundColor: Color(0xFFb8bcbf),
                     ),
-                    child: Text(
-                      "إنشاء حساب جديد",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                    child: Text("إنشاء حساب جديد", style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),

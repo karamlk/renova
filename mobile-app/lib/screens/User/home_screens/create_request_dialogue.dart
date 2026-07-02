@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
-import 'package:renove_provider/models/construction_request_model.dart';
+import 'package:renove_provider/models/User/construction_request_model.dart';
 import 'package:renove_provider/providers/User/construction_request_provider.dart';
 
 class CreateRequestDialogue extends StatefulWidget {

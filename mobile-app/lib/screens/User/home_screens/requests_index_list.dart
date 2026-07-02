@@ -99,20 +99,37 @@ class _RequestsIndexListState extends State<RequestsIndexList> {
                             ),
 
                             Row(
-                              spacing: 5,
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(req.location),
-                                Icon(Icons.location_on_outlined, color: primarycolor1),
+                                Text(req.location, style: TextStyle(color: primarycolor1)),
+
+                                Row(
+                                  spacing: 5,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text('الموقع:', textDirection: TextDirection.rtl),
+                                    Icon(Icons.location_on_outlined, color: primarycolor1),
+                                  ],
+                                ),
                               ],
                             ),
 
                             Row(
-                              spacing: 14,
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("الحالة: ${req.status}", textDirection: TextDirection.rtl),
-                                Icon(Icons.arrow_upward, color: primarycolor1),
+                                Text(
+                                  req.status,
+                                  textDirection: TextDirection.rtl,
+                                  style: TextStyle(color: primarycolor1),
+                                ),
+                                Row(
+                                  spacing: 5,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text('الحالة:', textDirection: TextDirection.rtl),
+                                    Icon(Icons.arrow_upward, color: primarycolor1),
+                                  ],
+                                ),
                               ],
                             ),
                             ElevatedButton(
