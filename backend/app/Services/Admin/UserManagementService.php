@@ -41,7 +41,7 @@ class UserManagementService
     }
     public function contractors()
     {
-        return User::with('role')
+        return User::with('role','contractorProfile')
             ->whereHas('role', function ($query) {
 
                 $query->where(
@@ -53,7 +53,7 @@ class UserManagementService
     }
     public function engineers()
     {
-        return User::with('role')
+        return User::with('role','profile')
             ->whereHas('role', function ($query) {
 
                 $query->where(
