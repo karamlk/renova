@@ -2,7 +2,10 @@
 
 namespace App\Services\Admin;
 
+use App\Models\EngineerProfile;
 use App\Models\User;
+use App\Models\UserProfile;
+use Illuminate\Support\Facades\Hash;
 
 class UserManagementService
 {
@@ -79,4 +82,33 @@ class UserManagementService
 
         return $user->fresh();
     }
+
+    public function createEngineerAccount(array $data): User {
+        $engineer = User::create([
+            'name'     => $data['name'],
+            'email'    => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role_id'  => 4, // تبعا لـ JSON مشروعك
+            'status'   => 'approved',
+        ]);
+
+        UserProfile::create([
+            'user_id'    => $engineer->id,
+            'first_name' => $data['name'],
+            'last_name'  => '',
+            'phone'      => '',
+            'location'   => '',
+        ]);
+
+        EngineerProfile::create([
+            'user_id'          => $engineer->id,
+            'specialization'   => '',
+            'syndicate_number' => 'PENDING_' . $engineer->id,
+            'degree'           => '',
+            'covered_zones'    => '',
+        ]);
+
+        return $engineer;
+    }
+
 }

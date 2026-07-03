@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\StoreEngineerRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -79,5 +80,13 @@ class UserManagementController extends Controller
             'data' => $this->service
                 ->toggleActive($user)
         ]);
+    }
+    public function createEngineerByAdmin(StoreEngineerRequest $request): JsonResponse {
+        $engineer = $this->service->createEngineerAccount($request->validated());
+
+        return response()->json([
+            'message' => 'تم إنشاء حساب المهندس بنجاح من قِبل المسؤول.',
+            'data'    => $engineer
+        ], 201);
     }
 }

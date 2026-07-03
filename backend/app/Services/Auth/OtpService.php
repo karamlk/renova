@@ -27,7 +27,7 @@ class OtpService
         return $otp;
     }
 
-    public function verify(User $user, string $code): string
+    public function verify(User $user, string $code): array
     {
         $otp = Otp::where('user_id', $user->id)
             ->where('code', $code)
@@ -51,7 +51,13 @@ class OtpService
             'otp_verified' => true,
         ]);
 
-        return $user->createToken('final_token')->plainTextToken;
+        $token = $user->createToken('final_token')->plainTextToken;
+
+        // نرجع مصفوفة بيانات نظيفة فقط
+        return [
+            'token' => $token,
+            'role'  => $user->role()->first() ? $user->role()->first()->name : null,
+        ];
     }
 
     protected function deleteOldOtps(User $user)

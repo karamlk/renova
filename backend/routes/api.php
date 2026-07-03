@@ -265,6 +265,10 @@ Route::middleware(['auth:sanctum','active'])->group(function () {
             '/engineers',
             [UserManagementController::class, 'engineers']
         );
+        Route::post(
+            '/create-engineer',
+            [UserManagementController::class, 'createEngineerByAdmin']);
+
     });
 use App\Http\Controllers\ConstructionFormController;
 
@@ -281,3 +285,13 @@ Route::put('construction-forms/{constructionForm}/user-review', [ConstructionFor
 
 // رابط تحميل المستند الـ PDF النهائي للمتضرر على جواله
 Route::get('construction-forms/{constructionForm}/download-pdf', [ConstructionFormController::class, 'downloadPdf']);
+
+use App\Http\Controllers\Engineer\EngineerProfileController;
+
+// مسار خاص بالآدمن لإنشاء الحسابات
+
+// مسارات المهندس الشخصية لإدارة البروفايل المدمج الفاخر
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('engineer/profile', [EngineerProfileController::class, 'show']);
+    Route::post('engineer/profile', [EngineerProfileController::class, 'update']); // نمرر _method=PUT عند الرفع
+});

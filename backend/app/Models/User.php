@@ -110,4 +110,7 @@ class User extends Authenticatable
             Like::class
         );
     }
+    public function engineerProfile() {
+        return $this->hasOne(EngineerProfile::class, 'user_id');
+    }
 }
