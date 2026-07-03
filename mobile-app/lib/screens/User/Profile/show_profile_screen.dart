@@ -6,8 +6,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/theme.dart';
-import 'package:renove_provider/providers/User/show_profile_provider.dart';
+import 'package:renove_provider/providers/User/Profile/show_profile_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
+import 'package:renove_provider/screens/User/Profile/edit_user_profile_screen.dart';
 import 'package:renove_provider/skeletons/profile_page_skeleton.dart';
 
 class ShowprofileScreen extends StatefulWidget {
@@ -30,7 +31,35 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ملفك الشخصي', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('ملفك الشخصي', style: TextStyle(fontWeight: FontWeight.bold)),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: primarycolor1,
+                backgroundColor: primarycolor2,
+              ),
+              onPressed: () {
+                final profile = context.read<ShowprofileProvider>().showProfileModel;
+
+                if (profile == null) return;
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => EditUserProfileScreen(profile: profile)),
+                );
+              },
+              child: Row(
+                spacing: 5,
+                children: [
+                  Text("تعديل", style: TextStyle(fontWeight: FontWeight.bold)),
+                  Icon(Icons.edit),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),

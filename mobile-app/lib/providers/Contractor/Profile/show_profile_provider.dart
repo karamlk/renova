@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/shared_preferneces.dart';
-import 'package:renove_provider/models/Contractor/show_profile_model.dart';
+import 'package:renove_provider/models/Contractor/Profile/show_profile_model.dart';
 
 class ShowContractorProfileProvider extends ChangeNotifier {
   ShowContractorProfileModel? showProfileModel;

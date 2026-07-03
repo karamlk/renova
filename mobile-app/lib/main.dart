@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
-import 'package:renove_provider/providers/Contractor/create_profile_provider.dart';
-import 'package:renove_provider/providers/Contractor/show_profile_provider.dart';
+import 'package:renove_provider/providers/Contractor/Profile/create_profile_provider.dart';
+import 'package:renove_provider/providers/Contractor/Profile/edit_profile_contractor_provider.dart';
+import 'package:renove_provider/providers/Contractor/Profile/show_profile_provider.dart';
 import 'package:renove_provider/providers/Contractor/user_requests_provider.dart';
 import 'package:renove_provider/providers/User/Inspection/inspection_provider.dart';
+import 'package:renove_provider/providers/User/Profile/edit_profile_provider.dart';
 import 'package:renove_provider/providers/User/construction_index_provider.dart';
 
 import 'package:renove_provider/providers/User/construction_request_provider.dart';
 import 'package:renove_provider/providers/User/request_details_provider.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
 import 'package:renove_provider/providers/navigation_provider.dart';
-import 'package:renove_provider/providers/User/create_profile_provider.dart';
-import 'package:renove_provider/providers/User/show_profile_provider.dart';
+import 'package:renove_provider/providers/User/Profile/create_profile_provider.dart';
+import 'package:renove_provider/providers/User/Profile/show_profile_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';
 
@@ -45,6 +47,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ContractorRequestsProvider()),
         ChangeNotifierProvider(create: (_) => CreateContractorProfileProvider()),
         ChangeNotifierProvider(create: (_) => ShowContractorProfileProvider()),
+        ChangeNotifierProvider(create: (_) => EditProfileProvider()),
+        ChangeNotifierProvider(create: (_) => EditContractorProfileProvider()),
       ],
       child: MyApp(isDark: isDark),
     ),

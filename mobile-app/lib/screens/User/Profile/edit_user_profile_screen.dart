@@ -1,28 +1,44 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:renove_provider/extras/link.dart';
+import 'package:renove_provider/models/User/Profile/edit_profile_model.dart';
 import 'package:renove_provider/models/User/Profile/profile_model.dart';
+import 'package:renove_provider/models/User/Profile/show_profile_model.dart';
 import 'package:renove_provider/providers/User/Profile/create_profile_provider.dart';
+import 'package:renove_provider/providers/User/Profile/edit_profile_provider.dart';
+import 'package:renove_provider/providers/User/Profile/show_profile_provider.dart';
 import 'package:renove_provider/screens/User/home_screens/home_main_user.dart';
 
-class CreateprofileUserScreen extends StatefulWidget {
-  const CreateprofileUserScreen({super.key});
+class EditUserProfileScreen extends StatefulWidget {
+  final ShowProfileModel profile;
+  const EditUserProfileScreen({super.key, required this.profile});
 
   @override
-  State<CreateprofileUserScreen> createState() => _ProfileScreenState();
+  State<EditUserProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<CreateprofileUserScreen> {
-  final TextEditingController firstNameController = TextEditingController();
+class _ProfileScreenState extends State<EditUserProfileScreen> {
+  late TextEditingController firstNameController;
+  late TextEditingController lastNameController;
+  late TextEditingController locationController;
+  late TextEditingController phoneController;
+  @override
+  void initState() {
+    super.initState();
 
-  final TextEditingController lastNameController = TextEditingController();
+    firstNameController = TextEditingController(text: widget.profile.firstName);
 
-  final TextEditingController locationController = TextEditingController();
+    lastNameController = TextEditingController(text: widget.profile.lastName);
 
-  final TextEditingController phonecontroller = TextEditingController();
+    phoneController = TextEditingController(text: widget.profile.phone);
+
+    locationController = TextEditingController(text: widget.profile.location);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,15 +54,15 @@ class _ProfileScreenState extends State<CreateprofileUserScreen> {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: Consumer<CreateProfileProvider>(
-                builder: (context, value, child) => Column(
+              child: Consumer<EditProfileProvider>(
+                builder: (context, provider, child) => Column(
                   children: [
                     GestureDetector(
                       onTap: () async {
                         final picker = ImagePicker();
                         final picked = await picker.pickImage(source: ImageSource.gallery);
                         if (picked != null) {
-                          value.setImage(File(picked.path));
+                          provider.setImage(File(picked.path));
                         }
                       },
                       child: Padding(
@@ -54,8 +70,11 @@ class _ProfileScreenState extends State<CreateprofileUserScreen> {
                         child: Center(
                           child: CircleAvatar(
                             radius: 100,
-                            backgroundImage: value.image != null ? FileImage(value.image!) : null,
-                            child: value.image == null
+                            backgroundImage: provider.image != null
+                                ? FileImage(provider.image!)
+                                : CachedNetworkImageProvider('$link${widget.profile.image}')
+                                      as ImageProvider,
+                            child: provider.image == null
                                 ? Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -107,7 +126,7 @@ class _ProfileScreenState extends State<CreateprofileUserScreen> {
                               ),
                             ),
                             TextField(
-                              controller: phonecontroller,
+                              controller: phoneController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 labelText: "رقم الهاتف ",
@@ -118,7 +137,7 @@ class _ProfileScreenState extends State<CreateprofileUserScreen> {
                               ),
                             ),
                             SizedBox(height: 15),
-                            Consumer<CreateProfileProvider>(
+                            Consumer<EditProfileProvider>(
                               builder: (context, value, child) => ElevatedButton(
                                 onPressed: value.isLoading
                                     ? null
@@ -126,17 +145,15 @@ class _ProfileScreenState extends State<CreateprofileUserScreen> {
                                         FocusScope.of(context).unfocus();
                                         final scaffold = ScaffoldMessenger.of(context);
                                         final navigator = Navigator.of(context);
-                                        final response = await context
-                                            .read<CreateProfileProvider>()
-                                            .fillProfile(
-                                              ProfileModel(
-                                                firstName: firstNameController.text,
-                                                lastName: lastNameController.text,
-                                                location: locationController.text,
-                                                phone: phonecontroller.text,
-                                              ),
-                                              value.image,
-                                            );
+                                        final response = await provider.updateProfile(
+                                          EditProfileModel(
+                                            firstName: firstNameController.text,
+                                            lastName: lastNameController.text,
+                                            location: locationController.text,
+                                            phone: phoneController.text,
+                                          ),
+                                          provider.image,
+                                        );
                                         if (response == null) return;
                                         final result = jsonDecode(response.body);
                                         scaffold.showSnackBar(
@@ -151,9 +168,8 @@ class _ProfileScreenState extends State<CreateprofileUserScreen> {
                                         );
                                         if (response.statusCode == 200 ||
                                             response.statusCode == 201) {
-                                          navigator.push(
-                                            MaterialPageRoute(builder: (context) => HomeMainUser()),
-                                          );
+                                          await context.read<ShowprofileProvider>().fetchProfile();
+                                          navigator.pop();
                                         }
                                       },
 

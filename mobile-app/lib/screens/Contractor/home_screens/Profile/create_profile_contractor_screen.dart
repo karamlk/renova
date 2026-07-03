@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:renove_provider/models/Contractor/create_profile_model.dart';
-import 'package:renove_provider/providers/Contractor/create_profile_provider.dart';
+import 'package:renove_provider/models/Contractor/Profile/create_profile_model.dart';
+import 'package:renove_provider/providers/Contractor/Profile/create_profile_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/home_main_contractor.dart';
 
