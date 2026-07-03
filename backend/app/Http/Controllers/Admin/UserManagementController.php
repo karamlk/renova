@@ -82,7 +82,8 @@ class UserManagementController extends Controller
         ]);
     }
     public function createEngineerByAdmin(StoreEngineerRequest $request): JsonResponse {
-        $engineer = $this->service->createEngineerAccount($request->validated());
+       // $engineer = $this->service->createEngineerAccount($request->validated());
+        $engineer = $this->service->createEngineerAccount($request->all());
 
         return response()->json([
             'message' => 'تم إنشاء حساب المهندس بنجاح من قِبل المسؤول.',

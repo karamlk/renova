@@ -63,4 +63,8 @@ class ConstructionForm extends Model
     {
         return $this->belongsTo(ReconstructionRequest::class, 'reconstruction_request_id');
     }
+    public function materials()
+    {
+        return $this->hasMany(ConstructionMaterial::class, 'construction_form_id');
+    }
 }

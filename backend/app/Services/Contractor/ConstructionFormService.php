@@ -92,7 +92,7 @@ class ConstructionFormService
             throw new Exception('لا يمكن تحميل ملف الاستمارة إلا بعد الحصول على الموافقات والاعتماد النهائي.');
         }
 
-        $form->load(['contractor', 'engineer']);
+        $form->load(['contractor', 'engineer', 'materials']);
 
         // إعدادات mpdf الخاصة لدعم اللغة العربية وتوصيل الحروف بشكل صحيح
         $mpdf = new \Mpdf\Mpdf([
@@ -123,6 +123,34 @@ class ConstructionFormService
             Storage::disk('public')->delete($form->pdf_file);
         }
         $form->delete();
+    }
+    /**
+     * إضافة مواد بناء إلى استمارة معينة وحساب السعر الإجمالي تلقائياً
+     */
+    public function addMaterialsToForm(int $formId, array $materialsData): void
+    {
+        foreach ($materialsData as $material) {
+            // حساب السعر الإجمالي برمجياً لضمان الدقة والأمان
+            $totalPrice = $material['quantity'] * $material['unit_price'];
+
+            \App\Models\ConstructionMaterial::create([
+                'construction_form_id' => $formId,
+                'material_name'        => $material['material_name'],
+                'material_type'        => $material['material_type'],
+                'quantity'             => $material['quantity'],
+                'unit'                 => $material['unit'],
+                'unit_price'           => $material['unit_price'],
+                'total_price'          => $totalPrice,
+            ]);
+        }
+    }
+
+    /**
+     * جلب تفاصيل الاستمارة كاملة مدمجاً بداخلها جدول المواد الخاص بها (Eager Loading)
+     */
+    public function getFormWithMaterials(int $formId)
+    {
+        return \App\Models\ConstructionForm::with('materials')->findOrFail($formId);
     }
 
 }

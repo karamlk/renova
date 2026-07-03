@@ -84,11 +84,16 @@ class UserManagementService
     }
 
     public function createEngineerAccount(array $data): User {
+        // خطوة اختيارية: التأكد من تطابق كلمة المرور والتأكيد داخل الدالة
+        if (!isset($data['password_confirmation']) || $data['password'] !== $data['password_confirmation']) {
+            throw new \InvalidArgumentException('كلمة المرور وتأكيدها غير متطابقين.');
+        }
+
         $engineer = User::create([
             'name'     => $data['name'],
             'email'    => $data['email'],
             'password' => Hash::make($data['password']),
-            'role_id'  => 4, // تبعا لـ JSON مشروعك
+            'role_id'  => 4,
             'status'   => 'approved',
         ]);
 

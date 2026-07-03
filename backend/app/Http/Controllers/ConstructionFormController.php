@@ -25,12 +25,37 @@ class ConstructionFormController extends Controller
     // 1. المتعهد: إنشاء
     public function store(StoreConstructionFormRequest $request)
     {
-        $form = $this->formService
-            ->createForm($request->validated(), $request->file('pdf_file'));
-        if ($form->pdf_file) {
-            $form->pdf_file = asset('storage/' . $form->pdf_file);
+        $form = $this->formService->createForm(
+            $request->validated(),
+            $request->file('pdf_file')
+        );
+
+        if ($request->has('materials')) {
+
+            $materials = json_decode(
+                $request->materials,
+                true
+            );
+
+            $this->formService->addMaterialsToForm(
+                $form->id,
+                $materials
+            );
         }
-        return response()->json(['message' => 'تم إنشاء الاستمارة وإرسالها للمهندس بانتظار التدقيق', 'data' => $form], 201);
+
+        $form->load('materials');
+
+        if ($form->pdf_file) {
+            $form->pdf_file = asset(
+                'storage/' . $form->pdf_file
+            );
+        }
+
+        return response()->json([
+            'message' =>
+                'تم إنشاء الاستمارة وإرسالها للمهندس بانتظار التدقيق',
+            'data' => $form
+        ], 201);
     }
 
     // 2. المتعهد: تعديل
@@ -44,6 +69,22 @@ class ConstructionFormController extends Controller
                     ->file('pdf_file'));
             if ($form->pdf_file) {
                 $form->pdf_file = asset('storage/' . $form->pdf_file);
+            }
+            if ($request->has('materials')) {
+
+                $constructionForm
+                    ->materials()
+                    ->delete();
+
+                $materials = json_decode(
+                    $request->materials,
+                    true
+                );
+
+                $this->formService->addMaterialsToForm(
+                    $constructionForm->id,
+                    $materials
+                );
             }
             return response()->json(['message' => 'تم تحديث بيانات الاستمارة بنجاح وأعيدت للمهندس', 'data' => $form]);
         } catch (Exception $e) {
