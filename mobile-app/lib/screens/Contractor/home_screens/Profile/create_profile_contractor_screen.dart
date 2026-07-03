@@ -1,21 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:renove_provider/models/User/profile_model.dart';
-import 'package:renove_provider/providers/User/create_profile_provider.dart';
-import 'package:renove_provider/screens/User/home_screens/home_main_user.dart';
+import 'package:renove_provider/models/Contractor/create_profile_model.dart';
+import 'package:renove_provider/providers/Contractor/create_profile_provider.dart';
+import 'package:renove_provider/screens/Auth/login_screen.dart';
+import 'package:renove_provider/screens/Contractor/home_screens/home_main_contractor.dart';
 
-class CreateprofileUserScreen extends StatefulWidget {
-  const CreateprofileUserScreen({super.key});
+class CreateProfileContractorScreen extends StatefulWidget {
+  CreateProfileContractorScreen({super.key});
 
   @override
-  State<CreateprofileUserScreen> createState() => _ProfileScreenState();
+  State<CreateProfileContractorScreen> createState() => _CreateProfileContractorState();
 }
 
-class _ProfileScreenState extends State<CreateprofileUserScreen> {
+class _CreateProfileContractorState extends State<CreateProfileContractorScreen> {
   final TextEditingController firstNameController = TextEditingController();
 
   final TextEditingController lastNameController = TextEditingController();
@@ -23,7 +24,7 @@ class _ProfileScreenState extends State<CreateprofileUserScreen> {
   final TextEditingController locationController = TextEditingController();
 
   final TextEditingController phonecontroller = TextEditingController();
-
+  final TextEditingController companyController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +39,7 @@ class _ProfileScreenState extends State<CreateprofileUserScreen> {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: Consumer<CreateProfileProvider>(
+              child: Consumer<CreateContractorProfileProvider>(
                 builder: (context, value, child) => Column(
                   children: [
                     GestureDetector(
@@ -117,8 +118,57 @@ class _ProfileScreenState extends State<CreateprofileUserScreen> {
                                 ),
                               ),
                             ),
+                            TextField(
+                              controller: companyController,
+
+                              decoration: InputDecoration(
+                                labelText: "اسم الشركة",
+
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                final picker = ImagePicker();
+
+                                final picked = await picker.pickImage(source: ImageSource.gallery);
+
+                                if (picked != null) {
+                                  value.setCommercialRecord(File(picked.path));
+                                }
+                              },
+                              child: Container(
+                                height: 170,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: value.commercialRecord == null
+                                    ? Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: const [
+                                          Icon(Icons.upload_file, size: 50),
+                                          SizedBox(height: 10),
+                                          Text(
+                                            "رفع السجل التجاري",
+                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Image.file(
+                                          value.commercialRecord!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                              ),
+                            ),
                             SizedBox(height: 15),
-                            Consumer<CreateProfileProvider>(
+                            Consumer<CreateContractorProfileProvider>(
                               builder: (context, value, child) => ElevatedButton(
                                 onPressed: value.isLoading
                                     ? null
@@ -127,15 +177,17 @@ class _ProfileScreenState extends State<CreateprofileUserScreen> {
                                         final scaffold = ScaffoldMessenger.of(context);
                                         final navigator = Navigator.of(context);
                                         final response = await context
-                                            .read<CreateProfileProvider>()
+                                            .read<CreateContractorProfileProvider>()
                                             .fillProfile(
-                                              ProfileModel(
+                                              ContractorProfileModel(
                                                 firstName: firstNameController.text,
                                                 lastName: lastNameController.text,
                                                 location: locationController.text,
                                                 phone: phonecontroller.text,
+                                                companyName: companyController.text,
                                               ),
                                               value.image,
+                                              value.commercialRecord,
                                             );
                                         if (response == null) return;
                                         final result = jsonDecode(response.body);
@@ -152,7 +204,17 @@ class _ProfileScreenState extends State<CreateprofileUserScreen> {
                                         if (response.statusCode == 200 ||
                                             response.statusCode == 201) {
                                           navigator.push(
-                                            MaterialPageRoute(builder: (context) => HomeMainUser()),
+                                            MaterialPageRoute(builder: (context) => LoginScreen()),
+                                          );
+                                          scaffold.showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                "سيتم مراجعة حسابك من الإدارة للموافقة عليه ",
+                                                textAlign: TextAlign.right,
+                                                textDirection: TextDirection.rtl,
+                                              ),
+                                              behavior: SnackBarBehavior.floating,
+                                            ),
                                           );
                                         }
                                       },

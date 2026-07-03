@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:renove_provider/extras/shared_preferneces.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/Contractor/user_requests_provider.dart';
+import 'package:renove_provider/screens/Auth/login_screen.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/UserRequestsDetails/user_requests_details.dart';
 
 class UserRequestsIndex extends StatefulWidget {
@@ -15,9 +19,37 @@ class _UserRequestsIndexState extends State<UserRequestsIndex> {
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ContractorRequestsProvider>().fetchRequests();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final response = await context.read<ContractorRequestsProvider>().fetchRequests();
+      if (!mounted) return;
+      if (response!.statusCode == 401) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("انتهت صلاحية جلستك"),
+            content: Text("سيتم تسجيل الخروج. اضغط موافق لإعادة تسجيل الدخول"),
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  backgroundColor: Colors.white30,
+                  foregroundColor: primarycolor1,
+                ),
+                onPressed: () async {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                    (Route<dynamic> route) => false,
+                  );
+                  await clearTPrefs('token');
+                },
+                child: Text("موافق"),
+              ),
+            ],
+          ),
+        );
+      }
     });
   }
 
@@ -55,7 +87,39 @@ class _UserRequestsIndexState extends State<UserRequestsIndex> {
             );
           }
           return RefreshIndicator(
-            onRefresh: value.fetchRequests,
+            onRefresh: () async {
+              final response = await value.fetchRequests();
+              if (!mounted) return;
+              if (response!.statusCode == 401) {
+                showDialog(
+                  animationStyle: AnimationStyle(curve: Curves.bounceOut),
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text("انتهت صلاحية جلستك"),
+                    content: Text("سيتم تسجيل الخروج. اضغط موافق لإعادة تسجيل الدخول"),
+                    actions: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          backgroundColor: Colors.white30,
+                          foregroundColor: primarycolor1,
+                        ),
+                        onPressed: () async {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginScreen()),
+                            (Route<dynamic> route) => false,
+                          );
+                          await clearTPrefs('token');
+                        },
+                        child: Text("موافق"),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
             color: primarycolor1,
             child: ListView.builder(
               itemCount: value.requests.length,

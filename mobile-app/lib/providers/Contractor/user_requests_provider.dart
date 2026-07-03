@@ -12,7 +12,7 @@ class ContractorRequestsProvider extends ChangeNotifier {
 
   List<ContractorRequestModel> requests = [];
 
-  Future<void> fetchRequests() async {
+  Future<http.Response?> fetchRequests() async {
     isLoading = true;
     notifyListeners();
 
@@ -29,6 +29,10 @@ class ContractorRequestsProvider extends ChangeNotifier {
 
         requests = (body['data'] as List).map((e) => ContractorRequestModel.fromJson(e)).toList();
       }
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
     } finally {
       isLoading = false;
       notifyListeners();

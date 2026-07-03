@@ -4,11 +4,13 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/navigation_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
+import 'package:renove_provider/screens/Contractor/home_screens/Profile/show_profile_contractor_screen.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/contractor_projects.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/home_screen_contractor.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/user_requests_index.dart';
 import 'package:renove_provider/screens/User/home_screens/contractors_requests_user.dart';
-import 'package:renove_provider/screens/settings/settings.dart';
+import 'package:renove_provider/screens/settings/contractor_settings.dart';
+import 'package:renove_provider/screens/settings/user_settings.dart';
 import 'package:renove_provider/screens/User/Profile/show_profile_screen.dart';
 
 class HomeMainContractor extends StatelessWidget {
@@ -30,7 +32,9 @@ class HomeMainContractor extends StatelessWidget {
           iconSize: 30,
 
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Settings()));
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (context) => ContractorSettings()));
           },
           icon: Icon(Icons.settings),
         ),
@@ -44,7 +48,7 @@ class HomeMainContractor extends StatelessWidget {
               onPressed: () {
                 Navigator.of(
                   context,
-                ).push(MaterialPageRoute(builder: (context) => ShowprofileScreen()));
+                ).push(MaterialPageRoute(builder: (context) => ShowProfileContractorScreen()));
               },
               icon: Icon(Icons.person_rounded),
             ),
