@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/theme.dart';
-import 'package:renove_provider/providers/User/show_profile_provider.dart';
+import 'package:renove_provider/providers/User/Profile/show_profile_provider.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';

@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/shared_preferneces.dart';
 import 'dart:async';
-import 'package:renove_provider/models/User/show_profile_model.dart';
+import 'package:renove_provider/models/User/Profile/show_profile_model.dart';
 
 class ShowprofileProvider extends ChangeNotifier {
   ShowProfileModel? showProfileModel;

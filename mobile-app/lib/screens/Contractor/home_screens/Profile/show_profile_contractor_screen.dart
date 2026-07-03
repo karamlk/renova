@@ -6,9 +6,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/theme.dart';
-import 'package:renove_provider/providers/Contractor/show_profile_provider.dart';
-import 'package:renove_provider/providers/User/show_profile_provider.dart';
+import 'package:renove_provider/providers/Contractor/Profile/show_profile_provider.dart';
+import 'package:renove_provider/providers/User/Profile/show_profile_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
+import 'package:renove_provider/screens/Contractor/home_screens/Profile/edit_profile_contractor.dart';
 import 'package:renove_provider/skeletons/profile_page_skeleton.dart';
 
 class ShowProfileContractorScreen extends StatefulWidget {
@@ -31,7 +32,34 @@ class _ShowprofileScreenState extends State<ShowProfileContractorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ملفك الشخصي', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+          children: [
+            Text('ملفك الشخصي', style: TextStyle(fontWeight: FontWeight.bold)),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: primarycolor1,
+                backgroundColor: primarycolor2,
+              ),
+              onPressed: () {
+                final profile = context.read<ShowContractorProfileProvider>().showProfileModel;
+
+                if (profile == null) return;
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => EditContractorProfileScreen(profile: profile)),
+                );
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                spacing: 5,
+                children: [Text("تعديل"), Icon(Icons.edit)],
+              ),
+            ),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
