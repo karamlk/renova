@@ -45,7 +45,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(height: 20),
                   TextField(
                     controller: namecontroller,
+                    cursorColor: primarycolor1,
+
                     decoration: InputDecoration(
+                      labelStyle: TextStyle(color: primarycolor1),
                       labelText: "الاسم",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -54,7 +57,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   TextField(
                     controller: emailcontroller,
+                    cursorColor: primarycolor1,
                     decoration: InputDecoration(
+                      labelStyle: TextStyle(color: primarycolor1),
                       labelText: "البريد الالكتروني",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -63,7 +68,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   TextField(
                     controller: passwordcontroller,
+                    cursorColor: primarycolor1,
                     decoration: InputDecoration(
+                      labelStyle: TextStyle(color: primarycolor1),
                       labelText: "كلمة المرور",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -72,7 +79,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   TextField(
                     controller: passwordconfirmcontroller,
+                    cursorColor: primarycolor1,
                     decoration: InputDecoration(
+                      labelStyle: TextStyle(color: primarycolor1),
                       labelText: "كلمة المرور مرة أخرى",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -97,12 +106,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     : Colors.black,
                                 width: provider.selectedrole == "user" ? 2 : 1,
                               ),
-                              backgroundColor: provider.selectedrole == "user"
-                                  ? primarycolor2
-                                  : Colors.white,
+                              backgroundColor: primarycolor2,
                               foregroundColor: provider.selectedrole == "user"
                                   ? primarycolor1
-                                  : primarycolor2,
+                                  : Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -123,11 +130,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             style: ElevatedButton.styleFrom(
                               foregroundColor: provider.selectedrole == "contractor"
                                   ? primarycolor1
-                                  : Colors.black,
-
-                              backgroundColor: provider.selectedrole == "contractor"
-                                  ? primarycolor2
                                   : Colors.white,
+
+                              backgroundColor: primarycolor2,
 
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),

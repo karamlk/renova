@@ -11,7 +11,7 @@ import 'package:renove_provider/screens/User/home_screens/inspection_index_scree
 import 'package:renove_provider/screens/User/home_screens/requests_index_list.dart';
 
 import 'package:renove_provider/screens/User/home_screens/home_screen_user.dart';
-import 'package:renove_provider/screens/settings/settings.dart';
+import 'package:renove_provider/screens/settings/user_settings.dart';
 import 'package:renove_provider/screens/User/Profile/show_profile_screen.dart';
 
 class HomeMainUser extends StatelessWidget {
@@ -33,7 +33,7 @@ class HomeMainUser extends StatelessWidget {
           iconSize: 30,
 
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Settings()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserSettings()));
           },
           icon: Icon(Icons.settings),
         ),

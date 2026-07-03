@@ -13,14 +13,14 @@ import 'package:renove_provider/screens/settings/change_password.dart';
 import 'package:renove_provider/screens/settings/verify_deletetion_screen.dart';
 import 'package:renove_provider/skeletons/setiings_page_skeleton.dart';
 
-class Settings extends StatefulWidget {
-  const Settings({super.key});
+class UserSettings extends StatefulWidget {
+  const UserSettings({super.key});
 
   @override
-  State<Settings> createState() => _SettingsState();
+  State<UserSettings> createState() => _SettingsState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsState extends State<UserSettings> {
   late final ExpansibleController expansibleController;
   @override
   void initState() {

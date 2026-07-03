@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
+import 'package:renove_provider/screens/Auth/login_screen.dart';
+import 'package:renove_provider/screens/Contractor/home_screens/Profile/create_profile_contractor_screen.dart';
+import 'package:renove_provider/screens/Contractor/home_screens/Profile/show_profile_contractor_screen.dart';
 import 'package:renove_provider/screens/User/Profile/createprofile_user_screen.dart';
 
 class Verifyscreen extends StatefulWidget {
@@ -46,12 +49,12 @@ class _VerifyscreenState extends State<Verifyscreen> {
                     },
                     keyboardType: TextInputType.number,
                     maxLength: 6,
-
                     controller: verifycontroller,
                     enabled: !value.isExpired,
-
                     decoration: InputDecoration(
                       labelText: 'OTP',
+                      labelStyle: TextStyle(color: primarycolor1),
+
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
@@ -71,7 +74,32 @@ class _VerifyscreenState extends State<Verifyscreen> {
                             final response = await context.read<AuthProvider>().verify(value.otp);
                             if (response == null) return;
                             final data = jsonDecode(response.body);
+                            print(data);
                             if (response.statusCode == 200 || response.statusCode == 201) {
+                              if (data['token']['role'] == 'user') {
+                                navigator.push(
+                                  MaterialPageRoute(
+                                    builder: (context) => CreateprofileUserScreen(),
+                                  ),
+                                );
+                              } else if (data['token']['role'] == 'contractor') {
+                                navigator.push(
+                                  MaterialPageRoute(
+                                    builder: (context) => CreateProfileContractorScreen(),
+                                  ),
+                                );
+                                Future.delayed(Duration(seconds: 1));
+                                scaffold.showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "سيتم مراجعة حسابك من قبل الإدارة للموافقة عليه",
+                                      textAlign: TextAlign.right,
+                                      textDirection: TextDirection.rtl,
+                                    ),
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
+                              }
                               scaffold.showSnackBar(
                                 SnackBar(
                                   content: Text(
@@ -81,9 +109,6 @@ class _VerifyscreenState extends State<Verifyscreen> {
                                   ),
                                   behavior: SnackBarBehavior.floating,
                                 ),
-                              );
-                              navigator.push(
-                                MaterialPageRoute(builder: (context) => ProfileScreen()),
                               );
                             } else {
                               scaffold.showSnackBar(
