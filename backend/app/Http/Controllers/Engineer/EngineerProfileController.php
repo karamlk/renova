@@ -19,21 +19,29 @@ class EngineerProfileController extends Controller {
         $this->profileService = $profileService;
     }
 
-    public function show(Request $request): JsonResponse {
-        $formattedData = $this->profileService
-            ->getFormattedProfile($request->user());
+    public function show(Request $request): JsonResponse
+    {
+        $formattedData = $this->profileService->getFormattedProfile($request->user());
 
         return response()->json([
             'data' => $formattedData
         ]);
     }
 
-    public function update(UpdateEngineerProfileRequest $request): JsonResponse {
-        $this->profileService
-            ->updateEngineerProfile($request->user(), $request->validated());
+    public function update(UpdateEngineerProfileRequest $request): JsonResponse
+    {
+        // 1. تنفيذ التحديث عبر الـ Service
+        $this->profileService->updateEngineerProfile($request->user(), $request->validated());
+
+        // 2. السطر السحري: إجبار لارافيل على إعادة تنشيط وجلب البيانات المحدثة من الداتابيز
+        $user = $request->user()->refresh();
+
+        // 3. جلب الـ Response الجديد المنسق بعد التحديث الفوري
+        $formattedData = $this->profileService->getFormattedProfile($user);
 
         return response()->json([
-            'message' => 'تم تحديث البروفايل بالكامل والأوراق الرسمية بنجاح!'
+            'message' => 'تم تحديث البروفايل بالكامل والأوراق الرسمية بنجاح!',
+            'data'    => $formattedData // إرجاع البيانات المحدثة مباشرة للفرونت إند ليتأكد من ظهورها
         ]);
     }
 }

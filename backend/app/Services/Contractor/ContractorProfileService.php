@@ -46,8 +46,11 @@ class ContractorProfileService
         return auth()
             ->user()
             ->contractorProfile()
-            ->with('user','role')
-            ->first();
+            ->with(['user' => function($query) {
+                // إذا كنت تستخدم Spatie وتريد تحميل الأدوار مع المستخدم
+                $query->with('role');
+            }])
+            ->firstOrFail();
     }
 
     public function update($request)

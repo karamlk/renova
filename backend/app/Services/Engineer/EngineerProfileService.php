@@ -10,45 +10,61 @@ use Illuminate\Support\Facades\Storage;
 class EngineerProfileService {
 
 
-    public function updateEngineerProfile(User $user, array $data): void {
-        // 1. تحديث البروفايل العادي المتوافق مع حقولك
-        $userProfile = $user->userProfile;
+    public function updateEngineerProfile(User $user, array $data): void
+    {
+        // 1. التحديث أو الإنشاء باستخدام اسم العلاقة الصحيح (profile)
+        $userProfile = \App\Models\UserProfile::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'first_name' => $data['first_name'],
+                'last_name'  => $data['last_name'],
+                'phone'      => $data['phone'],
+                'location'   => $data['location'],
+            ]
+        );
+
         if (isset($data['image'])) {
-            $this->deleteOldFile($userProfile->image);
+            if ($userProfile->image) {
+                $this->deleteOldFile($userProfile->image);
+            }
             $userProfile->image = $data['image']->store('profiles', 'public');
+            $userProfile->save();
         }
-        $userProfile->update([
-            'first_name' => $data['first_name'],
-            'last_name'  => $data['last_name'],
-            'phone'      => $data['phone'],
-            'location'   => $data['location'],
-        ]);
 
-        // 2. تحديث جدول الهندسيات المخصص
-        $engProfile = $user->engineerProfile;
+        // 2. تحديث أو إنشاء جدول الهندسيات
+        $engProfile = \App\Models\EngineerProfile::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'specialization'      => $data['specialization'],
+                'syndicate_number'    => $data['syndicate_number'],
+                'degree'              => $data['degree'],
+                'years_of_experience' => $data['years_of_experience'],
+                'covered_zones'       => $data['covered_zones'],
+                'bio'                 => $data['bio'] ?? null,
+            ]
+        );
+
         if (isset($data['syndicate_card_image'])) {
-            $this->deleteOldFile($engProfile->syndicate_card_image);
-            $engProfile->syndicate_card_image = $data['syndicate_card_image']
-                ->store('engineer_docs', 'public');
-        }
-        if (isset($data['certificate_file'])) {
-            $this->deleteOldFile($engProfile->certificate_file);
-            $engProfile->certificate_file = $data['certificate_file']
-                ->store('engineer_docs', 'public');
+            if ($engProfile->syndicate_card_image) {
+                $this->deleteOldFile($engProfile->syndicate_card_image);
+            }
+            $engProfile->syndicate_card_image = $data['syndicate_card_image']->store('engineer_docs', 'public');
+            $engProfile->save();
         }
 
-        $engProfile->update([
-            'specialization'      => $data['specialization'],
-            'syndicate_number'    => $data['syndicate_number'],
-            'degree'              => $data['degree'],
-            'years_of_experience' => $data['years_of_experience'],
-            'covered_zones'       => $data['covered_zones'],
-            'bio'                 => $data['bio'] ?? $engProfile->bio,
-        ]);
+        if (isset($data['certificate_file'])) {
+            if ($engProfile->certificate_file) {
+                $this->deleteOldFile($engProfile->certificate_file);
+            }
+            $engProfile->certificate_file = $data['certificate_file']->store('engineer_docs', 'public');
+            $engProfile->save();
+        }
     }
 
-    public function getFormattedProfile(User $user): array {
-        $user->load(['userProfile', 'engineerProfile']);
+    public function getFormattedProfile(User $user): array
+    {
+        // تغيير التمرير هنا إلى profile ليتناسب مع Eager Loading
+        $user->load(['profile', 'engineerProfile']);
 
         return [
             'id'                => $user->id,
@@ -63,16 +79,17 @@ class EngineerProfileService {
             'role_id'           => $user->role_id,
             'status'            => $user->status,
 
-            'profile' => $user->userProfile ? [
-                'id'         => $user->userProfile->id,
-                'user_id'    => $user->userProfile->user_id,
-                'first_name' => $user->userProfile->first_name,
-                'last_name'  => $user->userProfile->last_name,
-                'phone'      => $user->userProfile->phone,
-                'image'      => $user->userProfile->image ? asset('storage/' . $user->userProfile->image) : null,
-                'location'   => $user->userProfile->location,
-                'created_at' => $user->userProfile->created_at,
-                'updated_at' => $user->userProfile->updated_at,
+            // جلب البيانات من علاقة profile الصحيحة
+            'profile' => $user->profile ? [
+                'id'         => $user->profile->id,
+                'user_id'    => $user->profile->user_id,
+                'first_name' => $user->profile->first_name,
+                'last_name'  => $user->profile->last_name,
+                'phone'      => $user->profile->phone,
+                'image'      => $user->profile->image ? asset('storage/' . $user->profile->image) : null,
+                'location'   => $user->profile->location,
+                'created_at' => $user->profile->created_at,
+                'updated_at' => $user->profile->updated_at,
             ] : null,
 
             'engineer_profile' => $user->engineerProfile ? [
@@ -92,6 +109,7 @@ class EngineerProfileService {
             ] : null,
         ];
     }
+
 
     private function deleteOldFile(?string $path): void {
         if ($path && Storage::disk('public')->exists($path)) {
