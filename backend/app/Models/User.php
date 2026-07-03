@@ -113,4 +113,8 @@ class User extends Authenticatable
     public function engineerProfile() {
         return $this->hasOne(EngineerProfile::class, 'user_id');
     }
+    public function engineerVisits()
+    {
+        return $this->hasMany(SiteVisit::class, 'engineer_id');
+    }
 }

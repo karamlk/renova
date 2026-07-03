@@ -10,7 +10,13 @@ class SiteVisit extends Model
     protected $fillable = [
         'inspection_request_id',
         'schedule_id',
+        'engineer_id',
+        'status'
     ];
+    public function engineer()
+    {
+        return $this->belongsTo(User::class, 'engineer_id');
+    }
     public function inspectionRequest()
     {
         return $this->belongsTo(

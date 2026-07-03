@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Contractor\ContractorPostController;
 use App\Http\Controllers\Contractor\ContractorProfileController;
 use App\Http\Controllers\Contractor\ScheduleController;
+use App\Http\Controllers\Engineer\EngineerVisitController;
 use App\Http\Controllers\InspectionRequestController;
 use App\Http\Controllers\SiteVisitController;
 use App\Http\Controllers\User\LikeController;
@@ -268,8 +269,14 @@ Route::middleware(['auth:sanctum','active'])->group(function () {
         Route::post(
             '/create-engineer',
             [UserManagementController::class, 'createEngineerByAdmin']);
+        Route::get('available-engineers', [SiteVisitController::class, 'availableEngineers']);
+        Route::get('site-visits/pending-assignment', [SiteVisitController::class, 'unassignedOrRejectedVisits']);
 
+        // فرز مهندس لزيارة معينة
+        Route::post('site-visits/assign', [SiteVisitController::class, 'assignEngineer']);
     });
+
+
 use App\Http\Controllers\ConstructionFormController;
 
 // روابط المتعهد (إنشاء، تعديل، حذف)
@@ -293,5 +300,6 @@ use App\Http\Controllers\Engineer\EngineerProfileController;
 // مسارات المهندس الشخصية لإدارة البروفايل المدمج الفاخر
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('engineer/profile', [EngineerProfileController::class, 'show']);
-    Route::post('engineer/profile', [EngineerProfileController::class, 'update']); // نمرر _method=PUT عند الرفع
+    Route::post('engineer/profile', [EngineerProfileController::class, 'update']);
+    Route::post('site-visits/respond', [EngineerVisitController::class, 'respondToVisit']);
 });
