@@ -3,15 +3,18 @@
 namespace App\Services\Contractor;
 
 use App\Models\ConstructionForm;
-use App\Models\Payment;
+use App\Services\Auth\OtpService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\Payment;
+use App\Models\Wallet;
+use App\Services\WalletService;
 use Mpdf\Mpdf;
 
 class ConstructionFormService
 {
+
 
     public function createForm(array $data, $file = null): ConstructionForm
     {
@@ -69,34 +72,90 @@ class ConstructionFormService
     }
 
     // 4. اعتماد المستخدم النهائي
-    public function reviewByUser(ConstructionForm $form, string $status, ?string $notes): ConstructionForm
+    public function reviewByUser(
+        ConstructionForm $form,
+        string $status,
+        ?string $notes
+    ): ConstructionForm
     {
         if ($form->status !== 'pending_user') {
-            throw new Exception('لا يمكن اتخاذ إجراء من قبل المستخدم، الاستمارة لم يوافق عليها المهندس بعد.');
+            throw new Exception(
+                'لا يمكن اتخاذ إجراء من قبل المستخدم، الاستمارة لم يوافق عليها المهندس بعد.'
+            );
+        }
+
+        if ($status === 'user_rejected') {
+
+            $form->update([
+                'status' => 'user_rejected',
+                'user_notes' => $notes
+            ]);
+
+            return $form;
         }
 
         $form->update([
-            'status' => $status,
+            'status' => 'waiting_payment_otp',
             'user_notes' => $notes
         ]);
-        if ($status == 'user_approved'){
-            Payment::create([
 
-                'construction_form_id' => $form->id,
+        app(OtpService::class)->send(
+            $form->reconstructionRequest->user
+        );
 
-                'user_id' => $form->reconstructionRequest->user_id,
-
-                'amount' => $form->total_cost * 0.60,
-
-                'type' => 'first_payment',
-
-                'status' => 'pending'
-            ]);
-        }
         return $form;
     }
+    public function completePayment(
+        ConstructionForm $form
+    ): ConstructionForm
+    {
+        if ($form->status !== 'waiting_payment_otp') {
+            throw new Exception(
+                'الاستمارة ليست بانتظار تأكيد الدفع.'
+            );
+        }
 
-    // داخل ملف app/Services/ConstructionFormService.php
+        $amount = $form->total_cost * 0.60;
+
+        $userWallet =
+            $form->reconstructionRequest
+                ->user
+                ->wallet;
+
+        $adminWallet =
+            Wallet::where('user_id', 1)
+                ->firstOrFail();
+
+        $walletService =
+            app(WalletService::class);
+
+        $walletService->withdraw(
+            $userWallet,
+            $amount,
+            "الدفعة الأولى للمشروع {$form->id}"
+        );
+
+        $walletService->deposit(
+            $adminWallet,
+            $amount,
+            "استلام الدفعة الأولى للمشروع {$form->id}"
+        );
+
+        Payment::create([
+            'construction_form_id' => $form->id,
+            'user_id' => $form->reconstructionRequest->user_id,
+            'amount' => $amount,
+            'type' => 'first_payment',
+            'status' => 'paid',
+            'paid_at' => now()
+        ]);
+
+        $form->update([
+            'status' => 'user_approved'
+        ]);
+
+        return $form;
+    }    // داخل ملف app/Services/ConstructionFormService.php
 
      // استدعاء المكتبة الجديدة في أعلى الملف
 

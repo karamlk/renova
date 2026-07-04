@@ -37,6 +37,7 @@ return new class extends Migration
                 'engineer_approved',
                 'engineer_rejected',
                 'pending_user',
+
                 'user_approved',
                 'user_rejected'
             ])->default('pending_engineer');

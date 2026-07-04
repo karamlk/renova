@@ -303,9 +303,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('engineer/profile', [EngineerProfileController::class, 'show']);
     Route::post('engineer/profile', [EngineerProfileController::class, 'update']);
     Route::post('site-visits/respond', [EngineerVisitController::class, 'respondToVisit']);
+    Route::post(
+        'construction-forms/{constructionForm}/confirm-payment',
+        [ConstructionFormController::class, 'confirmPayment']
+    );
+
 });
-//-------------شام كاش------------------
-Route::post(
-    '/payments/{payment}/verify',
-    [PaymentController::class, 'verify']
-);

@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('payments', function (Blueprint $table) {
@@ -37,19 +34,15 @@ return new class extends Migration
                 'cancelled'
             ])->default('pending');
 
-            $table->string('transaction_id')->nullable();
-
-            $table->timestamp('paid_at')->nullable();
+            $table->timestamp('paid_at')
+                ->nullable();
 
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('ayments');
+        Schema::dropIfExists('payments');
     }
 };

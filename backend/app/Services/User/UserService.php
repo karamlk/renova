@@ -4,6 +4,7 @@ namespace App\Services\User;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Wallet;
 use App\Services\Auth\OtpService;
 use Illuminate\Support\Facades\Hash;
 
@@ -33,6 +34,19 @@ class UserService
                 : 'approved',
         ]);
 
+        Wallet::create([
+
+            'user_id' => $user->id,
+
+            'balance' => rand(1000,5000),
+
+            'card_number' => str_pad(
+                rand(0,9999),
+                4,
+                '0',
+                STR_PAD_LEFT
+            )
+        ]);
         $this->otpService->send($user);
 
         $token = $user->createToken('auth_token')->plainTextToken;

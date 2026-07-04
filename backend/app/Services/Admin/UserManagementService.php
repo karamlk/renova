@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use App\Models\EngineerProfile;
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Models\Wallet;
 use Illuminate\Support\Facades\Hash;
 
 class UserManagementService
@@ -102,6 +103,19 @@ class UserManagementService
             'password' => Hash::make($data['password']),
             'role_id'  => 4,
             'status'   => 'approved',
+        ]);
+        Wallet::create([
+
+            'user_id' => $engineer->id,
+
+            'balance' => rand(1000,5000),
+
+            'card_number' => str_pad(
+                rand(0,9999),
+                4,
+                '0',
+                STR_PAD_LEFT
+            )
         ]);
 
         UserProfile::create([

@@ -117,4 +117,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(SiteVisit::class, 'engineer_id');
     }
+    public function wallet()
+    {
+        return $this->hasOne(
+            Wallet::class
+        );
+    }
+    public function payments()
+    {
+        return $this->hasMany(
+            Payment::class
+        );
+    }
 }

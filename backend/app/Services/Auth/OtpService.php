@@ -86,4 +86,26 @@ class OtpService
                 ->subject('رمز التحقق OTP');
         });
     }
+    public function verifyPaymentOtp(User $user, string $code): bool
+    {
+        $otp = Otp::where('user_id', $user->id)
+            ->where('code', $code)
+            ->where('used', false)
+            ->latest()
+            ->first();
+
+        if (! $otp) {
+            throw new \Exception('رمز التحقق غير صحيح.');
+        }
+
+        if ($otp->expires_at < now()) {
+            throw new \Exception('انتهت صلاحية رمز التحقق.');
+        }
+
+        $otp->update([
+            'used' => true,
+        ]);
+
+        return true;
+    }
 }

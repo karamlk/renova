@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ConfirmPaymentRequest;
 use App\Http\Requests\Contractor\ConstructionForm\StoreConstructionFormRequest;
 use App\Http\Requests\Engineer\EngineerReviewRequest;
 use App\Models\ConstructionForm;
@@ -9,8 +10,12 @@ use App\Models\ConstructionForm;
 //use App\Http\Requests\EngineerReviewRequest;
 use App\Http\Requests\UserReviewRequest;
 //use App\Services\ConstructionFormService;
+use App\Services\Auth\OtpService;
 use App\Services\Contractor\ConstructionFormService;
 use Exception;
+use App\Models\Payment;
+use App\Models\Wallet;
+use App\Services\WalletService;
 
 class ConstructionFormController extends Controller
 {
@@ -120,8 +125,39 @@ class ConstructionFormController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 422);
         }
-    }
 
+    }
+    public function confirmPayment(
+        ConfirmPaymentRequest $request,
+        ConstructionForm $constructionForm
+    )
+    {
+        try {
+
+            app(OtpService::class)
+                ->verifyPaymentOtp(
+                    auth()->user(),
+                    $request->otp
+                );
+
+            $form = $this->formService
+                ->completePayment(
+                    $constructionForm
+                );
+
+            return response()->json([
+                'message' =>
+                    'تم تأكيد الدفع بنجاح',
+                'data' => $form
+            ]);
+
+        } catch (Exception $e) {
+
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 422);
+        }
+    }
     // 5. تحميل الـ PDF على الجوال
     // داخل ملف app/Http/Controllers/ConstructionFormController.php
 
