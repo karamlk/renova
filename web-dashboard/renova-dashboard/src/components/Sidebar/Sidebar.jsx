@@ -10,16 +10,17 @@ import { useTranslation } from 'react-i18next';
 import HomeIcon from '@mui/icons-material/Home';
 import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+//api
+import {logoutRequest} from "../../api/auth";
 
 export default function Sidebar() {
 
  const navigate = useNavigate();
  const [t]=useTranslation();
 
- function RemoveStorge() {
-     localStorage.removeItem("token");
-     localStorage.removeItem("role");
-     navigate("/", { replace: true });
+ function Logout() {
+     logoutRequest(navigate);
  }
     return (  
           <div className="sidebar">
@@ -40,8 +41,13 @@ export default function Sidebar() {
                 <GroupIcon />
                 <span>{t("المستخدمين")}</span>
             </NavLink>
-         
-            <div onClick={RemoveStorge} className="menu-btn-logout" >
+
+            <NavLink  to="requests" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
+                <AccessTimeFilledIcon />
+                <span>{t("معالجة الطلبات")}</span>
+            </NavLink>
+
+            <div onClick={Logout} className="menu-btn-logout" >
                 <LogoutIcon />
                 <span>{t("تسجيل خروج")}</span>
             </div>

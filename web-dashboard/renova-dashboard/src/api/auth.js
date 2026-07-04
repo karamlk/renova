@@ -1,8 +1,7 @@
-import axios from "axios";
-const API_URL = "http://127.0.0.1:8000/api";
+import api from "./axios";
 
 export async function loginRequest(email, password) {
-  let response = await axios.post(`${API_URL}/login`, {
+  let response = await api.post("/login", {
     email,
     password,
   });
@@ -10,11 +9,12 @@ export async function loginRequest(email, password) {
 }
 
 export async function getProfileRequest() {
-  const token = localStorage.getItem("token");
-  let response = await axios.get(`${API_URL}/user/profile`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  let response = await api.get("/user/profile");
   return response;
+}
+
+export function logoutRequest(navigate) {
+  localStorage.removeItem("token");
+  localStorage.removeItem("role");
+  navigate("/", { replace: true });
 }

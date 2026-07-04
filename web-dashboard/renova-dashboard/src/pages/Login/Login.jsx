@@ -22,8 +22,7 @@ export default function Login() {
   const [errorMessage, setErrorMessage] = useState('');
   const [showError, setShowError] = useState(false);
   const [t] = useTranslation();
-
-
+  
   async function handleLogin(e){
     e.preventDefault();
     try{

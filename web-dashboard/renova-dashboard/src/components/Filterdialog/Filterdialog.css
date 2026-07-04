@@ -1,0 +1,178 @@
+.filter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.filter-dialog {
+  background: white;
+  border-radius: 24px;
+  width: 420px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.3s ease;
+  overflow: hidden;
+}
+
+.filter-top-bar {
+  height: 4px;
+  background: linear-gradient(90deg, #f07c1f, #f59b4a);
+}
+
+.filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px 8px 24px;
+}
+
+.filter-header .title {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.filter-header .title h3 {
+  font-size: 19px;
+  font-weight: 700;
+  color: #0f1f2f;
+  margin: 0;
+}
+
+.filter-header .close-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: #f5f5f5;
+  color: #999;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.filter-header .close-btn:hover {
+  background: #999999eb;
+  color: white;
+}
+
+/* ===== المحتوى ===== */
+.filter-body {
+  padding: 16px 24px 24px 24px;
+}
+
+.filter-group .group-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f1f2f;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.filter-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #f8f9fc;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  border: 2px solid transparent;
+}
+
+.filter-option:hover {
+  background: #f0f1f3;
+}
+
+.filter-option.active {
+  border-color: #f07c1f;
+  background: rgba(240, 124, 31, 0.04);
+}
+
+.filter-option input[type="radio"] {
+  accent-color: #f07c1f;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.filter-option .option-label {
+  font-size: 14px;
+  color: #3b414c;
+  font-weight: 500;
+}
+
+/* ===== أزرار النافذة ===== */
+.filter-footer {
+  padding: 0 24px 24px 24px;
+  display: flex;
+  gap: 10px;
+}
+
+.filter-footer .btn-reset {
+  flex: 1;
+  padding: 12px;
+  background: transparent;
+  border: 2px solid #e8ecf2;
+  border-radius: 12px;
+  color: #666;
+  font-family: "Tajawal", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.filter-footer .btn-reset:hover {
+  border-color: #0f1f2f;
+  color: #0f1f2f;
+  transform: translateY(-2px);
+}
+
+.filter-footer .btn-apply {
+  flex: 1;
+  padding: 12px;
+  background: #f07c1f;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: "Tajawal", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.filter-footer .btn-apply:hover {
+  background: #d96d1a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(240, 124, 31, 0.25);
+}
