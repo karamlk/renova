@@ -67,4 +67,8 @@ class ConstructionForm extends Model
     {
         return $this->hasMany(ConstructionMaterial::class, 'construction_form_id');
     }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

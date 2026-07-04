@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'shamcash' => [
+        'token' => env('SHAMCASH_API_TOKEN'),
+        'base_url' => env('SHAMCASH_API_BASE'),
+    ],
 ];

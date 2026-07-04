@@ -12,6 +12,7 @@ use App\Http\Controllers\Contractor\ContractorProfileController;
 use App\Http\Controllers\Contractor\ScheduleController;
 use App\Http\Controllers\Engineer\EngineerVisitController;
 use App\Http\Controllers\InspectionRequestController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SiteVisitController;
 use App\Http\Controllers\User\LikeController;
 use Illuminate\Http\Request;
@@ -303,3 +304,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('engineer/profile', [EngineerProfileController::class, 'update']);
     Route::post('site-visits/respond', [EngineerVisitController::class, 'respondToVisit']);
 });
+//-------------شام كاش------------------
+Route::post(
+    '/payments/{payment}/verify',
+    [PaymentController::class, 'verify']
+);

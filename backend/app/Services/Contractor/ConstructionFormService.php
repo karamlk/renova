@@ -3,6 +3,7 @@
 namespace App\Services\Contractor;
 
 use App\Models\ConstructionForm;
+use App\Models\Payment;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Support\Facades\Storage;
@@ -78,7 +79,20 @@ class ConstructionFormService
             'status' => $status,
             'user_notes' => $notes
         ]);
+        if ($status == 'user_approved'){
+            Payment::create([
 
+                'construction_form_id' => $form->id,
+
+                'user_id' => $form->reconstructionRequest->user_id,
+
+                'amount' => $form->total_cost * 0.60,
+
+                'type' => 'first_payment',
+
+                'status' => 'pending'
+            ]);
+        }
         return $form;
     }
 
