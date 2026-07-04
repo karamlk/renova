@@ -38,4 +38,20 @@ class ContractorRequestsProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<http.Response?> makeOffer(int requestId) async {
+    try {
+      final token = await getPrefs('token');
+
+      final response = await http.post(
+        Uri.parse('$link/api/inspection-requests?reconstruction_request_id=$requestId'),
+        headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
+      );
+
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
 }

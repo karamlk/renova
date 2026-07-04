@@ -7,11 +7,9 @@ import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/Profile/show_profile_contractor_screen.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/contractor_projects.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/home_screen_contractor.dart';
+import 'package:renove_provider/screens/Contractor/home_screens/home_menu_contractor.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/user_requests_index.dart';
-import 'package:renove_provider/screens/User/home_screens/contractors_requests_user.dart';
 import 'package:renove_provider/screens/settings/contractor_settings.dart';
-import 'package:renove_provider/screens/settings/user_settings.dart';
-import 'package:renove_provider/screens/User/Profile/show_profile_screen.dart';
 
 class HomeMainContractor extends StatelessWidget {
   const HomeMainContractor({super.key});
@@ -19,7 +17,7 @@ class HomeMainContractor extends StatelessWidget {
     HomeScreenContractor(),
     UserRequestsIndex(),
     ContractorProjects(),
-    ContractorsRequests(),
+    HomwMenuContractor(),
   ];
 
   @override
@@ -109,8 +107,8 @@ class HomeMainContractor extends StatelessWidget {
               ),
               NavigationDestination(
                 icon: Icon(Icons.grid_3x3_outlined),
-                selectedIcon: Icon(Icons.request_page_outlined),
-                label: "العروض",
+                selectedIcon: Icon(Icons.menu),
+                label: "قائمتي",
               ),
             ],
           ),

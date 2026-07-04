@@ -211,7 +211,10 @@ class _SettingsState extends State<ContractorSettings> {
 
                           if (response.statusCode == 200 || response.statusCode == 201) {
                             String success = result['message'];
-                            navigate.push(MaterialPageRoute(builder: (context) => LoginScreen()));
+                            navigate.pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (context) => LoginScreen()),
+                              (Route<dynamic> route) => false,
+                            );
                             scaffold.showSnackBar(
                               SnackBar(
                                 content: Text(

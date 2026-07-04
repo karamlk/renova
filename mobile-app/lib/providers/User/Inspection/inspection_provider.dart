@@ -33,4 +33,36 @@ class InspectionProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<http.Response?> acceptOffer(int offerId) async {
+    try {
+      final token = await getPrefs('token');
+
+      final response = await http.post(
+        Uri.parse("$link/api/inspection-requests/$offerId/accept"),
+        headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
+      );
+
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<http.Response?> rejectOffer(int offerId) async {
+    try {
+      final token = await getPrefs('token');
+
+      final response = await http.post(
+        Uri.parse("$link/api/inspection-requests/$offerId/reject"),
+        headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
+      );
+
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
 }

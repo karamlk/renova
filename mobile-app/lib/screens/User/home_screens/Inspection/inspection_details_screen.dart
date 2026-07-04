@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
@@ -94,7 +96,29 @@ class _InspectionDetailsScreenState extends State<InspectionDetailsScreen> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                final response = await context
+                                    .read<InspectionProvider>()
+                                    .acceptOffer(offer.id);
+
+                                if (!context.mounted || response == null) return;
+
+                                final result = jsonDecode(response.body);
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    behavior: SnackBarBehavior.floating,
+                                    content: Text(
+                                      result['message'],
+                                      textDirection: TextDirection.rtl,
+                                    ),
+                                  ),
+                                );
+
+                                if (response.statusCode == 200 || response.statusCode == 201) {
+                                  await context.read<InspectionProvider>().fetchInspections();
+                                }
+                              },
                               style: ElevatedButton.styleFrom(
                                 alignment: Alignment.center,
                                 minimumSize: Size(80, 50),
@@ -118,7 +142,29 @@ class _InspectionDetailsScreenState extends State<InspectionDetailsScreen> {
                             ),
                           ),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              final response = await context.read<InspectionProvider>().rejectOffer(
+                                offer.id,
+                              );
+
+                              if (!context.mounted || response == null) return;
+
+                              final result = jsonDecode(response.body);
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  content: Text(
+                                    result['message'],
+                                    textDirection: TextDirection.rtl,
+                                  ),
+                                ),
+                              );
+
+                              if (response.statusCode == 200 || response.statusCode == 201) {
+                                await context.read<InspectionProvider>().fetchInspections();
+                              }
+                            },
                             style: ElevatedButton.styleFrom(
                               minimumSize: Size(20, 50),
                               shape: RoundedRectangleBorder(

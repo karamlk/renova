@@ -95,14 +95,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                     String role = result['role'];
 
                                     if (role == 'user') {
-                                      navigate.push(
+                                      navigate.pushAndRemoveUntil(
                                         MaterialPageRoute(builder: (context) => HomeMainUser()),
+                                        (Route<dynamic> route) => false,
                                       );
                                     } else {
-                                      navigate.push(
+                                      navigate.pushAndRemoveUntil(
                                         MaterialPageRoute(
                                           builder: (context) => HomeMainContractor(),
                                         ),
+                                        (Route<dynamic> route) => false,
                                       );
                                     }
                                     Future.delayed(Duration(microseconds: 5));
