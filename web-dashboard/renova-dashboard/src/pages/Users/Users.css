@@ -2,7 +2,7 @@
   background: white;
   border-radius: 20px;
   overflow: hidden;
-  margin-top: 20px;
+  margin-top: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
   width: 100%;
 }
@@ -50,26 +50,6 @@
   color: white;
 }
 
-.btn-add {
-  background: transparent;
-  border: 1.5px solid #4ed419;
-  padding: 8px 15px;
-  border-radius: 10px;
-  color: #4ed419;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  font-family: "Tajawal", sans-serif;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.btn-add:hover {
-  background: #4ed419;
-  color: white;
-}
 .btn-filter {
   background: transparent;
   border: 1.5px solid #b8bcbf;
@@ -167,4 +147,24 @@ tr:hover td {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.btn-add {
+  background: transparent;
+  border: 1.5px solid #4ed419;
+  padding: 8px 15px;
+  border-radius: 10px;
+  color: #4ed419;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: "Tajawal", sans-serif;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-add:hover {
+  background: #4ed419;
+  color: white;
 }

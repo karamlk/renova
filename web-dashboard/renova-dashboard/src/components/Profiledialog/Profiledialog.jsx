@@ -6,11 +6,11 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 //Hooks
 import { useTranslation } from 'react-i18next';
-export default function Profiledialog({image,first_name,last_name,name,email,phone,location,role, onClose }) {
+export default function Profiledialog({image,first_name,last_name,name,email,images,phone,location,role, onClose,children}) {
   const [t]=useTranslation();
     return (
     <div className="dialog-overlay" onClick={onClose}>
-      <div className="dialog-box1">
+      <div className="dialog-profile">
 
         <div className="dialog-header">
           <div className="title">
@@ -26,7 +26,6 @@ export default function Profiledialog({image,first_name,last_name,name,email,pho
               <span className="role">{t(role)}</span>
             </div>
           </div>
-
           <div className="field">
             <span className="label">{t("اسم المستخدم")}</span>
             <span className="value">{name}</span>
@@ -51,16 +50,18 @@ export default function Profiledialog({image,first_name,last_name,name,email,pho
             <span className="label">{t("مكان السكن")}</span>
             <span className="value">{location}</span>
           </div>
+          {children}
         </div>
 
         <div className="dialog-footer">
-          
-          <button className="btn-edit" >
-            <EditIcon sx={{ fontSize: '16px' }} />
-            {t("تعديل")}
-          </button>
+
+            <button className="btn-edit" >
+              <EditIcon sx={{ fontSize: '16px' }} />
+              {t("تعديل")}
+            </button>
+        
           <button className="btn-cancel" onClick={onClose}>
-            {t("إلغاء")}
+            {t("إغلاق")}
           </button>
         </div>
 

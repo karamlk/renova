@@ -1,5 +1,5 @@
 /* ===== الخلفية ===== */
-.delete-overlay {
+.dialog-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -14,7 +14,7 @@
 }
 
 /* ===== النافذة ===== */
-.delete-dialog {
+.dialog {
   background: white;
   border-radius: 20px;
   height: 300x;
@@ -25,26 +25,26 @@
   text-align: center;
 }
 
-.delete-dialog h3 {
+.dialog h3 {
   font-size: 20px;
   font-weight: 700;
   color: #0f1f2f;
   margin-bottom: 8px;
 }
 
-.delete-dialog p {
+.dialog p {
   font-size: 14px;
   color: #7a7f8a;
   line-height: 1.7;
   margin-bottom: 22px;
 }
 
-.delete-dialog .btn-group {
+.dialog .btn-group {
   display: flex;
   gap: 10px;
 }
 
-.delete-dialog .btn-group .btn-cancel {
+.dialog .btn-group .btn-cancel {
   flex: 1;
   padding: 12px;
   background: #f0f1f3;
@@ -58,14 +58,14 @@
   transition: 0.3s;
 }
 
-.delete-dialog .btn-group .btn-cancel:hover {
+.dialog .btn-group .btn-cancel:hover {
   background: #e8e9eb;
 }
 
-.delete-dialog .btn-group .btn-delete {
+.dialog .btn-group .btn {
   flex: 1;
   padding: 12px;
-  background: #e53935;
+
   border: none;
   border-radius: 12px;
   color: white;
@@ -74,8 +74,4 @@
   font-weight: 600;
   cursor: pointer;
   transition: 0.3s;
-}
-
-.delete-dialog .btn-group .btn-delete:hover {
-  background: #c62828;
 }
