@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/shared_preferneces.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/Contractor/user_requests_provider.dart';
+import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/UserRequestsDetails/user_requests_details.dart';
 
@@ -204,28 +205,70 @@ class _UserRequestsIndexState extends State<UserRequestsIndex> {
                             ],
                           ),
                           SizedBox(height: 5),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => UserRequestsDetails(request: request),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(double.infinity, 50),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              backgroundColor: Colors.white30,
-                              foregroundColor: primarycolor1,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () async {
+                                  final response = await context
+                                      .read<ContractorRequestsProvider>()
+                                      .makeOffer(request.id);
 
-                            child: Text(
-                              "عرض التفاصيل",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                                  if (!context.mounted || response == null) return;
+
+                                  final result = jsonDecode(response.body);
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        result['message'],
+                                        textDirection: TextDirection.rtl,
+                                      ),
+                                    ),
+                                  );
+                                },
+
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: Size(170, 50),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  backgroundColor: context.watch<ThemeProvider>().isDark
+                                      ? Colors.white30
+                                      : primarycolor2,
+                                  foregroundColor: primarycolor1,
+                                ),
+                                child: Text(
+                                  "تقديم عرض",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => UserRequestsDetails(request: request),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: Size(80, 50),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  backgroundColor: context.watch<ThemeProvider>().isDark
+                                      ? Colors.white30
+                                      : primarycolor2,
+                                  foregroundColor: primarycolor1,
+                                ),
+
+                                child: Text(
+                                  "عرض التفاصيل",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),

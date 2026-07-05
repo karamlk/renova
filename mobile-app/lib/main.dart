@@ -5,6 +5,7 @@ import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/Contractor/Profile/create_profile_provider.dart';
 import 'package:renove_provider/providers/Contractor/Profile/edit_profile_contractor_provider.dart';
 import 'package:renove_provider/providers/Contractor/Profile/show_profile_provider.dart';
+import 'package:renove_provider/providers/Contractor/contractor_schedule_provider.dart';
 import 'package:renove_provider/providers/Contractor/user_requests_provider.dart';
 import 'package:renove_provider/providers/User/Inspection/inspection_provider.dart';
 import 'package:renove_provider/providers/User/Profile/edit_profile_provider.dart';
@@ -49,6 +50,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ShowContractorProfileProvider()),
         ChangeNotifierProvider(create: (_) => EditProfileProvider()),
         ChangeNotifierProvider(create: (_) => EditContractorProfileProvider()),
+        ChangeNotifierProvider(create: (_) => ContractorScheduleProvider()),
       ],
       child: MyApp(isDark: isDark),
     ),
