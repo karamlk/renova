@@ -98,7 +98,16 @@ class SiteVisitService
     {
         return \App\Models\SiteVisit::whereNull('engineer_id')
             ->orWhere('status', 'rejected')
-            ->with(['inspectionRequest', 'engineer.profile']) // شحن العلاقات لمعرفة تفاصيل الطلب والمهندس الذي رفض إن وجد
+            ->with([
+                'inspectionRequest'=> function($query) {
+                $query->with([
+                   'contractor',
+                    'request'=>function($query){
+                    $query->with('user');
+                    }
+                    ]);
+            },
+                'engineer.profile','schedule',]) // شحن العلاقات لمعرفة تفاصيل الطلب والمهندس الذي رفض إن وجد
             ->get();
     }
 
