@@ -33,3 +33,6 @@ $this->call([
     ContractorProfileSeeder::class,
     ReconstructionRequestSeeder::class,
 ]);
+$this->call([
+    ContractorScheduleSeeder::class,
+]);
