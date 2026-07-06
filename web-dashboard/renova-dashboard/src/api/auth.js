@@ -13,6 +13,11 @@ export async function getProfileRequest() {
   return response;
 }
 
+export async function updateProfileRequest(data) {
+  let response = await api.post("/user/profile/update", data);
+  return response;
+}
+
 export function logoutRequest(navigate) {
   localStorage.removeItem("token");
   localStorage.removeItem("role");

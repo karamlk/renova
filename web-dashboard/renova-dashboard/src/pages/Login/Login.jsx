@@ -77,7 +77,7 @@ export default function Login() {
                 placeholder="admin@renova.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
+                
               />
             </div>
 
@@ -90,7 +90,7 @@ export default function Login() {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required
+                  
                 />
                 <span className="show-pass" onClick={() => {setShowPassword(!showPassword)}}>
                   {showPassword ? (

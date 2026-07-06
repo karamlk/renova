@@ -3,14 +3,17 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Login from "./pages/Login/Login";
 import Homepage from "./pages/Homepage/Homepage";
-import Settings from "./pages/Settings/Settings";
+import Usersettings from "./pages/Usersettings/Usersettings";
 import Users from "./pages/Users/Users";
 import Requests from "./pages/Requests/Requests";
+import Inspectionrequests from "./pages/Inspectionrequests/Inspectionrequests";
 //auth
 import ProtectedRoute from "./auth/ProtectedRoute";
 import AuthGate from "./auth/AuthGate";
 //Context
 import { LoadingContext } from "./Context/Loadingcontext";
+import UserProvider from "./Context/UserContext";
+
 //Hooks
 import { useState } from "react";
 import { useEffect } from "react";
@@ -26,28 +29,34 @@ function App() {
 
   return (
     <LoadingContext.Provider value={{ isloading, setisloading }}>
-      <div className="App">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <AuthGate>
-                <Login />
-              </AuthGate>
-            }
-          />
+      <UserProvider>
+        <div className="App">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <AuthGate>
+                  <Login />
+                </AuthGate>
+              }
+            />
 
-          <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<Dashboard />}>
-              <Route index element={<Navigate to="homepage" replace />} />
-              <Route path="homepage" element={<Homepage />} />
-              <Route path="users" element={<Users />} />
-              <Route path="requests" element={<Requests />} />
-              <Route path="settings" element={<Settings />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<Dashboard />}>
+                <Route index element={<Navigate to="homepage" replace />} />
+                <Route path="homepage" element={<Homepage />} />
+                <Route path="users" element={<Users />} />
+                <Route path="requests" element={<Requests />} />
+                <Route
+                  path="inspections_requests"
+                  element={<Inspectionrequests />}
+                />
+                <Route path="usersettings" element={<Usersettings />} />
+              </Route>
             </Route>
-          </Route>
-        </Routes>
-      </div>
+          </Routes>
+        </div>
+      </UserProvider>
     </LoadingContext.Provider>
   );
 }

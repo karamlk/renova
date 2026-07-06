@@ -5,13 +5,12 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import Topbar from "../../components/Topbar/Topbar";
 import Footer from "../../components/Footer/Footer";
 //MUI Icons
-import Avatar from '@mui/material/Avatar';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Loadingicon from "../../components/Loadingicon/Loadingicon";
 import Grid from "@mui/material/Grid";
 import {Outlet} from "react-router-dom";
 //Context
 import { LoadingContext } from "../../Context/Loadingcontext";
+import { UserContext } from "../../Context/UserContext";
 //Hooks
 import{useContext,useState,useEffect} from "react";
 //api
@@ -20,11 +19,12 @@ import { getProfileRequest } from "../../api/auth";
 export default function Dashboard() {
   const {isloading}=useContext(LoadingContext);
   const [firstload,setfirstload]=useState(false);
-  const[profile,setprofile]=useState({});
+  const { setUser } = useContext(UserContext);
+
   //Requests
   async function loadProfile() {
         let response = await getProfileRequest();
-        setprofile(response.data.data);
+        setUser(response.data.data);
         }
   
   //init
@@ -62,7 +62,7 @@ export default function Dashboard() {
           <Grid container spacing={0}>
             {/*TopBar*/}
             <Grid size={12} >
-              <Topbar first_name={profile?.profile?.first_name} last_name={profile?.profile?.last_name} image={profile?.profile?.full_image_url ? <Avatar  src={profile?.profile?.full_image_url} alt="img" sx={{ width: 35, height: 35 }} /> :<AccountCircleIcon fontSize="large" sx={{ color: '#f07c1f' }} />}/>
+              <Topbar/>
             </Grid>
             {/*MainContent*/}
             <Grid size={12}>
