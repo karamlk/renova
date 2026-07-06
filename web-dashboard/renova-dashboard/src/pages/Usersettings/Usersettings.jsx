@@ -111,7 +111,7 @@ export default function Settings() {
                         </div>
                         <div className="info">
                             <div className="name" id="displayName">{user?.profile?.first_name} {user?.profile?.last_name}</div>
-                            <div className="role" id="displayRole">{role[user?.role_id]}</div>
+                            <div className="role" id="displayRole">{t(role[user?.role_id])}</div>
                         </div>
                     </div>
                 </div>

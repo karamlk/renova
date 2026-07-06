@@ -27,6 +27,7 @@ export default function Topbar() {
          location={user?.profile?.location}
          role={role[user?.role_id]}
          onClose={() => setshowprofile(false)}
+         showEdit={true}
           />)}
             <div className="title">
                 <h1>{t("مرحباً،")} <span>{user?.profile?.first_name + " " +user?.profile?.last_name}</span></h1>
