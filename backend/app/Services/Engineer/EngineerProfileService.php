@@ -2,39 +2,27 @@
 namespace App\Services\Engineer;
 
 use App\Models\User;
-use App\Models\UserProfile;
 use App\Models\EngineerProfile;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class EngineerProfileService {
 
-
+    /**
+     * تحديث أو إنشاء الملف الشخصي للمهندس مباشرة
+     */
     public function updateEngineerProfile(User $user, array $data): void
     {
-        // 1. التحديث أو الإنشاء باستخدام اسم العلاقة الصحيح (profile)
-        $userProfile = \App\Models\UserProfile::updateOrCreate(
+        // تحديث أو إنشاء البيانات في جدول المهندس مباشرة دون الحاجة للجدول العادي
+        $engProfile = EngineerProfile::updateOrCreate(
             ['user_id' => $user->id],
             [
-                'first_name' => $data['first_name'],
-                'last_name'  => $data['last_name'],
-                'phone'      => $data['phone'],
-                'location'   => $data['location'],
-            ]
-        );
+                // البيانات الشخصية الأساسية التي تم نقلها
+                'first_name'          => $data['first_name'] ?? null,
+                'last_name'           => $data['last_name'] ?? null,
+                'phone'               => $data['phone'] ?? null,
+                'location'            => $data['location'] ?? null,
 
-        if (isset($data['image'])) {
-            if ($userProfile->image) {
-                $this->deleteOldFile($userProfile->image);
-            }
-            $userProfile->image = $data['image']->store('profiles', 'public');
-            $userProfile->save();
-        }
-
-        // 2. تحديث أو إنشاء جدول الهندسيات
-        $engProfile = \App\Models\EngineerProfile::updateOrCreate(
-            ['user_id' => $user->id],
-            [
+                // البيانات المهنية
                 'specialization'      => $data['specialization'],
                 'syndicate_number'    => $data['syndicate_number'],
                 'degree'              => $data['degree'],
@@ -44,6 +32,16 @@ class EngineerProfileService {
             ]
         );
 
+        // 1. التعامل مع الصورة الشخصية (تم ربطها بملف المهندس مباشرة)
+        if (isset($data['image'])) {
+            if ($engProfile->image) {
+                $this->deleteOldFile($engProfile->image);
+            }
+            $engProfile->image = $data['image']->store('profiles', 'public');
+            $engProfile->save();
+        }
+
+        // 2. التعامل مع صورة بطاقة النقابة
         if (isset($data['syndicate_card_image'])) {
             if ($engProfile->syndicate_card_image) {
                 $this->deleteOldFile($engProfile->syndicate_card_image);
@@ -52,6 +50,7 @@ class EngineerProfileService {
             $engProfile->save();
         }
 
+        // 3. التعامل مع ملف الشهادة
         if (isset($data['certificate_file'])) {
             if ($engProfile->certificate_file) {
                 $this->deleteOldFile($engProfile->certificate_file);
@@ -61,10 +60,13 @@ class EngineerProfileService {
         }
     }
 
+    /**
+     * جلب البيانات بتنسيق موحد يحتوي على بروفايل المهندس فقط
+     */
     public function getFormattedProfile(User $user): array
     {
-        // تغيير التمرير هنا إلى profile ليتناسب مع Eager Loading
-        $user->load(['profile', 'engineerProfile']);
+        // تحميل علاقة المهندس فقط
+        $user->load(['engineerProfile']);
 
         return [
             'id'                => $user->id,
@@ -79,22 +81,15 @@ class EngineerProfileService {
             'role_id'           => $user->role_id,
             'status'            => $user->status,
 
-            // جلب البيانات من علاقة profile الصحيحة
-            'profile' => $user->profile ? [
-                'id'         => $user->profile->id,
-                'user_id'    => $user->profile->user_id,
-                'first_name' => $user->profile->first_name,
-                'last_name'  => $user->profile->last_name,
-                'phone'      => $user->profile->phone,
-                'image'      => $user->profile->image ? asset('storage/' . $user->profile->image) : null,
-                'location'   => $user->profile->location,
-                'created_at' => $user->profile->created_at,
-                'updated_at' => $user->profile->updated_at,
-            ] : null,
-
+            // تم إرجاع بروفايل المهندس فقط محملاً بكل البيانات الشخصية والمهنية
             'engineer_profile' => $user->engineerProfile ? [
                 'id'                  => $user->engineerProfile->id,
                 'user_id'             => $user->engineerProfile->user_id,
+                'first_name'          => $user->engineerProfile->first_name, // مضاف حديثاً للجدول
+                'last_name'           => $user->engineerProfile->last_name,  // مضاف حديثاً للجدول
+                'phone'               => $user->engineerProfile->phone,      // مضاف حديثاً للجدول
+                'location'            => $user->engineerProfile->location,   // مضاف حديثاً للجدول
+                'image'               => $user->engineerProfile->image ? asset('storage/' . $user->engineerProfile->image) : null, // مضاف حديثاً للجدول
                 'specialization'      => $user->engineerProfile->specialization,
                 'syndicate_number'    => $user->engineerProfile->syndicate_number,
                 'degree'              => $user->engineerProfile->degree,
@@ -109,7 +104,6 @@ class EngineerProfileService {
             ] : null,
         ];
     }
-
 
     private function deleteOldFile(?string $path): void {
         if ($path && Storage::disk('public')->exists($path)) {

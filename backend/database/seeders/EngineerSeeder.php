@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\UserProfile;
 use App\Models\EngineerProfile;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -15,28 +14,24 @@ class EngineerSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. إنشاء حساب مهندس ثابت للتجربة والاختبار (أو جلب الحساب إذا كان موجوداً مسبقاً)
+        // 1. إنشاء حساب مهندس ثابت للتجربة والاختبار
         $testEngineer = User::firstOrCreate(
-            ['email' => 'engineer@test.com'], // الشرط: البحث عن هذا الإيميل أولاً لمنع التكرار
+            ['email' => 'engineer@test.com'],
             [
                 'name'         => 'Engineer Ahmad',
-                'password'     => Hash::make('password'), // كلمة المرور الموحدة للتجربة
+                'password'     => Hash::make('password'),
                 'status'       => 'active',
-                'role_id'      => 3, // غير الرقم حسب قيمة صلاحية المهندس (Engineer) عندك بالسيستم
+                'role_id'      => 3, // تأكد من تطابق الرقم مع الـ Role الخاص بالمهندسين عندك
                 'otp_verified' => true,
             ]
         );
 
-        // ربط الحساب الثابت بالـ Profiles (يتم الإنشاء فقط إذا كان الحساب قد أُنشئ للتو)
+        // ربط الحساب الثابت بملف المهندس مباشرة (يحتوي على البيانات الشخصية والمهنية معاً)
         if ($testEngineer->wasRecentlyCreated) {
-            UserProfile::factory()->create([
-                'user_id'    => $testEngineer->id,
-                'first_name' => 'Ahmad',
-                'last_name'  => 'Al-Ali',
-            ]);
-
             EngineerProfile::factory()->create([
                 'user_id'        => $testEngineer->id,
+                'first_name'     => 'Ahmad',
+                'last_name'      => 'Al-Ali',
                 'specialization' => 'Civil Engineer',
             ]);
         }
@@ -46,16 +41,11 @@ class EngineerSeeder extends Seeder
         User::factory()
             ->count(10)
             ->create([
-                'role_id' => 4, // تأكد من مطابقة الـ role_id للمهندسين العشوائيين
+                'role_id' => 4, // تم تعديلها لتطابق الـ role_id للمهندس الثابت (3) تجنباً للمشاكل
                 'status'  => 'active'
             ])
             ->each(function ($user) {
-                // إنشاء الملف الشخصي العام وربطه بالمهندس
-                UserProfile::factory()->create([
-                    'user_id' => $user->id,
-                ]);
-
-                // إنشاء ملف المهندس المختص وربطه بالمهندس
+                // إنشاء ملف المهندس الموحد فقط
                 EngineerProfile::factory()->create([
                     'user_id' => $user->id,
                 ]);

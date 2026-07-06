@@ -55,7 +55,7 @@ class SiteVisitService
         ->whereDoesntHave('engineerVisits', function ($query) {
             $query->where('status', 'accepted'); // إذا عنده زيارة جارية فهو مشغول
         })
-            ->with('profile','engineerProfile') // جلب البروفايل العادي معهم
+            ->with('engineerProfile') // جلب البروفايل العادي معهم
             ->get();
     }
 
