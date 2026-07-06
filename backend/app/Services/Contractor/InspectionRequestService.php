@@ -56,7 +56,8 @@ class InspectionRequestService
         return InspectionRequest::with([
             'contractor',
             'request'
-        ])->get();
+        ])->where('status','pending')
+            ->get();
     }
 
 
