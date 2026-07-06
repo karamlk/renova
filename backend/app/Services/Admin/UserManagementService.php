@@ -15,7 +15,8 @@ class UserManagementService
         return User::with([
             'role',
             'profile',
-            'contractorProfile'
+            'contractorProfile',
+            'engineerProfile'
         ])->get();
     }
 
@@ -24,7 +25,9 @@ class UserManagementService
         return $user->load([
             'role',
             'contractorProfile',
-            'profile'
+            'profile',
+            'engineerProfile'
+
         ]);
     }
 
@@ -57,7 +60,7 @@ class UserManagementService
     }
     public function engineers()
     {
-        return User::with('role','profile')
+        return User::with('role','profile','engineerProfile')
             ->whereHas('role', function ($query) {
 
                 $query->where(

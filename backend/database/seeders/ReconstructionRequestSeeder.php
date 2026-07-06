@@ -7,7 +7,9 @@ use Illuminate\Database\Seeder;
 use App\Models\ReconstructionRequest;
 use App\Models\ReconstructionRequestImage;
 
-class ReconstructionRequestSeeder extends Seeder
+class
+
+ReconstructionRequestSeeder extends Seeder
 {
     public function run(): void
     {
