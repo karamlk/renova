@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Admin\AdminComplaintController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\AccountDeletionController;
 use App\Http\Controllers\Auth\AuthController;
@@ -46,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 use App\Http\Controllers\Admin\ContractorController;
+use App\Http\Controllers\Complaint\ComplaintController;
 
 Route::prefix('admin')->group(function () {
 
@@ -224,6 +226,17 @@ Route::middleware(['auth:sanctum','active'])->group(function () {
         '/posts/{post}/like',
         [LikeController::class, 'toggleLike']
     );
+    // الأسباب الثابتة — يستدعيها الفرونت عند فتح نموذج الشكوى
+    Route::get('complaints/reasons', [ComplaintController::class, 'reasons']);
+ 
+    // شكاوي المستخدم الحالي
+    Route::get('complaints',         [ComplaintController::class, 'index']);
+ 
+    // رفع شكوى جديدة
+    Route::post('complaints',        [ComplaintController::class, 'store']);
+ 
+    // الإبلاغ عن غياب في زيارة ميدانية
+    Route::post('no-show-warnings',  [ComplaintController::class, 'reportNoShow']);
 });
 //---------------ادارة مستخدمين
 
@@ -275,6 +288,10 @@ Route::middleware(['auth:sanctum','active'])->group(function () {
 
         // فرز مهندس لزيارة معينة
         Route::post('site-visits/assign', [SiteVisitController::class, 'assignEngineer']);
+
+        Route::get('complaints',                        [AdminComplaintController::class, 'index']);
+        Route::get('complaints/{complaint}',            [AdminComplaintController::class, 'show']);
+        Route::patch('complaints/{complaint}/resolve',  [AdminComplaintController::class, 'resolve']);
     });
 
 
