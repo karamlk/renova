@@ -40,7 +40,10 @@ class _SettingsState extends State<UserSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('الإعدادات'), elevation: 10),
+      appBar: AppBar(
+        title: Text('الإعدادات', style: TextStyle(fontWeight: FontWeight.bold)),
+        elevation: 10,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: ListView(
