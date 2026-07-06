@@ -11,6 +11,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+import SettingsIcon from '@mui/icons-material/Settings';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 //api
 import {logoutRequest} from "../../api/auth";
 
@@ -44,7 +46,17 @@ export default function Sidebar() {
 
             <NavLink  to="requests" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
                 <AccessTimeFilledIcon />
-                <span>{t("معالجة الطلبات")}</span>
+                <span>{t("طلبات المتعهدين")}</span>
+            </NavLink>
+
+            <NavLink  to="inspections_requests" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
+                <AssignmentIcon />
+                <span>{t("طلبات المعاينة")}</span>
+            </NavLink>
+
+            <NavLink  to="usersettings" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
+                <SettingsIcon />
+                <span>{t("إعدادات الحساب")}</span>
             </NavLink>
 
             <div onClick={Logout} className="menu-btn-logout" >

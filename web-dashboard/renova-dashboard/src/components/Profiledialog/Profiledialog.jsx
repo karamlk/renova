@@ -1,13 +1,15 @@
 import './Profiledialog.css';
-//api
+
 //MUI Icons
 import EditIcon from '@mui/icons-material/Edit';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 //Hooks
 import { useTranslation } from 'react-i18next';
-export default function Profiledialog({image,first_name,last_name,name,email,images,phone,location,role, onClose,children}) {
+import { useNavigate } from "react-router-dom";
+export default function Profiledialog({image,first_name,last_name,name,email,images,phone,location,role, onClose,children,showEdit = false,}) {
   const [t]=useTranslation();
+  const navigate = useNavigate();
     return (
     <div className="dialog-overlay" onClick={onClose}>
       <div className="dialog-profile">
@@ -52,13 +54,13 @@ export default function Profiledialog({image,first_name,last_name,name,email,ima
           </div>
           {children}
         </div>
-
         <div className="dialog-footer">
-
-            <button className="btn-edit" >
+          {showEdit &&
+           <button className="btn-edit" onClick={() => navigate("/dashboard/usersettings")}>
               <EditIcon sx={{ fontSize: '16px' }} />
               {t("تعديل")}
-            </button>
+            </button>}
+            
         
           <button className="btn-cancel" onClick={onClose}>
             {t("إغلاق")}

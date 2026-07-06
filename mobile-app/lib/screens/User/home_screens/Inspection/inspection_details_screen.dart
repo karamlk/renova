@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/models/User/inspections/inspection_request_model.dart';
@@ -95,49 +96,179 @@ class _InspectionDetailsScreenState extends State<InspectionDetailsScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                final response = await context
-                                    .read<InspectionProvider>()
-                                    .acceptOffer(offer.id);
+                            child: Consumer<InspectionProvider>(
+                              builder: (context, value, child) => ElevatedButton(
+                                onPressed: () async {
+                                  await value.fetchSchedules(offer.id);
 
-                                if (!context.mounted || response == null) return;
+                                  if (!context.mounted) return;
 
-                                final result = jsonDecode(response.body);
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) {
+                                      if (value.isLoadingSchedules) {
+                                        return const Center(child: CircularProgressIndicator());
+                                      }
+                                      return Consumer<InspectionProvider>(
+                                        builder: (context, provider, child) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: ListView.builder(
+                                              itemCount: provider.schedules.length,
+                                              itemBuilder: (context, index) {
+                                                final schedule = provider.schedules[index];
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    behavior: SnackBarBehavior.floating,
-                                    content: Text(
-                                      result['message'],
-                                      textDirection: TextDirection.rtl,
-                                    ),
+                                                return Padding(
+                                                  padding: EdgeInsets.all(10),
+                                                  child: Card(
+                                                    color: context.watch<ThemeProvider>().isDark
+                                                        ? primarycolor2
+                                                        : Colors.grey.shade300,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(20),
+                                                      child: Column(
+                                                        spacing: 10,
+                                                        children: [
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                schedule.day,
+                                                                style: TextStyle(
+                                                                  fontWeight: FontWeight.bold,
+                                                                  color: primarycolor1,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                ':اليوم',
+                                                                style: TextStyle(
+                                                                  fontWeight: FontWeight.bold,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                "${schedule.startTime} - ${schedule.endTime}",
+                                                                style: TextStyle(
+                                                                  fontWeight: FontWeight.bold,
+                                                                  color: primarycolor1,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                ':الأوقات',
+                                                                style: TextStyle(
+                                                                  fontWeight: FontWeight.bold,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(height: 10),
+                                                          ElevatedButton(
+                                                            style: ElevatedButton.styleFrom(
+                                                              alignment: Alignment.center,
+                                                              minimumSize: Size(
+                                                                double.infinity,
+                                                                50,
+                                                              ),
+                                                              shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(
+                                                                  12,
+                                                                ),
+                                                              ),
+                                                              backgroundColor: Colors.white30,
+                                                              foregroundColor: Color(0xFFF59B4A),
+                                                            ),
+                                                            onPressed: () async {
+                                                              final navigate = Navigator.of(
+                                                                context,
+                                                              );
+                                                              final messenger =
+                                                                  ScaffoldMessenger.of(context);
+                                                              final response = await provider
+                                                                  .acceptOffer(
+                                                                    inspectionRequestId: offer.id,
+                                                                    scheduleId: schedule.id,
+                                                                  );
+
+                                                              if (response == null) return;
+                                                              print(response.body);
+                                                              final result = jsonDecode(
+                                                                response.body,
+                                                              );
+                                                              if (response.statusCode == 200 ||
+                                                                  response.statusCode == 201) {
+                                                                messenger.showSnackBar(
+                                                                  SnackBar(
+                                                                    behavior:
+                                                                        SnackBarBehavior.floating,
+                                                                    content: Text(
+                                                                      result['message'],
+                                                                      textDirection:
+                                                                          TextDirection.rtl,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              } else {
+                                                                messenger.showSnackBar(
+                                                                  SnackBar(
+                                                                    behavior:
+                                                                        SnackBarBehavior.floating,
+                                                                    content: Text(
+                                                                      result['message'],
+                                                                      textDirection:
+                                                                          TextDirection.rtl,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              }
+                                                              navigate.pop();
+                                                            },
+
+                                                            child: Text(
+                                                              'قبول العرض',
+                                                              style: TextStyle(
+                                                                fontWeight: FontWeight.bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  alignment: Alignment.center,
+                                  minimumSize: Size(80, 50),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
-                                );
-
-                                if (response.statusCode == 200 || response.statusCode == 201) {
-                                  await context.read<InspectionProvider>().fetchInspections();
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                alignment: Alignment.center,
-                                minimumSize: Size(80, 50),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  backgroundColor: Colors.white30,
+                                  foregroundColor: Color(0xFFF59B4A),
                                 ),
-                                backgroundColor: Colors.white30,
-                                foregroundColor: Color(0xFFF59B4A),
-                              ),
-                              child: Row(
-                                spacing: 6,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.check_circle),
-                                  Text(
-                                    'قبول العرض',
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                                  ),
-                                ],
+                                child: Row(
+                                  spacing: 6,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.access_time),
+                                    Text(
+                                      'اختيار الأوقات',
+                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
