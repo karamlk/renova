@@ -9,18 +9,31 @@ import '../../extras/link.dart';
 
 class ContractorRequestsProvider extends ChangeNotifier {
   bool isLoading = false;
+  String? selectedType;
+  String? selectedLocation;
 
   List<ContractorRequestModel> requests = [];
 
-  Future<http.Response?> fetchRequests() async {
+  Future<http.Response?> fetchRequests({String? location, String? type}) async {
     isLoading = true;
     notifyListeners();
 
     try {
       final token = await getPrefs('token');
+      final query = <String, String>{};
+
+      if (location != null && location.trim().isNotEmpty) {
+        query['location'] = location;
+      }
+
+      if (type != null && type.isNotEmpty) {
+        query['type'] = type;
+      }
 
       final response = await http.get(
-        Uri.parse("$link/api/contractor/reconstruction-requests"),
+        Uri.parse(
+          "$link/api/contractor/reconstruction-requests",
+        ).replace(queryParameters: query.isEmpty ? null : query),
         headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
       );
 
@@ -29,6 +42,7 @@ class ContractorRequestsProvider extends ChangeNotifier {
 
         requests = (body['data'] as List).map((e) => ContractorRequestModel.fromJson(e)).toList();
       }
+      print(response.body);
       return response;
     } catch (e) {
       print(e);

@@ -7,6 +7,7 @@ import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/Contractor/user_requests_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';
+import 'package:renove_provider/screens/Contractor/home_screens/UserRequestsDetails/filter_buttom_sheet.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/UserRequestsDetails/user_requests_details.dart';
 
 class UserRequestsIndex extends StatefulWidget {
@@ -72,6 +73,19 @@ class _UserRequestsIndexState extends State<UserRequestsIndex> {
               Divider(color: primarycolor1, height: 5),
             ],
           ),
+        ),
+
+        leading: IconButton.filled(
+          style: IconButton.styleFrom(backgroundColor: primarycolor2),
+
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => SafeArea(child: FilterButtomSheet()),
+            );
+          },
+          icon: Icon(Icons.filter_alt_outlined),
         ),
       ),
       body: Consumer<ContractorRequestsProvider>(
