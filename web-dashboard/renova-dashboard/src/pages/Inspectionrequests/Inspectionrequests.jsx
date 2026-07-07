@@ -16,6 +16,8 @@ import {chooseEngineerRequest} from "../../api/inspection"
 //Components
 import Engineerlistdialog from "../../components/Engineerlistdialog/Engineerlistdialog";
 import Snackbar from "../../components/Snackbar/Snakbar";
+import TablePagination from "../../components/Pagination/Pagination";
+
 //Context
 import { LoadingContext } from "../../Context/Loadingcontext";
 export default function Inspectionrequests() {
@@ -29,7 +31,10 @@ export default function Inspectionrequests() {
     const [isopen, setisopen] = useState(false);
     const [listload,setlistload] = useState(false);
     const {setisloading}=useContext(LoadingContext);
-
+    const [page, setPage] = useState(1);
+    
+    const rowsPerPage = 12;
+    const paginatedInspection = inspections.slice((page - 1) * rowsPerPage , page * rowsPerPage);
     let type={restoration:t("ترميم") , construction:t("بناء") , finishing:t("إكساء")};
     let status={approved:t("مقبول"), rejected:t("مرفوض"), pending:t("قيد الانتظار")}
     let day={sunday:t("الأحد"),monday:t("الاثنين"),tuesday:t("الثلاثاء"),wednesday:t("الأربعاء"),thursday:t("الخميس"),friday:t("الجمعة"),saturday:t("السبت")}
@@ -124,7 +129,7 @@ export default function Inspectionrequests() {
                         </tr>
                     </thead>
                    <tbody>
-                    {inspections.map((inspection) => (
+                    {paginatedInspection.map((inspection) => (
                         <tr key={inspection?.id}>
                         <td>{inspection?.id}</td>   
                         <td>{inspection?.inspection_request?.request?.title}</td>
@@ -144,6 +149,13 @@ export default function Inspectionrequests() {
                     </tbody>
                 </table>
                 }
+            </div>
+                <div className="table-footer">
+                  <TablePagination
+                    count={Math.ceil(inspections.length / rowsPerPage)}
+                    page={page}
+                    onChange={(event,value)=>setPage(value)}
+                  />
             </div>
         </div>
         </div>
