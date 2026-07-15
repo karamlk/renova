@@ -35,7 +35,7 @@ class ComplaintSeeder extends Seeder
             'otp_verified' => true,
         ]);
         UserProfile::create(['user_id' => $user->id, 'first_name' => 'Ahmad', 'last_name' => 'Nasser', 'phone' => '+963912100001', 'location' => 'Damascus']);
-        Wallet::create(['user_id' => $user->id, 'balance' => 500000.00, 'card_number' => 'SD-USER-' . rand(1000,9999)]);
+        Wallet::create(['user_id' => $user->id, 'balance' => 500000.00, 'card_number' => 'SD-USER-' . rand(1000, 9999)]);
 
         $contractor = User::create([
             'email'        => 'seed_contractor@renova.com',
@@ -47,7 +47,7 @@ class ComplaintSeeder extends Seeder
             'otp_verified' => true,
         ]);
         ContractorProfile::create(['user_id' => $contractor->id, 'first_name' => 'Samer', 'last_name' => 'Ali', 'phone' => '+963912100002', 'location' => 'Aleppo', 'company_name' => 'Seed Contracting Co.', 'commercial_record' => 'CR-SEED-001']);
-        Wallet::create(['user_id' => $contractor->id, 'balance' => 300000.00, 'card_number' => 'SD-CONT-' . rand(1000,9999)]);
+        Wallet::create(['user_id' => $contractor->id, 'balance' => 300000.00, 'card_number' => 'SD-CONT-' . rand(1000, 9999)]);
 
         $engineer = User::create([
             'email'        => 'seed_engineer@renova.com',
@@ -59,19 +59,22 @@ class ComplaintSeeder extends Seeder
             'otp_verified' => true,
         ]);
         EngineerProfile::create(['user_id' => $engineer->id, 'specialization' => 'Civil Engineering', 'syndicate_number' => 'SYN-SEED-001', 'degree' => 'Bachelor', 'years_of_experience' => 5, 'covered_zones' => 'Damascus', 'is_verified' => true]);
-        Wallet::create(['user_id' => $engineer->id, 'balance' => 150000.00, 'card_number' => 'SD-ENG-' . rand(1000,9999)]);
+        Wallet::create(['user_id' => $engineer->id, 'balance' => 150000.00, 'card_number' => 'SD-ENG-' . rand(1000, 9999)]);
 
         $reconstructionRequest = ReconstructionRequest::create([
-            'user_id' => $user->id, 'title' => 'Seed Complaint Project',
-            'description' => 'مشروع اختبار الشكاوي', 'location' => 'Damascus',
-            'type' => 'construction', 'status' => 'open',
+            'user_id' => $user->id,
+            'title' => 'Seed Complaint Project',
+            'description' => 'مشروع اختبار الشكاوي',
+            'location' => 'Damascus',
+            'type' => 'construction',
+            'status' => 'open',
         ]);
 
         $form = ConstructionForm::create([
             'reconstruction_request_id' => $reconstructionRequest->id,
             'contractor_id'       => $contractor->id,
             'engineer_id'         => $engineer->id,
-            'building_description'=> 'مبنى سكني ثلاثة طوابق',
+            'building_description' => 'مبنى سكني ثلاثة طوابق',
             'warranty_period'     => '12 months',
             'execution_duration'  => '8 months',
             'materials_cost'      => 600000.00,
@@ -116,12 +119,18 @@ class ComplaintSeeder extends Seeder
         }
 
         // صورة واحدة للشكوى الأولى فقط
-        $imagePath = 'complaints/seed-complaint-image.png';
-        if (!Storage::disk('public')->exists($imagePath)) {
-            $png = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==');
-            Storage::disk('public')->put($imagePath, $png);
-        }
-        ComplaintImage::create(['complaint_id' => $createdComplaints[0]->id, 'image' => $imagePath]);
+        $source    = database_path('seeders/images/complaint.png');
+        $imagePath = 'complaints/complaint.png';
+
+        Storage::disk('public')->put(
+            $imagePath,
+            file_get_contents($source)
+        );
+
+        ComplaintImage::create([
+            'complaint_id' => $createdComplaints[0]->id,
+            'image'        => $imagePath,
+        ]);
 
         $this->command->info('');
         $this->command->info('✅ ComplaintSeeder done — 10 complaints created');
