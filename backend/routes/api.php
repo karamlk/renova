@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\AdminComplaintController;
+use App\Http\Controllers\Admin\AdminNoShowWarningController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\AccountDeletionController;
 use App\Http\Controllers\Auth\AuthController;
@@ -226,9 +227,7 @@ Route::middleware(['auth:sanctum','active'])->group(function () {
         '/posts/{post}/like',
         [LikeController::class, 'toggleLike']
     );
-    // الأسباب الثابتة — يستدعيها الفرونت عند فتح نموذج الشكوى
-    Route::get('complaints/reasons', [ComplaintController::class, 'reasons']);
- 
+
     // شكاوي المستخدم الحالي
     Route::get('complaints',         [ComplaintController::class, 'index']);
  
@@ -289,9 +288,13 @@ Route::middleware(['auth:sanctum','active'])->group(function () {
         // فرز مهندس لزيارة معينة
         Route::post('site-visits/assign', [SiteVisitController::class, 'assignEngineer']);
 
+        Route::get('all-complaints',                   [AdminComplaintController::class, 'getAllComplaints']);
         Route::get('complaints',                        [AdminComplaintController::class, 'index']);
         Route::get('complaints/{complaint}',            [AdminComplaintController::class, 'show']);
         Route::patch('complaints/{complaint}/resolve',  [AdminComplaintController::class, 'resolve']);
+
+        Route::get('no-show-warnings',          [AdminNoShowWarningController::class, 'index']);
+        Route::get('no-show-warnings/{noShowWarning}', [AdminNoShowWarningController::class, 'show']);
     });
 
 

@@ -10,28 +10,40 @@ class NoShowWarning extends Model
         'site_visit_id',
         'reporter_id',
         'reported_id',
-        'reported_role',
+        'reporter_role_id',
+        'reported_role_id',
+        'type',
+        'reason',
+        'description',
         'penalty_applied',
-        'penalty_amount',
     ];
 
     protected $casts = [
         'penalty_applied' => 'boolean',
-        'penalty_amount'  => 'float',
     ];
 
     public function siteVisit()
     {
         return $this->belongsTo(SiteVisit::class);
     }
-    //من ابلغ
+
     public function reporter()
     {
         return $this->belongsTo(User::class, 'reporter_id');
     }
-    //من لم يحضر للزيارة الميدانية 
+
     public function reported()
     {
         return $this->belongsTo(User::class, 'reported_id');
+    }
+
+    public function reporterRole()
+    {
+        return $this->belongsTo(Role::class, 'reporter_role_id');
+    }
+
+    public function reportedRole()
+    {
+        return $this->belongsTo(Role::class, 'reported_role_id');
     }
 }

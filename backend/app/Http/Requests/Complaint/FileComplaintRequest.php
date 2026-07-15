@@ -14,23 +14,21 @@ class FileComplaintRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'complained_on_id'     => 'required|exists:users,id',
-            'complained_on_role'   => 'required|in:user,contractor,engineer',
-            'construction_form_id' => 'nullable|exists:construction_forms,id',
-            'reason'               => 'required|string',
+            'construction_form_id' => 'required|exists:construction_forms,id',
+            'reason'               => 'required|string|max:255',
             'description'          => 'nullable|string|max:1000',
-            'is_anonymous'         => 'boolean',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'complained_on_id.required'   => 'يجب تحديد الشخص المشكو عليه',
-            'complained_on_id.exists'     => 'المستخدم المشكو عليه غير موجود',
-            'complained_on_role.required' => 'يجب تحديد دور الشخص المشكو عليه',
-            'complained_on_role.in'       => 'الدور غير صالح',
-            'reason.required'             => 'يجب اختيار سبب الشكوى',
+            'construction_form_id.required' => 'يجب تحديد المشروع المرتبط بالشكوى',
+            'construction_form_id.exists'   => 'المشروع غير موجود',
+            'reason.required'               => 'يجب كتابة سبب الشكوى',
+            'reason.max'                    => 'سبب الشكوى طويل جداً',
         ];
     }
 }

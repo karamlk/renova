@@ -15,24 +15,37 @@ return new class extends Migration
                 ->constrained('site_visits')
                 ->cascadeOnDelete();
 
+            // من أبلغ
             $table->foreignId('reporter_id')
                 ->constrained('users')
                 ->cascadeOnDelete();
 
+            // من تغيب
             $table->foreignId('reported_id')
                 ->constrained('users')
                 ->cascadeOnDelete();
 
-            $table->enum('reported_role', ['user', 'contractor']);
+            // id الدور بدل اسمه
+            $table->foreignId('reporter_role_id')
+                ->constrained('roles');
 
-            // هل هذا التحذير تم احتسابه ضمن عقوبة مطبقة
+            $table->foreignId('reported_role_id')
+                ->constrained('roles');
+
+            // نوع الشكوى — ثابت دائماً
+            $table->string('type')->default('no_show');
+
+            // السبب — ثابت يُملأ تلقائياً
+            $table->string('reason')->default('عدم الحضور إلى الزيارة الميدانية');
+
+            // الوصف — يُملأ تلقائياً مع رقم الزيارة
+            $table->text('description')->nullable();
+
+            // هل تم احتساب هذا التحذير ضمن عقوبة (تعطيل الحساب)
             $table->boolean('penalty_applied')->default(false);
 
-            // مبلغ العقوبة — يُملأ فقط عند تطبيق العقوبة
-            $table->decimal('penalty_amount', 12, 2)->nullable();
-
-            // منع تكرار البلاغ من نفس الشخص على نفس الزيارة
-            $table->unique(['site_visit_id', 'reporter_id']);
+            // منع نفس الشخص من الإبلاغ على نفس الشخص في نفس الزيارة مرتين
+            $table->unique(['site_visit_id', 'reporter_id', 'reported_id']);
 
             $table->timestamps();
         });

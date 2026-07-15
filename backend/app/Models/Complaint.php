@@ -13,13 +13,13 @@ class Complaint extends Model
         'complainant_id',
         'complained_on_id',
         'construction_form_id',
-        'complainant_role',
-        'complained_on_role',
+        'complainant_role_id',
+        'complained_on_role_id',
+        'type',
         'reason',
         'description',
-        'is_anonymous',
         'status',
-        'admin_note',
+        'admin_processing_note',
         'penalty_percentage',
         'penalty_amount',
         'compensation_amount',
@@ -27,28 +27,39 @@ class Complaint extends Model
     ];
 
     protected $casts = [
-        'is_anonymous'      => 'boolean',
-        'penalty_percentage' => 'float',
-        'penalty_amount'    => 'float',
-        'compensation_amount' => 'float',
-        'resolved_at'       => 'datetime',
+        'penalty_percentage'   => 'float',
+        'penalty_amount'       => 'float',
+        'compensation_amount'  => 'float',
+        'resolved_at'          => 'datetime',
     ];
 
-    // من رفع الشكوى
     public function complainant()
     {
         return $this->belongsTo(User::class, 'complainant_id');
     }
 
-    // المشكو عليه
     public function complainedOn()
     {
         return $this->belongsTo(User::class, 'complained_on_id');
     }
 
-    // الاستمارة المرتبطة
     public function constructionForm()
     {
         return $this->belongsTo(ConstructionForm::class);
+    }
+
+    public function complainantRole()
+    {
+        return $this->belongsTo(Role::class, 'complainant_role_id');
+    }
+
+    public function complainedOnRole()
+    {
+        return $this->belongsTo(Role::class, 'complained_on_role_id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ComplaintImage::class);
     }
 }

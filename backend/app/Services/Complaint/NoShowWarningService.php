@@ -2,146 +2,140 @@
 
 namespace App\Services\Complaint;
 
-use App\Models\ConstructionForm;
 use App\Models\NoShowWarning;
+use App\Models\Role;
 use App\Models\SiteVisit;
-use App\Models\Wallet;
-use App\Services\WalletService;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class NoShowWarningService
 {
-    public function __construct(
-        protected WalletService $walletService
-    ) {}
-
-    public function report(int $siteVisitId): NoShowWarning
+    public function report(int $siteVisitId, int $reportedId): NoShowWarning
     {
-        return DB::transaction(function () use ($siteVisitId) {
+        return DB::transaction(function () use ($siteVisitId, $reportedId) {
 
-            $reporterId = Auth::id();
+            $reporter = Auth::user();
 
+            // جلب الزيارة مع جدول المتعهد وطلب الفحص
             $siteVisit = SiteVisit::with([
-                'inspectionRequest.request'
+                'schedule',
+                'inspectionRequest.request',
             ])->findOrFail($siteVisitId);
 
+            // ── 1. التحقق من حالة الزيارة ────────────────────────────────
+            // يجب أن تكون الزيارة مقبولة أو مكتملة
+            abort_if(
+                !in_array($siteVisit->status, ['accepted', 'completed']),
+                422,
+                'لا يمكن تقديم بلاغ غياب على زيارة لم تُقبل بعد'
+            );
+
+            // ── 2. التحقق من وقت انتهاء الزيارة ─────────────────────────
+            // نتحقق أن وقت الآن تجاوز end_time في جدول المتعهد
+            $endTime = Carbon::parse($siteVisit->schedule->end_time);
+            $now     = Carbon::now();
+
+            // TODO: عندما يضيف المتعهد عمود التاريخ (visit_date) لجدول site_visits
+            // استبدل هذا الكود بالتالي:
+            // $visitDate = Carbon::parse($siteVisit->visit_date);
+            // $endDateTime = $visitDate->setTimeFrom($endTime);
+            // abort_if(
+            //     $now->lessThan($endDateTime),
+            //     422,
+            //     'لا يمكن تقديم بلاغ الغياب قبل انتهاء وقت الزيارة'
+            // );
+            //
+            // في الوقت الحالي نتحقق من الوقت فقط بدون التاريخ (نفس اليوم)
+            abort_if(
+                $now->format('H:i:s') < $siteVisit->schedule->end_time,
+                422,
+                'لا يمكن تقديم بلاغ الغياب قبل انتهاء وقت الزيارة'
+            );
+
+            // ── 3. التحقق أن المُبلِّغ طرف في هذه الزيارة ───────────────
             $contractorId = $siteVisit->inspectionRequest->contractor_id;
             $customerId   = $siteVisit->inspectionRequest->request->user_id;
+            $engineerId   = $siteVisit->engineer_id;
 
-            // التأكد أن من يبلغ هو أحد طرفي الزيارة
+            $validParticipants = array_filter([
+                $contractorId,
+                $customerId,
+                $engineerId, // المهندس قد يكون null
+            ]);
+
             abort_if(
-                !in_array($reporterId, [$contractorId, $customerId]),
+                !in_array($reporter->id, $validParticipants),
                 403,
                 'لست طرفاً في هذه الزيارة'
             );
 
-            // من يبلغ → الطرف الآخر هو المتغيب تلقائياً
-            if ($reporterId === $contractorId) {
-                $reportedId   = $customerId;
-                $reportedRole = 'user';
-            } else {
-                $reportedId   = $contractorId;
-                $reportedRole = 'contractor';
-            }
-
-            // منع التكرار — شخص واحد لا يبلغ مرتين عن نفس الزيارة
+            // ── 4. التحقق أن المُبلَّغ عنه طرف في هذه الزيارة ──────────
             abort_if(
-                NoShowWarning::where('site_visit_id', $siteVisitId)
-                    ->where('reporter_id', $reporterId)
-                    ->exists(),
+                !in_array($reportedId, $validParticipants),
                 422,
-                'لقد أبلغت عن هذه الزيارة مسبقاً'
+                'الشخص المُبلَّغ عنه ليس طرفاً في هذه الزيارة'
             );
 
-            // TODO align the sitevist status 
-            
-            // إنشاء التحذير
+            // ── 5. منع الإبلاغ على النفس ─────────────────────────────────
+            abort_if(
+                $reporter->id === $reportedId,
+                422,
+                'لا يمكنك الإبلاغ على نفسك'
+            );
+
+            // ── 6. منع تكرار الإبلاغ من نفس الشخص على نفس الشخص في نفس الزيارة ──
+            abort_if(
+                NoShowWarning::where('site_visit_id', $siteVisitId)
+                    ->where('reporter_id', $reporter->id)
+                    ->where('reported_id', $reportedId)
+                    ->exists(),
+                422,
+                'لقد أبلغت عن هذا الشخص في هذه الزيارة مسبقاً'
+            );
+
+            // ── 7. جلب role_id للطرفين ────────────────────────────────────
+            $reporterRoleId = $reporter->role_id;
+            $reportedUser   = User::findOrFail($reportedId);
+            $reportedRoleId = $reportedUser->role_id;
+
+            // ── 8. إنشاء التحذير ──────────────────────────────────────────
             $warning = NoShowWarning::create([
                 'site_visit_id'   => $siteVisitId,
-                'reporter_id'     => $reporterId,
+                'reporter_id'     => $reporter->id,
                 'reported_id'     => $reportedId,
-                'reported_role'   => $reportedRole,
+                'reporter_role_id'=> $reporterRoleId,
+                'reported_role_id'=> $reportedRoleId,
+                'type'            => 'no_show',
+                'reason'          => 'عدم الحضور إلى الزيارة الميدانية',
+                'description'     => "عدم حضور المستخدم إلى الزيارة الميدانية رقم ({$siteVisitId})",
                 'penalty_applied' => false,
             ]);
 
-            // عدد التحذيرات غير المعاقب عليها لهذا الشخص
+            // ── 9. التحقق من عدد التحذيرات غير المعاقب عليها ────────────
             $unpunishedCount = NoShowWarning::where('reported_id', $reportedId)
                 ->where('penalty_applied', false)
                 ->count();
 
-            // عند بلوغ تحذيرين غير معاقب عليهما → تطبيق العقوبة
-            if ($unpunishedCount >= 2) {
-                $this->applyPenalty(
-                    $reportedId,
-                    $reportedRole,
-                    $siteVisitId,
-                    $siteVisit
-                );
+            // عند بلوغ 3 تحذيرات → تعطيل الحساب
+            if ($unpunishedCount >= 3) {
+                $this->deactivateAccount($reportedId);
             }
 
             return $warning->fresh();
         });
     }
 
-    private function applyPenalty(
-        int $reportedId,
-        string $reportedRole,
-        int $siteVisitId,
-        SiteVisit $siteVisit
-    ): void {
+    private function deactivateAccount(int $reportedId): void
+    {
+        // تعطيل حساب المستخدم
+        User::where('id', $reportedId)->update(['is_active' => false]);
 
-        $penaltyAmount = config('renova.no_show_penalty_amount', 10);
-
-        // محفظة الأدمن — وجهة كل الغرامات
-        $adminWallet = Wallet::where('user_id', 1)->firstOrFail();
-
-        // جلب الاستمارة المعتمدة إن وجدت
-        $reconstructionRequestId = $siteVisit->inspectionRequest->request->id;
-
-        $form = ConstructionForm::where('reconstruction_request_id', $reconstructionRequestId)
-            ->where('status', 'user_approved')
-            ->first();
-
-        if ($reportedRole === 'contractor') {
-            if ($form) {
-                $contractorWallet = Wallet::where('user_id', $reportedId)->firstOrFail();
-                $this->walletService->withdraw(
-                    $contractorWallet,
-                    $penaltyAmount,
-                    "غرامة غياب متعهد عن زيارة #{$siteVisitId}"
-                );
-            }
-            $this->walletService->deposit(
-                $adminWallet,
-                $penaltyAmount,
-                "استلام غرامة غياب متعهد عن زيارة #{$siteVisitId}"
-            );
-        } else {
-            // user
-            if ($form) {
-                $userWallet = Wallet::where('user_id', $reportedId)->firstOrFail();
-                $this->walletService->withdraw(
-                    $userWallet,
-                    $penaltyAmount,
-                    "غرامة غياب مستخدم عن زيارة #{$siteVisitId}"
-                );
-                $this->walletService->deposit(
-                    $adminWallet,
-                    $penaltyAmount,
-                    "استلام غرامة غياب مستخدم عن زيارة #{$siteVisitId}"
-                );
-            }
-            // إذا لا يوجد مشروع معتمد → لا تتحرك أموال
-        }
-
-        // تعليم كل التحذيرات غير المعاقب عليها لهذا الشخص كـ penalty_applied
-        // حتى يبدأ العداد من جديد للمستقبل
+        // تعليم كل التحذيرات غير المعاقب عليها كـ penalty_applied
+        // حتى تبدأ الدورة من جديد إذا أُعيد تفعيل الحساب لاحقاً
         NoShowWarning::where('reported_id', $reportedId)
             ->where('penalty_applied', false)
-            ->update([
-                'penalty_applied' => true,
-                'penalty_amount'  => $form ? $penaltyAmount : 0,
-            ]);
+            ->update(['penalty_applied' => true]);
     }
 }

@@ -3,9 +3,12 @@
 namespace App\Services\Complaint;
 
 use App\Models\Complaint;
+use App\Models\ComplaintImage;
 use App\Models\ConstructionForm;
+use App\Models\Role;
 use App\Models\Wallet;
 use App\Services\WalletService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -16,114 +19,86 @@ class ComplaintService
     ) {}
 
     // ─────────────────────────────────────────────────────
-    // الأسباب الثابتة 
-    // ─────────────────────────────────────────────────────
-    public function getReasons(): array
-    {
-        return [
-            'user_vs_contractor' => [
-                ['key' => 'timeline_breach', 'label' => 'عدم الالتزام بالجدول الزمني'],
-                ['key' => 'poor_quality',    'label' => 'رداءة جودة العمل'],
-            ],
-            'user_vs_engineer' => [
-                ['key' => 'timeline_breach',        'label' => 'عدم الالتزام بالجدول الزمني'],
-                ['key' => 'inappropriate_behavior', 'label' => 'سلوك غير لائق'],
-            ],
-            'contractor_vs_user' => [
-                ['key' => 'late_payment',        'label' => 'التأخر في الدفع'],
-                ['key' => 'lack_of_cooperation', 'label' => 'عدم التعاون'],
-            ],
-            'contractor_vs_engineer' => [
-                ['key' => 'negligence', 'label' => 'إهمال في العمل'],
-                ['key' => 'absence',    'label' => 'عدم الالتزام بالحضور'],
-            ],
-            'engineer_vs_contractor' => [
-                ['key' => 'unpaid_dues',        'label' => 'عدم صرف المستحقات'],
-                ['key' => 'unsafe_environment', 'label' => 'بيئة عمل غير آمنة'],
-            ],
-            'engineer_vs_user' => [
-                ['key' => 'inappropriate_behavior', 'label' => 'سلوك غير لائق'],
-                ['key' => 'lack_of_cooperation',    'label' => 'عدم التعاون'],
-            ],
-        ];
-    }
-
-    // ─────────────────────────────────────────────────────
     // رفع شكوى جديدة
     // ─────────────────────────────────────────────────────
-    public function file(array $data): Complaint
+    public function file(Request $request): Complaint
     {
-        $user = Auth::user();
-        $complainantRole = $user->role->name; // 'user', 'contractor', 'engineer'
+        $complainant     = Auth::user();
+        $complainantRole = $complainant->role; // Role model
+        $data = $request->validated();
 
-        // بناء مفتاح التركيبة
-        $key = "{$complainantRole}_vs_{$data['complained_on_role']}";
-
-        // التحقق من أن السبب صالح لهذه التركيبة
-        $validReasons = array_column(
-            $this->getReasons()[$key] ?? [],
-            'key'
+        // فقط user و contractor يمكنهم رفع شكوى
+        abort_if(
+            !in_array($complainantRole->name, ['user', 'contractor']),
+            403,
+            'غير مصرح لك برفع شكوى'
         );
+
+        // جلب الاستمارة
+        $form = ConstructionForm::findOrFail($data['construction_form_id']);
+
+        // التأكد أن المشتكي طرف في هذا المشروع
+        $customerId   = $form->reconstructionRequest->user_id;
+        $contractorId = $form->contractor_id;
 
         abort_if(
-            !in_array($data['reason'], $validReasons),
-            422,
-            'السبب المختار غير صالح لهذه الشكوى'
+            !in_array($complainant->id, [$customerId, $contractorId]),
+            403,
+            'لست طرفاً في هذا المشروع'
         );
 
-        // منع الشكوى على النفس
-        abort_if(
-            $user->id === (int) $data['complained_on_id'],
-            422,
-            'لا يمكنك تقديم شكوى على نفسك'
-        );
+        // تحديد المشكو عليه تلقائياً — الطرف الآخر في المشروع
+        if ($complainantRole->name === 'user') {
+            $complainedOnId   = $contractorId;
+            $complainedOnRole = Role::where('name', 'contractor')->firstOrFail();
+        } else {
+            $complainedOnId   = $customerId;
+            $complainedOnRole = Role::where('name', 'user')->firstOrFail();
+        }
 
-        return Complaint::create([
-            'complainant_id'       => $user->id,
-            'complained_on_id'     => $data['complained_on_id'],
-            'construction_form_id' => $data['construction_form_id'] ?? null,
-            'complainant_role'     => $complainantRole,
-            'complained_on_role'   => $data['complained_on_role'],
-            'reason'               => $data['reason'],
-            'description'          => $data['description'] ?? null,
-            'is_anonymous'         => $data['is_anonymous'] ?? false,
-            'status'               => 'open',
+        $complaint = Complaint::create([
+            'complainant_id'        => $complainant->id,
+            'complained_on_id'      => $complainedOnId,
+            'construction_form_id'  => $form->id,
+            'complainant_role_id'   => $complainantRole->id,
+            'complained_on_role_id' => $complainedOnRole->id,
+            'type'                  => $data['type'] ?? 'general',
+            'reason'                => $data['reason'],
+            'description'           => $data['description'] ?? null,
+            'status'                => 'open',
         ]);
+
+        $this->storeImages(
+            $request,
+            $complaint
+        );
+
+        return $complaint->load('images');
     }
 
     // ─────────────────────────────────────────────────────
-    // جلب الشكاوي للمستخدم الحالي مع إخفاء الهوية
+    // شكاوي المستخدم الحالي
     // ─────────────────────────────────────────────────────
-   public function getForUser()
-{
-    $userId = Auth::id();
+    public function getForUser()
+    {
+        $userId = Auth::id();
 
-    return Complaint::with([
-        'complainant',
-        'complainedOn',
-        'constructionForm',
-    ])
-    ->where(function ($q) use ($userId) {
-        $q->where('complainant_id', $userId)
-          ->orWhere('complained_on_id', $userId);
-    })
-    ->latest()
-    ->get() 
-    ->map(function ($complaint) use ($userId) { 
-        // إذا كان المستخدم هو المشكو عليه والشكوى مجهولة → أخفِ الهوية
-        if (
-            $complaint->complained_on_id === $userId &&
-            $complaint->is_anonymous
-        ) {
-            $complaint->complainant = null;
-        }
-        return $complaint;
-    });
-}
-
+        return Complaint::with([
+            'complainant',
+            'complainedOn',
+            'constructionForm',
+            'images'
+        ])
+            ->where(function ($q) use ($userId) {
+                $q->where('complainant_id', $userId)
+                    ->orWhere('complained_on_id', $userId);
+            })
+            ->latest()
+            ->get();
+    }
 
     // ─────────────────────────────────────────────────────
-    // جلب كل الشكاوي للأدمن — يرى كل شيء
+    // كل الشكاوي للأدمن
     // ─────────────────────────────────────────────────────
     public function getForAdmin()
     {
@@ -131,7 +106,8 @@ class ComplaintService
             'complainant',
             'complainedOn',
             'constructionForm',
-        ])->latest()->paginate(20);
+            'images'
+        ])->latest()->get();
     }
 
     // ─────────────────────────────────────────────────────
@@ -143,28 +119,23 @@ class ComplaintService
 
             $penaltyPercentage = $data['penalty_percentage'] ?? null;
 
-            // العقوبة المالية فقط بين user و contractor
-            if (
-                $penaltyPercentage &&
-                $this->isFinancial($complaint) &&
-                $complaint->construction_form_id
-            ) {
+            if ($penaltyPercentage && $complaint->construction_form_id) {
+
                 $form = ConstructionForm::findOrFail($complaint->construction_form_id);
 
                 // المبلغ المحجوز = 30% من التكلفة الكلية
                 $heldAmount    = $form->total_cost * 0.30;
                 $penaltyAmount = $heldAmount * ($penaltyPercentage / 100);
 
-                // تحديد المتعهد والمستخدم من الاستمارة مباشرة
-                $contractorId = $form->contractor_id;
+                // TODO: make the warrenty as a date to use it here
                 $customerId   = $form->reconstructionRequest->user_id;
-
-                $contractorWallet = Wallet::where('user_id', $contractorId)->firstOrFail();
+                
+                // TODO: make sure the admin id is always 1
+                $adminWallet = Wallet::whereHas('user.role', fn($q) => $q->where('name', 'admin'))->firstOrFail();
                 $customerWallet   = Wallet::where('user_id', $customerId)->firstOrFail();
 
-                // خصم من محفظة المتعهد → تعويض للمستخدم
                 $this->walletService->withdraw(
-                    $contractorWallet,
+                    $adminWallet,
                     $penaltyAmount,
                     "خصم عقوبة شكوى #{$complaint->id}"
                 );
@@ -180,21 +151,37 @@ class ComplaintService
                 $complaint->compensation_amount = $penaltyAmount;
             }
 
-            $complaint->status      = $data['status'];
-            $complaint->admin_note  = $data['admin_note'] ?? null;
-            $complaint->resolved_at = now();
+            $complaint->status                = $data['status'];
+            $complaint->admin_processing_note = $data['admin_processing_note'] ?? null;
+            $complaint->resolved_at           = now();
             $complaint->save();
 
             return $complaint->fresh();
         });
     }
 
-    // ─────────────────────────────────────────────────────
-    // هل الشكوى بين user و contractor (مالية)
-    // ─────────────────────────────────────────────────────
-    private function isFinancial(Complaint $complaint): bool
-    {
-        $roles = [$complaint->complainant_role, $complaint->complained_on_role];
-        return in_array('user', $roles) && in_array('contractor', $roles);
+    private function storeImages(
+        Request $request,
+        Complaint $complaint
+    ): void {
+
+        if (!$request->hasFile('images')) {
+            return;
+        }
+
+        foreach ($request->file('images') as $image) {
+
+            $path = $image->store(
+                'complaints',
+                'public'
+            );
+
+            ComplaintImage::create([
+
+                'complaint_id' => $complaint->id,
+
+                'image' => $path,
+            ]);
+        }
     }
 }

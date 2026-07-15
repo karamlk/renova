@@ -11,8 +11,9 @@ class ReportNoShowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // الفرونت يرسل فقطid
+            // الفرونت يرسل id الزيارة و id الشخص المتغيب
             'site_visit_id' => 'required|exists:site_visits,id',
+            'reported_id'   => 'required|exists:users,id',
         ];
     }
 
@@ -21,6 +22,8 @@ class ReportNoShowRequest extends FormRequest
         return [
             'site_visit_id.required' => 'يجب تحديد الزيارة الميدانية',
             'site_visit_id.exists'   => 'الزيارة الميدانية غير موجودة',
+            'reported_id.required'   => 'يجب تحديد الشخص المتغيب',
+            'reported_id.exists'     => 'المستخدم غير موجود',
         ];
     }
 }
