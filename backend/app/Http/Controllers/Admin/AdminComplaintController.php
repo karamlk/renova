@@ -19,16 +19,20 @@ class AdminComplaintController extends Controller
         // ── جلب الشكاوي العادية ───────────────────────
         $complaints = Complaint::with([
             'complainant',
-            'complainedOn',
+            'complainedOn' => function ($query) {
+                $query->withCount([
+                    'complaintsReceived as complaints_count'
+                ]);
+            },
             'constructionForm',
             'images',
         ])
-        ->get()
-        ->map(function ($complaint) {
-            $complaint->complaint_type = 'general';
-            return $complaint;
-        });
- 
+            ->get()
+            ->map(function ($complaint) {
+                $complaint->complaint_type = 'general';
+                return $complaint;
+            });
+
         // ── جلب تحذيرات الغياب ────────────────────────
         $noShowWarnings = NoShowWarning::with([
             'reporter',
@@ -38,18 +42,18 @@ class AdminComplaintController extends Controller
                 ]);
             },
         ])
-        ->get()
-        ->map(function ($warning) {
-            $warning->complaint_type = 'no_show';
-            return $warning;
-        });
- 
+            ->get()
+            ->map(function ($warning) {
+                $warning->complaint_type = 'no_show';
+                return $warning;
+            });
+
         // ── دمج الاثنين وترتيب من الأحدث للأقدم ──────
         $merged = $complaints
             ->concat($noShowWarnings)
             ->sortByDesc('created_at')
             ->values();
- 
+
         return response()->json(['data' => $merged]);
     }
 
@@ -65,8 +69,12 @@ class AdminComplaintController extends Controller
     public function show(Complaint $complaint)
     {
         $complaint->load([
-            'complainant.profile',
-            'complainedOn.profile',
+            'complainant',
+            'complainedOn' => function ($query) {
+                $query->withCount([
+                    'complaintsReceived as complaints_count'
+                ]);
+            },
             'constructionForm.reconstructionRequest',
             'images'
         ]);

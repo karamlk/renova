@@ -104,7 +104,11 @@ class ComplaintService
     {
         return Complaint::with([
             'complainant',
-            'complainedOn',
+            'complainedOn' => function ($query) {
+                $query->withCount([
+                    'complaintsReceived as complaints_count'
+                ]);
+            },
             'constructionForm',
             'images'
         ])->latest()->get();
@@ -129,7 +133,7 @@ class ComplaintService
 
                 // TODO: make the warrenty as a date to use it here
                 $customerId   = $form->reconstructionRequest->user_id;
-                
+
                 // TODO: make sure the admin id is always 1
                 $adminWallet = Wallet::whereHas('user.role', fn($q) => $q->where('name', 'admin'))->firstOrFail();
                 $customerWallet   = Wallet::where('user_id', $customerId)->firstOrFail();
