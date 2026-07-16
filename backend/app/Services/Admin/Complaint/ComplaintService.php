@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Services\Complaint;
+namespace App\Services\Admin\Complaint;
 
+use App\Http\Resources\Complaint\ComplaintResource;
+use App\Http\Resources\Complaint\NoShowWarningResource;
 use App\Models\Complaint;
 use App\Models\ComplaintImage;
 use App\Models\ConstructionForm;
+use App\Models\NoShowWarning;
 use App\Models\Role;
 use App\Models\Wallet;
 use App\Services\WalletService;
@@ -17,6 +20,44 @@ class ComplaintService
     public function __construct(
         protected WalletService $walletService
     ) {}
+
+    public function getAllComplaints()
+    {
+        // General complaints
+        $complaints = Complaint::with([
+            'complainant',
+            'complainedOn' => function ($query) {
+                $query->withCount('complaintsReceived as complaints_count');
+            },
+            'constructionForm',
+            'images',
+        ])
+            ->get()
+            ->map(function ($complaint) {
+                $complaint->complaint_type = 'general';
+
+                return (new ComplaintResource($complaint))->resolve();
+            });
+
+        // No-show warnings
+        $noShowWarnings = NoShowWarning::with([
+            'reporter',
+            'reported' => function ($query) {
+                $query->withCount('noShowWarnings as complaints_count');
+            },
+        ])
+            ->get()
+            ->map(function ($warning) {
+                $warning->complaint_type = 'no_show';
+
+                return (new NoShowWarningResource($warning))->resolve();
+            });
+
+        return $complaints
+            ->concat($noShowWarnings)
+            ->sortByDesc('created_at')
+            ->values();
+    }
 
     // ─────────────────────────────────────────────────────
     // رفع شكوى جديدة
@@ -100,9 +141,10 @@ class ComplaintService
     // ─────────────────────────────────────────────────────
     // كل الشكاوي للأدمن
     // ─────────────────────────────────────────────────────
+
     public function getForAdmin()
     {
-        return Complaint::with([
+        $complaints = Complaint::with([
             'complainant',
             'complainedOn' => function ($query) {
                 $query->withCount([
@@ -112,6 +154,25 @@ class ComplaintService
             'constructionForm',
             'images'
         ])->latest()->get();
+
+        return ComplaintResource::collection($complaints);
+    }
+
+
+    public function getComplaintDetails(Complaint $complaint): ComplaintResource
+    {
+        $complaint->load([
+            'complainant',
+            'complainedOn' => function ($query) {
+                $query->withCount([
+                    'complaintsReceived as complaints_count'
+                ]);
+            },
+            'constructionForm.reconstructionRequest',
+            'images',
+        ]);
+
+        return new ComplaintResource($complaint);
     }
 
     // ─────────────────────────────────────────────────────

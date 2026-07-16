@@ -2,8 +2,8 @@
 
 
 use App\Http\Controllers\AccountController;
-use App\Http\Controllers\Admin\AdminComplaintController;
-use App\Http\Controllers\Admin\AdminNoShowWarningController;
+use App\Http\Controllers\Admin\Complaint\ComplaintController as AdminComplaintController ;
+use App\Http\Controllers\Admin\Complaint\NoShowWarningController as AdminNoShowWarningController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\AccountDeletionController;
 use App\Http\Controllers\Auth\AuthController;

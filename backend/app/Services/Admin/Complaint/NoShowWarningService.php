@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Complaint;
+namespace App\Services\Admin\Complaint;
 
+use App\Http\Resources\Complaint\NoShowWarningResource;
 use App\Models\NoShowWarning;
-use App\Models\Role;
 use App\Models\SiteVisit;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +12,36 @@ use Carbon\Carbon;
 
 class NoShowWarningService
 {
+
+    public function getAllNoShowWarnings()
+    {
+        $warnings = NoShowWarning::with([
+            'reporter',
+            'reported' => function ($query) {
+                $query->withCount('noShowWarnings as complaints_count');
+            },
+            'siteVisit.inspectionRequest.request',
+        ])
+            ->latest()
+            ->get();
+
+        return NoShowWarningResource::collection($warnings);
+    }
+
+    public function getNoShowWarningDetails(NoShowWarning $noShowWarning)
+    {
+        $noShowWarning->load([
+            'reporter',
+            'reported' => function ($query) {
+                $query->withCount('noShowWarnings as complaints_count');
+            },
+            'siteVisit.inspectionRequest.request.user',
+            'siteVisit.inspectionRequest.contractor',
+        ]);
+
+        return new NoShowWarningResource($noShowWarning);
+    }
+
     public function report(int $siteVisitId, int $reportedId): NoShowWarning
     {
         return DB::transaction(function () use ($siteVisitId, $reportedId) {
@@ -105,8 +135,8 @@ class NoShowWarningService
                 'site_visit_id'   => $siteVisitId,
                 'reporter_id'     => $reporter->id,
                 'reported_id'     => $reportedId,
-                'reporter_role_id'=> $reporterRoleId,
-                'reported_role_id'=> $reportedRoleId,
+                'reporter_role_id' => $reporterRoleId,
+                'reported_role_id' => $reportedRoleId,
                 'type'            => 'no_show',
                 'reason'          => 'عدم الحضور إلى الزيارة الميدانية',
                 'description'     => "عدم حضور المستخدم إلى الزيارة الميدانية رقم ({$siteVisitId})",

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Complaint;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Complaint\FileComplaintRequest;
 use App\Http\Requests\Complaint\ReportNoShowRequest;
-use App\Services\Complaint\ComplaintService;
-use App\Services\Complaint\NoShowWarningService;
+use App\Services\Admin\Complaint\ComplaintService;
+use App\Services\Admin\Complaint\NoShowWarningService;
 
 class ComplaintController extends Controller
 {
