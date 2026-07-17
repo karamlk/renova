@@ -18,6 +18,18 @@ export async function updateProfileRequest(data) {
   return response;
 }
 
+export async function updatePasswordRequest(
+  current_password,
+  new_password,
+  new_password_confirmation,
+) {
+  let response = await api.post("/password/change", {
+    current_password,
+    new_password,
+    new_password_confirmation,
+  });
+  return response;
+}
 export function logoutRequest(navigate) {
   localStorage.removeItem("token");
   localStorage.removeItem("role");

@@ -45,11 +45,13 @@ class ReconstructionRequestController extends Controller
     public function index(Request $request)
     {
         // 1. نظف قيم الفلاتر وتأكد إنها مو فاضية
+
         $location = $request->input('location');
         $type = $request->input('type');
 
         // 2. ابدأ الاستعلام الأساسي
-        $query = ReconstructionRequest::with([
+        $query = ReconstructionRequest::where ('status','open')->
+        with([
             'user.profile',
             'images'
         ]);

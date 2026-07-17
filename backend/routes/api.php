@@ -2,7 +2,8 @@
 
 
 use App\Http\Controllers\AccountController;
-use App\Http\Controllers\Admin\AdminComplaintController;
+use App\Http\Controllers\Admin\Complaint\ComplaintController as AdminComplaintController ;
+use App\Http\Controllers\Admin\Complaint\NoShowWarningController as AdminNoShowWarningController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\AccountDeletionController;
 use App\Http\Controllers\Auth\AuthController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\InspectionRequestController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SiteVisitController;
 use App\Http\Controllers\User\LikeController;
+use App\Http\Controllers\User\NotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -226,15 +228,13 @@ Route::middleware(['auth:sanctum','active'])->group(function () {
         '/posts/{post}/like',
         [LikeController::class, 'toggleLike']
     );
-    // الأسباب الثابتة — يستدعيها الفرونت عند فتح نموذج الشكوى
-    Route::get('complaints/reasons', [ComplaintController::class, 'reasons']);
- 
+
     // شكاوي المستخدم الحالي
     Route::get('complaints',         [ComplaintController::class, 'index']);
- 
+
     // رفع شكوى جديدة
     Route::post('complaints',        [ComplaintController::class, 'store']);
- 
+
     // الإبلاغ عن غياب في زيارة ميدانية
     Route::post('no-show-warnings',  [ComplaintController::class, 'reportNoShow']);
 });
@@ -289,9 +289,13 @@ Route::middleware(['auth:sanctum','active'])->group(function () {
         // فرز مهندس لزيارة معينة
         Route::post('site-visits/assign', [SiteVisitController::class, 'assignEngineer']);
 
+        Route::get('all-complaints',                   [AdminComplaintController::class, 'getAllComplaints']);
         Route::get('complaints',                        [AdminComplaintController::class, 'index']);
         Route::get('complaints/{complaint}',            [AdminComplaintController::class, 'show']);
         Route::patch('complaints/{complaint}/resolve',  [AdminComplaintController::class, 'resolve']);
+
+        Route::get('no-show-warnings',          [AdminNoShowWarningController::class, 'index']);
+        Route::get('no-show-warnings/{noShowWarning}', [AdminNoShowWarningController::class, 'show']);
     });
 
 
@@ -324,5 +328,33 @@ Route::middleware(['auth:sanctum'])->group(function () {
         'construction-forms/{constructionForm}/confirm-payment',
         [ConstructionFormController::class, 'confirmPayment']
     );
+//------------------------------------------
+    Route::middleware(
+        'auth:sanctum'
+    )->group(function () {
 
+        Route::get(
+            '/notifications',
+            [NotificationController::class, 'index']
+        );
+
+        Route::get(
+            '/notifications/count',
+            [NotificationController::class, 'unreadCount']
+        );
+
+        Route::patch(
+            '/notifications/read-all',
+            [NotificationController::class, 'markAllRead']
+        );
+
+         Route::get(
+             '/receivedForms',
+             [ConstructionFormController::class, 'receivedForms']
+         );
+        Route::get(
+            '/showForm/{id}',
+            [ConstructionFormController::class, 'showForm']
+        );
+    });
 });

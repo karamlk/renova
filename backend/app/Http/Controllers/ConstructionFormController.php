@@ -116,8 +116,11 @@ class ConstructionFormController extends Controller
     public function userReview(UserReviewRequest $request, ConstructionForm $constructionForm)
     {
         try {
-            $form = $this->formService->reviewByUser($constructionForm, $request->status, $request->user_notes);
-            $msg = $request->status === 'user_approved' ? 'تم الاعتماد النهائي للاستمارة بنجاح من المستفيد' : 'تم رفض الاستمارة من قبل المستفيد';
+            $form = $this->formService
+                ->reviewByUser($constructionForm, $request->status, $request->user_notes);
+            $msg = $request->status === 'user_approved' ?
+                'تم الاعتماد النهائي للاستمارة بنجاح من المستفيد' :
+                'تم رفض الاستمارة من قبل المستفيد';
             if ($form->pdf_file) {
                 $form->pdf_file = asset('storage/' . $form->pdf_file);
             }
@@ -180,5 +183,52 @@ class ConstructionFormController extends Controller
     {
         $this->formService->deleteForm($constructionForm);
         return response()->json(['message' => 'تم حذف الاستمارة نهائياً بنجاح']);
+    }
+    public function receivedForms()
+    {
+        $forms = ConstructionForm::with([
+            'contractor'
+        ])
+            ->whereHas(
+                'reconstructionRequest',
+                function ($q) {
+                    $q->where(
+                        'user_id',
+                        auth()->id()
+                    );
+                }
+            )
+            ->whereIn('status', [
+                'pending_user',
+                'waiting_payment_otp',
+                'user_approved'
+            ])
+            ->latest()
+            ->get();
+
+        return response()->json($forms);
+    }
+
+    public function showForm($id)
+    {
+        $form = ConstructionForm::with([
+            'contractor',
+            'engineer',
+            'materials',
+            'reconstructionRequest'
+        ])->findOrFail($id);
+
+        if (
+            $form->reconstructionRequest->user_id
+            != auth()->id()
+        ) {
+            return response()->json([
+                'message' => 'غير مصرح لك بعرض هذه الاستمارة'
+            ], 403);
+        }
+
+        return response()->json([
+            'data' => $form
+        ]);
     }
 }

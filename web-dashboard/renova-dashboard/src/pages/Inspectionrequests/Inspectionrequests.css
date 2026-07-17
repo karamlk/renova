@@ -134,3 +134,10 @@ tr:hover td {
   align-items: center;
   justify-content: center;
 }
+.table-footer {
+  padding: 20px 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Tajawal", sans-serif !important;
+}

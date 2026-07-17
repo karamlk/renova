@@ -1,17 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Complaint;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Complaint\ResolveComplaintRequest;
 use App\Models\Complaint;
-use App\Services\Complaint\ComplaintService;
+use App\Services\Admin\Complaint\ComplaintService;
 
-class AdminComplaintController extends Controller
+
+class ComplaintController extends Controller
 {
     public function __construct(
         protected ComplaintService $complaintService
     ) {}
+
+    public function getAllComplaints()
+    {
+        return response()->json([
+            'data' => $this->complaintService->getAllComplaints(),
+        ]);
+    }
 
     // GET /api/admin/complaints
     public function index()
@@ -24,13 +32,9 @@ class AdminComplaintController extends Controller
     // GET /api/admin/complaints/{complaint}
     public function show(Complaint $complaint)
     {
-        $complaint->load([
-            'complainant.profile',
-            'complainedOn.profile',
-            'constructionForm.reconstructionRequest',
+        return response()->json([
+            'data' => $this->complaintService->getComplaintDetails($complaint)
         ]);
-
-        return response()->json(['data' => $complaint]);
     }
 
     // PATCH /api/admin/complaints/{complaint}/resolve

@@ -21,7 +21,8 @@ api.interceptors.response.use(
   (response) => response,
 
   (error) => {
-    if (error.response?.status === 401 && !loginRequest) {
+    const isLoginRequest = error.config?.url === "/login";
+    if (error.response?.status === 401 && !isLoginRequest) {
       localStorage.removeItem("token");
       localStorage.removeItem("role");
 

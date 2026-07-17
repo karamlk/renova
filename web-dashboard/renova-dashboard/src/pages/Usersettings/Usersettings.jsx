@@ -8,6 +8,7 @@ import SecurityIcon from '@mui/icons-material/Security';
 import LockIcon from '@mui/icons-material/Lock';
 import SaveIcon from '@mui/icons-material/Save';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import Switch from '@mui/material/Switch';
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
@@ -18,23 +19,27 @@ import { LoadingContext } from "../../Context/Loadingcontext";
 import { UserContext } from "../../Context/UserContext";
 //api
 import {updateProfileRequest} from "../../api/auth";
+import {editActivationRequest} from "../../api/activation";
+//Components
+import Snackbar from "../../components/Snackbar/Snakbar";
+import Changepassdialog from "../../components/Changepassdialog/Changepassdialog";
 export default function Settings() {
     const { t } = useTranslation();
-
     const {setisloading}=useContext(LoadingContext);
     const {user,setUser}=useContext(UserContext);
-
-    const[first_name,setfirst_name]=useState("");
-    const[last_name,setlast_name]=useState("");
-    const[phone,setphone]=useState("");
-    const[location,setlocation]=useState("");
-    const[image,setimage]=useState("");
-
+    const [first_name,setfirst_name]=useState("");
+    const [last_name,setlast_name]=useState("");
+    const [phone,setphone]=useState("");
+    const [location,setlocation]=useState("");
+    const [image,setimage]=useState("");
     const [editFirstName, setEditFirstName] = useState(false);
     const [editLastName, setEditLastName] = useState(false);
     const [editPhone, setEditPhone] = useState(false);
     const [editLocation, setEditLocation] = useState(false);
-
+    const [msg, setmsg] = useState("");
+    const [isopen,setisopen] = useState(false);
+    const [openchangepassdialog, setopenchangepassdialog] = useState(false);
+    const [severity, setseverity] = useState("success");
     let role ={ 1:"مدير النظام"}
     let status={approved:"مقبول", rejected:"مرفوض"}
     let act ={0:"غير نشط" , 1:"نشط"}
@@ -43,7 +48,7 @@ export default function Settings() {
         const file = e.target.files[0];
             if (!file) return;
             setimage(file);
-            }
+        }
     //Request
     async function loadProfile() {
         setisloading(true);
@@ -63,39 +68,71 @@ export default function Settings() {
         }
 
         }
-
     async function updateProfile(data) {
         const formData = new FormData();
-        formData.append("first_name", first_name);
-        formData.append("last_name", last_name);
-        formData.append("phone", phone);
-        formData.append("location", location);
+              formData.append("first_name", first_name);
+              formData.append("last_name", last_name);
+              formData.append("phone", phone);
+              formData.append("location", location);
          if (image) {formData.append("image", image);}
             try {
                 setisloading(true);
                 const response = await updateProfileRequest(formData);
-                console.log(response.data);
+                console.log(response.data.message);
                 setEditFirstName(false);
                 setEditLastName(false);
                 setEditPhone(false);
                 setEditLocation(false);
                 await loadProfile();
+                setmsg(response.data.message);
+                
               } catch (error) {
                 console.error(error);
               } finally {
                 setisloading(false);
+                setseverity("success");
+                setisopen(true);
              }
-    }                
-        
+        }                
+    async function editActivation(id) {
+            setUser(prev => ({
+                ...prev,
+                is_active: !prev.is_active,
+            }));
+        try {
+            const response = await editActivationRequest(id);
+            setmsg(response.data.message);
+            setseverity("success");
+            setisopen(true);
+            } catch (error) {
+                setUser(prev => ({
+                    ...prev,
+                    is_active: !prev.is_active,
+                }));
+                console.log(error);
+            }        
+        }
+    
     useEffect(()=>{loadProfile();},[]);
-    useEffect(() => {
-        return () => {
-            if (image) URL.revokeObjectURL(image);
-        };
-        }, [image]);
+    useEffect(() => {return () => {if (image) URL.revokeObjectURL(image);};},[image]);
     return (
-
             <div>
+                {openchangepassdialog && <Changepassdialog 
+                    onClose={() => setopenchangepassdialog(false)}
+                    onSuccess={(message) => {
+                        setopenchangepassdialog(false);
+                        setmsg(message);
+                        setseverity("success");
+                        setisopen(true);
+                    }}
+                    onError={(message) => {
+                        setopenchangepassdialog(false);
+                        setmsg(message);
+                        setseverity("error");
+                        setisopen(true);
+                    }}
+                    />}
+                <Snackbar msg={msg} isopen={isopen} setisopen={setisopen} severity={severity}/>
                 <div className="page-header">
                     <h3><SettingsIcon sx={{color: "#f07c1f"}}/>{t("إعدادات الحساب")}</h3>
                 </div>
@@ -176,7 +213,7 @@ export default function Settings() {
                         <div className="field-group">
                                 <span className="value-text">{t(act[user?.is_active])}</span>
                             </div>
-                        <button className="e" >{t("تعديل")}</button>
+                        <Switch checked={user?.is_active} onChange={() => editActivation(user?.id)} color="warning" />
                     </div>
                 </div>
 
@@ -191,7 +228,7 @@ export default function Settings() {
                         <span className="sub-label">  {t("آخر تغيير")}: 2024-06-15</span>
                     </div>
                 </div>
-                <button className="btn-pass" >
+                <button className="btn-pass" onClick={()=>setopenchangepassdialog(true)}>
                     <LockIcon sx={{color:"#e53935" , fontSize:20}}/>{t("تغيير كلمة المرور")}
                 </button>
             </div>  

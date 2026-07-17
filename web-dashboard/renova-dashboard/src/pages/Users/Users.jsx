@@ -24,6 +24,7 @@ import Switch from '@mui/material/Switch';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PersonIcon from '@mui/icons-material/Person';
 import AddIcon from '@mui/icons-material/Add';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 //Commponents
 import Profiledialog from "../../components/Profiledialog/Profiledialog";
 import Confirmdialog from "../../components/Confirmdialog/Confirmdialog";
@@ -31,7 +32,7 @@ import Snackbar from "../../components/Snackbar/Snakbar";
 import Filterdialog from "../../components/Filterdialog/Filterdialog";
 import Imagedialog from "../../components/Imagedialog/Imagedialog";
 import Createuser from "../../components/Createuser/Createuser";
-
+import TablePagination from "../../components/Pagination/Pagination";
 export default function User(){
     const [t] = useTranslation();
     const [users,setUsers] = useState([]);
@@ -49,7 +50,10 @@ export default function User(){
     const [selectedImage, setSelectedImage] = useState("");
     const {setisloading}=useContext(LoadingContext);
     const [severity, setseverity] = useState("");
-    
+    const [page, setPage] = useState(1);
+
+    const rowsPerPage = 12;
+    const paginatedUsers = users.slice((page - 1) * rowsPerPage , page * rowsPerPage);
     let role ={ 1:t("مدير النظام"), 2:t("مستخدم"), 3:t("متعهد"), 4:t("مهندس")}
     let status ={ approved:t("مقبول"), rejected:t("مرفوض"), pending:t("قيد الانتظار")}
     let FilterUsers = [
@@ -74,7 +78,7 @@ export default function User(){
             }finally{
                 setisloading(false);
              }
-            }
+    }
     async function showUser(id) {
             setprofileload(true);
             setUserinfo({});    
@@ -109,8 +113,7 @@ export default function User(){
                         )
                     );
                 }        
-            }
-
+    }
     async function getFilterUsers(type) {
         setshowfilterdialog(false);
         setisloading(true);
@@ -118,33 +121,80 @@ export default function User(){
         try{            
                 let response = await getFilterUsersRequest(type);
                 setUsers(response.data.data);
+                setPage(1);
             }finally{
                 setisloading(false);
              }
 
     }        
     useEffect(()=>{getUsers();},[]);
-    const currentProfile = userinfo.profile || userinfo.contractor_profile;
+    const profile = userinfo.profile ?? userinfo.contractor_profile ?? userinfo.engineer_profile;
     return(
         <div>  
         {profileload ? (<div className="page"></div>):(
             showprofile && (<Profiledialog
-         name={currentProfile?.name}
-         first_name={currentProfile?.first_name}
-         last_name={currentProfile?.last_name}
-         image={currentProfile?.full_image_url ? <Avatar  src={currentProfile?.full_image_url} alt="img" sx={{ width: 80, height: 80 }} /> :<AccountCircleIcon  sx={{ color: '#f07c1f' ,fontSize:"80px" }} />}
+         name={userinfo?.name}
+         first_name={profile?.first_name}
+         last_name={profile?.last_name}
+         image={profile?.full_image_url ? <Avatar  src={profile?.full_image_url} alt="img" sx={{ width: 80, height: 80 }} /> :<AccountCircleIcon  sx={{ color: '#f07c1f' ,fontSize:"80px" }} />}
          email={userinfo?.email}
-         phone={currentProfile?.phone}
-         location={currentProfile?.location}
+         phone={profile?.phone}
+         location={profile?.location}
          role={role[userinfo?.role_id]}
-         children={currentProfile.full_commercial_record_url?<div className="img-field">
+         children={
+            (userinfo.role_id === 4 ?
+                ( <>
+            <div className="field">
+            <span className="label">{t("الاختصاص")}</span>
+            <span className="value">{userinfo?.engineer_profile?.specialization}</span>
+            </div>
+            <div className="field">
+            <span className="label">{t("الرقم النقابي")}</span>
+            <span className="value">{userinfo?.engineer_profile?.syndicate_number}</span>
+            </div>
+            <div className="field">
+            <span className="label">{t("الدرجة العلمية")}</span>
+            <span className="value">{userinfo?.engineer_profile?.degree}</span>
+            </div>
+             <div className="field">
+            <span className="label">{t("سنوات الخبرة")}</span>
+            <span className="value">{userinfo?.engineer_profile?.years_of_experience} سنوات</span>
+            </div>
+            <div className="field">
+            <span className="label">{t("الشهادة الجامعية")}</span>
+            <Tooltip title={t("عرض PDF")} arrow>
+                <div className="pdf-thumb" onClick={() => window.open(userinfo?.engineer_profile?.full_certificate_file_url, "_blank")}>
+                    <PictureAsPdfIcon sx={{color:"#e53935", fontSize:28}} />
+                </div>
+            </Tooltip>
+            </div>
+            {userinfo?.engineer_profile?.full_syndicate_card_image_url?
+            <div className="img-field">
             <span className="label">{t("الصور")}</span>
             <div className="cert-thumb" onClick={(e)=>{
                  e.stopPropagation();
-                setSelectedImage(currentProfile?.full_commercial_record_url);
-                setopenimage(true)
-            }}><img src={currentProfile?.full_commercial_record_url} alt="Commercial Record" /></div>
-        </div>:<></>}
+                 setSelectedImage(userinfo?.engineer_profile?.full_syndicate_card_image_url);
+                 setopenimage(true)}}>
+                <img src={userinfo?.engineer_profile?.full_syndicate_card_image_url} alt="" /></div>
+                </div>:<></>}
+            </>)
+           :userinfo.role_id === 3 ?
+           (<>
+            <div className="field">
+            <span className="label">{t("اسم الشركة")}</span>
+            <span className="value">{userinfo?.contractor_profile?.company_name}</span>
+            </div>
+            {userinfo?.contractor_profile.full_commercial_record_url?
+            <div className="img-field">
+            <span className="label">{t("الصور")}</span>
+            <div className="cert-thumb" onClick={(e)=>{
+                 e.stopPropagation();
+                 setSelectedImage(userinfo?.contractor_profile?.full_commercial_record_url);
+                 setopenimage(true)}}>
+                <img src={userinfo?.contractor_profile?.full_commercial_record_url} alt="Commercial Record" /></div>
+                </div>:<></>}
+                </>):null
+            )}
          onClose={() => setshowprofile(false)}
           />)
         )}
@@ -194,7 +244,7 @@ export default function User(){
                 <h3><GroupIcon sx={{ color: "#f07c1f"}}/> {t("المستخدمين")}</h3>
                 <div className="table-actions">
                     <button className="btn-filter" onClick={() => setshowfilterdialog(true)}><FilterAltIcon sx={{fontSize: "18px"}}/> {t("فلترة")}</button>
-                    <button className="btn-refresh" onClick={getUsers}><RefreshIcon sx={{fontSize: "18px"}}/> {t("تحديث")}</button>
+                    <button className="btn-refresh" onClick={() => {getUsers();setPage(1)}}><RefreshIcon sx={{fontSize: "18px"}}/> {t("تحديث")}</button>
                     <button className="btn-add" onClick={() => setshowadduserdialog(true)}><AddIcon sx={{fontSize: "18px"}}/> {t("إضافة")}</button>
                 </div>
             </div>
@@ -214,8 +264,8 @@ export default function User(){
                         </tr>
                     </thead>
                    <tbody>
-                    {users.map((user) => {
-                        const profile = user.profile || user.contractor_profile;
+                    {paginatedUsers.map((user) => {
+                        const profile = user.profile || user.contractor_profile || user.engineer_profile;
                         return(<tr key={user.id}>
                         <td>
                             <div className="avatar">
@@ -268,7 +318,14 @@ export default function User(){
                     </tbody>
                 </table>
             </div>
+            <div className="table-footer">
+                    <TablePagination
+                        count={Math.ceil(users.length / rowsPerPage)}
+                        page={page}
+                        onChange={(event,value)=>setPage(value)}
+                    />
+            </div>
         </div>
-        </div>
+    </div>
     );
 }

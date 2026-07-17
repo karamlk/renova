@@ -16,41 +16,42 @@ return new class extends Migration
                 ->constrained('users')
                 ->cascadeOnDelete();
 
-            // المشكو عليه
+            // المشكو عليه — يُحدَّد تلقائياً من الباك
             $table->foreignId('complained_on_id')
                 ->constrained('users')
                 ->cascadeOnDelete();
 
-            // الاستمارة المرتبطة بالشكوى
+            // الاستمارة المرتبطة — إلزامية لأن الشكوى دائماً مرتبطة بمشروع
             $table->foreignId('construction_form_id')
                 ->constrained('construction_forms')
                 ->cascadeOnDelete();
 
-            // أدوار الطرفين
-            $table->enum('complainant_role', ['customer', 'contractor', 'engineer']);
-            $table->enum('complained_on_role', ['customer', 'contractor', 'engineer']);
+            $table->foreignId('complainant_role_id')
+                ->constrained('roles');
 
-            // سبب الشكوى (المفتاح المرسل من الفرونت)
+            $table->foreignId('complained_on_role_id')
+                ->constrained('roles');
+
+            // نوع الشكوى — general افتراضياً
+            $table->string('type')->default('general');
+
+            // السبب — string حر
             $table->string('reason');
 
             // وصف اختياري
             $table->text('description')->nullable();
 
-            // إخفاء هوية المشتكي عن المشكو عليه
-            $table->boolean('is_anonymous')->default(false);
-
-            // حالة الشكوى
+            // حالة الشكوى  
             $table->enum('status', [
                 'open',
-                'under_review',
                 'resolved',
-                'dismissed'
+                'dismissed',
             ])->default('open');
 
-            // قرار الأدمن
-            $table->text('admin_note')->nullable();
+            // ملاحظة الأدمن عن طريقة المعالجة
+            $table->string('admin_processing_note')->nullable();
 
-            // العقوبة المالية (فقط عند customer ↔ contractor)
+            // العقوبة المالية
             $table->decimal('penalty_percentage', 5, 2)->nullable();
             $table->decimal('penalty_amount', 12, 2)->nullable();
             $table->decimal('compensation_amount', 12, 2)->nullable();

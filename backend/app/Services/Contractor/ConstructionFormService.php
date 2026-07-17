@@ -3,6 +3,8 @@
 namespace App\Services\Contractor;
 
 use App\Models\ConstructionForm;
+use App\Models\Notification;
+use App\Models\PaymentAudit;
 use App\Services\Auth\OtpService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
@@ -67,7 +69,23 @@ class ConstructionFormService
             'status' => $finalStatus,
             'engineer_notes' => $notes
         ]);
+        if ($status === 'engineer_approved') {
 
+            Notification::create([
+
+                'user_id' =>
+                    $form->reconstructionRequest->user_id,
+
+                'title' =>
+                    'استمارة جديدة',
+
+                'message' =>
+                    'وصلتك استمارة جديدة للمراجعة',
+
+                'construction_form_id' =>
+                    $form->id
+            ]);
+        }
         return $form;
     }
 
@@ -80,7 +98,8 @@ class ConstructionFormService
     {
         if ($form->status !== 'pending_user') {
             throw new Exception(
-                'لا يمكن اتخاذ إجراء من قبل المستخدم، الاستمارة لم يوافق عليها المهندس بعد.'
+                'لا يمكن اتخاذ إجراء من قبل المستخدم،
+                 الاستمارة لم يوافق عليها المهندس بعد.'
             );
         }
 
@@ -141,7 +160,7 @@ class ConstructionFormService
             "استلام الدفعة الأولى للمشروع {$form->id}"
         );
 
-        Payment::create([
+           $payment= Payment::create([
             'construction_form_id' => $form->id,
             'user_id' => $form->reconstructionRequest->user_id,
             'amount' => $amount,
@@ -149,6 +168,39 @@ class ConstructionFormService
             'status' => 'paid',
             'paid_at' => now()
         ]);
+        PaymentAudit::create([
+
+            'payment_id' => $payment->id,
+
+            'from_user_id' =>
+                $form->reconstructionRequest->user_id,
+
+            'to_user_id' =>
+                $form->contractor_id,
+
+            'amount' => $amount,
+
+            'action' => 'first_payment',
+
+            'description' =>
+                "تم تحويل الدفعة الأولى للمشروع {$form->id}"
+        ]);
+        $form->reconstructionRequest->update([
+            'status' => 'closed'
+        ]);
+        ConstructionForm::where(
+            'reconstruction_request_id',
+            $form->reconstruction_request_id
+        )
+            ->where(
+                'id',
+                '!=',
+                $form->id
+            )
+            ->update([
+                'status' => 'user_rejected'
+            ]);
+
 
         $form->update([
             'status' => 'user_approved'
