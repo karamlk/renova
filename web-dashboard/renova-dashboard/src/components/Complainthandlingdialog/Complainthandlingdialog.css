@@ -1,0 +1,230 @@
+/* ===== الخلفية ===== */
+.complaint-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* ===== النافذة ===== */
+.complaint-dialog-box {
+  background: white;
+  border-radius: 24px;
+  border-top: 6px solid #4caf50;
+  max-width: 500px;
+  width: 100%;
+  max-height: 80vh;
+  height: 100%;
+  padding: 0;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== رأس النافذة ===== */
+.complaint-dialog-header {
+  padding: 25px 24px 20px 24px;
+  border-bottom: 1px solid #f0f1f3;
+}
+
+.complaint-dialog-header .complaint-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.complaint-dialog-header .complaint-title h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f1f2f;
+  margin: 0;
+  font-family: "Tajawal", sans-serif;
+}
+
+/* ===== بطاقة معلومات الشكوى ===== */
+.complaint-card {
+  background: #f8f9fc;
+  border-radius: 14px;
+  padding: 16px 20px;
+
+  border-right: 4px solid #4caf50;
+  margin: 18px 18px 0 18px;
+}
+
+.complaint-card .item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  color: #3b414c;
+  margin-bottom: 5px;
+  font-family: "Tajawal", sans-serif;
+}
+
+.complaint-card .item .label {
+  color: #b8bcbf;
+}
+
+.complaint-card .item .value {
+  font-weight: 600;
+  color: #0f1f2f;
+}
+
+/* ===== محتوى النافذة ===== */
+.complaint-dialog-body {
+  padding: 18px 24px 24px 24px;
+}
+
+.complaint-form-group {
+  margin-bottom: 18px;
+}
+
+.complaint-form-group label {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f1f2f;
+  margin-bottom: 6px;
+  font-family: "Tajawal", sans-serif;
+}
+
+/* ===== حقل نسبة الخصم ===== */
+.discount-input-wrapper {
+  position: relative;
+}
+
+.discount-input-wrapper input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e8ecf2;
+  border-radius: 12px;
+  font-family: "Tajawal", sans-serif;
+  font-size: 15px;
+  outline: none;
+  transition: 0.3s;
+  background: #fafafa;
+  color: #0f1f2f;
+  padding-left: 50px;
+}
+
+.discount-input-wrapper input:focus {
+  border-color: #4caf50;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.06);
+}
+
+.discount-input-wrapper input::placeholder {
+  color: #b8bcbf;
+}
+
+.discount-input-wrapper .discount-symbol {
+  position: absolute;
+  left: 14px;
+  top: 60%;
+  transform: translateY(-50%);
+}
+
+/* ===== حقل textarea ===== */
+.complaint-form-group textarea {
+  width: 100%;
+  min-height: 160px;
+  padding: 14px 16px;
+  border: 2px solid #e8ecf2;
+  border-radius: 12px;
+  font-family: "Tajawal", sans-serif;
+  font-size: 15px;
+  outline: none;
+  transition: 0.3s;
+  background: #fafafa;
+  color: #0f1f2f;
+
+  line-height: 1.7;
+}
+
+.complaint-form-group textarea:focus {
+  border-color: #4caf50;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.06);
+}
+
+.complaint-form-group textarea::placeholder {
+  color: #b8bcbf;
+}
+
+/* ===== أزرار النافذة ===== */
+.complaint-dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.complaint-dialog-footer .complaint-btn-cancel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+  background: transparent;
+  border: 2px solid #e8ecf2;
+  border-radius: 12px;
+  color: #666;
+  font-family: "Tajawal", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.complaint-dialog-footer .complaint-btn-cancel:hover {
+  border-color: #0f1f2f;
+  color: #0f1f2f;
+}
+
+.complaint-dialog-footer .complaint-btn-process {
+  flex: 1;
+  padding: 12px 0;
+  background: #4caf50;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: "Tajawal", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.complaint-dialog-footer .complaint-btn-process:hover {
+  background: #388e3c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.25);
+}
+
+.complaint-dialog-footer .complaint-btn-process:active {
+  transform: scale(0.97);
+}
