@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Models\Wallet;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -18,9 +19,17 @@ class AdminSeeder extends Seeder
             [
                 'name' => 'john',
                 'role_id' => \App\Models\Role::where('name', 'admin')->first()->id,
-                'status'  => 'approved', 
+                'status'  => 'approved',
                 'password' => Hash::make('12345678'),
                 'otp_verified' => true,
+            ]
+        );
+
+        Wallet::firstOrCreate(
+            ['user_id' => $admin->id],
+            [
+                'balance'     => 1000000.00,
+                'card_number' => 'SD-ADMIN-' . rand(1000, 9999),
             ]
         );
 
