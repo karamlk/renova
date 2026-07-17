@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -56,6 +58,30 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function activeProfile(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->relationLoaded('contractorProfile') && $this->contractorProfile) {
+                    return $this->contractorProfile;
+                }
+                if ($this->relationLoaded('engineerProfile') && $this->engineerProfile) {
+                    return $this->engineerProfile;
+                }
+                if ($this->relationLoaded('profile') && $this->profile) {
+                    return $this->profile;
+                }
+
+                return match ((int) $this->role_id) {
+                    3 => $this->contractorProfile, // Contractor Role ID
+                    4 => $this->engineerProfile,   // Engineer Role ID
+                    2 => $this->profile,     // Regular User Profile 
+                };
+            }
+        );
+    }
+
     public function role()
     {
         return $this->belongsTo(Role::class);
@@ -110,7 +136,8 @@ class User extends Authenticatable
             Like::class
         );
     }
-    public function engineerProfile() {
+    public function engineerProfile()
+    {
         return $this->hasOne(EngineerProfile::class, 'user_id');
     }
     public function engineerVisits()

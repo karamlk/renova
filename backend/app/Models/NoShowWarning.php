@@ -16,10 +16,14 @@ class NoShowWarning extends Model
         'reason',
         'description',
         'penalty_applied',
+        'is_archived',
+        'archived_at'
     ];
 
     protected $casts = [
         'penalty_applied' => 'boolean',
+        'is_archived' => 'boolean',
+        'archived_at' => 'datetime',
     ];
 
     public function siteVisit()

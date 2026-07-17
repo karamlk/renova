@@ -13,6 +13,15 @@ class NoShowWarningController extends Controller
     ) {}
     // GET /api/admin/no-show-warnings
     // كل تحذيرات الغياب في النظام
+
+    public function archive(NoShowWarning $noShowWarning)
+    {
+        return response()->json([
+            'message' => 'No-show warning archived successfully.',
+            'data' => $this->noShowWarningService->archiveNoShowWarning($noShowWarning),
+        ]);
+    }
+
     public function index()
     {
         return response()->json([

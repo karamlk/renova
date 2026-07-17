@@ -32,6 +32,8 @@ class ComplaintResource extends JsonResource
             'penalty_amount' => $this->penalty_amount,
             'compensation_amount' => $this->compensation_amount,
 
+            'is_archived' => $this->is_archived,
+            'archived_at' => $this->archived_at,
             'resolved_at' => $this->resolved_at,
 
             'complainant' => $this->whenLoaded('complainant'),

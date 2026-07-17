@@ -290,12 +290,16 @@ Route::middleware(['auth:sanctum','active'])->group(function () {
         Route::post('site-visits/assign', [SiteVisitController::class, 'assignEngineer']);
 
         Route::get('all-complaints',                   [AdminComplaintController::class, 'getAllComplaints']);
+        Route::get('archived-complaints',[AdminComplaintController::class, 'getArchivedComplaints']);
+        
         Route::get('complaints',                        [AdminComplaintController::class, 'index']);
         Route::get('complaints/{complaint}',            [AdminComplaintController::class, 'show']);
         Route::patch('complaints/{complaint}/resolve',  [AdminComplaintController::class, 'resolve']);
+        Route::patch('complaints/{complaint}/archive',[AdminComplaintController::class, 'archive']);
 
         Route::get('no-show-warnings',          [AdminNoShowWarningController::class, 'index']);
         Route::get('no-show-warnings/{noShowWarning}', [AdminNoShowWarningController::class, 'show']);
+        Route::patch('no-show-warnings/{noShowWarning}/archive',[AdminNoShowWarningController::class, 'archive']);
     });
 
 

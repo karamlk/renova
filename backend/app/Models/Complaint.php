@@ -24,6 +24,8 @@ class Complaint extends Model
         'penalty_amount',
         'compensation_amount',
         'resolved_at',
+        'is_archived',
+        'archived_at',
     ];
 
     protected $casts = [
@@ -31,6 +33,8 @@ class Complaint extends Model
         'penalty_amount'       => 'float',
         'compensation_amount'  => 'float',
         'resolved_at'          => 'datetime',
+        'is_archived' => 'boolean',
+        'archived_at' => 'datetime',
     ];
 
     public function complainant()

@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin\Complaint;
 
+use App\Http\Resources\Complaint\NoShowWarningDetailsResource;
 use App\Http\Resources\Complaint\NoShowWarningResource;
 use App\Models\NoShowWarning;
 use App\Models\SiteVisit;
@@ -28,7 +29,7 @@ class NoShowWarningService
         return NoShowWarningResource::collection($warnings);
     }
 
-    public function getNoShowWarningDetails(NoShowWarning $noShowWarning)
+    public function getNoShowWarningDetails(NoShowWarning $noShowWarning): NoShowWarningDetailsResource
     {
         $noShowWarning->load([
             'reporter',
@@ -39,7 +40,30 @@ class NoShowWarningService
             'siteVisit.inspectionRequest.contractor',
         ]);
 
-        return new NoShowWarningResource($noShowWarning);
+        $noShowWarning->reporter?->load(['profile', 'contractorProfile', 'engineerProfile']);
+        $noShowWarning->reported?->load(['profile', 'contractorProfile', 'engineerProfile']);
+
+        return new NoShowWarningDetailsResource ($noShowWarning);
+    }
+
+
+    public function archiveNoShowWarning(NoShowWarning $warning): NoShowWarningDetailsResource
+    {
+        $warning->update([
+            'is_archived' => true,
+            'archived_at' => now(),
+        ]);
+
+        $warning->load([
+            'reporter',
+            'reported' => function ($query) {
+                $query->withCount('noShowWarnings as complaints_count');
+            },
+            'siteVisit.inspectionRequest.request.user',
+            'siteVisit.inspectionRequest.contractor',
+        ]);
+
+        return new NoShowWarningDetailsResource($warning);
     }
 
     public function report(int $siteVisitId, int $reportedId): NoShowWarning
