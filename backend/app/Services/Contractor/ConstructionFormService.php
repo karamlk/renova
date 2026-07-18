@@ -5,6 +5,7 @@ namespace App\Services\Contractor;
 use App\Models\ConstructionForm;
 use App\Models\Notification;
 use App\Models\PaymentAudit;
+use App\Models\Project;
 use App\Services\Auth\OtpService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
@@ -187,6 +188,22 @@ class ConstructionFormService
         ]);
         $form->reconstructionRequest->update([
             'status' => 'closed'
+        ]);
+        Project::create([
+
+            'construction_form_id' =>
+                $form->id,
+
+            'contractor_id' =>
+                $form->contractor_id,
+
+            'engineer_id' =>
+                $form->engineer_id,
+
+            'user_id' =>
+                $form->reconstructionRequest->user_id,
+
+            'status' => 'active'
         ]);
         ConstructionForm::where(
             'reconstruction_request_id',

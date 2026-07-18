@@ -77,4 +77,10 @@ class ConstructionForm extends Model
             Notification::class
         );
     }
+    public function tasks()
+    {
+        return $this->hasMany(
+            ProjectTask::class
+        );
+    }
 }

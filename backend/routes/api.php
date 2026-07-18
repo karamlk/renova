@@ -13,6 +13,7 @@ use App\Http\Controllers\Contractor\ContractorPostController;
 use App\Http\Controllers\Contractor\ContractorProfileController;
 use App\Http\Controllers\Contractor\ScheduleController;
 use App\Http\Controllers\Engineer\EngineerVisitController;
+use App\Http\Controllers\Engineer\ProjectTaskController;
 use App\Http\Controllers\InspectionRequestController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SiteVisitController;
@@ -357,4 +358,36 @@ Route::middleware(['auth:sanctum'])->group(function () {
             [ConstructionFormController::class, 'showForm']
         );
     });
+    //----------------------------------------------------------
+    Route::prefix('tasks')->group(function () {
+
+        Route::post(
+            '/',
+            [ProjectTaskController::class,'store']
+        );
+
+        Route::put(
+            '/{task}',
+            [ProjectTaskController::class,'update']
+        );
+
+        Route::delete(
+            '/{task}',
+            [ProjectTaskController::class,'destroy']
+        );
+
+        Route::patch(
+            '/{task}/complete',
+            [ProjectTaskController::class,'complete']
+        );
+    });
+
+    Route::get(
+        '/projects/{project}/tasks',
+        [ProjectTaskController::class,'index']
+    );
+    Route::get(
+        '/tasks/{task}',
+        [ProjectTaskController::class,'show']
+    );
 });
