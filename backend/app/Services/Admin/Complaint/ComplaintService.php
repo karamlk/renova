@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin\Complaint;
 
+use App\Http\Resources\Complaint\ComplaintDetailsResource;
 use App\Http\Resources\Complaint\ComplaintResource;
 use App\Http\Resources\Complaint\NoShowWarningResource;
 use App\Models\Complaint;
@@ -21,43 +22,119 @@ class ComplaintService
         protected WalletService $walletService
     ) {}
 
-    public function getAllComplaints()
+    private const ROLE_MAP = [
+        'user' => 2,
+        'contractor' => 3,
+        'engineer' => 4,
+    ];
+
+    public function getAllComplaints(array $filters)
     {
-        // General complaints
-        $complaints = Complaint::with([
+        $complaints = collect();
+
+        $warnings = collect();
+
+        if (
+            !isset($filters['type']) ||
+            $filters['type'] === 'general'
+        ) {
+
+            $complaints = $this
+                ->buildComplaintQuery($filters, false)
+                ->get()
+                ->map(function ($complaint) {
+
+                    $complaint->complaint_type = 'general';
+
+                    return (new ComplaintResource($complaint))->resolve();
+                });
+        }
+
+        if (
+            !isset($filters['type']) ||
+            $filters['type'] === 'no_show'
+        ) {
+
+            $warnings = $this
+                ->buildNoShowWarningQuery($filters, false)
+                ->get()
+                ->map(function ($warning) {
+
+                    $warning->complaint_type = 'no_show';
+
+                    return (new NoShowWarningResource($warning))->resolve();
+                });
+        }
+
+        return $complaints
+            ->concat($warnings)
+            ->sortByDesc('created_at')
+            ->values();
+    }
+
+    public function getArchivedComplaints(array $filters)
+    {
+        $complaints = collect();
+
+        $warnings = collect();
+
+        if (
+            !isset($filters['type']) ||
+            $filters['type'] === 'general'
+        ) {
+
+            $complaints = $this
+                ->buildComplaintQuery($filters, true)
+                ->get()
+                ->map(function ($complaint) {
+
+                    $complaint->complaint_type = 'general';
+
+                    return (new ComplaintResource($complaint))->resolve();
+                });
+        }
+
+        if (
+            !isset($filters['type']) ||
+            $filters['type'] === 'no_show'
+        ) {
+
+            $warnings = $this
+                ->buildNoShowWarningQuery($filters, true)
+                ->get()
+                ->map(function ($warning) {
+
+                    $warning->complaint_type = 'no_show';
+
+                    return (new NoShowWarningResource($warning))->resolve();
+                });
+        }
+
+        return $complaints
+            ->concat($warnings)
+            ->sortByDesc('created_at')
+            ->values();
+    }
+
+    public function archiveComplaint(Complaint $complaint): ComplaintDetailsResource
+    {
+        $complaint->update([
+            'is_archived' => true,
+            'archived_at' => now(),
+        ]);
+
+        $complaint->load([
             'complainant',
             'complainedOn' => function ($query) {
                 $query->withCount('complaintsReceived as complaints_count');
             },
-            'constructionForm',
+            'constructionForm.reconstructionRequest',
             'images',
-        ])
-            ->get()
-            ->map(function ($complaint) {
-                $complaint->complaint_type = 'general';
+        ]);
 
-                return (new ComplaintResource($complaint))->resolve();
-            });
-
-        // No-show warnings
-        $noShowWarnings = NoShowWarning::with([
-            'reporter',
-            'reported' => function ($query) {
-                $query->withCount('noShowWarnings as complaints_count');
-            },
-        ])
-            ->get()
-            ->map(function ($warning) {
-                $warning->complaint_type = 'no_show';
-
-                return (new NoShowWarningResource($warning))->resolve();
-            });
-
-        return $complaints
-            ->concat($noShowWarnings)
-            ->sortByDesc('created_at')
-            ->values();
+        return new ComplaintDetailsResource($complaint);
     }
+
 
     // ─────────────────────────────────────────────────────
     // رفع شكوى جديدة
@@ -159,21 +236,23 @@ class ComplaintService
     }
 
 
-    public function getComplaintDetails(Complaint $complaint): ComplaintResource
+    public function getComplaintDetails(Complaint $complaint): ComplaintDetailsResource
     {
         $complaint->load([
             'complainant',
             'complainedOn' => function ($query) {
-                $query->withCount([
-                    'complaintsReceived as complaints_count'
-                ]);
+                $query->withCount(['complaintsReceived as complaints_count']);
             },
             'constructionForm.reconstructionRequest',
             'images',
         ]);
 
-        return new ComplaintResource($complaint);
+        $complaint->complainant?->load(['profile', 'contractorProfile', 'engineerProfile']);
+        $complaint->complainedOn?->load(['profile', 'contractorProfile', 'engineerProfile']);
+
+        return new ComplaintDetailsResource($complaint);
     }
+
 
     // ─────────────────────────────────────────────────────
     // الأدمن يحل الشكوى
@@ -223,6 +302,52 @@ class ComplaintService
 
             return $complaint->fresh();
         });
+    }
+
+    private function buildComplaintQuery(array $filters, bool $archived)
+    {
+        $query = Complaint::with([
+            'complainant',
+            'complainedOn' => function ($query) {
+                $query->withCount('complaintsReceived as complaints_count');
+            },
+            'constructionForm',
+            'images',
+        ])
+            ->where('is_archived', $archived);
+
+        if (!empty($filters['complained_on_role'])) {
+
+            $roles = collect(explode(',', $filters['complained_on_role']))
+                ->map(fn($role) => self::ROLE_MAP[$role])
+                ->toArray();
+
+            $query->whereIn('complained_on_role_id', $roles);
+        }
+
+        return $query;
+    }
+
+    private function buildNoShowWarningQuery(array $filters, bool $archived)
+    {
+        $query = NoShowWarning::with([
+            'reporter',
+            'reported' => function ($query) {
+                $query->withCount('noShowWarnings as complaints_count');
+            },
+        ])
+            ->where('is_archived', $archived);
+
+        if (!empty($filters['complained_on_role'])) {
+
+            $roles = collect(explode(',', $filters['complained_on_role']))
+                ->map(fn($role) => self::ROLE_MAP[$role])
+                ->toArray();
+
+            $query->whereIn('reported_role_id', $roles);
+        }
+
+        return $query;
     }
 
     private function storeImages(

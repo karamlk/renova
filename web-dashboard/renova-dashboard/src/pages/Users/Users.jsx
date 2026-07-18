@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
 //api
 import {getUsersRequest} from "../../api/users";
-import {getUserProfileRequest} from "../../api/userProfile";
-import {deleteUserRequest} from "../../api/deleteUser";
+import {getUserProfileRequest} from "../../api/users";
+import {deleteUserRequest} from "../../api/users";
 import {editActivationRequest} from "../../api/activation";
 import {getFilterUsersRequest} from "../../api/users";
 //Context
@@ -33,6 +33,8 @@ import Filterdialog from "../../components/Filterdialog/Filterdialog";
 import Imagedialog from "../../components/Imagedialog/Imagedialog";
 import Createuser from "../../components/Createuser/Createuser";
 import TablePagination from "../../components/Pagination/Pagination";
+//Libraries
+import dayjs from "dayjs";
 export default function User(){
     const [t] = useTranslation();
     const [users,setUsers] = useState([]);
@@ -276,7 +278,7 @@ export default function User(){
                         <td>{profile?.phone? profile?.phone : t("غير موجود")}</td>
                         <td className="location"><LocationOnIcon sx={{ color: "#f07c1f"}}/>{profile?.location ? profile?.location : t("غير موجود")}</td>
                         <td>{role[user?.role_id]}</td>
-                        <td>{user?.created_at}</td>
+                        <td>{dayjs(user?.created_at).format("YYYY-MM-DD")}</td>
                         <td>{status[user?.status]}</td>
                         <td><Switch checked={user.is_active} onChange={() => editActivation(user.id)} color="warning" /></td>
                         <td>

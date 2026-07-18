@@ -24,3 +24,13 @@ export async function createUserRequest(
   });
   return response;
 }
+
+export async function getUserProfileRequest(id) {
+  let response = await api.get(`/admin/users/${id}`);
+  return response;
+}
+
+export async function deleteUserRequest(id) {
+  let response = await api.delete(`/admin/users/${id}`);
+  return response;
+}

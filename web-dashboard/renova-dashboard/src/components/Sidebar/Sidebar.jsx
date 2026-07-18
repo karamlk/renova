@@ -13,6 +13,9 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import FeedbackIcon from '@mui/icons-material/Feedback';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import ApartmentIcon from '@mui/icons-material/Apartment';
 //api
 import {logoutRequest} from "../../api/auth";
 
@@ -39,6 +42,17 @@ export default function Sidebar() {
                 <span>{t("الصفحة الرئيسية")}</span>
             </NavLink>
 
+            <NavLink  to="projects" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
+                <ApartmentIcon />
+                <span>{t("المشاريع")}</span>
+            </NavLink>
+
+            <NavLink  to="projectsArchive" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
+                <ArchiveIcon />
+                <span>{t("أرشيف المشاريع")}</span>
+            </NavLink>
+
+
             <NavLink  to="users" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
                 <GroupIcon />
                 <span>{t("المستخدمين")}</span>
@@ -52,6 +66,16 @@ export default function Sidebar() {
             <NavLink  to="inspections_requests" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
                 <AssignmentIcon />
                 <span>{t("طلبات المعاينة")}</span>
+            </NavLink>
+
+            <NavLink  to="Complaints" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
+                <FeedbackIcon />
+                <span>{t("شكاوى المستخدمين")}</span>
+            </NavLink>
+
+            <NavLink  to="ComplaintsArchive" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
+                <ArchiveIcon />
+                <span>{t("أرشيف الشكاوى")}</span>
             </NavLink>
 
             <NavLink  to="usersettings" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >

@@ -25,6 +25,9 @@ class NoShowWarningResource extends JsonResource
             'description' => $this->description,
             'penalty_applied' => $this->penalty_applied,
 
+            'is_archived' => $this->is_archived,
+            'archived_at' => $this->archived_at,
+
             'complainant' => $this->whenLoaded('reporter'),
             'complained_on' => $this->whenLoaded('reported'),
 

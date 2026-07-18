@@ -22,32 +22,28 @@
   overflow: hidden;
 }
 
-.filter-top-bar {
-  height: 4px;
-  background: linear-gradient(90deg, #f07c1f, #f59b4a);
-}
-
 .filter-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 24px 8px 24px;
+  padding: 30px 24px 0px 24px;
+  border-top: 5px solid #f07c1f;
 }
 
-.filter-header .title {
+.filter-header .filter-title {
   display: flex;
   align-items: center;
   gap: 3px;
 }
 
-.filter-header .title h3 {
+.filter-header .filter-title h3 {
   font-size: 19px;
   font-weight: 700;
   color: #0f1f2f;
   margin: 0;
 }
 
-.filter-header .close-btn {
+.filter-header .filter-close-btn {
   width: 24px;
   height: 24px;
   border: none;
@@ -61,7 +57,7 @@
   transition: 0.3s;
 }
 
-.filter-header .close-btn:hover {
+.filter-header .filter-close-btn:hover {
   background: #999999eb;
   color: white;
 }
@@ -70,7 +66,9 @@
 .filter-body {
   padding: 16px 24px 24px 24px;
 }
-
+.filter-group {
+  margin-top: 15px;
+}
 .filter-group .group-label {
   font-size: 14px;
   font-weight: 600;

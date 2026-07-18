@@ -17,7 +17,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 //api
 import { getContractorsRequest } from "../../api/contractors";
-import {getUserProfileRequest} from "../../api/userProfile";
+import {getUserProfileRequest} from "../../api/users";
 import {approveContractorRequest} from "../../api/contractors";
 import {rejectContractorRequest} from "../../api/contractors";
 //Hooks
@@ -28,6 +28,8 @@ import Profiledialog from "../../components/Profiledialog/Profiledialog";
 import Confirmdialog from "../../components/Confirmdialog/Confirmdialog";
 import Snackbar from "../../components/Snackbar/Snakbar";
 import Imagedialog from "../../components/Imagedialog/Imagedialog";
+//Libraries
+import dayjs from "dayjs";
 
 export default function Requests() {
     const [t] = useTranslation();
@@ -157,7 +159,7 @@ export default function Requests() {
                     <span><EmailIcon sx={{ color: "#f07c1f" , fontSize: 18}} />{contractor?.email}</span>
                     <span><LocalPhoneIcon sx={{ color: "#f07c1f" , fontSize: 18}} />{contractor?.contractor_profile?.phone}</span>
                     <span><LocationOnIcon sx={{ color: "#f07c1f" , fontSize: 18}} /> {contractor?.contractor_profile?.location}</span>
-                    <span><CalendarMonthIcon sx={{ color: "#f07c1f" , fontSize: 18}} /> {contractor?.contractor_profile?.created_at}</span>
+                    <span><CalendarMonthIcon sx={{ color: "#f07c1f" , fontSize: 18}} /> {dayjs(contractor?.contractor_profile?.created_at).format("YYYY-MM-DD")}</span>
                 </div>
                 <div className="card-certs">
                     <div className="cert-thumb" 

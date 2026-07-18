@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Complaint;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Complaint\ComplaintFilterRequest;
 use App\Http\Requests\Complaint\ResolveComplaintRequest;
 use App\Models\Complaint;
 use App\Services\Admin\Complaint\ComplaintService;
@@ -14,10 +15,27 @@ class ComplaintController extends Controller
         protected ComplaintService $complaintService
     ) {}
 
-    public function getAllComplaints()
+    public function getAllComplaints(ComplaintFilterRequest $request)
     {
         return response()->json([
-            'data' => $this->complaintService->getAllComplaints(),
+            'data' => $this->complaintService
+                ->getAllComplaints($request->validated()),
+        ]);
+    }
+
+    public function getArchivedComplaints(ComplaintFilterRequest $request)
+    {
+        return response()->json([
+            'data' => $this->complaintService
+                ->getArchivedComplaints($request->validated()),
+        ]);
+    }
+
+    public function archive(Complaint $complaint)
+    {
+        return response()->json([
+            'message' => 'تمت ارشفة الشكوى بنجاح',
+            'data' => $this->complaintService->archiveComplaint($complaint),
         ]);
     }
 

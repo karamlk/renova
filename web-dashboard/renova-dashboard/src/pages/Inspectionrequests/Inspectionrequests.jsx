@@ -17,7 +17,8 @@ import {chooseEngineerRequest} from "../../api/inspection"
 import Engineerlistdialog from "../../components/Engineerlistdialog/Engineerlistdialog";
 import Snackbar from "../../components/Snackbar/Snakbar";
 import TablePagination from "../../components/Pagination/Pagination";
-
+//Libraries
+import dayjs from "dayjs";
 //Context
 import { LoadingContext } from "../../Context/Loadingcontext";
 export default function Inspectionrequests() {
@@ -135,7 +136,7 @@ export default function Inspectionrequests() {
                         <td>{inspection?.inspection_request?.request?.title}</td>
                         <td>{inspection?.inspection_request?.request?.user?.name}</td>
                         <td>{type[inspection?.inspection_request?.request?.type]}</td>
-                        <td>{inspection?.created_at}</td>
+                        <td>{dayjs(inspection?.created_at).format("YYYY-MM-DD")}</td>
                         <td><div className="location_project"><LocationOnIcon sx={{ color: "#f07c1f"}}/>{inspection?.inspection_request?.request?.location}</div></td>
                         <td>{inspection?.inspection_request?.contractor?.name}</td>
                         <td>{day[inspection?.schedule?.day_of_week]}<br/>{t("من")} {inspection?.schedule?.start_time} {t("الى")} {inspection?.schedule?.end_time}</td>

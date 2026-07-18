@@ -30,6 +30,7 @@ export async function updatePasswordRequest(
   });
   return response;
 }
+
 export function logoutRequest(navigate) {
   localStorage.removeItem("token");
   localStorage.removeItem("role");

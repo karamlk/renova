@@ -7,6 +7,7 @@ import Usersettings from "./pages/Usersettings/Usersettings";
 import Users from "./pages/Users/Users";
 import Requests from "./pages/Requests/Requests";
 import Inspectionrequests from "./pages/Inspectionrequests/Inspectionrequests";
+import Complaints from "./pages/Complaints/Complaints";
 //auth
 import ProtectedRoute from "./auth/ProtectedRoute";
 import AuthGate from "./auth/AuthGate";
@@ -47,6 +48,7 @@ function App() {
                 <Route path="homepage" element={<Homepage />} />
                 <Route path="users" element={<Users />} />
                 <Route path="requests" element={<Requests />} />
+                <Route path="Complaints" element={<Complaints />} />
                 <Route
                   path="inspections_requests"
                   element={<Inspectionrequests />}
