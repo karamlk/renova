@@ -22,3 +22,11 @@ export async function patchComplaintRequest(
   });
   return response;
 }
+export async function getComplaintsArchiveRequest() {
+  let response = await api.get("/admin/archived-complaints");
+  return response;
+}
+export async function archiveComplaintsRequest(type, id) {
+  let response = await api.patch(`/admin/${type}/${id}/archive`);
+  return response;
+}
