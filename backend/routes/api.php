@@ -292,7 +292,7 @@ Route::middleware(['auth:sanctum','active'])->group(function () {
 
         Route::get('all-complaints',                   [AdminComplaintController::class, 'getAllComplaints']);
         Route::get('archived-complaints',[AdminComplaintController::class, 'getArchivedComplaints']);
-        
+
         Route::get('complaints',                        [AdminComplaintController::class, 'index']);
         Route::get('complaints/{complaint}',            [AdminComplaintController::class, 'show']);
         Route::patch('complaints/{complaint}/resolve',  [AdminComplaintController::class, 'resolve']);
@@ -301,6 +301,7 @@ Route::middleware(['auth:sanctum','active'])->group(function () {
         Route::get('no-show-warnings',          [AdminNoShowWarningController::class, 'index']);
         Route::get('no-show-warnings/{noShowWarning}', [AdminNoShowWarningController::class, 'show']);
         Route::patch('no-show-warnings/{noShowWarning}/archive',[AdminNoShowWarningController::class, 'archive']);
+        Route::post('/payments/{payment}/release', [PaymentController::class, 'release']);
     });
 
 
@@ -393,5 +394,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get(
         '/tasks/{task}',
         [ProjectTaskController::class,'show']
+    );
+    Route::get(
+        '/payments/pending',
+        [PaymentController::class,'pending']
+    );
+    Route::post('/payments/{payment}/send-otp',[PaymentController::class,'sendOtp']);
+
+    Route::post(
+        '/payments/{payment}/pay',
+        [PaymentController::class,'pay']
     );
 });

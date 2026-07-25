@@ -4,6 +4,7 @@ namespace App\Services\Engineer;
 
 use App\Models\Project;
 use App\Models\ProjectTask;
+use App\Services\PaymentMilestoneService;
 use Exception;
 
 class ProjectTaskService
@@ -96,6 +97,15 @@ class ProjectTaskService
         $this->updateProjectProgress(
             $task->project
         );
+        $project =
+            $task
+                //->constructionForm
+                ->project;
+
+        app(PaymentMilestoneService::class)
+            ->checkMilestones(
+                $project
+            );
 
         return $task->fresh();
     }

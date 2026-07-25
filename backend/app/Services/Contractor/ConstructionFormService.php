@@ -72,20 +72,21 @@ class ConstructionFormService
         ]);
         if ($status === 'engineer_approved') {
 
-            Notification::create([
+            app(\App\Services\NotificationService::class)
+                ->send(
 
-                'user_id' =>
                     $form->reconstructionRequest->user_id,
 
-                'title' =>
                     'استمارة جديدة',
 
-                'message' =>
-                    'وصلتك استمارة جديدة للمراجعة',
+                    'وصلتك استمارة جديدة للمراجعة.',
 
-                'construction_form_id' =>
+                    'construction_form',
+
+                    $form->id,
+
                     $form->id
-            ]);
+                );
         }
         return $form;
     }
@@ -205,6 +206,19 @@ class ConstructionFormService
 
             'status' => 'active'
         ]);
+        app(\App\Services\NotificationService::class)
+            ->send(
+
+                $form->reconstructionRequest->user_id,
+
+                'تم بدء المشروع',
+
+                'تم اعتماد المشروع وبدأ التنفيذ.',
+
+                'project',
+
+                $form->id
+            );
         ConstructionForm::where(
             'reconstruction_request_id',
             $form->reconstruction_request_id

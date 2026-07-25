@@ -14,18 +14,14 @@ class Notification extends Model
 
         'message',
 
+        'type',
+
+        'related_id',
+
         'is_read',
 
         'construction_form_id'
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(
-            User::class
-        );
-    }
-
     public function form()
     {
         return $this->belongsTo(
