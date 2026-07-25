@@ -6,6 +6,7 @@ use App\Models\Payment;
 use App\Models\PaymentAudit;
 use App\Models\Wallet;
 use Exception;
+use Illuminate\Http\Request; //
 
 class PaymentService
 {
@@ -207,6 +208,108 @@ class PaymentService
             'action'=>'release',
 
             'description'=>'تحويل جزئي للمتعهد'
+
+        ]);
+    }
+
+    public function index(Request $request)
+    {
+        $query = Payment::query()
+
+            ->with([
+
+                'user',
+
+                'form.reconstructionRequest',
+
+                'form.contractor',
+
+                'form.engineer'
+
+            ]);
+
+        if ($request->filled('status')) {
+
+            $query->where(
+                'status',
+                $request->status
+            );
+
+        }
+
+        if ($request->filled('type')) {
+
+            $query->where(
+                'type',
+                $request->type
+            );
+
+        }
+
+        if ($request->filled('user_id')) {
+
+            $query->where(
+                'user_id',
+                $request->user_id
+            );
+
+        }
+
+        if ($request->filled('contractor_id')) {
+
+            $query->whereHas(
+                'form',
+                function ($q) use ($request) {
+
+                    $q->where(
+                        'contractor_id',
+                        $request->contractor_id
+                    );
+
+                }
+            );
+
+        }
+
+        if ($request->filled('keyword')) {
+
+            $keyword = $request->keyword;
+
+            $query->whereHas(
+                'user',
+                function ($q) use ($keyword) {
+
+                    $q->where(
+                        'name',
+                        'like',
+                        "%{$keyword}%"
+                    );
+
+                }
+            );
+
+        }
+
+        return $query
+            ->latest()
+            ->paginate(15);
+    }
+
+    public function show(
+        Payment $payment
+    )
+    {
+        return $payment->load([
+
+            'user',
+
+            'form.reconstructionRequest',
+
+            'form.contractor',
+
+            'form.engineer',
+
+            'form.materials'
 
         ]);
     }

@@ -83,4 +83,25 @@ class PaymentController extends Controller
             'message' => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني.'
         ]);
     }
+
+    public function index(Request $request)
+    {
+        return response()->json(
+
+            app(PaymentService::class)
+                ->index($request)
+
+        );
+    }
+    public function show(
+        Payment $payment
+    )
+    {
+        return response()->json(
+
+            app(PaymentService::class)
+                ->show($payment)
+
+        );
+    }
 }

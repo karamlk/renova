@@ -4,6 +4,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\Complaint\ComplaintController as AdminComplaintController ;
 use App\Http\Controllers\Admin\Complaint\NoShowWarningController as AdminNoShowWarningController;
+use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\AccountDeletionController;
 use App\Http\Controllers\Auth\AuthController;
@@ -15,7 +16,9 @@ use App\Http\Controllers\Contractor\ScheduleController;
 use App\Http\Controllers\Engineer\EngineerVisitController;
 use App\Http\Controllers\Engineer\ProjectTaskController;
 use App\Http\Controllers\InspectionRequestController;
+use App\Http\Controllers\PaymentAuditController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SiteVisitController;
 use App\Http\Controllers\User\LikeController;
 use App\Http\Controllers\User\NotificationController;
@@ -302,6 +305,38 @@ Route::middleware(['auth:sanctum','active'])->group(function () {
         Route::get('no-show-warnings/{noShowWarning}', [AdminNoShowWarningController::class, 'show']);
         Route::patch('no-show-warnings/{noShowWarning}/archive',[AdminNoShowWarningController::class, 'archive']);
         Route::post('/payments/{payment}/release', [PaymentController::class, 'release']);
+        Route::get(
+            '/finance/dashboard',
+            [FinanceController::class, 'dashboard']
+        );
+        Route::get(
+            '/payments',
+            [PaymentController::class,'index']
+        );
+        Route::get(
+            '/payments/{payment}',
+            [PaymentController::class,'show']
+        );
+        Route::get(
+            '/payment-audits',
+            [PaymentAuditController::class,'index']
+        );
+        Route::get(
+            '/payment-audits/{payment_audit}',
+            [PaymentAuditController::class,'show']
+        );
+        Route::get(
+            '/projects/waiting-release',
+            [ProjectController::class,'waitingRelease']
+        );
+        Route::get(
+            '/projects/finished-payments',
+            [ProjectController::class,'finishedPayments']
+        );
+        Route::get(
+            '/finance/report',
+            [FinanceController::class,'report']
+        );
     });
 
 

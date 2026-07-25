@@ -35,4 +35,5 @@ class Payment extends Model
             User::class
         );
     }
+
 }

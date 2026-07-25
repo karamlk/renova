@@ -15,4 +15,26 @@ class PaymentAudit extends Model
         'action',
         'description'
     ];
+    public function payment()
+    {
+        return $this->belongsTo(
+            Payment::class
+        );
+    }
+
+    public function fromUser()
+    {
+        return $this->belongsTo(
+            User::class,
+            'from_user_id'
+        );
+    }
+
+    public function toUser()
+    {
+        return $this->belongsTo(
+            User::class,
+            'to_user_id'
+        );
+    }
 }
