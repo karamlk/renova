@@ -1,0 +1,161 @@
+.complaints-table {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  width: 100%;
+}
+
+.complaints-table-header {
+  padding: 20px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.complaints-table-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #3b414c;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.complaints-table-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.complaints-btn-refresh {
+  background: transparent;
+  border: 1.5px solid #f07c1f;
+  padding: 8px 15px;
+  border-radius: 10px;
+  color: #f07c1f;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: "Tajawal", sans-serif;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.complaints-btn-refresh:hover {
+  background: #f07c1f;
+  color: white;
+}
+
+.complaints-btn-filter {
+  background: transparent;
+  border: 1.5px solid #b8bcbf;
+  padding: 8px 15px;
+  border-radius: 10px;
+  color: #3d424c;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: "Tajawal", sans-serif;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.complaints-btn-filter:hover {
+  background: #3d424c;
+  border-color: #3d424c;
+  color: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px;
+}
+
+th {
+  text-align: center;
+  padding: 16px 24px;
+  background: #f0f1f3;
+  font-weight: 700;
+  font-size: 14px;
+  color: #3d424c;
+}
+
+td {
+  text-align: center;
+  padding: 16px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #3b414c;
+  transition: background 0.2s;
+}
+
+tr:hover td {
+  background: #f0f1f3;
+}
+.complaints-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.complaints-location {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 11vh;
+}
+
+.complaints-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.complaints-action-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.complaints-action-btn:hover {
+  transform: translateY(-2px);
+}
+.page {
+  z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.complaints-table-footer {
+  padding: 20px 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Tajawal", sans-serif !important;
+}
+.no-requests {
+  text-align: center;
+  font-size: 18px;
+  color: #b8bcbf;
+  width: 100%;
+  padding-bottom: 25px;
+}

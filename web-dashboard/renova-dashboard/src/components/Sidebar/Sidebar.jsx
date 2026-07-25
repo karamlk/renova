@@ -3,7 +3,8 @@ import "./Sidebar.css";
 import Langswitcher from "../Langswitcher/Langswitcher";
 //Router
 import { NavLink } from "react-router-dom";
-
+//Hooks
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 // Material UI Icons
@@ -16,6 +17,8 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import ApartmentIcon from '@mui/icons-material/Apartment';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ModeCommentIcon from '@mui/icons-material/ModeComment';
 //api
 import {logoutRequest} from "../../api/auth";
 
@@ -47,12 +50,6 @@ export default function Sidebar() {
                 <span>{t("المشاريع")}</span>
             </NavLink>
 
-            <NavLink  to="projectsArchive" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
-                <ArchiveIcon />
-                <span>{t("أرشيف المشاريع")}</span>
-            </NavLink>
-
-
             <NavLink  to="users" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
                 <GroupIcon />
                 <span>{t("المستخدمين")}</span>
@@ -73,10 +70,28 @@ export default function Sidebar() {
                 <span>{t("شكاوى المستخدمين")}</span>
             </NavLink>
 
-            <NavLink  to="ComplaintsArchive" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
-                <ArchiveIcon />
-                <span>{t("أرشيف الشكاوى")}</span>
-            </NavLink>
+            <div className="archive-container">
+                <div className="archive-btn">
+                        <div className="archive">
+                            <ArchiveIcon />
+                            <span>{t("الأرشيف")}</span>
+                        </div>
+                        <div className="arrow">
+                            <ArrowDropDownIcon/>
+                        </div>
+                </div>
+                <div className="archive-dropdown ">
+                    <NavLink to="projectsarchive" className={({ isActive }) => isActive ? "dropdown-item active" : "dropdown-item"}>
+                        <ApartmentIcon />
+                        <span>{t("أرشيف المشاريع")}</span>
+                    </NavLink>
+
+                    <NavLink to="complaintsarchive" className={({ isActive }) => isActive ? "dropdown-item active" : "dropdown-item"}>
+                        <ModeCommentIcon sx={{fontSize: "21px"}} />
+                        <span>{t("أرشيف الشكاوى")}</span>
+                    </NavLink>
+                </div>
+        </div>
 
             <NavLink  to="usersettings" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
                 <SettingsIcon />

@@ -11,11 +11,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import WarningIcon from '@mui/icons-material/Warning';
 import PersonIcon from '@mui/icons-material/Person';
-
 //api
 import {getComplaintsRequest} from "../../api/complaints"
 import {getFilterComplaintsRequest} from "../../api/complaints"
 import {patchComplaintRequest} from "../../api/complaints";
+import {archiveComplaintsRequest} from "../../api/complaints";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
@@ -44,6 +44,7 @@ export default function Complaints() {
     const [showfilterdialog,setshowfilterdialog] = useState(false);
     const [selectedFilters,setSelectedFilters]=useState({type:"",complained_on_role:""});
     const [showresolvedialog, setshowresolvedialog] = useState(false);
+    const [showarchivedialog, setshowarchivedialog] = useState(false);
     const rowsPerPage = 12;
     const paginatedComplaints = complaintsList.slice((page - 1) * rowsPerPage , page * rowsPerPage);
     let role = { 2:t("المستخدم"), 3:t("المتعهد"), 4:t("المهندس")}
@@ -126,6 +127,21 @@ export default function Complaints() {
          setisopen(true);
          setprofileload(false);      
         }
+    }
+    async function archiveComplaint(type,id){
+        setshowarchivedialog(false);
+        setprofileload(true);
+        try{
+         await archiveComplaintsRequest(type,id);
+         setmsg(t("تم ارشفة الشكوى بنجاح"));
+         setseverity("success");
+         await getComplaintsList();
+        }catch(error){
+         console.log(error);
+        }finally{
+         setisopen(true);
+         setprofileload(false);      
+        }
     }  
     useEffect(()=>{getComplaintsList();},[]);
     return(
@@ -155,6 +171,22 @@ export default function Complaints() {
         complainton_name={selectedComplaint?.complained_on?.name}
         onApply={(data) => {resolveComplaint(selectedComplaint?.id,"resolved",data.admin_processing_note,data.penalty_percentage)}}
         onClose={() => setshowresolvedialog(false)}
+        />)}
+        {showarchivedialog && (<Confirmdialog
+        icon={<ArchiveIcon sx={{ color: "#f07c1f" ,fontSize:65 }}/>}
+         title={t("تأكيد الأرشفة")}
+         message={t("هل تريد أرشفة هذه الشكوى؟")}
+         name_btn1={t("إلغاء")}
+         btnColor={"#f07c1f"}
+         name_btn2={t("أرشفة")}
+         onClose={() => setshowarchivedialog(false)}
+         onConfirm={() => {
+            if(selectedComplaint?.type==="no_show"){
+                archiveComplaint("no-show-warnings",selectedComplaint?.id)
+            }else{
+                archiveComplaint("complaints",selectedComplaint?.id)
+            }
+         }}
         />)}
         {profileload && (<div className="page"></div>)}
             <Snackbar msg={msg} isopen={isopen} setisopen={setisopen} severity={severity}/>
@@ -238,7 +270,7 @@ export default function Complaints() {
                             </Tooltip>
                             </>
                             ):(<></>)}
-                            {complaint.status==="resolved"||complaint.status==="dismissed"||"تمت المعالجة تلقائياً"?(
+                            {(complaint.status==="resolved"||complaint.status==="dismissed"||!complaint.status)?(
                                 <Tooltip title={t("أرشفة")} arrow>
                                     <IconButton className="action-btn" sx={{
                                         color: "#FF9800",
@@ -247,7 +279,7 @@ export default function Complaints() {
                                             backgroundColor: "#FF9800",
                                             color: "white",
                                         },
-                                    }} >
+                                    }} onClick={()=>{setSelectedComplaint(complaint);setshowarchivedialog(true)}}>
                                         <ArchiveIcon sx={{ fontSize: 24 }} />
                                     </IconButton>
                                 </Tooltip>
