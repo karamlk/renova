@@ -30,3 +30,7 @@ export async function archiveComplaintsRequest(type, id) {
   let response = await api.patch(`/admin/${type}/${id}/archive`);
   return response;
 }
+export async function getComplaintDetailsRequest(type, id) {
+  let response = await api.get(`/admin/${type}/${id}`);
+  return response;
+}

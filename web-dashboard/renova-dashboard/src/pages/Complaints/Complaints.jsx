@@ -16,6 +16,7 @@ import {getComplaintsRequest} from "../../api/complaints"
 import {getFilterComplaintsRequest} from "../../api/complaints"
 import {patchComplaintRequest} from "../../api/complaints";
 import {archiveComplaintsRequest} from "../../api/complaints";
+import {getComplaintDetailsRequest} from "../../api/complaints";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
@@ -24,7 +25,8 @@ import TablePagination from "../../components/Pagination/Pagination";
 import Filterdialog from "../../components/Filterdialog/Filterdialog";
 import Confirmdialog from "../../components/Confirmdialog/Confirmdialog";
 import Snackbar from "../../components/Snackbar/Snakbar";
-import Complainthandlingdialog from "../../components/Complainthandlingdialog/Complainthandlingdialog"
+import Complainthandlingdialog from "../../components/Complainthandlingdialog/Complainthandlingdialog";
+import Complaintdetailsdialog from "../../components/Complaintdetailsdialog/Complaintdetailsdialog";
 //Context
 import { LoadingContext } from "../../Context/Loadingcontext";
 //Libraries
@@ -45,6 +47,8 @@ export default function Complaints() {
     const [selectedFilters,setSelectedFilters]=useState({type:"",complained_on_role:""});
     const [showresolvedialog, setshowresolvedialog] = useState(false);
     const [showarchivedialog, setshowarchivedialog] = useState(false);
+    const [showcomplaintsdialog, setshowcomplaintsdialog] = useState(false);
+    const [complaintdetails,setcomplaintdetails] = useState({});
     const rowsPerPage = 12;
     const paginatedComplaints = complaintsList.slice((page - 1) * rowsPerPage , page * rowsPerPage);
     let role = { 2:t("المستخدم"), 3:t("المتعهد"), 4:t("المهندس")}
@@ -142,7 +146,14 @@ export default function Complaints() {
          setisopen(true);
          setprofileload(false);      
         }
-    }  
+    }
+    async function getComplaintDetails(type,id){
+        setprofileload(true);
+        setcomplaintdetails({});    
+        let response = await getComplaintDetailsRequest(type,id);
+        setcomplaintdetails(response.data.data);
+        setprofileload(false);
+    }
     useEffect(()=>{getComplaintsList();},[]);
     return(
         <div>
@@ -188,6 +199,41 @@ export default function Complaints() {
             }
          }}
         />)}
+        {profileload ? (<div className="page"></div>):(
+            showcomplaintsdialog && (<Complaintdetailsdialog
+        onClose={() => setshowcomplaintsdialog(false)}
+        id={complaintdetails?.id}
+        status={complaintdetails?.status}
+        type={complaintdetails?.type}
+        title={complaintdetails?.reason}
+        description={complaintdetails?.description}
+        date={complaintdetails?.created_at}
+        complaint_img={complaintdetails?.complainant?.profile?.full_image_url}
+        complaint_n={complaintdetails?.complainant?.profile?.first_name + " " +complaintdetails?.complainant?.profile?.last_name}
+        complaint_r={complaintdetails?.complainant?.role_id}
+        complaint_p={complaintdetails?.complainant?.profile?.phone}
+        complaint_e={complaintdetails?.complainant?.email}
+        complaint_l={complaintdetails?.complainant?.profile?.location}
+        complainton_img={complaintdetails?.complained_on?.profile?.full_image_url}
+        complainton_n={complaintdetails?.complained_on?.profile?.first_name + " " +complaintdetails?.complained_on?.profile?.last_name}
+        complainton_r={complaintdetails?.complained_on?.role_id}
+        complainton_p={complaintdetails?.complained_on?.profile?.phone}
+        complainton_e={complaintdetails?.complained_on?.email}
+        complainton_l={complaintdetails?.complained_on?.profile?.location}
+        complainton_c={complaintdetails?.complained_on?.complaints_count}
+        p_title={complaintdetails?.construction_form?.reconstruction_request?.title}
+        p_type={complaintdetails?.construction_form?.reconstruction_request?.type}
+        p_location={complaintdetails?.construction_form?.reconstruction_request?.location}
+        p_status={complaintdetails?.construction_form?.reconstruction_request?.status}
+        images={complaintdetails?.images}
+        admin_note={complaintdetails?.admin_processing_note}
+        penalty_percentage={complaintdetails?.penalty_percentage}
+        penalty_amount={complaintdetails?.penalty_amount}
+        resolved_at={complaintdetails?.resolved_at}
+        is_archived={complaintdetails?.is_archived}
+        archived_at={complaintdetails?.archived_at}
+        />
+        ))}
         {profileload && (<div className="page"></div>)}
             <Snackbar msg={msg} isopen={isopen} setisopen={setisopen} severity={severity}/>
         
@@ -228,7 +274,7 @@ export default function Complaints() {
                         <td>{complaint?.complained_on.complaints_count}</td>
                         <td>
                             <div className="complaints-actions">
-                            {/* زر العرض */}
+                                
                             <Tooltip title={t("عرض")} arrow>
                                 <IconButton className="action-btn" sx={{
                                         color: "#2196f3",
@@ -237,7 +283,14 @@ export default function Complaints() {
                                         backgroundColor: "#2196f3",
                                         color: "white",
                                         },
-                                    }} >
+                                    }} onClick={()=>{
+                                        setSelectedComplaint(complaint);
+                                        if(complaint?.type==="general"){
+                                            getComplaintDetails("complaints",complaint?.id);
+                                        }else{
+                                            getComplaintDetails("no-show-warnings",complaint?.id);
+                                        }
+                                        setshowcomplaintsdialog(true);}}>
                                         <VisibilityIcon sx={{ fontSize: 24 }} />
                                 </IconButton>
                             </Tooltip>

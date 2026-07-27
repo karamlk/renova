@@ -7,15 +7,21 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import PersonIcon from '@mui/icons-material/Person';
+import ModeCommentIcon from '@mui/icons-material/ModeComment';
+
 //api
 import {getComplaintsArchiveRequest} from "../../api/complaints"
 import {getFilterComplaintsRequest} from "../../api/complaints"
+import {getComplaintDetailsRequest} from "../../api/complaints";
+
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
 //Components
 import TablePagination from "../../components/Pagination/Pagination";
 import Filterdialog from "../../components/Filterdialog/Filterdialog";
+import Complaintdetailsdialog from "../../components/Complaintdetailsdialog/Complaintdetailsdialog";
+
 //Context
 import { LoadingContext } from "../../Context/Loadingcontext";
 //Libraries
@@ -27,6 +33,10 @@ export default function Complaintsarchive() {
     const [page, setPage] = useState(1);
     const [showfilterdialog,setshowfilterdialog] = useState(false);
     const [selectedFilters,setSelectedFilters]=useState({type:"",complained_on_role:""});
+    const [profileload,setprofileload] = useState(false);
+    const [showcomplaintsdialog, setshowcomplaintsdialog] = useState(false);
+    const [complaintdetails,setcomplaintdetails] = useState({});
+    const [selectedComplaint, setSelectedComplaint] = useState(null);
     
     const rowsPerPage = 12;
     const paginatedComplaints = complaintsList.slice((page - 1) * rowsPerPage , page * rowsPerPage);
@@ -81,8 +91,13 @@ export default function Complaintsarchive() {
              }
 
     }   
-
-
+    async function getComplaintDetails(type,id){
+        setprofileload(true);
+        setcomplaintdetails({});    
+        let response = await getComplaintDetailsRequest(type,id);
+        setcomplaintdetails(response.data.data);
+        setprofileload(false);
+    }    
     useEffect(()=>{getComplaintsArchiveList();},[]);
     return(
         <div>
@@ -95,17 +110,51 @@ export default function Complaintsarchive() {
          setSelectedFilters={setSelectedFilters}
          onReset={()=>{setSelectedFilters({type:"",complained_on_role:""})}}
          />)}
-       
+        {profileload ? (<div className="page"></div>):(
+            showcomplaintsdialog && (<Complaintdetailsdialog
+        onClose={() => setshowcomplaintsdialog(false)}
+        id={complaintdetails?.id}
+        status={complaintdetails?.status}
+        type={complaintdetails?.type}
+        title={complaintdetails?.reason}
+        description={complaintdetails?.description}
+        date={complaintdetails?.created_at}
+        complaint_img={complaintdetails?.complainant?.profile?.full_image_url}
+        complaint_n={complaintdetails?.complainant?.profile?.first_name + " " +complaintdetails?.complainant?.profile?.last_name}
+        complaint_r={complaintdetails?.complainant?.role_id}
+        complaint_p={complaintdetails?.complainant?.profile?.phone}
+        complaint_e={complaintdetails?.complainant?.email}
+        complaint_l={complaintdetails?.complainant?.profile?.location}
+        complainton_img={complaintdetails?.complained_on?.profile?.full_image_url}
+        complainton_n={complaintdetails?.complained_on?.profile?.first_name + " " +complaintdetails?.complained_on?.profile?.last_name}
+        complainton_r={complaintdetails?.complained_on?.role_id}
+        complainton_p={complaintdetails?.complained_on?.profile?.phone}
+        complainton_e={complaintdetails?.complained_on?.email}
+        complainton_l={complaintdetails?.complained_on?.profile?.location}
+        complainton_c={complaintdetails?.complained_on?.complaints_count}
+        p_title={complaintdetails?.construction_form?.reconstruction_request?.title}
+        p_type={complaintdetails?.construction_form?.reconstruction_request?.type}
+        p_location={complaintdetails?.construction_form?.reconstruction_request?.location}
+        p_status={complaintdetails?.construction_form?.reconstruction_request?.status}
+        images={complaintdetails?.images}
+        admin_note={complaintdetails?.admin_processing_note}
+        penalty_percentage={complaintdetails?.penalty_percentage}
+        penalty_amount={complaintdetails?.penalty_amount}
+        resolved_at={complaintdetails?.resolved_at}
+        is_archived={complaintdetails?.is_archived}
+        archived_at={complaintdetails?.archived_at}
+        />
+        ))}     
             <div className="complaints-table">
             <div className="complaints-table-header">
-                <h3><FeedbackIcon sx={{ color: "#f07c1f" , fontSize:23}}/> {t("أرشيف الشكاوى")}</h3>
+                <h3><ModeCommentIcon sx={{ color: "#f07c1f" , fontSize:23}}/> {t("أرشيف الشكاوى")}</h3>
                 <div className="complaints-table-actions">
                     <button className="complaints-btn-filter" onClick={() => setshowfilterdialog(true)}><FilterAltIcon sx={{fontSize: "18px"}}/> {t("فلترة")}</button>
                     <button className="complaints-btn-refresh" onClick={()=>{getComplaintsArchiveList();setPage(1);}}><RefreshIcon sx={{fontSize: "18px"}}/> {t("تحديث")}</button>
                 </div>
             </div>
             {complaintsList.length===0?(<div className="no-requests">لاتوجد شكاوى مؤرشفة</div>):(
-                            <div className="complaints-table-container">
+            <div className="complaints-table-container">
                 <table>
                     <thead>
                         <tr>
@@ -142,7 +191,14 @@ export default function Complaintsarchive() {
                                         backgroundColor: "#2196f3",
                                         color: "white",
                                         },
-                                    }} >
+                                    }} onClick={()=>{
+                                        setSelectedComplaint(complaint);
+                                        if(complaint?.type==="general"){
+                                            getComplaintDetails("complaints",complaint?.id);
+                                        }else{
+                                            getComplaintDetails("no-show-warnings",complaint?.id);
+                                        }
+                                        setshowcomplaintsdialog(true);}} >
                                         <VisibilityIcon sx={{ fontSize: 24 }} />
                                 </IconButton>
                             </Tooltip>

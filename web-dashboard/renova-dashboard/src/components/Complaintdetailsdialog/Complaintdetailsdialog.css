@@ -1,0 +1,276 @@
+.complaints-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.complaints-dialog-box {
+  background: white;
+  border-radius: 24px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.complaints-dialog-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.complaints-dialog-body::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 10px 0;
+}
+
+.complaints-dialog-body::-webkit-scrollbar-thumb {
+  background: #f07c1f;
+  border-radius: 20px;
+  min-height: 40px;
+}
+
+.complaints-dialog-body::-webkit-scrollbar-thumb:hover {
+  background: #d96d1a;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== الرأس ===== */
+.complaints-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px;
+  border-bottom: 1px solid #f0f1f3;
+  border-radius: 24px 24px 0 0;
+}
+
+.complaints-dialog-header .complaints-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.complaints-dialog-header .complaints-title h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f1f2f;
+  margin: 0px;
+}
+
+.complaints-dialog-header .complaints-close-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #f5f5f5;
+  color: #999;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.complaints-dialog-header .complaints-close-btn:hover {
+  background: #e53935;
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* ===== المحتوى ===== */
+.complaints-dialog-body {
+  padding: 24px 24px 30px 24px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+}
+
+.complaints-section {
+  margin-bottom: 30px;
+}
+
+.complaints-section:last-child {
+  margin-bottom: 0;
+}
+
+.complaints-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f1f2f;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f1f3;
+  margin-bottom: 12px;
+}
+
+.complaints-section-main-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f1f2f;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f1f3;
+  margin-bottom: 12px;
+}
+
+.complaints-section-main-title .complaints-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.complaints-sub-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f1f2f;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.complaints-badge.resolved {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+}
+.complaints-badge.open {
+  background: rgba(240, 124, 31, 0.1);
+  color: #f07c1f;
+}
+.complaints-badge.dismissed {
+  background: rgba(229, 57, 53, 0.1);
+  color: #e53935;
+}
+
+.complaints-badge.auto {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+}
+
+.complaints-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+}
+
+.complaints-info-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #f5f5f6;
+}
+
+.complaints-info-item .complaints-label {
+  font-size: 13px;
+  color: #b8bcbf;
+  padding-right: 6px;
+  padding-left: 6px;
+}
+
+.complaints-info-item .complaints-value {
+  font-size: 14px;
+  color: #0f1f2f;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+/* ===== صور الشكوى ===== */
+.complaints-images-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.complaints-images-grid .complaints-img-thumb {
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 1/1;
+  background: transparent;
+  border: 1px solid #e8ecf2;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.complaints-images-grid .complaints-img-thumb:hover {
+  border-color: #f07c1f;
+  transform: scale(1.02);
+}
+
+.complaints-images-grid .complaints-img-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== نتيجة المعالجة ===== */
+.complaints-result-box {
+  background: #f8f9fc;
+  border-radius: 12px;
+  padding: 14px 18px;
+  border-right: 4px solid #4caf50;
+}
+
+.complaints-result-box .complaints-info-item .complaints-label {
+  padding-left: 6px;
+  padding-right: 6px;
+  white-space: nowrap;
+}
+
+/* ===== الحالة ===== */
+.complaints-status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.complaints-status-dot.resolved {
+  background: #4caf50;
+}
+.complaints-status-dot.open {
+  background: #f07c1f;
+}
+.complaints-status-dot.dismissed {
+  background: #e53935;
+}
+
+.complaints-status-dot.auto {
+  background: #4caf50;
+}
