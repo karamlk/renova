@@ -13,6 +13,9 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Contractor\ContractorPostController;
 use App\Http\Controllers\Contractor\ContractorProfileController;
 use App\Http\Controllers\Contractor\ScheduleController;
+use App\Http\Controllers\Engineer\EngineerDashboardController;
+use App\Http\Controllers\Engineer\EngineerFormController;
+use App\Http\Controllers\Engineer\EngineerProjectController;
 use App\Http\Controllers\Engineer\EngineerVisitController;
 use App\Http\Controllers\Engineer\ProjectTaskController;
 use App\Http\Controllers\InspectionRequestController;
@@ -369,6 +372,47 @@ Route::middleware(['auth:sanctum'])->group(function () {
         'construction-forms/{constructionForm}/confirm-payment',
         [ConstructionFormController::class, 'confirmPayment']
     );
+    Route::get(
+
+        '/visits',
+
+        [EngineerVisitController::class,'index']
+    );
+    Route::get(
+
+        '/forms/{form}',
+
+        [EngineerFormController::class,'show']
+
+    );
+
+    Route::get(
+
+        '/visits/{visit}',
+
+        [EngineerVisitController::class,'show']
+
+    );
+    Route::get(
+        '/forms',
+        [EngineerFormController::class,'index']
+    );
+    Route::get(
+        '/projects',
+        [EngineerProjectController::class,'index']
+    );
+    Route::get(
+
+        '/projects/{project}',
+
+        [EngineerProjectController::class,'show']
+
+    );
+    Route::get(
+        '/dashboard',
+        [EngineerDashboardController::class,'index']
+    );
+
 //------------------------------------------
     Route::middleware(
         'auth:sanctum'
