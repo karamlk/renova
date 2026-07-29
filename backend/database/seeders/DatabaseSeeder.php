@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use PaymentsSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -35,4 +36,8 @@ $this->call([
 ]);
 $this->call([
     ContractorScheduleSeeder::class,
+]);
+$this->call([
+    PaymentsSeeder::class,
+    PaymentAuditSeeder::class,
 ]);
