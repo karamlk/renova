@@ -20,7 +20,7 @@ class ProjectService
 
              'form.engineer',
 
-             'form.reconstructionRequest',
+             'form.reconstructionRequest:id,title',
 
              'form:id,reconstruction_request_id,contractor_id,engineer_id,building_description',
 
@@ -60,7 +60,7 @@ class ProjectService
 
                     'user'              => $payment->user->name,
 
-                    'building_description'=>$payment->form->building_description,
+                    'title'=>$payment->form->reconstructionRequest->title,
 
                     'project_cost'      => $payment->form->total_cost,
 
