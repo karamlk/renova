@@ -10,15 +10,23 @@ class ProjectService
 
     public function waitingRelease()
     {
-        return Payment::with([
+       // return Payment::with([
 
-            'user',
+         return Payment::with([
 
-            'form.contractor',
+             'user',
 
-            'form.engineer',
+             'form.contractor',
 
-            'form.reconstructionRequest'
+             'form.engineer',
+
+             'form.reconstructionRequest',
+
+             'form:id,reconstruction_request_id,contractor_id,engineer_id,building_description',
+
+             'form.project:id,construction_form_id,progress,status'
+
+
 
         ])
 
@@ -51,6 +59,8 @@ class ProjectService
                     'engineer'          => $payment->form->engineer->name,
 
                     'user'              => $payment->user->name,
+
+                    'building_description'=>$payment->form->building_description,
 
                     'project_cost'      => $payment->form->total_cost,
 

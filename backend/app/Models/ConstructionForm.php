@@ -83,4 +83,8 @@ class ConstructionForm extends Model
             ProjectTask::class
         );
     }
+    public function project()
+    {
+        return $this->hasOne(Project::class, 'construction_form_id');
+    }
 }
