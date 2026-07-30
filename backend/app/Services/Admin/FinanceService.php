@@ -19,8 +19,9 @@ class FinanceService
             'total_received' => Payment::where('status', 'paid')
                 ->sum('amount'),
 
-            'total_released' => Payment::where('status', 'released')
-                ->sum('released_amount'),
+            'total_released' => Payment::
+            //where('status', 'released')
+                sum('released_amount'),
 
             'pending_payments' => Payment::where('status', 'pending')
                 ->count(),

@@ -103,7 +103,7 @@ class PaymentService
 
     )
     {
-        if($payment->status=='pending'){
+        if($payment->status!='paid'){
 
             throw new Exception(
                 'هذه الدفعة غير جاهزة للتحويل'
@@ -168,8 +168,9 @@ class PaymentService
 
         if(
 
-            $payment->released_amount >= 0 && $payment->released_amount <$payment->amount
-            //$payment->amount
+            $payment->released_amount
+            >=
+            $payment->amount
 
         ){
 
