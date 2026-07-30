@@ -65,7 +65,8 @@ class ConstructionFormService
             throw new Exception('هذه الاستمارة ليست في مرحلة تدقيق المهندس حالياً.');
         }
 
-        $finalStatus = ($status === 'engineer_approved') ? 'pending_user' : 'engineer_rejected';
+        $finalStatus = ($status === 'engineer_approved')
+            ? 'pending_user' : 'engineer_rejected';
 
         $form->update([
             'status' => $finalStatus,
@@ -88,7 +89,21 @@ class ConstructionFormService
 
                     $form->id
                 );
-        }
+
+        }if($status === 'engineer_rejected'){
+
+        Notification::create([
+
+            'user_id' => $form->contractor_id,
+
+            'title' => 'تم رفض الاستمارة',
+
+            'message' => 'قام المهندس برفض الاستمارة، يرجى مراجعة الملاحظات وإعادة التعديل.',
+
+            'construction_form_id' => $form->id
+
+        ]);
+    }
         return $form;
     }
 

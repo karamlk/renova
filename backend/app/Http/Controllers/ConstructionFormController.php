@@ -240,7 +240,8 @@ class ConstructionFormController extends Controller
         return ConstructionForm::with([
             'engineer',
             'reconstructionRequest.user'
-        ])->get();
+        ])  ->where('contractor_id', auth()->id())
+            ->get();
 
     }
     public function show(ConstructionForm $form)
@@ -258,5 +259,24 @@ class ConstructionFormController extends Controller
         ]);
 
         return response()->json($form);
+    }
+
+    public function rejectedForms()
+    {
+        return response()->json(
+
+            ConstructionForm::with([
+
+                'engineer:id,name',
+
+                'reconstructionRequest.user:id,name'
+
+            ])
+                ->where('contractor_id', auth()->id())
+                ->where('status', 'engineer_rejected')
+                ->latest()
+                ->get()
+
+        );
     }
 }

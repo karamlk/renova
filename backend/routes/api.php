@@ -346,11 +346,22 @@ Route::middleware(['auth:sanctum','active'])->group(function () {
 use App\Http\Controllers\ConstructionFormController;
 
 // روابط المتعهد (إنشاء، تعديل، حذف)
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/contractor/forms/rejected', [ConstructionFormController::class, 'rejectedForms']);
+
+
 Route::post('construction-forms', [ConstructionFormController::class, 'store']);
 Route::post('construction-forms/{constructionForm}', [ConstructionFormController::class, 'update']);
 Route::delete('construction-forms/{constructionForm}', [ConstructionFormController::class, 'destroy']);
 Route::get('construction-forms',[ConstructionFormController::class,'index']);
 Route::get('construction-forms/{form}',[ConstructionFormController::class,'show']);
+//Route::get('/contractor/forms/rejected', [ConstructionFormController::class, 'rejectedForms']);
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/contractor/forms/rejected', [ConstructionFormController::class, 'rejectedForms']);
+});
+});
 
 // رابط تدقيق المهندس (قبول/رفض)
 Route::put('construction-forms/{constructionForm}/engineer-review', [ConstructionFormController::class, 'engineerReview']);
