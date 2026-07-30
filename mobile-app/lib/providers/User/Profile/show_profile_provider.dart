@@ -82,6 +82,7 @@ class ShowprofileProvider extends ChangeNotifier {
           phone: showProfileModel!.phone,
           location: showProfileModel!.location,
           image: showProfileModel!.image,
+          role: showProfileModel!.role,
         );
         image = null;
       }

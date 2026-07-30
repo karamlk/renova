@@ -4,7 +4,8 @@ class ShowProfileModel {
   String email;
   String phone;
   String location;
-  String image;
+  String? image;
+  String role;
 
   ShowProfileModel({
     required this.firstName,
@@ -13,6 +14,7 @@ class ShowProfileModel {
     required this.phone,
     required this.location,
     required this.image,
+    required this.role,
   });
 
   factory ShowProfileModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class ShowProfileModel {
       phone: json['data']['profile']['phone'],
       location: json['data']['profile']['location'],
       image: json['data']['profile']['image_url'],
+      role: json['data']['role']['name'],
     );
   }
 }

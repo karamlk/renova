@@ -36,6 +36,8 @@ class ShowContractorProfileProvider extends ChangeNotifier {
       final data = jsonDecode(response.body);
 
       showProfileModel = ShowContractorProfileModel.fromJson(data);
+      print('RESPONSE CODE IS : ${response.statusCode}');
+      print(data);
     } catch (e) {
       print(e);
     } finally {
