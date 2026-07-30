@@ -10,12 +10,15 @@ use App\Models\ConstructionForm;
 //use App\Http\Requests\EngineerReviewRequest;
 use App\Http\Requests\UserReviewRequest;
 //use App\Services\ConstructionFormService;
+use App\Models\User;
 use App\Services\Auth\OtpService;
 use App\Services\Contractor\ConstructionFormService;
+use App\Services\Engineer\EngineerFormService;
 use Exception;
 use App\Models\Payment;
 use App\Models\Wallet;
 use App\Services\WalletService;
+use Illuminate\Http\Request;
 
 class ConstructionFormController extends Controller
 {
@@ -230,5 +233,30 @@ class ConstructionFormController extends Controller
         return response()->json([
             'data' => $form
         ]);
+    }
+    public function index(
+
+    ) {
+        return ConstructionForm::with([
+            'engineer',
+            'reconstructionRequest.user'
+        ])->get();
+
+    }
+    public function show(ConstructionForm $form)
+    {
+        $form->load([
+
+            'contractor:id,name,email',
+
+            'engineer:id,name,email',
+
+            'reconstructionRequest.user:id,name,email',
+
+            'materials'
+
+        ]);
+
+        return response()->json($form);
     }
 }

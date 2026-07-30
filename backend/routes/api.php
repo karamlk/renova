@@ -349,6 +349,8 @@ use App\Http\Controllers\ConstructionFormController;
 Route::post('construction-forms', [ConstructionFormController::class, 'store']);
 Route::post('construction-forms/{constructionForm}', [ConstructionFormController::class, 'update']);
 Route::delete('construction-forms/{constructionForm}', [ConstructionFormController::class, 'destroy']);
+Route::get('construction-forms',[ConstructionFormController::class,'index']);
+Route::get('construction-forms/{form}',[ConstructionFormController::class,'show']);
 
 // رابط تدقيق المهندس (قبول/رفض)
 Route::put('construction-forms/{constructionForm}/engineer-review', [ConstructionFormController::class, 'engineerReview']);
