@@ -31,17 +31,6 @@ class PaymentService
         }
         $form = $payment->form;
 
-//        $userWallet =
-//            $form
-//                ->reconstructionRequest
-//                ->user
-//                ->wallet;
-//
-//        $adminWallet =
-//            Wallet::where(
-//                'user_id',
-//                1
-//            )->firstOrFail();
         if (!$form || !$form->reconstructionRequest) {
             throw new Exception('نموذج الإعمار أو طلب الإعمار المرتبط بهذه الدفعة غير موجود');
         }
@@ -114,7 +103,7 @@ class PaymentService
 
     )
     {
-        if($payment->status!='paid'){
+        if($payment->status=='pending'){
 
             throw new Exception(
                 'هذه الدفعة غير جاهزة للتحويل'
@@ -179,11 +168,8 @@ class PaymentService
 
         if(
 
-            $payment->released_amount
-
-            >=
-
-            $payment->amount
+            $payment->released_amount >= 0 && $payment->released_amount <$payment->amount
+            //$payment->amount
 
         ){
 
