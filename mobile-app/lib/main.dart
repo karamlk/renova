@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
+import 'package:renove_provider/providers/Contractor/Inspection/inspection_provider.dart';
 import 'package:renove_provider/providers/Contractor/Profile/create_profile_provider.dart';
 import 'package:renove_provider/providers/Contractor/Profile/edit_profile_contractor_provider.dart';
 import 'package:renove_provider/providers/Contractor/Profile/show_profile_provider.dart';
+import 'package:renove_provider/providers/Contractor/construction%20forms/construction_form_provider.dart';
 import 'package:renove_provider/providers/Contractor/contractor_schedule_provider.dart';
 import 'package:renove_provider/providers/Contractor/user_requests_provider.dart';
 import 'package:renove_provider/providers/User/Inspection/inspection_provider.dart';
@@ -51,6 +53,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => EditProfileProvider()),
         ChangeNotifierProvider(create: (_) => EditContractorProfileProvider()),
         ChangeNotifierProvider(create: (_) => ContractorScheduleProvider()),
+        ChangeNotifierProvider(create: (_) => ContractorInspectionRequestsProvider()),
+        ChangeNotifierProvider(create: (_) => InspectionFormProvider()),
       ],
       child: MyApp(isDark: isDark),
     ),

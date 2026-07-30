@@ -23,14 +23,14 @@ class ShowContractorProfileModel {
     final data = json['data'];
 
     return ShowContractorProfileModel(
-      firstName: data['first_name'] ?? '',
-      lastName: data['last_name'] ?? '',
-      email: data['user']['email'] ?? '',
-      phone: data['phone'] ?? '',
-      location: data['location'] ?? '',
+      firstName: data['profile']['first_name'] ?? '',
+      lastName: data['profile']['last_name'] ?? '',
+      email: data['email'] ?? '',
+      phone: data['profile']['phone'] ?? '',
+      location: data['profile']['location'] ?? '',
       companyName: data['company_name'] ?? '',
-      commercialRecord: data['commercial_record_url'] ?? '',
-      image: data['image_url'] ?? '',
+      commercialRecord: data['profile']['commercial_record_url'] ?? '',
+      image: data['profile']['image_url'] ?? '',
     );
   }
 }

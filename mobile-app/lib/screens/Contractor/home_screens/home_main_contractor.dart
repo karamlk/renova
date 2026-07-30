@@ -106,8 +106,8 @@ class HomeMainContractor extends StatelessWidget {
                 label: "مشاريعي",
               ),
               NavigationDestination(
-                icon: Icon(Icons.grid_3x3_outlined),
-                selectedIcon: Icon(Icons.menu),
+                icon: Icon(Icons.grid_view_outlined),
+                selectedIcon: Icon(Icons.grid_view_rounded),
                 label: "قائمتي",
               ),
             ],

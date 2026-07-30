@@ -202,6 +202,7 @@ class _SettingsState extends State<ContractorSettings> {
                         onPressed: () async {
                           final scaffold = ScaffoldMessenger.of(context);
                           final navigate = Navigator.of(context);
+
                           final response = await context.read<AuthProvider>().logout();
                           if (response == null) {
                             print("No response");

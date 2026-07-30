@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/Contractor/Profile/show_profile_provider.dart';
-import 'package:renove_provider/providers/User/Profile/show_profile_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/Profile/edit_profile_contractor.dart';
 import 'package:renove_provider/skeletons/profile_page_skeleton.dart';
@@ -136,7 +135,14 @@ class _ShowprofileScreenState extends State<ShowProfileContractorScreen> {
                 final profile = value.showProfileModel;
 
                 if (profile == null) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                    child: Column(
+                      children: [
+                        Icon(Icons.offline_bolt, size: 40),
+                        Text('فضل تحميل الملف الشخصي'),
+                      ],
+                    ),
+                  );
                 }
 
                 return Column(

@@ -125,7 +125,7 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
               ),
             ),
 
-            SizedBox(height: 20),
+            SizedBox(height: 10),
 
             Consumer<ShowprofileProvider>(
               builder: (context, value, child) {
@@ -143,6 +143,12 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   spacing: 5,
                   children: [
+                    Center(
+                      child: Text(
+                        profile.role,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ),
                     Text('الاسم الأول'),
                     Container(
                       width: double.infinity,

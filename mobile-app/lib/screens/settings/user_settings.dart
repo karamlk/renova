@@ -105,6 +105,10 @@ class _SettingsState extends State<UserSettings> {
                             profile.email,
                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                           ),
+                          Text(
+                            profile.role,
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                          ),
                         ],
                       ),
                     ],
