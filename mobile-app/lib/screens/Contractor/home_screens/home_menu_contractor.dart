@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/screens/Contractor/Schedule/schedule_screen.dart';
+import 'package:renove_provider/screens/Contractor/construction%20forms/forms_index.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/InspectionRequests/show_inspection_request.dart';
 
 class HomwMenuContractor extends StatefulWidget {
@@ -37,6 +38,7 @@ class _HomwMenuContractorState extends State<HomwMenuContractor> {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 15,
+              mainAxisSpacing: 15,
             ),
             children: [
               ElevatedButton(
@@ -56,7 +58,7 @@ class _HomwMenuContractorState extends State<HomwMenuContractor> {
                   );
                 },
                 child: Column(
-                  spacing: 30,
+                  spacing: 20,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CircleAvatar(
@@ -88,7 +90,7 @@ class _HomwMenuContractorState extends State<HomwMenuContractor> {
                   );
                 },
                 child: Column(
-                  spacing: 30,
+                  spacing: 20,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CircleAvatar(
@@ -99,6 +101,38 @@ class _HomwMenuContractorState extends State<HomwMenuContractor> {
                     Text(
                       'جدول الزيارات',
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  minimumSize: Size(30, 30),
+
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  backgroundColor: primarycolor2,
+                  foregroundColor: primarycolor1,
+                ),
+
+                onPressed: () {
+                  Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (context) => ContractorIndexFormsScreen()));
+                },
+                child: Column(
+                  spacing: 20,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.white24,
+                      radius: 35,
+                      child: Icon(Icons.work_history_outlined, size: 35, color: primarycolor1),
+                    ),
+                    Text(
+                      'الاستمارات المقدمة',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
