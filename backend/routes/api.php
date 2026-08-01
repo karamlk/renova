@@ -356,13 +356,10 @@ Route::post('construction-forms/{constructionForm}', [ConstructionFormController
 Route::delete('construction-forms/{constructionForm}', [ConstructionFormController::class, 'destroy']);
 Route::get('construction-forms',[ConstructionFormController::class,'index']);
 Route::get('construction-forms/{form}',[ConstructionFormController::class,'show']);
-//Route::get('/contractor/forms/rejected', [ConstructionFormController::class, 'rejectedForms']);
+
+});
+
 Route::middleware('auth:sanctum')->group(function () {
-
-    Route::get('/contractor/forms/rejected', [ConstructionFormController::class, 'rejectedForms']);
-});
-});
-
 // رابط تدقيق المهندس (قبول/رفض)
 Route::put('construction-forms/{constructionForm}/engineer-review', [ConstructionFormController::class, 'engineerReview']);
 
@@ -371,6 +368,7 @@ Route::put('construction-forms/{constructionForm}/user-review', [ConstructionFor
 
 // رابط تحميل المستند الـ PDF النهائي للمتضرر على جواله
 Route::get('construction-forms/{constructionForm}/download-pdf', [ConstructionFormController::class, 'downloadPdf']);
+});
 
 use App\Http\Controllers\Engineer\EngineerProfileController;
 
