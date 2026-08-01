@@ -87,4 +87,11 @@ class ConstructionForm extends Model
     {
         return $this->hasOne(Project::class, 'construction_form_id');
     }
+    protected $appends=['pdf_file_url'];
+
+    public function getPdfFileUrlAttribute()
+    {
+        return $this->pdf_file
+            ? asset('storage/' . $this->pdf_file) : null;
+    }
 }
