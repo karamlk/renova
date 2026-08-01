@@ -19,6 +19,7 @@ use App\Models\Payment;
 use App\Models\Wallet;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ConstructionFormController extends Controller
 {
@@ -246,6 +247,8 @@ class ConstructionFormController extends Controller
     }
     public function show(ConstructionForm $form)
     {
+
+
         $form->load([
 
             'contractor:id,name,email',
