@@ -24,17 +24,15 @@ class InspectionRequestService
             ->exists();
 
         if ($exists) {
-            throw new \Exception(
-                'لقد أرسلت عرضاً لهذا الطلب مسبقاً'
-            );
+            abort(422, 'لقد أرسلت عرضاً لهذا الطلب مسبقاً');
         }
 
         return InspectionRequest::create([
             'reconstruction_request_id' =>
-                $request->reconstruction_request_id,
+            $request->reconstruction_request_id,
 
             'contractor_id' =>
-                auth()->id(),
+            auth()->id(),
         ]);
     }
     // طلبات طلب معين
@@ -51,12 +49,12 @@ class InspectionRequestService
 
 
 
-          public function userOffers()
+    public function userOffers()
     {
         return InspectionRequest::with([
             'contractor',
             'request'
-        ])->where('status','pending')
+        ])->where('status', 'pending')
             ->get();
     }
 
@@ -67,6 +65,11 @@ class InspectionRequestService
         $inspection = InspectionRequest::findOrFail(
             $data['inspection_request_id']
         );
+
+        if ($inspection->request->user_id !== auth()->id()) {
+            abort(403, 'غير مصرح');
+        }
+
         SiteVisit::create([
             'inspection_request_id' => $inspection->id,
             'schedule_id' => $data['schedule_id'],
@@ -85,6 +88,9 @@ class InspectionRequestService
         $inspection =
             InspectionRequest::findOrFail($id);
 
+        if ($inspection->request->user_id !== auth()->id()) {
+            abort(403, 'غير مصرح');
+        }
 
         $inspection->update([
 
@@ -93,5 +99,4 @@ class InspectionRequestService
 
         return $inspection;
     }
-
 }

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\ReconstructionRequest;
 use App\Models\ReconstructionRequestImage;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +17,7 @@ class ReconstructionRequestWorkflowTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed(\Database\Seeders\RoleSeeder::class);
+        $this->seed(RoleSeeder::class);
         Storage::fake('public');
     }
 
@@ -258,7 +259,6 @@ class ReconstructionRequestWorkflowTest extends TestCase
             ->assertJsonPath('data.title', 'Updated Title');
     }
 
-    //TODOTest: 403 thing
     public function test_user_cannot_update_another_users_request(): void
     {
         $owner   = $this->createUser();
@@ -275,7 +275,6 @@ class ReconstructionRequestWorkflowTest extends TestCase
             ->assertStatus(403);
     }
 
-    //TODOTest: make sure it returns 403 not 500
     public function test_contractor_cannot_update_reconstruction_request(): void
     {
         $user       = $this->createUser();
@@ -334,7 +333,6 @@ class ReconstructionRequestWorkflowTest extends TestCase
             ->assertStatus(422);
     }
 
-    //TODOTest: 403 thing as well
     public function test_contractor_cannot_delete_reconstruction_request(): void
     {
         $user       = $this->createUser();
