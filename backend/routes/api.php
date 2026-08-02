@@ -77,6 +77,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Reconstruction requests — read available to all (contractors browse them)
     Route::get('/reconstruction-requests',       [ReconstructionRequestController::class, 'index']);
     Route::get('/reconstruction-requests/{id}',  [ReconstructionRequestController::class, 'show']);
+
+
 });
 
 // ══════════════════════════════════════════════════════════════
@@ -100,6 +102,10 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer'])->
 // User & contractor
 Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(function () {
     Route::post('complaints',                    [ComplaintController::class, 'store']);
+
+    //invoices
+    Route::get('/invoice/{invoice}',[InvoiceController::class,'show']);
+    Route::get('/invoice/{invoice}/pdf',[InvoiceController::class,'pdf']);
 });
 
 // ── USER (customer) ───────────────────────────────────────────
@@ -131,6 +137,9 @@ Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
 
     // Likes
     Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
+
+    //invoice
+    Route::get('/my-invoices',[InvoiceController::class,'myInvoices']);
 });
 
 // ── CONTRACTOR ────────────────────────────────────────────────
@@ -171,6 +180,9 @@ Route::middleware(['auth:sanctum', 'active', 'role:contractor'])->group(function
 
     // Likes
     Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
+
+    //invoice
+    Route::get('contractor/invoices',[InvoiceController::class,'contractorInvoices']);
 });
 
 // ── ENGINEER ──────────────────────────────────────────────────
@@ -223,6 +235,52 @@ Route::middleware(['auth:sanctum', 'active', 'role:admin'])->prefix('admin')->gr
     Route::get('/contractors/pending',      [ContractorController::class, 'pending']);
     Route::post('/contractors/{id}/approve', [ContractorController::class, 'approve']);
     Route::post('/contractors/{id}/reject', [ContractorController::class, 'reject']);
+
+    // User management
+    Route::get('/users',                    [UserManagementController::class, 'index']);
+    Route::get('/users/{user}',             [UserManagementController::class, 'show']);
+    Route::patch('/users/{user}/status',    [UserManagementController::class, 'toggleStatus']);
+    Route::patch('/users/{user}/active',    [UserManagementController::class, 'toggleActive']);
+    Route::delete('/users/{user}',          [UserManagementController::class, 'destroy']);
+    Route::get('/contractors',              [UserManagementController::class, 'contractors']);
+    Route::get('/engineers',                [UserManagementController::class, 'engineers']);
+    Route::post('/create-engineer',         [UserManagementController::class, 'createEngineerByAdmin']);
+
+    // Site visit management
+    Route::get('available-engineers',                   [SiteVisitController::class, 'availableEngineers']);
+    Route::get('site-visits/pending-assignment',        [SiteVisitController::class, 'unassignedOrRejectedVisits']);
+    Route::post('site-visits/assign',                   [SiteVisitController::class, 'assignEngineer']);
+
+    // Complaints
+    Route::get('all-complaints',                        [AdminComplaintController::class, 'getAllComplaints']);
+    Route::get('archived-complaints',                   [AdminComplaintController::class, 'getArchivedComplaints']);
+    Route::get('complaints',                            [AdminComplaintController::class, 'index']);
+    Route::get('complaints/{complaint}',                [AdminComplaintController::class, 'show']);
+    Route::patch('complaints/{complaint}/resolve',      [AdminComplaintController::class, 'resolve']);
+    Route::patch('complaints/{complaint}/archive',      [AdminComplaintController::class, 'archive']);
+
+    // No-show warnings
+    Route::get('no-show-warnings',                      [AdminNoShowWarningController::class, 'index']);
+    Route::get('no-show-warnings/{noShowWarning}',      [AdminNoShowWarningController::class, 'show']);
+    Route::patch('no-show-warnings/{noShowWarning}/archive', [AdminNoShowWarningController::class, 'archive']);
+
+    // Finance & payments
+    Route::get('/finance/dashboard',        [FinanceController::class, 'dashboard']);
+    Route::get('/finance/report',           [FinanceController::class, 'report']);
+    Route::get('/payments',                 [PaymentController::class, 'index']);
+    Route::get('/payments/{payment}',       [PaymentController::class, 'show']);
+    Route::post('/payments/{payment}/release', [PaymentController::class, 'release']);
+    Route::get('/payment-audits',           [PaymentAuditController::class, 'index']);
+    Route::get('/payment-audits/{payment_audit}', [PaymentAuditController::class, 'show']);
+
+    // Projects
+    Route::get('/projects/waiting-release',   [ProjectController::class, 'waitingRelease']);
+    Route::get('/projects/finished-payments', [ProjectController::class, 'finishedPayments']);
+
+    //invoices
+    Route::get('/invoice/{invoice}',[InvoiceController::class,'show']);
+    Route::get('/invoice/{invoice}/pdf',[InvoiceController::class,'pdf']);
+    Route::get('invoices',[InvoiceController::class,'adminInvoices']);
 });
 
 
