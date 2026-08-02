@@ -7,6 +7,7 @@ class ShowContractorProfileModel {
   String companyName;
   String commercialRecord;
   String image;
+  String role;
 
   ShowContractorProfileModel({
     required this.firstName,
@@ -17,20 +18,22 @@ class ShowContractorProfileModel {
     required this.companyName,
     required this.commercialRecord,
     required this.image,
+    required this.role,
   });
 
   factory ShowContractorProfileModel.fromJson(Map<String, dynamic> json) {
     final data = json['data'];
 
     return ShowContractorProfileModel(
-      firstName: data['profile']['first_name'] ?? '',
-      lastName: data['profile']['last_name'] ?? '',
-      email: data['email'] ?? '',
-      phone: data['profile']['phone'] ?? '',
-      location: data['profile']['location'] ?? '',
+      firstName: data['first_name'] ?? '',
+      lastName: data['last_name'] ?? '',
+      email: data['user']['email'] ?? '',
+      phone: data['phone'] ?? '',
+      location: data['location'] ?? '',
       companyName: data['company_name'] ?? '',
-      commercialRecord: data['profile']['commercial_record_url'] ?? '',
-      image: data['profile']['image_url'] ?? '',
+      commercialRecord: data['commercial_record_url'] ?? '',
+      image: data['image_url'] ?? '',
+      role: data['user']['role']['name'],
     );
   }
 }
