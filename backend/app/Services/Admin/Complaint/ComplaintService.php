@@ -9,11 +9,9 @@ use App\Models\Complaint;
 use App\Models\ComplaintImage;
 use App\Models\ConstructionForm;
 use App\Models\NoShowWarning;
-use App\Models\Role;
 use App\Models\Wallet;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ComplaintService
@@ -133,86 +131,6 @@ class ComplaintService
         ]);
 
         return new ComplaintDetailsResource($complaint);
-    }
-
-
-    // ─────────────────────────────────────────────────────
-    // رفع شكوى جديدة
-    // ─────────────────────────────────────────────────────
-    public function file(Request $request): Complaint
-    {
-        $complainant     = Auth::user();
-        $complainantRole = $complainant->role; // Role model
-        $data = $request->validated();
-
-        // فقط user و contractor يمكنهم رفع شكوى
-        abort_if(
-            !in_array($complainantRole->name, ['user', 'contractor']),
-            403,
-            'غير مصرح لك برفع شكوى'
-        );
-
-        // جلب الاستمارة
-        $form = ConstructionForm::findOrFail($data['construction_form_id']);
-
-        // التأكد أن المشتكي طرف في هذا المشروع
-        $customerId   = $form->reconstructionRequest->user_id;
-        $contractorId = $form->contractor_id;
-
-        abort_if(
-            !in_array($complainant->id, [$customerId, $contractorId]),
-            403,
-            'لست طرفاً في هذا المشروع'
-        );
-
-        // تحديد المشكو عليه تلقائياً — الطرف الآخر في المشروع
-        if ($complainantRole->name === 'user') {
-            $complainedOnId   = $contractorId;
-            $complainedOnRole = Role::where('name', 'contractor')->firstOrFail();
-        } else {
-            $complainedOnId   = $customerId;
-            $complainedOnRole = Role::where('name', 'user')->firstOrFail();
-        }
-
-        $complaint = Complaint::create([
-            'complainant_id'        => $complainant->id,
-            'complained_on_id'      => $complainedOnId,
-            'construction_form_id'  => $form->id,
-            'complainant_role_id'   => $complainantRole->id,
-            'complained_on_role_id' => $complainedOnRole->id,
-            'type'                  => $data['type'] ?? 'general',
-            'reason'                => $data['reason'],
-            'description'           => $data['description'] ?? null,
-            'status'                => 'open',
-        ]);
-
-        $this->storeImages(
-            $request,
-            $complaint
-        );
-
-        return $complaint->load('images');
-    }
-
-    // ─────────────────────────────────────────────────────
-    // شكاوي المستخدم الحالي
-    // ─────────────────────────────────────────────────────
-    public function getForUser()
-    {
-        $userId = Auth::id();
-
-        return Complaint::with([
-            'complainant',
-            'complainedOn',
-            'constructionForm',
-            'images'
-        ])
-            ->where(function ($q) use ($userId) {
-                $q->where('complainant_id', $userId)
-                    ->orWhere('complained_on_id', $userId);
-            })
-            ->latest()
-            ->get();
     }
 
     // ─────────────────────────────────────────────────────
@@ -348,30 +266,5 @@ class ComplaintService
         }
 
         return $query;
-    }
-
-    private function storeImages(
-        Request $request,
-        Complaint $complaint
-    ): void {
-
-        if (!$request->hasFile('images')) {
-            return;
-        }
-
-        foreach ($request->file('images') as $image) {
-
-            $path = $image->store(
-                'complaints',
-                'public'
-            );
-
-            ComplaintImage::create([
-
-                'complaint_id' => $complaint->id,
-
-                'image' => $path,
-            ]);
-        }
     }
 }

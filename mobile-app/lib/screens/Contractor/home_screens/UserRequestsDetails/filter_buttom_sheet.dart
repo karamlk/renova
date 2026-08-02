@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/Contractor/user_requests_provider.dart';
+import 'package:renove_provider/providers/theme_provider.dart';
 
 class FilterButtomSheet extends StatefulWidget {
   const FilterButtomSheet({super.key});
@@ -30,7 +31,11 @@ class _FilterButtomSheetState extends State<FilterButtomSheet> {
         children: [
           Text(
             "إدخال فلتر",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: primarycolor1),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: context.watch<ThemeProvider>().isDark ? primarycolor1 : primarycolor2,
+            ),
           ),
           const SizedBox(height: 25),
           Directionality(
@@ -40,7 +45,9 @@ class _FilterButtomSheetState extends State<FilterButtomSheet> {
               textDirection: TextDirection.rtl,
 
               decoration: InputDecoration(
-                labelStyle: TextStyle(color: primarycolor1),
+                labelStyle: TextStyle(
+                  color: context.watch<ThemeProvider>().isDark ? primarycolor1 : primarycolor2,
+                ),
                 labelText: "الموقع",
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               ),
@@ -49,31 +56,24 @@ class _FilterButtomSheetState extends State<FilterButtomSheet> {
           const SizedBox(height: 20),
           Directionality(
             textDirection: TextDirection.rtl,
-            child: DropdownMenu<String>(
-              inputDecorationTheme: InputDecorationTheme(
-                labelStyle: TextStyle(color: primarycolor1),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              width: double.infinity,
-              label: Text('اختر النوع'),
+            child: DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                label: Text("اختر النوع"),
+                hint: Text("اختر النوع"),
 
-              menuHeight: 250,
-
-              menuStyle: MenuStyle(
-                shape: WidgetStatePropertyAll(
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                labelStyle: TextStyle(
+                  color: context.watch<ThemeProvider>().isDark ? primarycolor1 : primarycolor2,
                 ),
-                fixedSize: WidgetStatePropertyAll(Size(100, 200)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
               ),
-              initialSelection: selectedType,
-              dropdownMenuEntries: [
-                DropdownMenuEntry(value: "construction", label: "Construction"),
-                DropdownMenuEntry(value: "restoration", label: "Restoration"),
-                DropdownMenuEntry(value: "finishing", label: "Finishing"),
+
+              initialValue: selectedType,
+              items: [
+                DropdownMenuItem(value: 'construction', child: Text('Construction')),
+                DropdownMenuItem(value: 'restoration', child: Text('Restoration')),
+                DropdownMenuItem(value: 'finishing', child: Text('Finishing')),
               ],
-              onSelected: (value) {
-                selectedType = value;
-              },
+              onChanged: (value) => selectedType = value,
             ),
           ),
           SizedBox(height: 30),
@@ -107,6 +107,7 @@ class _FilterButtomSheetState extends State<FilterButtomSheet> {
             },
             child: const Text("إزالة الفلتر"),
           ),
+          SizedBox(height: 40),
         ],
       ),
     );

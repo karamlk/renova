@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/Contractor/Profile/show_profile_provider.dart';
+import 'package:renove_provider/providers/User/Profile/show_profile_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/Profile/edit_profile_contractor.dart';
 import 'package:renove_provider/skeletons/profile_page_skeleton.dart';
@@ -44,7 +45,37 @@ class _ShowprofileScreenState extends State<ShowProfileContractorScreen> {
               onPressed: () {
                 final profile = context.read<ShowContractorProfileProvider>().showProfileModel;
 
-                if (profile == null) return;
+                if (profile == null) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text("فشل تحميل الملف الشخصي", textAlign: TextAlign.right),
+                      content: Text("لايمكنك تعديل ملفك الشخصي", textAlign: TextAlign.right),
+                      actions: [
+                        Row(
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(80, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                backgroundColor: Color(0xFF3b414c),
+                                foregroundColor: Color(0xFFF59B4A),
+                                disabledBackgroundColor: Color(0xFF3b414c),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('مواقق'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                  return;
+                }
 
                 Navigator.push(
                   context,
@@ -61,7 +92,7 @@ class _ShowprofileScreenState extends State<ShowProfileContractorScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.only(right: 20, left: 20),
         child: ListView(
           children: [
             Consumer<ShowContractorProfileProvider>(
@@ -83,9 +114,22 @@ class _ShowprofileScreenState extends State<ShowProfileContractorScreen> {
                           color: primarycolor2,
                         ),
 
-                        child: Icon(Icons.person, size: 80, color: primarycolor1),
+                        child: Icon(Icons.person_off, size: 80, color: primarycolor1),
                       ),
                     ),
+                  ),
+                );
+              },
+            ),
+            SizedBox(height: 20),
+            Consumer<ShowContractorProfileProvider>(
+              builder: (context, value, child) {
+                final profile = value.showProfileModel;
+
+                return Center(
+                  child: Text(
+                    profile!.role,
+                    style: TextStyle(fontWeight: FontWeight.bold, color: primarycolor1),
                   ),
                 );
               },
@@ -95,6 +139,17 @@ class _ShowprofileScreenState extends State<ShowProfileContractorScreen> {
               widthFactor: 40,
               child: Consumer<ShowContractorProfileProvider>(
                 builder: (context, value, child) {
+                  if (value.showProfileModel == null) {
+                    return Text(
+                      'فشل تحميل الصورة الشخصية',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: primarycolor1,
+                      ),
+                      textAlign: TextAlign.center,
+                    );
+                  }
                   return ElevatedButton(
                     onPressed: () async {
                       final picker = ImagePicker();
@@ -128,18 +183,23 @@ class _ShowprofileScreenState extends State<ShowProfileContractorScreen> {
 
             Consumer<ShowContractorProfileProvider>(
               builder: (context, value, child) {
-                if (value.isLoading || value.showProfileModel == null) {
+                if (value.isLoading) {
                   return ProfilePageSkeleton();
                 }
 
                 final profile = value.showProfileModel;
 
                 if (profile == null) {
-                  return const Center(
+                  return Center(
                     child: Column(
+                      spacing: 30,
                       children: [
-                        Icon(Icons.offline_bolt, size: 40),
-                        Text('فضل تحميل الملف الشخصي'),
+                        Icon(Icons.offline_bolt, size: 80),
+                        Text(
+                          'فشل تحميل الملف الشخصي',
+                          style: TextStyle(fontSize: 30, color: primarycolor1),
+                          textAlign: TextAlign.center,
+                        ),
                       ],
                     ),
                   );
@@ -240,7 +300,7 @@ class _ShowprofileScreenState extends State<ShowProfileContractorScreen> {
                         width: double.infinity,
                         fit: BoxFit.cover,
                         placeholder: (context, url) =>
-                            const Center(child: CircularProgressIndicator()),
+                            Center(child: CircularProgressIndicator(color: primarycolor1)),
                         errorWidget: (context, url, error) => Container(
                           height: 220,
                           color: Colors.grey.shade300,

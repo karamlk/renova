@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/models/Contractor/construction%20forms/create_construction_form.dart';
@@ -12,16 +10,9 @@ import 'package:renove_provider/screens/Contractor/construction%20forms/add_mate
 
 class UpdateFormScreen extends StatefulWidget {
   final ConstructionFormDetails form;
-  final int constructionId;
-  final int contractorId;
-  final int engineerId;
-  const UpdateFormScreen({
-    super.key,
-    required this.constructionId,
-    required this.form,
-    required this.contractorId,
-    required this.engineerId,
-  });
+
+  final int id;
+  const UpdateFormScreen({super.key, required this.form, required this.id});
 
   @override
   State<UpdateFormScreen> createState() => _CreateFormScreenState();
@@ -425,20 +416,18 @@ class _CreateFormScreenState extends State<UpdateFormScreen> {
 
                         materials: provider.materials,
                       );
-                      final response = await provider.updateInspection(
-                        id: widget.constructionId,
-                        form: form,
-                      );
+                      final response = await provider.updateInspection(id: widget.id, form: form);
 
                       if (response == null) return;
 
                       final result = jsonDecode(response.body);
+                      final text = result['message'] ?? result['error'];
 
                       print(response.statusCode);
                       print(response.body);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(result.toString()),
+                          content: Text(text.toString()),
                           behavior: SnackBarBehavior.floating,
                         ),
                       );

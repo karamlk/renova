@@ -72,8 +72,10 @@ class _ProfileScreenState extends State<EditUserProfileScreen> {
                             radius: 100,
                             backgroundImage: provider.image != null
                                 ? FileImage(provider.image!)
-                                : CachedNetworkImageProvider('$link${widget.profile.image}')
-                                      as ImageProvider,
+                                : (widget.profile.image != null && widget.profile.image!.isNotEmpty
+                                      ? CachedNetworkImageProvider('$link${widget.profile.image}')
+                                      : null),
+
                             child: provider.image == null
                                 ? Column(
                                     mainAxisAlignment: MainAxisAlignment.center,

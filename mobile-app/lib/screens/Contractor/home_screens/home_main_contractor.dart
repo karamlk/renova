@@ -9,6 +9,7 @@ import 'package:renove_provider/screens/Contractor/home_screens/contractor_proje
 import 'package:renove_provider/screens/Contractor/home_screens/home_screen_contractor.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/home_menu_contractor.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/user_requests_index.dart';
+import 'package:renove_provider/screens/Contractor/notification/notificaton_page.dart';
 import 'package:renove_provider/screens/settings/contractor_settings.dart';
 
 class HomeMainContractor extends StatelessWidget {
@@ -30,11 +31,12 @@ class HomeMainContractor extends StatelessWidget {
           iconSize: 30,
 
           onPressed: () {
-            Navigator.of(
-              context,
-            ).push(MaterialPageRoute(builder: (context) => ContractorSettings()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationPage()));
           },
-          icon: Icon(Icons.settings),
+          icon: Icon(
+            Icons.notifications_rounded,
+            color: context.watch<ThemeProvider>().isDark ? Colors.white70 : primarycolor2,
+          ),
         ),
 
         elevation: 10,
@@ -48,7 +50,10 @@ class HomeMainContractor extends StatelessWidget {
                   context,
                 ).push(MaterialPageRoute(builder: (context) => ShowProfileContractorScreen()));
               },
-              icon: Icon(Icons.person_rounded),
+              icon: Icon(
+                Icons.person_rounded,
+                color: context.watch<ThemeProvider>().isDark ? Colors.white70 : primarycolor2,
+              ),
             ),
           ),
         ],

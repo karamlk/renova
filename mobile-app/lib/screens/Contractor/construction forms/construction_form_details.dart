@@ -70,12 +70,7 @@ class _ConstructionFormDetailsScreenState extends State<ConstructionFormDetailsS
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => UpdateFormScreen(
-                      constructionId: form.reconstructionRequestId,
-                      contractorId: form.contractorId,
-                      engineerId: form.engineerId,
-                      form: form,
-                    ),
+                    builder: (_) => UpdateFormScreen(id: form.id, form: form),
                   ),
                 );
               },
@@ -134,7 +129,7 @@ class _ConstructionFormDetailsScreenState extends State<ConstructionFormDetailsS
                     ),
 
                     Text(
-                      "الوصف",
+                      "وصف الطلب",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: primarycolor1,
@@ -157,6 +152,29 @@ class _ConstructionFormDetailsScreenState extends State<ConstructionFormDetailsS
                           form.reconstructionRequest.title,
                           textDirection: TextDirection.rtl,
                         ),
+                      ),
+                    ),
+                    Text(
+                      "الوصف",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: primarycolor1,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                      child: Container(
+                        width: double.infinity,
+                        height: 100,
+                        padding: EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: context.watch<ThemeProvider>().isDark
+                              ? primarycolor2
+                              : Color(0xFFe4e6f2),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(form.buildingDescription, textDirection: TextDirection.rtl),
                       ),
                     ),
                     Text(
