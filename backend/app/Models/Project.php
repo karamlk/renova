@@ -35,4 +35,8 @@ class Project extends Model
             ProjectTask::class
         );
     }
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }

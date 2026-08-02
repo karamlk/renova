@@ -76,7 +76,7 @@ class User extends Authenticatable
                 return match ((int) $this->role_id) {
                     3 => $this->contractorProfile, // Contractor Role ID
                     4 => $this->engineerProfile,   // Engineer Role ID
-                    2 => $this->profile,     // Regular User Profile 
+                    2 => $this->profile,     // Regular User Profile
                 };
             }
         );
@@ -176,6 +176,18 @@ class User extends Authenticatable
     {
         return $this->hasMany(
             Notification::class
+        );
+    }
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function contractorInvoices()
+    {
+        return $this->hasMany(
+            Invoice::class,
+            'contractor_id'
         );
     }
 }

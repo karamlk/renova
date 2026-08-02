@@ -78,6 +78,8 @@ class PaymentService
             'paid_at' => now()
 
         ]);
+        app(InvoiceService::class)
+            ->create($payment);
 
         PaymentAudit::create([
 
@@ -197,6 +199,11 @@ class PaymentService
             'description'=>'تحويل جزئي للمتعهد'
 
         ]);
+        app(InvoiceService::class)
+            ->createReleaseInvoice(
+                $payment,
+                $amount
+            );
     }
 
     public function index(Request $request)
