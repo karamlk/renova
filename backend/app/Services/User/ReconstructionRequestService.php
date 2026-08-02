@@ -34,8 +34,7 @@ class ReconstructionRequestService
     private function storeImages(
         $request,
         $reconstructionRequest
-    ): void
-    {
+    ): void {
         foreach ($request->file('images') as $image) {
 
             $path = $image->store(
@@ -77,7 +76,7 @@ class ReconstructionRequestService
         if (
             $reconstructionRequest->user_id !== auth()->id()
         ) {
-            throw new \Exception('غير مصرح');
+            abort(403, 'Unauthorized action.');
         }
 
         $reconstructionRequest->update(
@@ -114,7 +113,7 @@ class ReconstructionRequestService
         if (
             $reconstructionRequest->user_id !== auth()->id()
         ) {
-            throw new \Exception('غير مصرح');
+            abort(403, 'Unauthorized action.');
         }
 
         $reconstructionRequest->delete();

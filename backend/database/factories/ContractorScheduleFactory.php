@@ -12,15 +12,29 @@ class ContractorScheduleFactory extends Factory
 
     public function definition(): array
     {
-        $startTime = fake()->time('H:i:s', '12:00:00'); // وقت البداية قبل الظهر مثلاً
-
         return [
-            // بيفترض إنك بتجيب ID مستخدم موجود أو بيعمل واحد جديد
-            'contractor_id' => User::where('role_id', '3')->inRandomOrder()->first()?->id ?? User::factory(),
+            'contractor_id' => User::factory()->asContractor(),
             'day_of_week'   => fake()->randomElement(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']),
-            'start_time'    => $startTime,
-            // وقت النهاية بيكون بعد وقت البداية بـ 4 لـ 8 ساعات
-            'end_time'      => fake()->dateTimeInInterval($startTime, '+8 hours')->format('H:i:s'),
+            'start_time'    => '09:00:00',
+            'end_time'      => '17:00:00',
         ];
+    }
+
+    // للاختبار: جعل وقت الانتهاء في الماضي
+    public function ended(): static
+    {
+        return $this->state(fn() => [
+            'start_time' => '08:00:00',
+            'end_time'   => '09:00:00',
+        ]);
+    }
+
+    // للاختبار: جعل وقت الانتهاء في المستقبل
+    public function upcoming(): static
+    {
+        return $this->state(fn() => [
+            'start_time' => '22:00:00',
+            'end_time'   => '23:59:00',
+        ]);
     }
 }

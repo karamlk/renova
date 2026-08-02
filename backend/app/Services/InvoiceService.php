@@ -161,34 +161,39 @@ class InvoiceService
 
         ]);
 
-            $qr = base64_encode(
+//            $qr = base64_encode(
+//
+//                QrCode::format('png')
+//
+//                    ->size(180)
+//
+//                    ->generate(
+//
+//                        url('/api/invoice/'.$invoice->id.'/verify')
+//
+//                    )
+//
 
-                QrCode::format('png')
 
-                    ->size(180)
+       // );
 
-                    ->generate(
-
-                        url('/api/invoice/'.$invoice->id.'/verify')
-
-                    )
-
-
-
-        );
+//        $html = view(
+//
+//            'pdf.invoice',
+//
+//            [
+//
+//                'invoice' => $invoice,
+//
+//                'qr' => $qr
+//
+//            ]
+//
+//        )->render();
 
         $html = view(
-
             'pdf.invoice',
-
-            [
-
-                'invoice' => $invoice,
-
-                'qr' => $qr
-
-            ]
-
+            compact('invoice')
         )->render();
 
         $pdf = new Mpdf([

@@ -61,7 +61,7 @@ class ConstructionFormService
     // 3. تدقيق المهندس
     public function reviewByEngineer(ConstructionForm $form, string $status, ?string $notes): ConstructionForm
     {
-        if ($form->status !== 'pending_engineer') {
+        if ($form->status != 'pending_engineer') {
             throw new Exception('هذه الاستمارة ليست في مرحلة تدقيق المهندس حالياً.');
         }
 

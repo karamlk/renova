@@ -66,6 +66,15 @@ class SiteVisitService
     {
         $visit = SiteVisit::findOrFail($visitId);
 
+    // Check the assigned user actually has the engineer role
+        $engineer = User::findOrFail($engineerId);
+        
+        abort_if(
+            $engineer->role->name !== 'engineer',
+            422,
+            'المستخدم المحدد ليس مهندساً'
+        );
+
         $visit->update([
             'engineer_id' => $engineerId,
             'status' => 'pending' // تعود قيد الانتظار حتى يوافق المهندس المفرز حديثاً

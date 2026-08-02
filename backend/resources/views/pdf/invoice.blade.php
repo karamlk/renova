@@ -16,7 +16,7 @@
 
         .header{
             width:100%;
-            border-bottom:3px solid #0d6efd;
+            border-bottom:3px solid #f07c1f;
             padding-bottom:15px;
             margin-bottom:25px;
         }
@@ -31,7 +31,7 @@
 
         .company h1{
             margin:0;
-            color:#0d6efd;
+            color:#f07c1f;
             font-size:28px;
         }
 
@@ -51,7 +51,7 @@
         .invoice-title h2{
 
             margin:0;
-            color:#0d6efd;
+            color:#f07c1f;
 
         }
 
@@ -72,7 +72,7 @@
 
         .section-title{
 
-            background:#0d6efd;
+            background:#5E5D6290;
             color:white;
             padding:10px;
             font-weight:bold;
@@ -105,7 +105,7 @@
         .amount{
 
             font-size:22px;
-            color:#0d6efd;
+            color:#f07c1f;
             font-weight:bold;
             text-align:center;
             margin-top:20px;
@@ -140,12 +140,12 @@
 
         }
 
-        .qr{
+        /*.qr{*/
 
-            text-align:center;
-            margin-top:25px;
+        /*    text-align:center;*/
+        /*    margin-top:25px;*/
 
-        }
+        /*}*/
 
         .copyright{
 
@@ -174,7 +174,7 @@
 
         .issued{
 
-            background:#0d6efd;
+            background:#3d424c;
 
         }
 
@@ -384,19 +384,19 @@
 
 @endif
 
-<div class="qr">
+{{--<div class="qr">--}}
 
-    <img
+{{--    <img--}}
 
-        src="data:image/png;base64,{{ $qr }}"
+{{--        src="data:image/png;base64,{{ $qr }}"--}}
 
-        width="120">
+{{--        width="120">--}}
 
-    <br><br>
+{{--    <br><br>--}}
 
-    Scan To Verify
+{{--    Scan To Verify--}}
 
-</div>
+{{--</div>--}}
 
 <table class="signature">
 

@@ -50,7 +50,8 @@ class _ShowInspectionRequestState extends State<ShowInspectionRequest>
               return const Center(child: Text("لا توجد طلبات", style: TextStyle(fontSize: 20)));
             }
             return ListView.builder(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.all(20),
+
               itemCount: value.requests.length,
 
               itemBuilder: (context, index) {

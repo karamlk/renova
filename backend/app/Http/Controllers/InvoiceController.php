@@ -59,4 +59,24 @@ class InvoiceController extends Controller
 
         );
     }
+    public function show(
+        Invoice $invoice
+    )
+    {
+        return response()->json(
+
+            $invoice->load([
+
+                'payment',
+
+                'project',
+
+                'user',
+
+                'contractor'
+
+            ])
+
+        );
+    }
 }
