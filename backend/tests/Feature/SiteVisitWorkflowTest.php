@@ -66,7 +66,6 @@ class SiteVisitWorkflowTest extends TestCase
             'schedule_id'           => $schedule->id,
         ]);
 
-        // contractor2 should see empty list
         $response = $this->withHeaders($this->authHeaders($contractor2))
             ->getJson('/api/contractor/visits');
 
@@ -120,7 +119,6 @@ class SiteVisitWorkflowTest extends TestCase
             'schedule_id'           => $schedule->id,
         ]);
 
-        // user2 should see empty list
         $response = $this->withHeaders($this->authHeaders($user2))
             ->getJson('/api/user/visits');
 
@@ -281,11 +279,6 @@ class SiteVisitWorkflowTest extends TestCase
             ->assertStatus(403);
     }
 
-    /**
-     * BUG EXPOSURE: assignEngineer() doesn't verify the user being assigned
-     * actually has the engineer role. Any user ID can be assigned.
-     * This test will FAIL until your teammate adds a role check.
-     */
     public function test_admin_cannot_assign_non_engineer_to_visit(): void
     {
         $admin   = $this->createAdmin();

@@ -11,9 +11,9 @@ class ReportNoShowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // الفرونت يرسل id الزيارة و id الشخص المتغيب
             'site_visit_id' => 'required|exists:site_visits,id',
-            'reported_id'   => 'required|exists:users,id',
+            // الفرونت يرسل الدور فقط — الباك يجد الشخص تلقائياً
+            'reported_role' => 'required|in:user,contractor,engineer',
         ];
     }
 
@@ -22,8 +22,8 @@ class ReportNoShowRequest extends FormRequest
         return [
             'site_visit_id.required' => 'يجب تحديد الزيارة الميدانية',
             'site_visit_id.exists'   => 'الزيارة الميدانية غير موجودة',
-            'reported_id.required'   => 'يجب تحديد الشخص المتغيب',
-            'reported_id.exists'     => 'المستخدم غير موجود',
+            'reported_role.required' => 'يجب تحديد دور الشخص الغائب',
+            'reported_role.in'       => 'الدور غير صالح',
         ];
     }
 }

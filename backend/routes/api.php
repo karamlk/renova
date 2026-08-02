@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Complaint\ComplaintController;
+use App\Http\Controllers\Complaint\NoShowWarningController;
 use App\Http\Controllers\Contractor\ContractorPostController;
 use App\Http\Controllers\Contractor\ContractorProfileController;
 use App\Http\Controllers\Contractor\ScheduleController;
@@ -88,6 +89,18 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,admin'])->group(function
     Route::post('/user/profile/update', [ProfileController::class, 'update']);
 });
 
+Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer'])->group(function () {
+    Route::get('my-complaints',                  [ComplaintController::class, 'myComplaints']);
+    // Route::get('complaints/{complaint}',         [ComplaintController::class, 'show']);
+    Route::post('no-show-warnings',              [NoShowWarningController::class, 'store']);
+    // Route::get('no-show-warnings/{warning}',     [NoShowWarningController::class, 'show']);
+});
+
+// User & contractor
+Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(function () {
+    Route::post('complaints',                    [ComplaintController::class, 'store']);
+});
+
 // ── USER (customer) ───────────────────────────────────────────
 Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
 
@@ -114,11 +127,6 @@ Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
     Route::post('/payments/{payment}/send-otp',     [PaymentController::class, 'sendOtp']);
     Route::post('/payments/{payment}/pay',          [PaymentController::class, 'pay']);
     Route::post('construction-forms/{constructionForm}/confirm-payment', [ConstructionFormController::class, 'confirmPayment']);
-
-    // Complaints
-    Route::get('complaints',          [ComplaintController::class, 'index']);
-    Route::post('complaints',         [ComplaintController::class, 'store']);
-    Route::post('no-show-warnings',   [ComplaintController::class, 'reportNoShow']);
 
     // Likes
     Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
@@ -158,11 +166,6 @@ Route::middleware(['auth:sanctum', 'active', 'role:contractor'])->group(function
     Route::delete('construction-forms/{constructionForm}',      [ConstructionFormController::class, 'destroy']);
     Route::get('construction-forms',                            [ConstructionFormController::class, 'index']);
     Route::get('construction-forms/{form}',                     [ConstructionFormController::class, 'show']);
-
-    // Complaints
-    Route::get('complaints',        [ComplaintController::class, 'index']);
-    Route::post('complaints',       [ComplaintController::class, 'store']);
-    Route::post('no-show-warnings', [ComplaintController::class, 'reportNoShow']);
 
     // Likes
     Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
@@ -206,8 +209,6 @@ Route::middleware(['auth:sanctum', 'active', 'role:engineer'])->group(function (
     // Dashboard
     Route::get('/dashboard', [EngineerDashboardController::class, 'index']);
 
-    // No-show warnings — engineer can report
-    Route::post('no-show-warnings', [ComplaintController::class, 'reportNoShow']);
 });
 
 // ══════════════════════════════════════════════════════════════
