@@ -291,6 +291,12 @@ class ConstructionFormService
     // 6. حذف الاستمارة
     public function deleteForm(ConstructionForm $form): void
     {
+        abort_if(
+        $form->contractor_id !== auth()->id(),
+        403,
+        'غير مصرح لك بحذف هذه الاستمارة'
+        );
+
         if ($form->pdf_file) {
             Storage::disk('public')->delete($form->pdf_file);
         }

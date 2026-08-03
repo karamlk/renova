@@ -128,6 +128,8 @@ Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
     // Construction form — user review
     Route::put('construction-forms/{constructionForm}/user-review', [ConstructionFormController::class, 'userReview']);
     Route::get('construction-forms/{constructionForm}/download-pdf', [ConstructionFormController::class, 'downloadPdf']);
+    Route::get('/receivedForms', [ConstructionFormController::class, 'receivedForms']);
+    Route::get('/showForm/{id}', [ConstructionFormController::class, 'showForm']);
 
     // Payments
     Route::get('/payments/pending',                 [PaymentController::class, 'pending']);
@@ -200,8 +202,6 @@ Route::middleware(['auth:sanctum', 'active', 'role:engineer'])->group(function (
     // Forms
     Route::get('/forms',         [EngineerFormController::class, 'index']);
     Route::get('/forms/{form}',  [EngineerFormController::class, 'show']);
-    Route::get('/receivedForms', [ConstructionFormController::class, 'receivedForms']);
-    Route::get('/showForm/{id}', [ConstructionFormController::class, 'showForm']);
 
     // Engineer review of construction form
     Route::put('construction-forms/{constructionForm}/engineer-review', [ConstructionFormController::class, 'engineerReview']);
