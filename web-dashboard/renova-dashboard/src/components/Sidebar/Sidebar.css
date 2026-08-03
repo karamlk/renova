@@ -114,7 +114,7 @@
   display: flex;
   justify-content: flex-end;
 }
-.archive {
+.list-title-btn {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -124,10 +124,10 @@
   align-items: center;
   transition: transform 0.3s ease;
 }
-.archive-container:hover .arrow {
+.container:hover .arrow {
   transform: rotate(180deg);
 }
-.archive-btn {
+.list-btn {
   padding: 12px 18px;
   margin: 4px 0;
   display: flex;
@@ -144,18 +144,18 @@
   text-decoration: none;
 }
 
-.archive-btn:hover {
+.list-btn:hover {
   background: rgba(240, 124, 31, 0.12);
   color: #f07c1f;
 }
 
-.archive-btn.active {
+.list-btn.active {
   background: #f07c1f;
   color: #0f1f2f;
   font-weight: 700;
 }
 
-.archive-dropdown {
+.list-dropdown {
   max-height: 0;
   overflow: hidden;
   opacity: 0;
@@ -164,12 +164,12 @@
     opacity 0.5s ease;
 }
 
-.archive-container:hover .archive-dropdown {
+.container:hover .list-dropdown {
   max-height: 200px;
   opacity: 1;
 }
 
-.archive-dropdown.active {
+.list-dropdown.active {
   max-height: 200px;
   opacity: 1;
 }

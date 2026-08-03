@@ -85,7 +85,9 @@ export default function Inspectionrequests() {
     return (
         <div>
             {listload ? (<div className="page"></div>):(
-                showenglistdialog && <Engineerlistdialog onClose={() => setshowenglistdialog(false)} onApply={() => chooseEngineer(selectedInspection,selectedEngineer)}>
+                showenglistdialog && <Engineerlistdialog
+                  onClose={() => setshowenglistdialog(false)}
+                  onApply={() => chooseEngineer(selectedInspection,selectedEngineer)}>
                   {engineers.map((engineer) => (
                         <div className={`engineer-item ${selectedEngineer === engineer.id ? "selected" : ""}`} key={engineer?.id}>
                             <div className="D-left">
@@ -142,7 +144,7 @@ export default function Inspectionrequests() {
                         <td>{day[inspection?.schedule?.day_of_week]}<br/>{t("من")} {inspection?.schedule?.start_time} {t("الى")} {inspection?.schedule?.end_time}</td>
                         <td>{status[inspection?.status]}</td>
                         <td>
-                            <button className="open-btn" onClick={()=>{setSelectedInspection(inspection?.id);setshowenglistdialog(true); getEngineersList();}}><EngineeringIcon/>{t("اختيار مهندس")}</button>
+                            <button className="open-btn" onClick={()=>{setSelectedInspection(inspection?.id);setshowenglistdialog(true); getEngineersList();}}><EngineeringIcon sx={{fontSize: "18px"}}/>{t("اختيار مهندس")}</button>
                         </td>
                         
                         </tr>

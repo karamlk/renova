@@ -7,6 +7,7 @@ export async function getUsersRequest() {
 
 export async function getFilterUsersRequest(type) {
   let response = await api.get(`/admin/${type}`);
+  console.log(response);
   return response;
 }
 
