@@ -44,7 +44,7 @@ export default function User(){
     const [showconfirmdialog, setshowconfirmdialog] = useState(false);
     const [showfilterdialog,setshowfilterdialog] = useState(false);
     const [showadduserdialog,setshowadduserdialog] = useState(false);
-    const [selectedType, setSelectedType] = useState("users");
+    const [selectedFilters, setSelectedFilters] = useState({role: "users",});
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [msg,setmsg] = useState();
     const [isopen, setisopen] = useState(false);
@@ -116,12 +116,12 @@ export default function User(){
                     );
                 }        
     }
-    async function getFilterUsers(type) {
+    async function getFilterUsers(filters) {
         setshowfilterdialog(false);
         setisloading(true);
         await new Promise(resolve => setTimeout(resolve, 1500));
         try{            
-                let response = await getFilterUsersRequest(type);
+                let response = await getFilterUsersRequest(filters.role);
                 setUsers(response.data.data);
                 setPage(1);
             }finally{
@@ -221,13 +221,13 @@ export default function User(){
 
 
         {showfilterdialog && (<Filterdialog
-         groups={FilterUsers} 
-         title={"فلترة المستخدمين"} 
-         onClose={() => setshowfilterdialog(false)} 
-         onApply={getFilterUsers}
-         selectedType={selectedType}
-         setSelectedType={setSelectedType}
-         onReset={()=>{setSelectedType("users");}}
+            groups={FilterUsers}
+            title="فلترة المستخدمين"
+            onClose={() => setshowfilterdialog(false)}
+            onApply={getFilterUsers}
+            onReset={() => setSelectedFilters({role: "users",})}
+            selectedFilters={selectedFilters}
+            setSelectedFilters={setSelectedFilters}
          />)}
 
 

@@ -4,7 +4,6 @@ import Langswitcher from "../Langswitcher/Langswitcher";
 //Router
 import { NavLink } from "react-router-dom";
 //Hooks
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 // Material UI Icons
@@ -19,6 +18,10 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ModeCommentIcon from '@mui/icons-material/ModeComment';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import HistoryIcon from '@mui/icons-material/History';
 //api
 import {logoutRequest} from "../../api/auth";
 
@@ -44,12 +47,12 @@ export default function Sidebar() {
                 <HomeIcon />
                 <span>{t("الصفحة الرئيسية")}</span>
             </NavLink>
-
+            {/*
             <NavLink  to="projects" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
                 <ApartmentIcon />
                 <span>{t("المشاريع")}</span>
             </NavLink>
-
+            */}
             <NavLink  to="users" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
                 <GroupIcon />
                 <span>{t("المستخدمين")}</span>
@@ -65,14 +68,42 @@ export default function Sidebar() {
                 <span>{t("طلبات المعاينة")}</span>
             </NavLink>
 
-            <NavLink  to="Complaints" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
+            <div className="container">
+                <div className="list-btn">
+                        <div className="list-title-btn">
+                            <AccountBalanceWalletIcon />
+                            <span>{t("المالية")}</span>
+                        </div>
+                        <div className="arrow">
+                            <ArrowDropDownIcon/>
+                        </div>
+                </div>
+                <div className="list-dropdown">
+                    <NavLink to="moneytransfers" className={({ isActive }) => isActive ? "dropdown-item active" : "dropdown-item"}>
+                        <CurrencyExchangeIcon sx={{fontSize: "20px"}}/>
+                        <span>{t("التحويلات المالية")}</span>
+                    </NavLink>
+
+                    <NavLink to="userpayments" className={({ isActive }) => isActive ? "dropdown-item active" : "dropdown-item"}>
+                        <ReceiptLongIcon sx={{fontSize: "23px"}} />
+                        <span>{t("دفعات المستخدمين")}</span>
+                    </NavLink>
+
+                    <NavLink to="Financiallogs" className={({ isActive }) => isActive ? "dropdown-item active" : "dropdown-item"}>
+                        <HistoryIcon sx={{fontSize: "25px"}} />
+                        <span>{t("سجل الدفعات")}</span>
+                    </NavLink>
+                </div>
+            </div>
+
+            <NavLink  to="complaints" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
                 <FeedbackIcon />
                 <span>{t("شكاوى المستخدمين")}</span>
             </NavLink>
-
-            <div className="archive-container">
-                <div className="archive-btn">
-                        <div className="archive">
+                
+            <div className="container">
+                <div className="list-btn">
+                        <div className="list-title-btn">
                             <ArchiveIcon />
                             <span>{t("الأرشيف")}</span>
                         </div>
@@ -80,18 +111,22 @@ export default function Sidebar() {
                             <ArrowDropDownIcon/>
                         </div>
                 </div>
-                <div className="archive-dropdown ">
+                <div className="list-dropdown">
+                    {/*
                     <NavLink to="projectsarchive" className={({ isActive }) => isActive ? "dropdown-item active" : "dropdown-item"}>
                         <ApartmentIcon />
                         <span>{t("أرشيف المشاريع")}</span>
                     </NavLink>
 
+                    */}
                     <NavLink to="complaintsarchive" className={({ isActive }) => isActive ? "dropdown-item active" : "dropdown-item"}>
                         <ModeCommentIcon sx={{fontSize: "21px"}} />
                         <span>{t("أرشيف الشكاوى")}</span>
                     </NavLink>
                 </div>
-        </div>
+            </div>
+
+
 
             <NavLink  to="usersettings" className={({ isActive }) => isActive ? "menu-btn active" : "menu-btn"} >
                 <SettingsIcon />

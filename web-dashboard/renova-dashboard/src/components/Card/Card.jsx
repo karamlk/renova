@@ -5,12 +5,14 @@ export default function Card({number, title, iconright}) {
     return (
         <div>
             <div className="stat-card">
-                <div className="stat-left">
-                    <h2>{number}</h2>
-                    <p><FolderIcon sx={{ color: "#f07c1f" }} fontSize="small"/> {title}</p>
+                <div className="stat-middle">
+                    <span>{number}</span>
+                    <div className="stat">{iconright}</div>
                 </div>
+                <br/>
                 <div className="stat-right">
-                    {iconright}
+                    <FolderIcon sx={{ color: "#f07c1f" }} fontSize="small"/>
+                    <p>{title}</p>
                 </div>
             </div>
         </div>

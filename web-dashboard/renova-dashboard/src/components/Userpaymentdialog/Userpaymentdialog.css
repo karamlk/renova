@@ -1,0 +1,206 @@
+/* ===== الخلفية ===== */
+.userpayment-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  white-space: nowrap;
+}
+
+/* ===== النافذة ===== */
+.userpayment-dialog-box {
+  background: white;
+  border-radius: 24px;
+  max-width: 650px;
+  width: 100%;
+  max-height: 92vh;
+  border-top: 5px solid #f07c1f;
+  overflow-y: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.userpayment-dialog-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.userpayment-dialog-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.userpayment-dialog-body::-webkit-scrollbar-thumb {
+  background: #f07c1f;
+  border-radius: 20px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== رأس النافذة ===== */
+.userpayment-dialog-header {
+  padding: 25px 24px;
+  border-bottom: 1px solid #f0f1f3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  border-radius: 24px 24px 0 0;
+}
+
+.userpayment-dialog-header .userpayment-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.userpayment-dialog-header .userpayment-title h3 {
+  margin: 0px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f1f2f;
+}
+
+.userpayment-dialog-header .userpayment-close-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: #f5f5f5;
+  color: #999;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 16px;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userpayment-dialog-header .userpayment-close-btn:hover {
+  background: #e53935;
+  color: white;
+}
+
+/* ===== محتوى النافذة ===== */
+.userpayment-dialog-body {
+  flex: 1;
+  padding: 15px 24px 25px 24px;
+  overflow-y: auto;
+}
+
+.userpayment-section {
+  margin-bottom: 28px;
+}
+
+.userpayment-section:last-child {
+  margin-bottom: 0;
+}
+
+.userpayment-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #b8bcbf;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f1f3;
+}
+
+.userpayment-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 45px;
+}
+
+.userpayment-detail-item {
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.userpayment-detail-item .userpayment-label {
+  color: #b8bcbf;
+  flex-shrink: 0;
+  font-size: 14px;
+  padding: 0px 8px;
+}
+
+.userpayment-detail-item .userpayment-value {
+  color: #0f1f2f;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.userpayment-status-badge {
+  padding: 1px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.userpayment-status-badge.paid {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+}
+
+.userpayment-status-badge.pending {
+  background: rgba(240, 124, 31, 0.1);
+  color: #f07c1f;
+}
+
+.userpayment-status-badge.released {
+  background: rgba(229, 57, 53, 0.1);
+  color: #e53935;
+}
+
+/* ===== المواد ===== */
+.userpayment-detail-materials {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.userpayment-detail-materials .userpayment-material-item {
+  background: #f8f9fc;
+  border: 1px solid #f0f1f3;
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.userpayment-detail-materials .userpayment-material-item .userpayment-name {
+  color: #0f1f2f;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.userpayment-detail-materials .userpayment-material-item .userpayment-price {
+  color: #4caf50;
+  font-weight: 500;
+  font-size: 14px;
+  margin-top: 4px;
+}
