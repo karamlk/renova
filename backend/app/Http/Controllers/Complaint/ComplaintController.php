@@ -20,7 +20,7 @@ class ComplaintController extends Controller
             'data' => $this->complaintService->getForUserMerged()
         ]);
     }
-    
+
     // GET /api/complaints
     // شكاوي رفعها المستخدم الحالي فقط
     public function index()
@@ -45,14 +45,13 @@ class ComplaintController extends Controller
 
         return response()->json([
             'message' => 'تم تقديم الشكوى بنجاح',
-            'data'    => $complaint->load([
-                'complainant',
-                'complainedOn',
-                'complainantRole',
-                'complainedOnRole',
-                'constructionForm',
-                'images',
-            ])
+            'data'    => [
+                'id'          => $complaint->id,
+                'reason'      => $complaint->reason,
+                'status'      => $complaint->status,
+                'created_at'  => $complaint->created_at,
+                'images'      => $complaint->images,
+            ]
         ], 201);
     }
 }

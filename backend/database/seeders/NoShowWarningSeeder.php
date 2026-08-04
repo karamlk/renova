@@ -39,7 +39,7 @@ class NoShowWarningSeeder extends Seeder
             |--------------------------------------------------------------------------
             */
 
-            $user = User::create([
+            $user = User::firstOrCreate([
                 'name'         => "User {$i}",
                 'email'        => "nsw_user{$i}@renova.com",
                 'password'     => Hash::make('password'),
@@ -49,7 +49,7 @@ class NoShowWarningSeeder extends Seeder
                 'is_active'    => true,
             ]);
 
-            UserProfile::create([
+            UserProfile::firstOrCreate([
                 'user_id'    => $user->id,
                 'first_name' => fake()->firstName(),
                 'last_name'  => fake()->lastName(),
@@ -64,7 +64,7 @@ class NoShowWarningSeeder extends Seeder
             |--------------------------------------------------------------------------
             */
 
-            $contractor = User::create([
+            $contractor = User::firstOrCreate([
                 'name'         => "Contractor {$i}",
                 'email'        => "nsw_contractor{$i}@renova.com",
                 'password'     => Hash::make('password'),
@@ -74,7 +74,7 @@ class NoShowWarningSeeder extends Seeder
                 'is_active'    => true,
             ]);
 
-            ContractorProfile::create([
+            ContractorProfile::firstOrCreate([
                 'user_id'           => $contractor->id,
                 'first_name'        => fake()->firstName(),
                 'last_name'         => fake()->lastName(),
@@ -91,7 +91,7 @@ class NoShowWarningSeeder extends Seeder
             |--------------------------------------------------------------------------
             */
 
-            $engineer = User::create([
+            $engineer = User::firstOrCreate([
                 'name'         => "Engineer {$i}",
                 'email'        => "nsw_engineer{$i}@renova.com",
                 'password'     => Hash::make('password'),
@@ -101,7 +101,7 @@ class NoShowWarningSeeder extends Seeder
                 'is_active'    => true,
             ]);
 
-            EngineerProfile::create([
+            EngineerProfile::firstOrCreate([
                 'user_id'             => $engineer->id,
                 'first_name'          => fake()->firstName(),
                 'last_name'           => fake()->lastName(),
@@ -122,7 +122,7 @@ class NoShowWarningSeeder extends Seeder
             |--------------------------------------------------------------------------
             */
 
-            $request = ReconstructionRequest::create([
+            $request = ReconstructionRequest::firstOrCreate([
                 'user_id'     => $user->id,
                 'title'       => "No Show Project {$i}",
                 'description' => "Project {$i} for testing no show warnings.",
@@ -137,7 +137,7 @@ class NoShowWarningSeeder extends Seeder
             |--------------------------------------------------------------------------
             */
 
-            $inspectionRequest = InspectionRequest::create([
+            $inspectionRequest = InspectionRequest::firstOrCreate([
                 'reconstruction_request_id' => $request->id,
                 'contractor_id'             => $contractor->id,
                 'status'                    => 'accepted',
@@ -149,7 +149,7 @@ class NoShowWarningSeeder extends Seeder
             |--------------------------------------------------------------------------
             */
 
-            $schedule = ContractorSchedule::create([
+            $schedule = ContractorSchedule::firstOrCreate([
                 'contractor_id' => $contractor->id,
                 'day_of_week'   => 'monday',
                 'start_time'    => '09:00:00',
@@ -162,11 +162,11 @@ class NoShowWarningSeeder extends Seeder
             |--------------------------------------------------------------------------
             */
 
-            $siteVisit = SiteVisit::create([
+            $siteVisit = SiteVisit::firstOrCreate([
                 'inspection_request_id' => $inspectionRequest->id,
                 'schedule_id'           => $schedule->id,
                 'engineer_id'           => $engineer->id,
-                'status'                => 'missed',
+                'status'                => 'accepted',
             ]);
 
             $projects[] = [
@@ -230,7 +230,7 @@ class NoShowWarningSeeder extends Seeder
 
         $warningsCount = 0;
 
-        foreach ($projects as $project) {
+        foreach (array_slice($projects, 1) as $project) {
             foreach ($combinations as $combination) {
                 NoShowWarning::create([
                     'site_visit_id'    => $project['site_visit']->id,
@@ -243,13 +243,10 @@ class NoShowWarningSeeder extends Seeder
                     'description'      => "عدم حضور المستخدم إلى الزيارة الميدانية رقم ({$project['site_visit']->id})",
                     'penalty_applied'  => false,
                 ]);
-
-                $warningsCount++;
             }
         }
 
         $this->command->info('');
-        $this->command->info("✅ NoShowWarningSeeder done — {$warningsCount} warnings created across 4 projects");
         $this->command->info('   Each project has 6 warnings (all role combinations)');
         $this->command->info('   All penalty_applied = false');
         $this->command->info('');

@@ -43,14 +43,14 @@ class NoShowWarningController extends Controller
         $reported        = User::find($warning->reported_id);
         $accountDisabled = !$reported->is_active;
 
-        $message = $accountDisabled
-            ? 'تم تسجيل التحذير وتعطيل حساب المستخدم بسبب تجاوز الحد المسموح'
-            : 'تم تسجيل التحذير بنجاح';
-
         return response()->json([
-            'message'          => $message,
-            'account_disabled' => $accountDisabled,
-            'data'             => $warning->load(['reporterRole', 'reportedRole']),
+            'message'          => 'تم تسجيل التحذير بنجاح',
+            'data'             => [
+                'id'              => $warning->id,
+                'reason'          => $warning->reason,
+                'reported_role'   => $warning->reportedRole->name,
+                'created_at'      => $warning->created_at,
+            ]
         ], 201);
     }
 }

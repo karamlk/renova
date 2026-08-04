@@ -93,7 +93,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,admin'])->group(function
 });
 
 Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer'])->group(function () {
-    Route::get('my-complaints',                  [ComplaintController::class, 'myComplaints']);
+    // Route::get('my-complaints',                  [ComplaintController::class, 'myComplaints']);
     // Route::get('complaints/{complaint}',         [ComplaintController::class, 'show']);
     Route::post('no-show-warnings',              [NoShowWarningController::class, 'store']);
     // Route::get('no-show-warnings/{warning}',     [NoShowWarningController::class, 'show']);
