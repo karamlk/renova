@@ -44,9 +44,7 @@ class WalletService
         if (
             $wallet->balance < $amount
         ) {
-            throw new Exception(
-                'الرصيد غير كافٍ'
-            );
+             abort(422, 'الرصيد غير كافٍ');
         }
 
         DB::transaction(function () use (

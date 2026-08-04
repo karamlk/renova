@@ -19,7 +19,7 @@ class PaymentController extends Controller
     )
     {
         if ($payment->status == 'paid') {
-            throw new Exception('تم دفع هذه الدفعة مسبقاً');
+               abort(422, 'تم دفع هذه الدفعة مسبقاً');
         }
 
         app(OtpService::class)->verifyPaymentOtp(

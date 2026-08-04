@@ -16,17 +16,13 @@ class PaymentService
     {
         if ($payment->user_id != auth()->id()) {
 
-            throw new Exception(
-                'لا يمكنك دفع هذه الدفعة'
-            );
+               abort(403, 'لا يمكنك دفع هذه الدفعة');
 
         }
 
         if ($payment->status != 'pending') {
 
-            throw new Exception(
-                'هذه الدفعة مدفوعة مسبقاً'
-            );
+              abort(422, 'هذه الدفعة مدفوعة مسبقاً');
 
         }
         $form = $payment->form;
@@ -107,9 +103,7 @@ class PaymentService
     {
         if($payment->status!='paid'){
 
-            throw new Exception(
-                'هذه الدفعة غير جاهزة للتحويل'
-            );
+               abort(422,  'هذه الدفعة غير جاهزة للتحويل');
 
         }
 
@@ -121,10 +115,7 @@ class PaymentService
 
         if($amount>$remaining){
 
-            throw new Exception(
-                'المبلغ أكبر من المتبقي.'
-            );
-
+               abort(422,  'المبلغ أكبر من المتبقي.');
         }
 
         $form = $payment->form;
