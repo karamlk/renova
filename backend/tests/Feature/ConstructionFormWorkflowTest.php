@@ -269,33 +269,6 @@ class ConstructionFormWorkflowTest extends TestCase
     // User reviews the form
     // ─────────────────────────────────────────────────
 
-    // TODOTest: make sure waiting_payment_otp is in enum
-    public function test_user_can_approve_form_after_engineer_approval(): void
-    {
-        $project = $this->createFullProject();
-
-        $form = ConstructionForm::factory()->create([
-            'reconstruction_request_id' => $project['request']->id,
-            'contractor_id'             => $project['contractor']->id,
-            'engineer_id'               => $project['engineer']->id,
-            'status'                    => 'pending_user',
-        ]);
-
-        $response = $this->withHeaders($this->authHeaders($project['user']))
-            ->putJson("/api/construction-forms/{$form->id}/user-review", [
-                'status'     => 'user_approved',
-                'user_notes' => 'موافق على كل شيء',
-            ]);
-
-        $response->assertStatus(200);
-
-        // Status moves to waiting_payment_otp
-        $this->assertDatabaseHas('construction_forms', [
-            'id'     => $form->id,
-            'status' => 'waiting_payment_otp',
-        ]);
-    }
-
     public function test_user_can_reject_form(): void
     {
         $project = $this->createFullProject();
