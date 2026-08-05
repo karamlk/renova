@@ -8,12 +8,15 @@ import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/shared_preferneces.dart';
 import 'package:renove_provider/models/Contractor/construction%20forms/create_construction_form.dart';
 import 'package:renove_provider/models/Contractor/construction%20forms/forms_index.dart';
+import 'package:renove_provider/models/Contractor/construction%20forms/rejected_forms.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class InspectionFormProvider extends ChangeNotifier {
   bool isLoading = false;
 
   File? pdfFile;
   ConstructionFormDetails? formDetails;
+  List<RejectedForms> rejected = [];
 
   bool isDetailsLoading = false;
 
@@ -219,6 +222,40 @@ class InspectionFormProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint(e.toString());
       return null;
+    }
+  }
+
+  Future<http.Response?> fetchRecjectedForms() async {
+    isLoading = true;
+    notifyListeners();
+    final token = await getPrefs('token');
+    try {
+      final response = await http.get(
+        Uri.parse('$link/api/contractor/forms/rejected'),
+        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final List data = jsonDecode(response.body);
+        rejected = data.map((e) => RejectedForms.fromJson(e)).toList();
+        print(response.body);
+      }
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> openPdf(String url) async {
+    debugPrint("Opening PDF: $url");
+    final uri = Uri.parse(url);
+
+    final success = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!success) {
+      throw Exception("Could not launch $url");
     }
   }
 }

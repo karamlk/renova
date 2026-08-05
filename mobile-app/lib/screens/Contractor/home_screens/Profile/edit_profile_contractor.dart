@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/link.dart';
+import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/models/Contractor/Profile/create_profile_model.dart';
 import 'package:renove_provider/models/Contractor/Profile/edit_profile_model.dart';
 import 'package:renove_provider/models/Contractor/Profile/show_profile_model.dart';
 import 'package:renove_provider/providers/Contractor/Profile/create_profile_provider.dart';
 import 'package:renove_provider/providers/Contractor/Profile/edit_profile_contractor_provider.dart';
 import 'package:renove_provider/providers/Contractor/Profile/show_profile_provider.dart';
+import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';
 
 class EditContractorProfileScreen extends StatefulWidget {
@@ -103,6 +105,11 @@ class _CreateProfileContractorState extends State<EditContractorProfileScreen> {
                             TextField(
                               controller: firstNameController,
                               decoration: InputDecoration(
+                                labelStyle: TextStyle(
+                                  color: context.watch<ThemeProvider>().isDark
+                                      ? primarycolor1
+                                      : primarycolor2,
+                                ),
                                 labelText: "الاسم الأول",
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -112,6 +119,11 @@ class _CreateProfileContractorState extends State<EditContractorProfileScreen> {
                             TextField(
                               controller: lastNameController,
                               decoration: InputDecoration(
+                                labelStyle: TextStyle(
+                                  color: context.watch<ThemeProvider>().isDark
+                                      ? primarycolor1
+                                      : primarycolor2,
+                                ),
                                 labelText: "اسم العائلة",
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -121,6 +133,11 @@ class _CreateProfileContractorState extends State<EditContractorProfileScreen> {
                             TextField(
                               controller: locationController,
                               decoration: InputDecoration(
+                                labelStyle: TextStyle(
+                                  color: context.watch<ThemeProvider>().isDark
+                                      ? primarycolor1
+                                      : primarycolor2,
+                                ),
                                 labelText: "مكان السكن",
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -132,6 +149,11 @@ class _CreateProfileContractorState extends State<EditContractorProfileScreen> {
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 labelText: "رقم الهاتف ",
+                                labelStyle: TextStyle(
+                                  color: context.watch<ThemeProvider>().isDark
+                                      ? primarycolor1
+                                      : primarycolor2,
+                                ),
 
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -143,11 +165,21 @@ class _CreateProfileContractorState extends State<EditContractorProfileScreen> {
 
                               decoration: InputDecoration(
                                 labelText: "اسم الشركة",
+                                labelStyle: TextStyle(
+                                  color: context.watch<ThemeProvider>().isDark
+                                      ? primarycolor1
+                                      : primarycolor2,
+                                ),
 
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.all(Radius.circular(10)),
                                 ),
                               ),
+                            ),
+
+                            Text(
+                              'اضغط على صورة السجل التجاري لتغييرها',
+                              style: TextStyle(color: primarycolor1),
                             ),
                             GestureDetector(
                               onTap: () async {

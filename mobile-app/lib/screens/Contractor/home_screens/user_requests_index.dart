@@ -111,7 +111,7 @@ class _UserRequestsIndexState extends State<UserRequestsIndex> {
                     hasScrollBody: false,
                     child: Center(
                       child: Text(
-                        'لا يوجد أي طلبات من المسخدمين',
+                        'لا يوجد أي طلبات من المستخدمين',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
