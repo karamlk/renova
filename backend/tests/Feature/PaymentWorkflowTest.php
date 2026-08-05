@@ -122,13 +122,13 @@ class PaymentWorkflowTest extends TestCase
 
     public function test_user_can_pay_their_pending_payment(): void
     {
+        $admin = $this->createAdmin();
         $project = $this->createFullProject();
 
         // Set user wallet balance high enough
         $project['user']->wallet->update(['balance' => 1000000]);
 
         // Admin wallet must exist
-        $admin = $this->createAdmin();
 
         $payment = Payment::factory()->create([
             'construction_form_id' => $project['form']->id,
@@ -153,10 +153,10 @@ class PaymentWorkflowTest extends TestCase
 
     public function test_payment_deducts_from_user_wallet(): void
     {
+        $admin = $this->createAdmin();
         $project = $this->createFullProject();
         $project['user']->wallet->update(['balance' => 1000000]);
 
-        $admin = $this->createAdmin();
 
         $payment = Payment::factory()->create([
             'construction_form_id' => $project['form']->id,
@@ -175,13 +175,13 @@ class PaymentWorkflowTest extends TestCase
 
         $project['user']->wallet->refresh();
 
-        // TODOTest: remove one of the withdraws
-        // Once fixed, change to: $balanceBefore - $payment->amount, and make it assertEquals
-        $this->assertNotEquals(
-            $balanceBefore,
+        $this->assertEquals(
+            $balanceBefore - $payment->amount,
             $project['user']->wallet->balance,
-            'Wallet balance should have decreased after payment'
+            'Wallet balance should have decreased exactly by the payment amount'
         );
+
+        $this->assertDatabaseCount('wallet_transactions', 2);
     }
 
     public function test_payment_deposits_to_admin_wallet(): void
