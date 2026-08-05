@@ -68,7 +68,7 @@ abstract class TestCase extends BaseTestCase
             'inspection_request_id' => $inspectionRequest->id,
             'schedule_id'           => $schedule->id,
             'engineer_id'           => $engineer->id,
-            'status'                => 'missed',
+            'status'                => 'accepted',
         ]);
 
         $form = ConstructionForm::factory()->approved()->withTotalCost(1000000)->create([
