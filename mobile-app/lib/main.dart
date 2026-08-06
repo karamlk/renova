@@ -11,6 +11,7 @@ import 'package:renove_provider/providers/Contractor/contractor_schedule_provide
 import 'package:renove_provider/providers/Contractor/user_requests_provider.dart';
 import 'package:renove_provider/providers/User/Inspection/inspection_provider.dart';
 import 'package:renove_provider/providers/User/Profile/edit_profile_provider.dart';
+import 'package:renove_provider/providers/User/construction%20forms/contrsution_forms_provider.dart';
 import 'package:renove_provider/providers/User/construction_index_provider.dart';
 
 import 'package:renove_provider/providers/User/construction_request_provider.dart';
@@ -55,6 +56,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ContractorScheduleProvider()),
         ChangeNotifierProvider(create: (_) => ContractorInspectionRequestsProvider()),
         ChangeNotifierProvider(create: (_) => InspectionFormProvider()),
+        ChangeNotifierProvider(create: (_) => ContrsutionFormsProvider()),
       ],
       child: MyApp(isDark: isDark),
     ),

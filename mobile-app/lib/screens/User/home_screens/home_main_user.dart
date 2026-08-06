@@ -5,12 +5,13 @@ import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/navigation_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 
-import 'package:renove_provider/screens/User/home_screens/contractors_requests_user.dart';
+import 'package:renove_provider/screens/User/home_screens/home_menu_user.dart';
 import 'package:renove_provider/screens/User/home_screens/inspection_index_screen.dart';
 
 import 'package:renove_provider/screens/User/home_screens/requests_index_list.dart';
 
 import 'package:renove_provider/screens/User/home_screens/home_screen_user.dart';
+import 'package:renove_provider/screens/User/notifications/notifications_page_user.dart';
 import 'package:renove_provider/screens/settings/user_settings.dart';
 import 'package:renove_provider/screens/User/Profile/show_profile_screen.dart';
 
@@ -20,7 +21,7 @@ class HomeMainUser extends StatelessWidget {
     HomeScreenUser(),
     RequestsIndexList(),
     InspectionIndexScreen(),
-    ContractorsRequests(),
+    HomeMenuUser(),
   ];
 
   @override
@@ -33,9 +34,11 @@ class HomeMainUser extends StatelessWidget {
           iconSize: 30,
 
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserSettings()));
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (context) => NotificationsPageUser()));
           },
-          icon: Icon(Icons.settings),
+          icon: Icon(Icons.notifications),
         ),
 
         elevation: 10,
@@ -107,9 +110,9 @@ class HomeMainUser extends StatelessWidget {
                 label: "العروض",
               ),
               NavigationDestination(
-                icon: Icon(Icons.grid_3x3_outlined),
-                selectedIcon: Icon(Icons.request_page_outlined),
-                label: "العروض",
+                icon: Icon(Icons.grid_view_outlined),
+                selectedIcon: Icon(Icons.grid_view_rounded),
+                label: "قائمتي",
               ),
             ],
           ),

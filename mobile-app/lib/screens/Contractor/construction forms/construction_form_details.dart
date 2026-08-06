@@ -615,7 +615,7 @@ class _ConstructionFormDetailsScreenState extends State<ConstructionFormDetailsS
                                   ),
                                 ),
                                 ...form.materials.map((material) {
-                                  return Text(material.unit);
+                                  return Text(material.unitPrice.toString());
                                 }),
                               ],
                             ),

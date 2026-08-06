@@ -237,7 +237,6 @@ class InspectionFormProvider extends ChangeNotifier {
       if (response.statusCode == 200 || response.statusCode == 201) {
         final List data = jsonDecode(response.body);
         rejected = data.map((e) => RejectedForms.fromJson(e)).toList();
-        print(response.body);
       }
       return response;
     } catch (e) {
