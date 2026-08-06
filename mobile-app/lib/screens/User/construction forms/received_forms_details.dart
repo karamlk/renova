@@ -3,10 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/Extras/theme.dart';
 import 'package:renove_provider/providers/User/construction%20forms/contrsution_forms_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
+import 'package:renove_provider/screens/User/construction%20forms/review_bottom_sheet.dart';
 
 class ReceivedFormsDetails extends StatefulWidget {
   final int receivedId;
-  const ReceivedFormsDetails({super.key, required this.receivedId});
+  ReceivedFormsDetails({super.key, required this.receivedId});
+  final otpController = TextEditingController();
+  final notesController = TextEditingController();
 
   @override
   State<ReceivedFormsDetails> createState() => _ReceivedFormsDetailsState();
@@ -23,6 +26,7 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isApproved = false;
     return Scaffold(
       appBar: AppBar(
         title: Text('تفاصيل الاستمارة', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -289,6 +293,193 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
               ),
               SizedBox(height: 40),
             ],
+          );
+        },
+      ),
+
+      bottomNavigationBar: Consumer<ContrsutionFormsProvider>(
+        builder: (context, value, child) {
+          if (value.isLoading || value.details == null) {
+            return const SizedBox.shrink();
+          }
+          return SafeArea(
+            child: Padding(
+              padding: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(130, 45),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      backgroundColor: context.watch<ThemeProvider>().isDark
+                          ? Colors.white30
+                          : primarycolor2,
+                      foregroundColor: primarycolor1,
+                    ),
+                    onPressed: () {
+                      widget.notesController.clear();
+
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                        ),
+                        builder: (context) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              left: 20,
+                              right: 20,
+                              top: 20,
+                              bottom: MediaQuery.of(context).viewInsets.bottom + 60,
+                            ),
+                            child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "رفض الاستمارة",
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                                  ),
+
+                                  const SizedBox(height: 20),
+
+                                  TextField(
+                                    controller: widget.notesController,
+                                    maxLines: 4,
+                                    decoration: InputDecoration(
+                                      labelText: "سبب الرفض",
+                                      alignLabelWithHint: true,
+                                      labelStyle: TextStyle(
+                                        color: context.watch<ThemeProvider>().isDark
+                                            ? primarycolor1
+                                            : primarycolor2,
+                                      ),
+                                      border: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 20),
+
+                                  Consumer<ContrsutionFormsProvider>(
+                                    builder: (context, provider, child) {
+                                      return SizedBox(
+                                        width: double.infinity,
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            minimumSize: const Size(double.infinity, 60),
+                                            backgroundColor: Colors.red,
+                                            foregroundColor: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(12),
+                                            ),
+                                          ),
+                                          onPressed: provider.isReviewing
+                                              ? null
+                                              : () async {
+                                                  final response = await provider.reviewForm(
+                                                    id: value.details!.id,
+                                                    status: "user_rejected",
+                                                    userNotes: widget.notesController.text.trim(),
+                                                  );
+
+                                                  if (!context.mounted) return;
+
+                                                  if (response != null &&
+                                                      response.statusCode == 200) {
+                                                    Navigator.pop(context);
+
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      const SnackBar(
+                                                        content: Text("تم رفض الاستمارة بنجاح"),
+                                                      ),
+                                                    );
+
+                                                    Navigator.pop(context);
+                                                  } else {
+                                                    Navigator.pop(context);
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(response?.body ?? "حدث خطأ"),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                          child: provider.isReviewing
+                                              ? CircularProgressIndicator(color: primarycolor1)
+                                              : const Text(
+                                                  "تأكيد الرفض",
+                                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                                ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Text(
+                      "رفض",
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.redAccent),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(130, 45),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      backgroundColor: context.watch<ThemeProvider>().isDark
+                          ? Colors.white30
+                          : primarycolor2,
+                      foregroundColor: primarycolor1,
+                    ),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (_) => ReviewFormBottomSheet(
+                          notesController: widget.notesController,
+
+                          onReview: () async {
+                            final response = await context
+                                .read<ContrsutionFormsProvider>()
+                                .reviewForm(
+                                  id: value.details!.id,
+                                  status: "user_approved",
+                                  userNotes: widget.notesController.text,
+                                );
+
+                            return response?.statusCode == 200;
+                          },
+
+                          onVerifyOtp: (otp) async {
+                            await context.read<ContrsutionFormsProvider>().verifyReviewOtp(
+                              id: value.details!.id,
+                              otp: otp,
+                            );
+
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
+                      );
+                    },
+
+                    child: Text("قبول", style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),
