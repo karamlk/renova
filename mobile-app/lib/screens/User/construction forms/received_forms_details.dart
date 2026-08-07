@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/Extras/theme.dart';
 import 'package:renove_provider/providers/User/construction%20forms/contrsution_forms_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
+import 'package:renove_provider/screens/User/construction%20forms/complain_bottomSheet.dart';
 import 'package:renove_provider/screens/User/construction%20forms/review_bottom_sheet.dart';
 
 class ReceivedFormsDetails extends StatefulWidget {
@@ -26,10 +27,40 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isApproved = false;
     return Scaffold(
       appBar: AppBar(
-        title: Text('تفاصيل الاستمارة', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(
+          'تفاصيل الاستمارة',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Consumer<ContrsutionFormsProvider>(
+              builder: (context, value, child) => ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  backgroundColor: context.watch<ThemeProvider>().isDark
+                      ? Colors.white30
+                      : primarycolor2,
+                  foregroundColor: primarycolor1,
+                ),
+
+                onPressed: value.details?.status == 'user_approved'
+                    ? () {
+                        showModalBottomSheet(
+                          useSafeArea: true,
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (_) => ComplainBottomsheet(formId: value.details!.id),
+                        );
+                      }
+                    : null,
+                child: Text('تقديم شكوى', style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Consumer<ContrsutionFormsProvider>(
         builder: (context, value, child) {
