@@ -55,7 +55,7 @@ class ContractorProfileService
 //    }
     public function show($id)
     {
-        $user = User::with('profile')
+        $user = User::with('contractorProfile')
             ->findOrFail($id);
 
         $averageRating = $user
@@ -68,7 +68,7 @@ class ContractorProfileService
 
             'name' => $user->name,
 
-            'profile' => $user->profile,
+            'profile' => $user->contractorProfile,
 
             'average_rating' => $averageRating
                 ? round($averageRating, 1)

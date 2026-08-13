@@ -186,6 +186,23 @@ class ConstructionFormService
             'status' => 'paid',
             'paid_at' => now()
         ]);
+
+        PaymentAudit::create([
+            'payment_id' => $payment->id,
+
+            'from_user_id' =>
+                $form->reconstructionRequest->user_id,
+
+            'to_user_id' =>
+                $form->contractor_id,
+
+            'amount' => $amount,
+
+            'action' => 'first_payment',
+
+            'description' =>
+                "تم تحويل الدفعة الأولى للمشروع {$form->id}"
+        ]);
         PaymentAudit::create([
 
             'payment_id' => $payment->id,
@@ -235,6 +252,9 @@ class ConstructionFormService
 
                 $form->id
             );
+        app(\App\Services\InvoiceService::class)
+            ->create($payment);
+
         ConstructionForm::where(
             'reconstruction_request_id',
             $form->reconstruction_request_id
