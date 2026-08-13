@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/Extras/theme.dart';
@@ -473,13 +475,17 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
                       foregroundColor: primarycolor1,
                     ),
                     onPressed: () {
+                      final messenger = ScaffoldMessenger.of(context);
+                      final navigate = Navigator.of(context);
+
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
-                        builder: (_) => ReviewFormBottomSheet(
+                        builder: (context) => ReviewFormBottomSheet(
                           notesController: widget.notesController,
 
                           onReview: () async {
+                            final scaffold = ScaffoldMessenger.of(context);
                             final response = await context
                                 .read<ContrsutionFormsProvider>()
                                 .reviewForm(
@@ -488,19 +494,42 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
                                   userNotes: widget.notesController.text,
                                 );
 
-                            return response?.statusCode == 200;
+                            final result = jsonDecode(response!.body);
+                            if (response.statusCode != 200) {
+                              navigate.pop();
+                              scaffold.showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    result['error'],
+                                    textAlign: TextAlign.right,
+                                    textDirection: TextDirection.rtl,
+                                  ),
+                                ),
+                              );
+                            }
+
+                            return response.statusCode == 200;
                           },
 
                           onVerifyOtp: (otp) async {
-                            await context.read<ContrsutionFormsProvider>().verifyReviewOtp(
-                              id: value.details!.id,
-                              otp: otp,
-                            );
+                            final result = await context
+                                .read<ContrsutionFormsProvider>()
+                                .verifyReviewOtp(id: value.details!.id, otp: otp);
+                            final res = jsonDecode(result!.body);
 
-                            if (context.mounted) {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            }
+                            String message = res['message'] ?? res['error'];
+
+                            navigate.pop();
+
+                            messenger.showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  message,
+                                  textAlign: TextAlign.right,
+                                  textDirection: TextDirection.rtl,
+                                ),
+                              ),
+                            );
                           },
                         ),
                       );
