@@ -219,7 +219,8 @@ class ConstructionFormController extends Controller
             'contractor',
             'engineer',
             'materials',
-            'reconstructionRequest'
+            'reconstructionRequest.user',
+
         ])->findOrFail($id);
 
         if (
