@@ -3,6 +3,7 @@
 namespace App\Services\Contractor;
 
 use App\Models\ContractorProfile;
+use App\Models\User;
 
 class ContractorProfileService
 {
@@ -41,16 +42,39 @@ class ContractorProfileService
 
         return ContractorProfile::create($data);
     }
-    public function show()
+//    public function show()
+//    {
+//        return auth()
+//            ->user()
+//            ->contractorProfile()
+//            ->with(['user' => function($query) {
+//                // إذا كنت تستخدم Spatie وتريد تحميل الأدوار مع المستخدم
+//                $query->with('role');
+//            }])
+//            ->firstOrFail();
+//    }
+    public function show($id)
     {
-        return auth()
-            ->user()
-            ->contractorProfile()
-            ->with(['user' => function($query) {
-                // إذا كنت تستخدم Spatie وتريد تحميل الأدوار مع المستخدم
-                $query->with('role');
-            }])
-            ->firstOrFail();
+        $user = User::with('profile')
+            ->findOrFail($id);
+
+        $averageRating = $user
+            ->reviews()
+            ->avg('rating');
+
+        return response()->json([
+
+            'id' => $user->id,
+
+            'name' => $user->name,
+
+            'profile' => $user->profile,
+
+            'average_rating' => $averageRating
+                ? round($averageRating, 1)
+                : 0,
+
+        ]);
     }
 
     public function update($request)

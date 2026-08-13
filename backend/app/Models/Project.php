@@ -39,4 +39,10 @@ class Project extends Model
     {
         return $this->hasMany(Invoice::class);
     }
+    public function review()
+    {
+        return $this->hasOne(
+            ProjectReview::class
+        );
+    }
 }

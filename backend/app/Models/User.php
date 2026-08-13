@@ -190,4 +190,11 @@ class User extends Authenticatable
             'contractor_id'
         );
     }
+    public function reviews()
+    {
+        return $this->hasMany(
+            ProjectReview::class,
+            'contractor_id'
+        );
+    }
 }

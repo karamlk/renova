@@ -221,12 +221,20 @@ class ScheduleService
 
     public function availableSchedules($contractorId)
     {
-
         return ContractorSchedule::where(
             'contractor_id',
             $contractorId
         )
-           // ->whereDoesntHave('siteVisit')
+            ->whereDoesntHave('siteVisit', function ($query) {
+
+                $query->whereIn('status', [
+                    'pending',
+                    'accepted',
+                ]);
+
+            })
+            ->orderBy('day_of_week')
+            ->orderBy('start_time')
             ->get()
             ->map(function ($schedule) {
 
@@ -249,8 +257,9 @@ class ScheduleService
                     'end_time' => Carbon::parse(
                         $schedule->end_time
                     )->format('h:i A'),
+
                 ];
+
             });
     }
-
 }

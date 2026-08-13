@@ -31,11 +31,11 @@ class ContractorProfileController extends Controller
             'data' => $profile
         ]);
     }
-    public function show()
+    public function show($id)
     {
         return response()->json([
 
-            'data' => $this->profileService->show()
+            'data' => $this->profileService->show($id)
 
         ]);
     }

@@ -27,6 +27,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentAuditController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectReviewController;
 use App\Http\Controllers\SiteVisitController;
 use App\Http\Controllers\User\LikeController;
 use App\Http\Controllers\User\NotificationController;
@@ -106,6 +107,8 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(fun
     //invoices
     Route::get('/invoice/{invoice}',[InvoiceController::class,'show']);
     Route::get('/invoice/{invoice}/pdf',[InvoiceController::class,'pdf']);
+
+    Route::get('/contractor/profile/{id}',         [ContractorProfileController::class, 'show']);
 });
 
 // ── USER (customer) ───────────────────────────────────────────
@@ -117,6 +120,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
     Route::delete('/reconstruction-requests/{id}', [ReconstructionRequestController::class, 'destroy']);
 
     // Inspection requests — customer accepts/rejects
+    Route::get('/inspection-requests/{inspectionRequest}/schedules',   [ScheduleController::class, 'availableSchedules']);
     Route::post('/inspection-requests/accept',        [InspectionRequestController::class, 'accept']);
     Route::post('/inspection-requests/{id}/reject',   [InspectionRequestController::class, 'reject']);
     Route::get('/user/offers',                        [InspectionRequestController::class, 'userOffers']);
@@ -142,6 +146,9 @@ Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
 
     //invoice
     Route::get('/my-invoices',[InvoiceController::class,'myInvoices']);
+
+    //review
+    Route::post('/projects/{project}/review', [ProjectReviewController::class, 'store']);
 });
 
 // ── CONTRACTOR ────────────────────────────────────────────────
@@ -149,7 +156,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:contractor'])->group(function
 
     // Profile
     Route::post('/contractor/profile',        [ContractorProfileController::class, 'store']);
-    Route::get('/contractor/profile',         [ContractorProfileController::class, 'show']);
+//    Route::get('/contractor/profile/{id}',         [ContractorProfileController::class, 'show']);
     Route::post('/contractor/profile/update', [ContractorProfileController::class, 'update']);
 
     // Posts
@@ -163,7 +170,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:contractor'])->group(function
     Route::get('/contractor/schedule/{schedule}',                      [ScheduleController::class, 'show']);
     Route::delete('/contractor/schedules/{schedule}',                  [ScheduleController::class, 'destroy']);
     Route::post('/contractor/schedules/update/{scheduleId}',           [ScheduleController::class, 'update']);
-    Route::get('/inspection-requests/{inspectionRequest}/schedules',   [ScheduleController::class, 'availableSchedules']);
+    //Route::get('/inspection-requests/{inspectionRequest}/schedules',   [ScheduleController::class, 'availableSchedules']);
 
     // Inspection requests — contractor sends
     Route::post('/inspection-requests', [InspectionRequestController::class, 'store']);
