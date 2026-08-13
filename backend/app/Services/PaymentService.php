@@ -42,11 +42,11 @@ class PaymentService
 
         $adminWallet = Wallet::where('user_id', 1)->firstOrFail();
 
-        app(WalletService::class)->withdraw(
-            $userWallet,
-            $payment->amount,
-            "Payment {$payment->id}"
-        );
+//        app(WalletService::class)->withdraw(
+//            $userWallet,
+//            $payment->amount,
+//            "Payment {$payment->id}"
+//        );
         app(WalletService::class)
             ->withdraw(
 
