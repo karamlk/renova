@@ -1,28 +1,38 @@
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+
 import 'package:renove_provider/Extras/theme.dart';
 import 'package:renove_provider/providers/User/construction%20forms/contrsution_forms_provider.dart';
+import 'package:renove_provider/providers/auth_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/User/construction%20forms/complain_bottomSheet.dart';
-import 'package:renove_provider/screens/User/construction%20forms/review_bottom_sheet.dart';
 
 class ReceivedFormsDetails extends StatefulWidget {
   final int receivedId;
-  ReceivedFormsDetails({super.key, required this.receivedId});
-  final otpController = TextEditingController();
-  final notesController = TextEditingController();
+  const ReceivedFormsDetails({super.key, required this.receivedId});
 
   @override
   State<ReceivedFormsDetails> createState() => _ReceivedFormsDetailsState();
 }
 
 class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
+  final otpController = TextEditingController();
+  final notesController = TextEditingController();
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ContrsutionFormsProvider>().fetchRecievedDetails(widget.receivedId);
     });
+  }
+
+  @override
+  void dispose() {
+    otpController.dispose();
+    notesController.dispose();
+    super.dispose();
   }
 
   @override
@@ -64,9 +74,6 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
       ),
       body: Consumer<ContrsutionFormsProvider>(
         builder: (context, value, child) {
-          if (value.isLoading) {
-            return Center(child: CircularProgressIndicator(color: primarycolor1));
-          }
           if (value.details == null) {
             return Center(
               child: Text(
@@ -349,7 +356,7 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
                       foregroundColor: primarycolor1,
                     ),
                     onPressed: () {
-                      widget.notesController.clear();
+                      notesController.clear();
 
                       showModalBottomSheet(
                         context: context,
@@ -379,7 +386,7 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
                                   const SizedBox(height: 20),
 
                                   TextField(
-                                    controller: widget.notesController,
+                                    controller: notesController,
                                     maxLines: 4,
                                     decoration: InputDecoration(
                                       labelText: "سبب الرفض",
@@ -416,7 +423,7 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
                                                   final response = await provider.reviewForm(
                                                     id: value.details!.id,
                                                     status: "user_rejected",
-                                                    userNotes: widget.notesController.text.trim(),
+                                                    userNotes: notesController.text.trim(),
                                                   );
 
                                                   if (!context.mounted) return;
@@ -472,38 +479,305 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
                           : primarycolor2,
                       foregroundColor: primarycolor1,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
-                        builder: (_) => ReviewFormBottomSheet(
-                          notesController: widget.notesController,
 
-                          onReview: () async {
-                            final response = await context
-                                .read<ContrsutionFormsProvider>()
-                                .reviewForm(
-                                  id: value.details!.id,
-                                  status: "user_approved",
-                                  userNotes: widget.notesController.text,
-                                );
-
-                            return response?.statusCode == 200;
-                          },
-
-                          onVerifyOtp: (otp) async {
-                            await context.read<ContrsutionFormsProvider>().verifyReviewOtp(
-                              id: value.details!.id,
-                              otp: otp,
-                            );
-
-                            if (context.mounted) {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            }
-                          },
+                        builder: (context) => Padding(
+                          padding: EdgeInsets.only(
+                            top: 30,
+                            left: 30,
+                            right: 30,
+                            bottom: MediaQuery.of(context).viewInsets.bottom + 60,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Center(child: CircularProgressIndicator(color: primarycolor1)),
+                            ],
+                          ),
                         ),
                       );
+                      await context.read<ContrsutionFormsProvider>().fetchRecievedDetails(
+                        widget.receivedId,
+                      );
+                      if (!context.mounted) return;
+                      Navigator.of(context).pop();
+                      final currentStatus = context
+                          .read<ContrsutionFormsProvider>()
+                          .details
+                          ?.status;
+                      switch (currentStatus) {
+                        case "pending_user":
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+
+                            builder: (context) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  top: 30,
+                                  left: 30,
+                                  right: 30,
+                                  bottom: MediaQuery.of(context).viewInsets.bottom + 80,
+                                ),
+                                child: Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: Column(
+                                    spacing: 20,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextField(
+                                        controller: notesController,
+                                        maxLines: 3,
+                                        decoration: InputDecoration(
+                                          labelText: "ملاحظات",
+
+                                          alignLabelWithHint: true,
+                                          labelStyle: TextStyle(
+                                            color: context.watch<ThemeProvider>().isDark
+                                                ? primarycolor1
+                                                : primarycolor2,
+                                          ),
+                                          border: const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                                          ),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          minimumSize: Size(130, 60),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          backgroundColor: context.watch<ThemeProvider>().isDark
+                                              ? Colors.white30
+                                              : primarycolor2,
+                                          foregroundColor: primarycolor1,
+                                        ),
+                                        onPressed: () async {
+                                          final response = await context
+                                              .read<ContrsutionFormsProvider>()
+                                              .reviewForm(
+                                                id: value.details!.id,
+                                                status: "user_approved",
+                                                userNotes: notesController.text,
+                                              );
+                                          final result = jsonDecode(response!.body);
+                                          if (!context.mounted) return;
+                                          if (response.statusCode == 200) {
+                                            Navigator.of(context).pop();
+                                            showModalBottomSheet(
+                                              context: context,
+                                              isScrollControlled: true,
+
+                                              builder: (context) {
+                                                return Padding(
+                                                  padding: EdgeInsets.only(
+                                                    top: 30,
+                                                    left: 30,
+                                                    right: 30,
+                                                    bottom:
+                                                        MediaQuery.of(context).viewInsets.bottom +
+                                                        60,
+                                                  ),
+                                                  child: Directionality(
+                                                    textDirection: TextDirection.rtl,
+                                                    child: Column(
+                                                      spacing: 20,
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        TextField(
+                                                          controller: otpController,
+                                                          decoration: InputDecoration(
+                                                            labelText: "رمز التحقق",
+
+                                                            alignLabelWithHint: true,
+                                                            labelStyle: TextStyle(
+                                                              color:
+                                                                  context
+                                                                      .watch<ThemeProvider>()
+                                                                      .isDark
+                                                                  ? primarycolor1
+                                                                  : primarycolor2,
+                                                            ),
+                                                            border: const OutlineInputBorder(
+                                                              borderRadius: BorderRadius.all(
+                                                                Radius.circular(10),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        ElevatedButton(
+                                                          style: ElevatedButton.styleFrom(
+                                                            minimumSize: Size(130, 50),
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(
+                                                                12,
+                                                              ),
+                                                            ),
+                                                            backgroundColor:
+                                                                context
+                                                                    .watch<ThemeProvider>()
+                                                                    .isDark
+                                                                ? Colors.white30
+                                                                : primarycolor2,
+                                                            foregroundColor: primarycolor1,
+                                                          ),
+                                                          onPressed: () async {
+                                                            final response = await context
+                                                                .read<ContrsutionFormsProvider>()
+                                                                .verifyReviewOtp(
+                                                                  id: value.details!.id,
+                                                                  otp: otpController.text,
+                                                                );
+                                                            if (!context.mounted) return;
+                                                            final result = jsonDecode(
+                                                              response!.body,
+                                                            );
+                                                            Navigator.of(context).pop();
+                                                            ScaffoldMessenger.of(
+                                                              context,
+                                                            ).showSnackBar(
+                                                              SnackBar(
+                                                                content: Text(
+                                                                  result['message'] ??
+                                                                      result['error'],
+                                                                  textAlign: TextAlign.right,
+                                                                  textDirection: TextDirection.rtl,
+                                                                ),
+                                                              ),
+                                                            );
+                                                            notesController.clear();
+                                                            otpController.clear();
+                                                            Navigator.of(context).pop();
+                                                          },
+                                                          child: Text(
+                                                            'تأكيد',
+                                                            style: TextStyle(
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          } else {
+                                            Navigator.of(context).pop();
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  result['message'] ?? result['error'],
+                                                  textAlign: TextAlign.right,
+                                                  textDirection: TextDirection.rtl,
+                                                ),
+                                              ),
+                                            );
+                                            notesController.clear();
+                                          }
+                                        },
+                                        child: Consumer<ContrsutionFormsProvider>(
+                                          builder: (context, value, child) => value.isReviewing
+                                              ? CircularProgressIndicator(color: primarycolor1)
+                                              : Text(
+                                                  'إرسال',
+                                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                                ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+
+                        case 'waiting_payment_otp':
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+
+                            builder: (context) {
+                              context.read<AuthProvider>().resendOtp(
+                                value.details!.contractor.email,
+                              );
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  top: 30,
+                                  left: 30,
+                                  right: 30,
+                                  bottom: MediaQuery.of(context).viewInsets.bottom + 60,
+                                ),
+                                child: Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: Column(
+                                    spacing: 20,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextField(
+                                        decoration: InputDecoration(
+                                          labelText: "رمز التحقق",
+
+                                          alignLabelWithHint: true,
+                                          labelStyle: TextStyle(
+                                            color: context.watch<ThemeProvider>().isDark
+                                                ? primarycolor1
+                                                : primarycolor2,
+                                          ),
+                                          border: const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                                          ),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          minimumSize: Size(130, 50),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          backgroundColor: context.watch<ThemeProvider>().isDark
+                                              ? Colors.white30
+                                              : primarycolor2,
+                                          foregroundColor: primarycolor1,
+                                        ),
+                                        onPressed: () async {
+                                          final response = await context
+                                              .read<ContrsutionFormsProvider>()
+                                              .verifyReviewOtp(
+                                                id: value.details!.id,
+                                                otp: otpController.text,
+                                              );
+                                          if (!context.mounted) return;
+                                          final result = jsonDecode(response!.body);
+                                          Navigator.of(context).pop();
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                result['message'] ?? result['error'],
+                                                textAlign: TextAlign.right,
+                                                textDirection: TextDirection.rtl,
+                                              ),
+                                            ),
+                                          );
+                                          notesController.clear();
+                                          otpController.clear();
+                                        },
+                                        child: Text(
+                                          'تأكيد',
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                      }
                     },
 
                     child: Text("قبول", style: TextStyle(fontWeight: FontWeight.bold)),

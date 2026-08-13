@@ -104,7 +104,7 @@ class ContrsutionFormsProvider extends ChangeNotifier {
     try {
       final token = await getPrefs("token");
 
-      final response = await http.put(
+      final response = await http.post(
         Uri.parse("$link/api/construction-forms/$id/confirm-payment"),
         headers: {
           "Accept": "application/json",
