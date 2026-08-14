@@ -294,7 +294,8 @@ class PaymentService
 
             'form.engineer',
 
-            'form.materials'
+            'form.materials',
+            'invoice',
 
         ]);
     }

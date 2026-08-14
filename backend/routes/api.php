@@ -291,3 +291,19 @@ Route::middleware(['auth:sanctum', 'active', 'role:admin'])->prefix('admin')->gr
 });
 
 
+use App\Services\FirebaseNotificationService;
+
+
+Route::post('/test-firebase', function (
+    FirebaseNotificationService $firebase
+) {
+
+    $token = request('token');
+
+    return $firebase->send(
+        $token,
+        'تجربة إشعار 🔔',
+        'هذا إشعار تجريبي من منصة ReNova'
+    );
+
+});
