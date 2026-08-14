@@ -74,6 +74,9 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
       ),
       body: Consumer<ContrsutionFormsProvider>(
         builder: (context, value, child) {
+          if (value.isLoading) {
+            return const SizedBox.shrink();
+          }
           if (value.details == null) {
             return Center(
               child: Text(
@@ -547,7 +550,7 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
                                       ),
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          minimumSize: Size(130, 60),
+                                          minimumSize: Size(double.infinity, 60),
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(12),
                                           ),
@@ -580,87 +583,93 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
                                                     right: 30,
                                                     bottom:
                                                         MediaQuery.of(context).viewInsets.bottom +
-                                                        60,
+                                                        10,
                                                   ),
                                                   child: Directionality(
                                                     textDirection: TextDirection.rtl,
-                                                    child: Column(
-                                                      spacing: 20,
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: [
-                                                        TextField(
-                                                          controller: otpController,
-                                                          decoration: InputDecoration(
-                                                            labelText: "رمز التحقق",
+                                                    child: SafeArea(
+                                                      child: Column(
+                                                        spacing: 20,
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          TextField(
+                                                            controller: otpController,
+                                                            decoration: InputDecoration(
+                                                              labelText: "رمز التحقق",
 
-                                                            alignLabelWithHint: true,
-                                                            labelStyle: TextStyle(
-                                                              color:
+                                                              alignLabelWithHint: true,
+                                                              labelStyle: TextStyle(
+                                                                color:
+                                                                    context
+                                                                        .watch<ThemeProvider>()
+                                                                        .isDark
+                                                                    ? primarycolor1
+                                                                    : primarycolor2,
+                                                              ),
+                                                              border: const OutlineInputBorder(
+                                                                borderRadius: BorderRadius.all(
+                                                                  Radius.circular(10),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          ElevatedButton(
+                                                            style: ElevatedButton.styleFrom(
+                                                              minimumSize: Size(
+                                                                double.infinity,
+                                                                50,
+                                                              ),
+                                                              shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(
+                                                                  12,
+                                                                ),
+                                                              ),
+                                                              backgroundColor:
                                                                   context
                                                                       .watch<ThemeProvider>()
                                                                       .isDark
-                                                                  ? primarycolor1
+                                                                  ? Colors.white30
                                                                   : primarycolor2,
+                                                              foregroundColor: primarycolor1,
                                                             ),
-                                                            border: const OutlineInputBorder(
-                                                              borderRadius: BorderRadius.all(
-                                                                Radius.circular(10),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        ElevatedButton(
-                                                          style: ElevatedButton.styleFrom(
-                                                            minimumSize: Size(130, 50),
-                                                            shape: RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.circular(
-                                                                12,
-                                                              ),
-                                                            ),
-                                                            backgroundColor:
-                                                                context
-                                                                    .watch<ThemeProvider>()
-                                                                    .isDark
-                                                                ? Colors.white30
-                                                                : primarycolor2,
-                                                            foregroundColor: primarycolor1,
-                                                          ),
-                                                          onPressed: () async {
-                                                            final response = await context
-                                                                .read<ContrsutionFormsProvider>()
-                                                                .verifyReviewOtp(
-                                                                  id: value.details!.id,
-                                                                  otp: otpController.text,
-                                                                );
-                                                            if (!context.mounted) return;
-                                                            final result = jsonDecode(
-                                                              response!.body,
-                                                            );
-                                                            Navigator.of(context).pop();
-                                                            ScaffoldMessenger.of(
-                                                              context,
-                                                            ).showSnackBar(
-                                                              SnackBar(
-                                                                content: Text(
-                                                                  result['message'] ??
-                                                                      result['error'],
-                                                                  textAlign: TextAlign.right,
-                                                                  textDirection: TextDirection.rtl,
+                                                            onPressed: () async {
+                                                              final response = await context
+                                                                  .read<ContrsutionFormsProvider>()
+                                                                  .verifyReviewOtp(
+                                                                    id: value.details!.id,
+                                                                    otp: otpController.text,
+                                                                  );
+                                                              if (!context.mounted) return;
+                                                              final result = jsonDecode(
+                                                                response!.body,
+                                                              );
+                                                              Navigator.of(context).pop();
+                                                              ScaffoldMessenger.of(
+                                                                context,
+                                                              ).showSnackBar(
+                                                                SnackBar(
+                                                                  content: Text(
+                                                                    result['message'] ??
+                                                                        result['error'],
+                                                                    textAlign: TextAlign.right,
+                                                                    textDirection:
+                                                                        TextDirection.rtl,
+                                                                  ),
                                                                 ),
+                                                              );
+                                                              notesController.clear();
+                                                              otpController.clear();
+                                                              Navigator.of(context).pop();
+                                                            },
+                                                            child: Text(
+                                                              'تأكيد',
+                                                              style: TextStyle(
+                                                                fontWeight: FontWeight.bold,
                                                               ),
-                                                            );
-                                                            notesController.clear();
-                                                            otpController.clear();
-                                                            Navigator.of(context).pop();
-                                                          },
-                                                          child: Text(
-                                                            'تأكيد',
-                                                            style: TextStyle(
-                                                              fontWeight: FontWeight.bold,
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 );
@@ -697,81 +706,85 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
                           );
 
                         case 'waiting_payment_otp':
+                          context.read<AuthProvider>().resendOtpInApp(
+                            value.details!.reconstructionRequest.email,
+                          );
+
                           showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
 
                             builder: (context) {
-                              context.read<AuthProvider>().resendOtp(
-                                value.details!.contractor.email,
-                              );
                               return Padding(
                                 padding: EdgeInsets.only(
                                   top: 30,
                                   left: 30,
                                   right: 30,
-                                  bottom: MediaQuery.of(context).viewInsets.bottom + 60,
+                                  bottom: MediaQuery.of(context).viewInsets.bottom + 10,
                                 ),
                                 child: Directionality(
                                   textDirection: TextDirection.rtl,
-                                  child: Column(
-                                    spacing: 20,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TextField(
-                                        decoration: InputDecoration(
-                                          labelText: "رمز التحقق",
+                                  child: SafeArea(
+                                    child: Column(
+                                      spacing: 20,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TextField(
+                                          controller: otpController,
+                                          decoration: InputDecoration(
+                                            labelText: "رمز التحقق",
 
-                                          alignLabelWithHint: true,
-                                          labelStyle: TextStyle(
-                                            color: context.watch<ThemeProvider>().isDark
-                                                ? primarycolor1
-                                                : primarycolor2,
-                                          ),
-                                          border: const OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                                          ),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          minimumSize: Size(130, 50),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
-                                          ),
-                                          backgroundColor: context.watch<ThemeProvider>().isDark
-                                              ? Colors.white30
-                                              : primarycolor2,
-                                          foregroundColor: primarycolor1,
-                                        ),
-                                        onPressed: () async {
-                                          final response = await context
-                                              .read<ContrsutionFormsProvider>()
-                                              .verifyReviewOtp(
-                                                id: value.details!.id,
-                                                otp: otpController.text,
-                                              );
-                                          if (!context.mounted) return;
-                                          final result = jsonDecode(response!.body);
-                                          Navigator.of(context).pop();
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                result['message'] ?? result['error'],
-                                                textAlign: TextAlign.right,
-                                                textDirection: TextDirection.rtl,
-                                              ),
+                                            alignLabelWithHint: true,
+                                            labelStyle: TextStyle(
+                                              color: context.watch<ThemeProvider>().isDark
+                                                  ? primarycolor1
+                                                  : primarycolor2,
                                             ),
-                                          );
-                                          notesController.clear();
-                                          otpController.clear();
-                                        },
-                                        child: Text(
-                                          'تأكيد',
-                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                            border: const OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            minimumSize: Size(double.infinity, 50),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(12),
+                                            ),
+                                            backgroundColor: context.watch<ThemeProvider>().isDark
+                                                ? Colors.white30
+                                                : primarycolor2,
+                                            foregroundColor: primarycolor1,
+                                          ),
+                                          onPressed: () async {
+                                            final response = await context
+                                                .read<ContrsutionFormsProvider>()
+                                                .verifyReviewOtp(
+                                                  id: value.details!.id,
+                                                  otp: otpController.text,
+                                                );
+                                            if (!context.mounted) return;
+                                            final result = jsonDecode(response!.body);
+                                            Navigator.of(context).pop();
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  result['message'] ?? result['error'],
+                                                  textAlign: TextAlign.right,
+                                                  textDirection: TextDirection.rtl,
+                                                ),
+                                              ),
+                                            );
+                                            notesController.clear();
+                                            otpController.clear();
+                                          },
+                                          child: Text(
+                                            'تأكيد',
+                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );
