@@ -26,6 +26,7 @@ class _InvoicesIndexState extends State<InvoicesIndex> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
+      color: primarycolor1,
       onRefresh: () async => context.read<InvoiceProvider>().fetchInvoices(),
       child: Scaffold(
         appBar: AppBar(
@@ -66,6 +67,9 @@ class _InvoicesIndexState extends State<InvoicesIndex> {
                   return Padding(
                     padding: const EdgeInsets.all(5),
                     child: Card(
+                      color: context.watch<ThemeProvider>().isDark
+                          ? Colors.white10
+                          : Colors.grey.shade300,
                       child: Padding(
                         padding: EdgeInsets.all(20),
                         child: Column(

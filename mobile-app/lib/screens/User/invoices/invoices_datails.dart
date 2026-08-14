@@ -230,6 +230,25 @@ class _InvoicesDatailsState extends State<InvoicesDatails> {
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
+                SizedBox(height: 10),
+                Text("المبلغ المحول", style: TextStyle(fontSize: 18), textAlign: TextAlign.right),
+                Container(
+                  width: double.infinity,
+
+                  padding: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: context.watch<ThemeProvider>().isDark
+                        ? primarycolor2
+                        : Color(0xFFe4e6f2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    value.details!.payment.releasedAmount,
+                    textDirection: TextDirection.rtl,
+
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
               ],
             ),
           );
