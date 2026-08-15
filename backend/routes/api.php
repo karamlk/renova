@@ -109,6 +109,9 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(fun
     Route::get('/invoice/{invoice}/pdf',[InvoiceController::class,'pdf']);
 
     Route::get('/contractor/profile/{id}',         [ContractorProfileController::class, 'show']);
+
+
+
 });
 
 // ── USER (customer) ───────────────────────────────────────────
@@ -194,6 +197,8 @@ Route::middleware(['auth:sanctum', 'active', 'role:contractor'])->group(function
     Route::get('contractor/invoices',[InvoiceController::class,'contractorInvoices']);
 
     Route::get('/contractor/projects', [ProjectController::class, 'myProjects']);
+    Route::get('/contractor/projects/{project}', [ProjectController::class, 'show']);
+
 });
 
 // ── ENGINEER ──────────────────────────────────────────────────

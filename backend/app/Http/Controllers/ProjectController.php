@@ -54,5 +54,18 @@ class ProjectController extends Controller
                 ];
             });
     }
+    public function show(Project $project)
+    {
+        $project->load([
+            'form.materials',
+            'contractor',
+            'engineer',
+            'user',
+        ]);
 
+        return response()->json([
+            'message' => 'تفاصيل المشروع',
+            'project' => $project,
+        ]);
+    }
 }
