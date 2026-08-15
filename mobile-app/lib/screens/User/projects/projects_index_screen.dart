@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
+import 'package:renove_provider/models/User/projects/projects_index.dart';
 import 'package:renove_provider/providers/Contractor/project_provider.dart';
+import 'package:renove_provider/providers/User/project_provider_user.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
-import 'package:renove_provider/screens/Contractor/posts/create_post.dart';
 import 'package:renove_provider/screens/Contractor/projects/project_details.dart';
+import 'package:renove_provider/screens/User/projects/project_details_screen.dart';
 
-class ProjectsIndex extends StatefulWidget {
-  const ProjectsIndex({super.key});
+class ProjectsIndexScreen extends StatefulWidget {
+  const ProjectsIndexScreen({super.key});
 
   @override
-  State<ProjectsIndex> createState() => _ProjectsIndexState();
+  State<ProjectsIndexScreen> createState() => _ProjectsIndexScreenState();
 }
 
-class _ProjectsIndexState extends State<ProjectsIndex> {
+class _ProjectsIndexScreenState extends State<ProjectsIndexScreen> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ProjectProvider>().fetchProjects();
+      context.read<ProjectProviderUser>().fetchProjects();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async => await context.read<ProjectProvider>().fetchProjects(),
+      onRefresh: () async => await context.read<ProjectProviderUser>().fetchProjects(),
       color: primarycolor1,
       child: Scaffold(
         appBar: AppBar(
@@ -33,7 +35,7 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
         ),
         body: Padding(
           padding: EdgeInsets.all(20),
-          child: Consumer<ProjectProvider>(
+          child: Consumer<ProjectProviderUser>(
             builder: (context, value, child) {
               if (value.isLoading) {
                 return Center(child: CircularProgressIndicator(color: primarycolor1));
@@ -64,13 +66,13 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
                 itemBuilder: (context, index) {
                   final project = value.projects[index];
                   return Padding(
-                    padding: const EdgeInsets.all(5),
+                    padding: EdgeInsets.all(5),
                     child: Card(
                       color: context.watch<ThemeProvider>().isDark
                           ? Colors.white10
                           : Colors.grey.shade300,
                       child: Padding(
-                        padding: EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
                         child: Column(
                           spacing: 10,
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -97,7 +99,7 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  project.user.name,
+                                  project.contractor.name,
                                   textDirection: TextDirection.rtl,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -105,7 +107,7 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
                                   ),
                                 ),
                                 Text(
-                                  'المتضرر',
+                                  'المتعهد',
                                   textDirection: TextDirection.rtl,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
@@ -129,66 +131,29 @@ class _ProjectsIndexState extends State<ProjectsIndex> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    minimumSize: Size(120, 50),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    backgroundColor: context.watch<ThemeProvider>().isDark
-                                        ? Colors.white30
-                                        : primarycolor2,
-                                    foregroundColor: primarycolor1,
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => CreateSharedPost(
-                                          projectId: project.id,
-                                          status: project.status,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: Text(
-                                    'مشاركة',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: primarycolor1,
-                                    ),
-                                  ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(double.infinity, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    minimumSize: Size(120, 50),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    backgroundColor: context.watch<ThemeProvider>().isDark
-                                        ? Colors.white30
-                                        : primarycolor2,
-                                    foregroundColor: primarycolor1,
+                                backgroundColor: context.watch<ThemeProvider>().isDark
+                                    ? Colors.white30
+                                    : primarycolor2,
+                                foregroundColor: primarycolor1,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProjectDetailsUserScreen(projectId: project.id),
                                   ),
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => ProjectDetailsScreen(id: project.id),
-                                      ),
-                                    );
-                                  },
-                                  child: Text(
-                                    'التفاصيل',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: primarycolor1,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                );
+                              },
+                              child: Text(
+                                'التفاصيل',
+                                style: TextStyle(fontWeight: FontWeight.bold, color: primarycolor1),
+                              ),
                             ),
                           ],
                         ),
