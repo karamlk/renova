@@ -7,11 +7,16 @@ use App\Models\ComplaintImage;
 use App\Models\ConstructionForm;
 use App\Models\NoShowWarning;
 use App\Models\Role;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ComplaintService
 {
+    public function __construct(
+        protected NotificationService $notificationService
+    ) {}
+
     public function file(Request $request): Complaint
     {
         $complainant     = Auth::user();
@@ -54,6 +59,11 @@ class ComplaintService
             'description'           => $data['description'] ?? null,
             'status'                => 'open',
         ]);
+
+        $this->notificationService->newComplaint(
+            complaintId: $complaint->id,
+            complainantName: Auth::user()->name,
+        );
 
         $this->storeImages($request, $complaint);
 

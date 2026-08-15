@@ -81,21 +81,6 @@ class PaymentMilestoneService
 
                 ]);
 
-                app(NotificationService::class)->send(
-
-                    $project->user_id,
-
-                    'الدفعة الثانية',
-
-                    'اكتمل 50٪ من المشروع، يرجى دفع الدفعة الثانية.',
-
-                    'payment',
-
-                    $payment->id,
-
-                    $project->construction_form_id
-
-                );
             }
         }
 
@@ -164,21 +149,5 @@ class PaymentMilestoneService
 
         ]);
 
-
-        app(NotificationService::class)->send(
-
-            $project->user_id,
-
-            'الدفعة الأخيرة',
-
-            'اكتمل المشروع بنسبة 100٪، يرجى دفع الدفعة الأخيرة.',
-
-            'payment',
-
-            $payment->id,
-
-            $project->construction_form_id
-
-        );
     }
 }

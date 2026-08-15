@@ -7,23 +7,24 @@ use App\Models\PaymentAudit;
 use App\Models\Wallet;
 use Exception;
 use Illuminate\Http\Request; //
+use Illuminate\Support\Facades\Auth;
 
 class PaymentService
 {
+     public function __construct(
+        protected NotificationService $notificationService
+    ) {}
     public function pay(
         Payment $payment
-    )
-    {
+    ) {
         if ($payment->user_id != auth()->id()) {
 
-               abort(403, 'لا يمكنك دفع هذه الدفعة');
-
+            abort(403, 'لا يمكنك دفع هذه الدفعة');
         }
 
         if ($payment->status != 'pending') {
 
-              abort(422, 'هذه الدفعة مدفوعة مسبقاً');
-
+            abort(422, 'هذه الدفعة مدفوعة مسبقاً');
         }
         $form = $payment->form;
 
@@ -31,7 +32,7 @@ class PaymentService
             throw new Exception('نموذج الإعمار أو طلب الإعمار المرتبط بهذه الدفعة غير موجود');
         }
 
-// 2. التأكد من وجود المستخدم ومحفظته
+        // 2. التأكد من وجود المستخدم ومحفظته
         $user = $form->reconstructionRequest->user;
 
         if (!$user || !$user->wallet) {
@@ -42,11 +43,11 @@ class PaymentService
 
         $adminWallet = Wallet::where('user_id', 1)->firstOrFail();
 
-//        app(WalletService::class)->withdraw(
-//            $userWallet,
-//            $payment->amount,
-//            "Payment {$payment->id}"
-//        );
+        //        app(WalletService::class)->withdraw(
+        //            $userWallet,
+        //            $payment->amount,
+        //            "Payment {$payment->id}"
+        //        );
         app(WalletService::class)
             ->withdraw(
 
@@ -74,6 +75,12 @@ class PaymentService
             'paid_at' => now()
 
         ]);
+
+        $this->notificationService->newPayment(
+            paymentId: $payment->id,
+            userName: Auth::user()->name,
+            amount: $payment->amount,
+        );
         app(InvoiceService::class)
             ->create($payment);
 
@@ -99,12 +106,10 @@ class PaymentService
 
         float $amount
 
-    )
-    {
-        if($payment->status!='paid'){
+    ) {
+        if ($payment->status != 'paid') {
 
-               abort(422,  'هذه الدفعة غير جاهزة للتحويل');
-
+            abort(422,  'هذه الدفعة غير جاهزة للتحويل');
         }
 
         $remaining =
@@ -113,9 +118,9 @@ class PaymentService
 
             $payment->released_amount;
 
-        if($amount>$remaining){
+        if ($amount > $remaining) {
 
-               abort(422,  'المبلغ أكبر من المتبقي.');
+            abort(422,  'المبلغ أكبر من المتبقي.');
         }
 
         $form = $payment->form;
@@ -159,35 +164,34 @@ class PaymentService
 
         );
 
-        if(
+        if (
 
             $payment->released_amount
             >=
             $payment->amount
 
-        ){
+        ) {
 
             $payment->update([
 
-                'status'=>'released'
+                'status' => 'released'
 
             ]);
-
         }
 
         PaymentAudit::create([
 
-            'payment_id'=>$payment->id,
+            'payment_id' => $payment->id,
 
-            'from_user_id'=>1,
+            'from_user_id' => 1,
 
-            'to_user_id'=>$form->contractor_id,
+            'to_user_id' => $form->contractor_id,
 
-            'amount'=>$amount,
+            'amount' => $amount,
 
-            'action'=>'release',
+            'action' => 'release',
 
-            'description'=>'تحويل جزئي للمتعهد'
+            'description' => 'تحويل جزئي للمتعهد'
 
         ]);
         app(InvoiceService::class)
@@ -221,7 +225,6 @@ class PaymentService
                 'status',
                 $request->status
             );
-
         }
 
         if ($request->filled('type')) {
@@ -230,7 +233,6 @@ class PaymentService
                 'type',
                 $request->type
             );
-
         }
 
         if ($request->filled('user_id')) {
@@ -239,7 +241,6 @@ class PaymentService
                 'user_id',
                 $request->user_id
             );
-
         }
 
         if ($request->filled('contractor_id')) {
@@ -252,10 +253,8 @@ class PaymentService
                         'contractor_id',
                         $request->contractor_id
                     );
-
                 }
             );
-
         }
 
         if ($request->filled('keyword')) {
@@ -271,10 +270,8 @@ class PaymentService
                         'like',
                         "%{$keyword}%"
                     );
-
                 }
             );
-
         }
 
         return $query
@@ -284,8 +281,7 @@ class PaymentService
 
     public function show(
         Payment $payment
-    )
-    {
+    ) {
         return $payment->load([
 
             'user',

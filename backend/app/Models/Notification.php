@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Notification extends Model
 {
+    use SoftDeletes;
+    
     protected $fillable = [
 
         'user_id',
@@ -20,7 +23,7 @@ class Notification extends Model
 
         'is_read',
 
-        'construction_form_id'
+        'target_path'
     ];
     public function form()
     {

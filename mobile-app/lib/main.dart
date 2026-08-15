@@ -8,6 +8,8 @@ import 'package:renove_provider/providers/Contractor/Profile/edit_profile_contra
 import 'package:renove_provider/providers/Contractor/Profile/show_profile_provider.dart';
 import 'package:renove_provider/providers/Contractor/construction%20forms/construction_form_provider.dart';
 import 'package:renove_provider/providers/Contractor/contractor_schedule_provider.dart';
+import 'package:renove_provider/providers/Contractor/post_provider.dart';
+import 'package:renove_provider/providers/Contractor/project_provider.dart';
 import 'package:renove_provider/providers/Contractor/user_requests_provider.dart';
 import 'package:renove_provider/providers/User/Inspection/inspection_provider.dart';
 import 'package:renove_provider/providers/User/Profile/edit_profile_provider.dart';
@@ -61,6 +63,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ContrsutionFormsProvider()),
         ChangeNotifierProvider(create: (_) => InvoiceProvider()),
         ChangeNotifierProvider(create: (_) => PaymentProvider()),
+        ChangeNotifierProvider(create: (_) => ProjectProvider()),
+        ChangeNotifierProvider(create: (_) => PostProvider()),
       ],
       child: MyApp(isDark: isDark),
     ),

@@ -272,9 +272,7 @@ class _PaymentsIndexState extends State<PaymentsIndex> {
                                                     behavior: SnackBarBehavior.floating,
                                                   ),
                                                 );
-                                                print(otpController.text);
 
-                                                Navigator.of(context).pop();
                                                 otpController.clear();
                                               },
                                               child: value.isVeriying

@@ -5,12 +5,16 @@ namespace App\Services\Complaint;
 use App\Models\NoShowWarning;
 use App\Models\SiteVisit;
 use App\Models\User;
+use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class NoShowWarningService
 {
+     public function __construct(
+        protected NotificationService $notificationService
+    ) {}
     // ─────────────────────────────────────────────────
     // الإبلاغ عن غياب
     // الفرونت يرسل: site_visit_id + reported_role
@@ -120,6 +124,11 @@ class NoShowWarningService
                 'description'      => "عدم حضور المستخدم إلى الزيارة الميدانية رقم ({$siteVisitId})",
                 'penalty_applied'  => false,
             ]);
+
+            $this->notificationService->newNoShowWarning(
+                warningId: $warning->id,
+                reporterName: Auth::user()->name,
+            );
 
             // ── 11. التحقق من عدد التحذيرات غير المعاقب عليها ───────────
             $unpunishedCount = NoShowWarning::where('reported_id', $reportedId)

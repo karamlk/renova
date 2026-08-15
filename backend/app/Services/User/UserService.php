@@ -6,16 +6,19 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Services\Auth\OtpService;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
     protected $otpService;
 
+    protected NotificationService $notificationService;
 
-    public function __construct(OtpService $otpService)
+    public function __construct(OtpService $otpService, NotificationService $notificationService)
     {
         $this->otpService = $otpService;
+        $this->notificationService = $notificationService;
     }
 
 
@@ -34,14 +37,20 @@ class UserService
                 : 'approved',
         ]);
 
+        if ($data['role'] === 'user') {
+            $this->notificationService->newUser($user);
+        } elseif ($data['role'] === 'contractor') {
+            $this->notificationService->newContractor($user);
+        }
+
         Wallet::create([
 
             'user_id' => $user->id,
 
-            'balance' => rand(1000,5000),
+            'balance' => rand(1000, 5000),
 
             'card_number' => str_pad(
-                rand(0,9999),
+                rand(0, 9999),
                 4,
                 '0',
                 STR_PAD_LEFT
@@ -60,9 +69,9 @@ class UserService
     {
         $user = User::where('email', $data['email'])->first();
 
-//        if (! $user || ! Hash::check($data['password'], $user->password)) {
-//            throw new \Exception('الإيميل أو كلمة المرور غير صحيحة.');
-//        }
+        //        if (! $user || ! Hash::check($data['password'], $user->password)) {
+        //            throw new \Exception('الإيميل أو كلمة المرور غير صحيحة.');
+        //        }
         if (! $user) {
 
             throw new \Exception(
@@ -86,7 +95,7 @@ class UserService
         ) {
             throw new \Exception('يجب التحقق من OTP أولاً.');
         }
-//
+        //
         if (! $user->is_active) {
 
             throw new \Exception(
@@ -130,4 +139,3 @@ class UserService
         $user->currentAccessToken()->delete();
     }
 }
-
