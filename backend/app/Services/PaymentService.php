@@ -210,6 +210,7 @@ class PaymentService
                 'form.contractor',
 
                 'form.engineer',
+
                 'invoice'
 
             ]);
