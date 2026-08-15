@@ -28,7 +28,7 @@ class StoreContractorPostRequest extends FormRequest
             'description' => 'required|string',
 
             'status' =>
-                'required|in:completed,in_progress',
+                'required|in:completed,active',
 
             'progress' =>
                 'nullable|integer|min:0|max:100',
