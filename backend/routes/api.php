@@ -108,7 +108,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(fun
     Route::get('/invoice/{invoice}',[InvoiceController::class,'show']);
     Route::get('/invoice/{invoice}/pdf',[InvoiceController::class,'pdf']);
 
-    Route::get('/contractor/profile/{id}',         [ContractorProfileController::class, 'show']);
+    //Route::get('/contractor/profile/{id}',         [ContractorProfileController::class, 'show']);
 
 
 
@@ -159,7 +159,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:contractor'])->group(function
 
     // Profile
     Route::post('/contractor/profile',        [ContractorProfileController::class, 'store']);
-//    Route::get('/contractor/profile/{id}',         [ContractorProfileController::class, 'show']);
+    Route::get('/contractor/profile',         [ContractorProfileController::class, 'show']);
     Route::post('/contractor/profile/update', [ContractorProfileController::class, 'update']);
 
     // Posts

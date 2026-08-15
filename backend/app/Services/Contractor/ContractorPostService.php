@@ -76,9 +76,7 @@ class ContractorPostService
             'description' => $request->description,
 
             // بما أن المشروع مكتمل
-            'status' =>$project->status
-
-            ,
+            'status' =>$project->status,
 
             'progress' => $project->progress,
         ]);

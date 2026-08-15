@@ -53,30 +53,44 @@ class ContractorProfileService
 //            }])
 //            ->firstOrFail();
 //    }
-    public function show($id)
+//    public function show($id)
+//    {
+//        $user = User::with('contractorProfile')
+//            ->findOrFail($id);
+//
+//        $averageRating = $user
+//            ->reviews()
+//            ->avg('rating');
+//
+//        return response()->json([
+//
+//            'id' => $user->id,
+//
+//            'name' => $user->name,
+//
+//            'profile' => $user->contractorProfile,
+//
+//            'average_rating' => $averageRating
+//                ? round($averageRating, 1)
+//                : 0,
+//
+//        ]);
+//    }
+    public function show()
     {
-        $user = User::with('contractorProfile')
-            ->findOrFail($id);
+        $user = auth()->user()->load('contractorProfile');
 
-        $averageRating = $user
-            ->reviews()
-            ->avg('rating');
+        $averageRating = $user->reviews()->avg('rating');
 
         return response()->json([
-
             'id' => $user->id,
-
             'name' => $user->name,
-
             'profile' => $user->contractorProfile,
-
             'average_rating' => $averageRating
                 ? round($averageRating, 1)
                 : 0,
-
         ]);
     }
-
     public function update($request)
     {
         $profile = auth()
