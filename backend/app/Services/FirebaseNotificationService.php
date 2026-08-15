@@ -45,3 +45,13 @@ class FirebaseNotificationService
 //    'تم قبول الطلب',
 //    'تم قبول طلب إعادة الإعمار الخاص بك.'
 //);
+//$user = $request->user;
+//
+//if ($user?->fcm_token) {
+//    app(FirebaseNotificationService::class)->send(
+//        $user->fcm_token,
+//        'تم قبول طلبك',
+//        'تم قبول طلب إعادة الإعمار الخاص بك.'
+//    );
+//}
+

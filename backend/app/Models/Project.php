@@ -45,4 +45,18 @@ class Project extends Model
             ProjectReview::class
         );
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function engineer()
+    {
+        return $this->belongsTo(User::class, 'engineer_id');
+    }
+
+    public function contractor()
+    {
+        return $this->belongsTo(User::class, 'contractor_id');
+    }
 }

@@ -102,7 +102,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer'])->
 
 // User & contractor
 Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(function () {
-    Route::post('complaints',                    [ComplaintController::class, 'store']);
+    Route::post('complaints',[ComplaintController::class, 'store']);
 
     //invoices
     Route::get('/invoice/{invoice}',[InvoiceController::class,'show']);
@@ -192,6 +192,8 @@ Route::middleware(['auth:sanctum', 'active', 'role:contractor'])->group(function
 
     //invoice
     Route::get('contractor/invoices',[InvoiceController::class,'contractorInvoices']);
+
+    Route::get('/contractor/projects', [ProjectController::class, 'myProjects']);
 });
 
 // ── ENGINEER ──────────────────────────────────────────────────

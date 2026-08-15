@@ -193,7 +193,6 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     String? token = await getPrefs('token');
-    print(token);
 
     try {
       final response = await http.post(
@@ -209,6 +208,36 @@ class AuthProvider extends ChangeNotifier {
         otp = "";
         startTimer();
       }
+
+      print('THE RESPONSE IS: ${response.body}');
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    } finally {
+      isResending = false;
+      notifyListeners();
+    }
+  }
+
+  Future<http.Response?> resendOtpInApp(String email) async {
+    isResending = true;
+    notifyListeners();
+
+    String? token = await getPrefs('token');
+
+    try {
+      final response = await http.post(
+        Uri.parse('$link/api/otp/resend'),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode({'email': email}),
+      );
+
+      print('THE RESPONSE IS: ${response.body}');
       return response;
     } catch (e) {
       print(e);

@@ -118,6 +118,7 @@ class ReconstructionRequest {
   final String location;
   final String type;
   final String status;
+  final String email;
 
   ReconstructionRequest({
     required this.id,
@@ -126,6 +127,7 @@ class ReconstructionRequest {
     required this.location,
     required this.type,
     required this.status,
+    required this.email,
   });
 
   factory ReconstructionRequest.fromJson(Map<String, dynamic> json) {
@@ -136,6 +138,7 @@ class ReconstructionRequest {
       location: json['location'],
       type: json['type'],
       status: json['status'],
+      email: json['user']['email'],
     );
   }
 }
