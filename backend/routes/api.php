@@ -52,8 +52,7 @@ Route::post('/set-new-password',    [PasswordResetController::class, 'setNewPass
 Route::post('/password/reset',      [ChangePasswordController::class, 'updatePassword']);
 
 // Public contractor posts (visible without login)
-Route::get('/contractor/posts',           [ContractorPostController::class, 'index']);
-Route::get('/contractor/posts/{id}',      [ContractorPostController::class, 'show']);
+
 Route::get('/contractors/{id}/posts',     [ContractorPostController::class, 'contractorPosts']);
 
 // ══════════════════════════════════════════════════════════════
@@ -156,6 +155,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
     Route::post('/projects/{project}/review', [ProjectReviewController::class, 'store']);
 
     Route::get('/user/projects', [ProjectController::class, 'userProjects']);
+    Route::get('/user/projects/{id}', [ProjectController::class, 'userProject']);
 });
 
 // ── CONTRACTOR ────────────────────────────────────────────────
@@ -171,6 +171,8 @@ Route::middleware(['auth:sanctum', 'active', 'role:contractor'])->group(function
     Route::post('/contractor/posts',       [ContractorPostController::class, 'store']);
     Route::post('/contractor/posts/{id}',  [ContractorPostController::class, 'update']);
     Route::delete('/contractor/posts/{id}', [ContractorPostController::class, 'delete']);
+    Route::get('/contractor/posts',   [ContractorPostController::class, 'index']);
+    Route::get('/contractor/posts/{id}',  [ContractorPostController::class, 'show']);
 
     // Schedules
     Route::post('/contractor/schedules',                               [ScheduleController::class, 'store']);

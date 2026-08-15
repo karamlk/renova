@@ -121,6 +121,7 @@ class ContractorPostService
             'project.form.reconstructionRequest',
             'project.engineer',
         ])
+            ->where('user_id', auth()->id())
             ->withCount('likes')
             ->latest()
             ->get();
@@ -136,6 +137,7 @@ class ContractorPostService
             'project.form.materials',
             'project.engineer',
         ])
+            ->where('user_id', auth()->id())
             ->withCount('likes')
             ->findOrFail($id);
     }

@@ -134,6 +134,7 @@ class ProjectService
             });
 
     }
+
     public function userProjects()
     {
         return Project::with([
@@ -144,6 +145,20 @@ class ProjectService
             ->where('user_id', auth()->id())
             ->latest()
             ->get();
+    }
+
+    public function userProject($id)
+    {
+        return Project::with([
+            'form.reconstructionRequest',
+            'contractor',
+            'engineer',
+        ])
+            ->where('id', $id)
+            ->whereHas('form.reconstructionRequest', function ($query) {
+                $query->where('user_id', auth()->id());
+            })
+            ->firstOrFail();
     }
 
 }
