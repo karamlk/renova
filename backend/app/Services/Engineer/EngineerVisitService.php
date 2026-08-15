@@ -3,6 +3,7 @@
 namespace App\Services\Engineer;
 
 use App\Models\SiteVisit;
+use Illuminate\Support\Carbon;
 
 class EngineerVisitService
 {
@@ -307,5 +308,12 @@ class EngineerVisitService
 
         ];
 
+
+    }
+    private function getVisitDate(string $dayOfWeek): string
+    {
+        return Carbon::now()
+            ->nextOrSame($dayOfWeek)
+            ->format('Y-m-d');
     }
 }
