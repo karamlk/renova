@@ -23,6 +23,10 @@ import {editActivationRequest} from "../../api/activation";
 //Components
 import Snackbar from "../../components/Snackbar/Snakbar";
 import Changepassdialog from "../../components/Changepassdialog/Changepassdialog";
+import Button from "../../components/Button/Button";
+//Libraries
+import dayjs from "dayjs";
+
 export default function Settings() {
     const { t } = useTranslation();
     const {setisloading}=useContext(LoadingContext);
@@ -136,6 +140,7 @@ export default function Settings() {
                 <div className="page-header">
                     <h3><SettingsIcon sx={{color: "#f07c1f"}}/>{t("إعدادات الحساب")}</h3>
                 </div>
+                
                 <div className="card">
                     <span className="card-title"><PersonIcon sx={{color: "#f07c1f"}}/> {t("الملف الشخصي")}</span>
                     <div className="avatar-row">
@@ -152,7 +157,6 @@ export default function Settings() {
                         </div>
                     </div>
                 </div>
-        
 
                 <div className="card">
                     <span className="card-title"><AccountBoxIcon sx={{color: "#f07c1f"}}/>{t("المعلومات الشخصية")}</span>
@@ -163,44 +167,39 @@ export default function Settings() {
                              <span className="value-text">{user?.name}</span>
                         </div>
                     </div>
-
                     <div className="card-row">
                         <span className="l">{t("الاسم الأول")} </span>
                         <div className="field-group">
                             <input type="text" disabled={!editFirstName} value={first_name} onChange={(e) => setfirst_name(e.target.value)} />
                         </div>
-                        <button className="e" onClick={() =>{(editFirstName?setEditFirstName(false):setEditFirstName(true))} }>{t("تعديل")}</button>
+                        <Button className="edit" onClick={() =>{(editFirstName?setEditFirstName(false):setEditFirstName(true))} } text="تعديل" />
                     </div>
-
                     <div className="card-row">
                         <span className="l">{t("الاسم الأخير")}</span>
                             <div className="field-group">
                                 <input type="text" disabled={!editLastName}  value={last_name} onChange={(e) => setlast_name(e.target.value)} />
-                            </div>
-                        <button className="e" onClick={()=>{(editLastName?setEditLastName(false):setEditLastName(true))}} >{t("تعديل")}</button>
+                            </div> 
+                        <Button className="edit" onClick={()=>{(editLastName?setEditLastName(false):setEditLastName(true))}} text="تعديل" />
                     </div>
-
                     <div className="card-row">
                         <span className="l">{t("البريد الألكتروني")}</span>
                         <div className="field-group">
                             <span className="value-text">{user?.email}</span>
                         </div>
                     </div>
-
                     <div className="card-row">
                         <span className="l">{t("رقم الجوال")}</span>
                         <div className="field-group">
                             <input type="phone" disabled={!editPhone}  value={phone} onChange={(e) => setphone(e.target.value)} />
                         </div>
-                        <button className="e" onClick={()=>{(editPhone?setEditPhone(false):setEditPhone(true))}}>{t("تعديل")}</button>
+                        <Button className="edit" onClick={()=>{(editPhone?setEditPhone(false):setEditPhone(true))}} text="تعديل" />
                     </div>
-
                     <div className="card-row">
                         <span className="l">{t("مكان السكن")}</span> 
                         <div className="field-group">
                             <input type="text" disabled={!editLocation} value={location} onChange={(e) => setlocation(e.target.value)} />
                         </div>
-                        <button className="e" onClick={()=>{(editLocation?setEditLocation(false):setEditLocation(true))}} >{t("تعديل")}</button>
+                        <Button className="edit" onClick={()=>{(editLocation?setEditLocation(false):setEditLocation(true))}} text="تعديل" />
                     </div>
                     <div className="card-row">
                         <span className="l">{t("الحالة")}</span> 
@@ -217,7 +216,6 @@ export default function Settings() {
                     </div>
                 </div>
 
-            
                 <div className="card">
                     <span className="card-title"><SecurityIcon sx={{color: "#f07c1f"}}/>{t("الأمان")}</span> 
             <div className="security-row">
@@ -225,18 +223,15 @@ export default function Settings() {
                     <LockIcon sx={{color:"#e53935" , fontSize:40}}/>
                     <div>
                         <span className="label">{t("كلمة المرور")}</span>
-                        <span className="sub-label">  {t("آخر تغيير")}: 2024-06-15</span>
+                        <span className="sub-label">  {t("آخر تغيير")}: {dayjs(user?.updated_at).format("YYYY-MM-DD")}</span>
                     </div>
                 </div>
-                <button className="btn-pass" onClick={()=>setopenchangepassdialog(true)}>
-                    <LockIcon sx={{color:"#e53935" , fontSize:20}}/>{t("تغيير كلمة المرور")}
-                </button>
+                <Button className="change-pass" onClick={()=>setopenchangepassdialog(true)} icon={<LockIcon sx={{fontSize:20}}/>} text="تغيير كلمة المرور" />
             </div>  
                 </div>
 
-      
                 <div className="card-actions">
-                    <button className="save" onClick={updateProfile}><SaveIcon sx={{fontSize:20}}/>{t("حفظ")}</button>
+                    <Button className="save" onClick={updateProfile} icon={<SaveIcon sx={{fontSize:20}}/>} text="حفظ" />
                 </div>
 
             </div>

@@ -6,6 +6,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 //Components
 import TablePagination from "../../components/Pagination/Pagination";
 import Userpaymentdialog from "../../components/Userpaymentdialog/Userpaymentdialog";
+import Button from "../../components/Button/Button";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
@@ -86,7 +87,7 @@ useEffect(()=>{getUserPayment();},[]);
             <div class="payment-table-header">
                 <h3><PaidIcon sx={{ color: "#f07c1f" ,fontSize: "25px" }} /> {t("دفعات المستخدمين")}</h3>
                 <div class="payment-table-actions">
-                    <button class="payment-btn-outline" onClick={()=>{getUserPayment()}}><RefreshIcon sx={{fontSize: "18px"}}/> {t("تحديث")}</button>
+                    <Button className="refresh" onClick={()=>{getUserPayment()}} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text="تحديث"/>
                 </div>
             </div>
             <div class="payment-table-container">
@@ -117,7 +118,9 @@ useEffect(()=>{getUserPayment();},[]);
                             <td><span className={`transfer-status-badge paid ${userspayment?.status}`}>{status[userspayment?.status]}</span></td>
                             <td>{dayjs(userspayment?.created_at).format("YYYY-MM-DD")}</td>
                             <td>
-                                <div className="payment-table-action"><button className="payment-open-btn" onClick={()=>{showUserPayment(userspayment.id);}}><VisibilityIcon sx={{fontSize: "19px"}}/>{t("عرض")}</button></div>
+                                <div className="payment-table-action">
+                                    <Button className="view" onClick={()=>{showUserPayment(userspayment.id);}} icon={<VisibilityIcon sx={{fontSize: "19px"}}/>} text="عرض"/>
+                            </div>
                             </td>
                         </tr>
                     ))}

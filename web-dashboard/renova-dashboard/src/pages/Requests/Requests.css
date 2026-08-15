@@ -24,27 +24,6 @@
   gap: 5px;
 }
 
-.btn-refresh {
-  background: transparent;
-  border: 1.5px solid #f07c1f;
-  padding: 8px 15px;
-  border-radius: 10px;
-  color: #f07c1f;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  font-family: "Tajawal", sans-serif;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.btn-refresh:hover {
-  background: #f07c1f;
-  color: white;
-}
-
 .request-card {
   background: #f8f9fb;
   border-radius: 20px;
@@ -158,51 +137,6 @@
   flex-direction: column;
   gap: 8px;
   flex-shrink: 0;
-}
-
-.card-actions button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 10px;
-  font-family: "Tajawal", sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-}
-
-.card-actions .btn-view {
-  background: #e3f2fd;
-  color: #2196f3;
-}
-
-.card-actions .btn-view:hover {
-  background: #1976d2;
-  color: white;
-}
-
-.card-actions .btn-approve {
-  background: #f07c1f;
-  color: white;
-}
-
-.card-actions .btn-approve:hover {
-  background: #d96d1a;
-}
-
-.card-actions .btn-reject {
-  background: rgba(229, 57, 53, 0.1);
-  color: #e53935;
-  border: 1px solid #ffebee;
-}
-
-.card-actions .btn-reject:hover {
-  background: #e53935;
-  color: white;
 }
 
 .no-requests {

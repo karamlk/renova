@@ -3,8 +3,6 @@ import "./Complaintsarchive.css";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import PersonIcon from '@mui/icons-material/Person';
 import ModeCommentIcon from '@mui/icons-material/ModeComment';
@@ -21,11 +19,13 @@ import { useState,useEffect,useContext } from "react";
 import TablePagination from "../../components/Pagination/Pagination";
 import Filterdialog from "../../components/Filterdialog/Filterdialog";
 import Complaintdetailsdialog from "../../components/Complaintdetailsdialog/Complaintdetailsdialog";
-
+import IconBtn from "../../components/IconBtn/IconBtn";
+import Button from "../../components/Button/Button";
 //Context
 import { LoadingContext } from "../../Context/Loadingcontext";
 //Libraries
 import dayjs from "dayjs";
+
 export default function Complaintsarchive() {
     const {t}=useTranslation();
     const {setisloading}=useContext(LoadingContext);
@@ -149,8 +149,8 @@ export default function Complaintsarchive() {
             <div className="complaints-table-header">
                 <h3><ModeCommentIcon sx={{ color: "#f07c1f" , fontSize:23}}/> {t("أرشيف الشكاوى")}</h3>
                 <div className="complaints-table-actions">
-                    <button className="complaints-btn-filter" onClick={() => setshowfilterdialog(true)}><FilterAltIcon sx={{fontSize: "18px"}}/> {t("فلترة")}</button>
-                    <button className="complaints-btn-refresh" onClick={()=>{getComplaintsArchiveList();setPage(1);}}><RefreshIcon sx={{fontSize: "18px"}}/> {t("تحديث")}</button>
+                    <Button className="filter" onClick={() => setshowfilterdialog(true)} icon={<FilterAltIcon sx={{fontSize: "18px"}}/>} text={"فلترة"}/>
+                    <Button className="refresh" onClick={()=>{getComplaintsArchiveList();setPage(1);}} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text={"تحديث"}/>
                 </div>
             </div>
             {complaintsList.length===0?(<div className="no-requests">لاتوجد شكاوى مؤرشفة</div>):(
@@ -182,27 +182,16 @@ export default function Complaintsarchive() {
                         <td>{complaint?.complained_on.complaints_count}</td>
                         <td>
                             <div className="complaints-actions">
-                            {/* زر العرض */}
-                            <Tooltip title={t("عرض")} arrow>
-                                <IconButton className="action-btn" sx={{
-                                        color: "#2196f3",
-                                        backgroundColor: "rgba(33,150,243,0.1)",
-                                        "&:hover": {
-                                        backgroundColor: "#2196f3",
-                                        color: "white",
-                                        },
-                                    }} onClick={()=>{
+                                <IconBtn name="عرض" clr="#2196f3" bgc="rgba(33,150,243,0.1)" h_clr="white" h_bgc="#2196f3"  icon={<VisibilityIcon sx={{ fontSize: 24 }} />} 
+                                    onClick={()=>{
                                         setSelectedComplaint(complaint);
                                         if(complaint?.type==="general"){
                                             getComplaintDetails("complaints",complaint?.id);
                                         }else{
                                             getComplaintDetails("no-show-warnings",complaint?.id);
                                         }
-                                        setshowcomplaintsdialog(true);}} >
-                                        <VisibilityIcon sx={{ fontSize: 24 }} />
-                                </IconButton>
-                            </Tooltip>
-                            
+                                        setshowcomplaintsdialog(true);
+                                    }} />
                             </div>
                         </td>
                         </tr>)

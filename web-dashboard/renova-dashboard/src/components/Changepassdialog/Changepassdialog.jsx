@@ -13,6 +13,7 @@ import { useState } from "react";
 import {updatePasswordRequest} from "../../api/auth";
 //Components
 import Snackbar from "../../components/Snackbar/Snakbar";
+import Button from "../../components/Button/Button";
 export default function Changepassdialog({onClose,onSuccess,onError}) {
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -134,12 +135,8 @@ export default function Changepassdialog({onClose,onSuccess,onError}) {
                         </div>
                     </div>
                     <div className="pass-dialog-footer">
-                        <button type="button" className="btn-cancel" onClick={onClose}>
-                            <ClearIcon/> إلغاء
-                        </button>
-                        <button type="submit" className="btn-change">
-                            <SaveIcon/> تغيير
-                        </button>
+                        <Button type="button" className="cancel" onClick={onClose} text="إلغاء" icon={<ClearIcon/>}/>
+                        <Button type="submit" className="accept" text="تغيير" icon={<SaveIcon/>}/>    
                     </div>
 
                 </form>

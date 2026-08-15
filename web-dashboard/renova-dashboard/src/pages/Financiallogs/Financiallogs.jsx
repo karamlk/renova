@@ -5,13 +5,13 @@ import PaidIcon from '@mui/icons-material/Paid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import HistoryIcon from '@mui/icons-material/History';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
 import PrintIcon from '@mui/icons-material/Print';
 //Components
 import TablePagination from "../../components/Pagination/Pagination";
 import Filterdialog from "../../components/Filterdialog/Filterdialog";
 import Financiallogdialog from "../../components/Financiallogdialog/Financiallogdialog";
+import IconBtn from "../../components/IconBtn/IconBtn";
+import Button from "../../components/Button/Button";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
@@ -25,6 +25,8 @@ import {showPaymentLogsRequest} from "../../api/finance";
 import {formatMoney} from "../../utils/formatMoney";
 //Libraries
 import dayjs from "dayjs";
+
+
 export default function Financiallogs() {
     const [t] = useTranslation();
     const [page, setPage] = useState(1);
@@ -119,8 +121,8 @@ export default function Financiallogs() {
             <div class="log-table-header">
                 <h3><HistoryIcon sx={{ color: "#f07c1f" ,fontSize: "28px" }} /> {t("سجل الدفعات")}</h3>
                 <div class="log-table-actions">
-                    <button className="btn-filter" onClick={() => setshowfilterdialog(true)} ><FilterAltIcon sx={{fontSize: "18px"}}/> {t("فلترة")}</button>
-                    <button class="log-btn-outline" onClick={()=>{getPaymentLogs()}}><RefreshIcon sx={{fontSize: "18px"}}/> {t("تحديث")}</button>                 
+                    <Button className="filter" onClick={() => setshowfilterdialog(true)} icon={<FilterAltIcon sx={{fontSize: "18px"}}/>} text={"فلترة"}/>
+                    <Button className="refresh" onClick={()=>{getPaymentLogs()}} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text={"تحديث"}/>                 
                 </div>
             </div>
             <div class="log-table-container">
@@ -149,33 +151,11 @@ export default function Financiallogs() {
                             <td><div className="user-info-td">{paymentlog?.to_user?.name}</div></td>
                             <td>${formatMoney(paymentlog?.amount)}</td>
                             <td>{paymentlog?.description}</td>
-                        
                             <td>{dayjs(paymentlog?.payment?.created_at).format("YYYY-MM-DD || hh:mm:ss  A")}</td>
                             <td>
                                 <div className="log-table-action">
-                                    <Tooltip title={t("عرض")} arrow>
-                                        <IconButton className="action-btn" sx={{
-                                                color: "#2196f3",
-                                                backgroundColor: "rgba(33,150,243,0.1)",
-                                                "&:hover": {
-                                                backgroundColor: "#2196f3",
-                                                color: "white",
-                                                },
-                                            }} onClick={() =>{showFinancialLog(paymentlog?.id);}}>
-                                        <VisibilityIcon sx={{ fontSize: 24 }} />
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title={t("طباعة")} arrow>
-                                        <IconButton className="action-btn" sx={{
-                                            color: "#6C63FF", // بنفسجي مائل للأزرق
-                                            backgroundColor: "rgba(108,99,255,0.1)",
-                                            "&:hover": {
-                                                backgroundColor: "#6C63FF",
-                                                color: "white",
-                                            }}}>
-                                        <PrintIcon sx={{ fontSize: 25 }} />
-                                        </IconButton>
-                                    </Tooltip>                                            
+                                    <IconBtn name="عرض" clr="#2196f3" bgc="rgba(33,150,243,0.1)" h_clr="white" h_bgc="#2196f3" onClick={()=>{showFinancialLog(paymentlog?.id);}} icon={<VisibilityIcon sx={{ fontSize: 24 }} />} />
+                                    <IconBtn name="طباعة" clr="#6C63FF" bgc="rgba(108,99,255,0.1)" h_clr="white" h_bgc="#6C63FF" onClick={()=>{}} icon={<PrintIcon sx={{ fontSize: 25 }} />} />                                            
                                 </div>
                             </td>
                         </tr>

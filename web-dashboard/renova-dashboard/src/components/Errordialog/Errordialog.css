@@ -54,27 +54,3 @@ p {
   line-height: 1.7;
   margin-bottom: 24px;
 }
-
-.btn-primary {
-  width: 100%;
-  padding: 16px;
-  background: #f07c1f;
-  border: none;
-  border-radius: 12px;
-  color: white;
-  font-family: "Tajawal", sans-serif;
-  font-size: 17px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  gap: 2px;
-  transition: 0.3s;
-}
-
-.btn-primary:hover {
-  background: #d96d1a;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(240, 124, 31, 0.2);
-}

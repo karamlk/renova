@@ -1,4 +1,4 @@
-.projects-table {
+.inspection-table {
   background: white;
   border-radius: 20px;
   overflow: hidden;
@@ -6,7 +6,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
 }
 
-.table-header {
+.inspection-table-header {
   padding: 20px 25px;
   display: flex;
   justify-content: space-between;
@@ -14,7 +14,7 @@
   flex-wrap: wrap;
 }
 
-.table-header h3 {
+.inspection-table-header h3 {
   font-size: 18px;
   font-weight: 700;
   color: #3b414c;
@@ -23,33 +23,12 @@
   gap: 5px;
 }
 
-.table-actions {
+.inspection-table-actions {
   display: flex;
   gap: 12px;
 }
 
-.btn-outline {
-  background: transparent;
-  border: 1.5px solid #f07c1f;
-  padding: 8px 15px;
-  border-radius: 10px;
-  color: #f07c1f;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  font-family: "Tajawal", sans-serif;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.btn-outline:hover {
-  background: #f07c1f;
-  color: white;
-}
-
-.table-container {
+.inspection-table-container {
   overflow-x: auto;
 }
 
@@ -81,7 +60,7 @@ tr:hover td {
   background: #f0f1f3;
 }
 
-.location_project {
+.inspection-location_project {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,37 +68,14 @@ tr:hover td {
   text-align: center;
 }
 
-.no-requests {
+.inspection-no-requests {
   text-align: center;
   font-size: 18px;
   color: #b8bcbf;
   width: 100%;
   padding-bottom: 25px;
 }
-.projects-table .open-btn {
-  padding: 10px 12px;
-  background: #2196f3;
-  border: none;
-  border-radius: 12px;
-  color: white;
-  font-family: "Tajawal", sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
-  white-space: nowrap;
-}
 
-.projects-table .open-btn:hover {
-  background: #1976d2;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
-}
 .page {
   z-index: 9999;
   position: fixed;
@@ -134,7 +90,7 @@ tr:hover td {
   align-items: center;
   justify-content: center;
 }
-.table-footer {
+.inspection-table-footer {
   padding: 20px 25px;
   display: flex;
   justify-content: center;

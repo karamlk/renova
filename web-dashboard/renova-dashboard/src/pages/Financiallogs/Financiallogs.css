@@ -28,27 +28,6 @@
   gap: 12px;
 }
 
-.log-btn-outline {
-  background: transparent;
-  border: 1.5px solid #f07c1f;
-  padding: 8px 15px;
-  border-radius: 10px;
-  color: #f07c1f;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  font-family: "Tajawal", sans-serif;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.log-btn-outline:hover {
-  background: #f07c1f;
-  color: white;
-}
-
 .log-table-container {
   overflow-x: auto;
 }
@@ -91,35 +70,13 @@ tr:hover td {
   padding-bottom: 25px;
 }
 
-.log-table .log-open-btn {
-  padding: 9px 12px;
-  background: #2196f3;
-  border: none;
-  border-radius: 12px;
-  color: white;
-  font-family: "Tajawal", sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
-  white-space: nowrap;
-}
 .log-table-action {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
 }
-.log-table .log-open-btn:hover {
-  background: #1976d2;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
-}
+
 .page {
   z-index: 9999;
   position: fixed;

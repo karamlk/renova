@@ -4,7 +4,8 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import GppMaybeIcon from '@mui/icons-material/GppMaybe';
 //Hooks
 import { useTranslation } from 'react-i18next';
-
+//Components
+import Button from '../Button/Button';
 export default function Errordialog({message ,onClose}){
     const { t } = useTranslation();
 
@@ -17,10 +18,7 @@ export default function Errordialog({message ,onClose}){
             </div>
             <h3>{t("فشل المصادقة")}</h3>
                 <p>{t(message)}</p>
-            <button className="btn-primary" onClick={onClose} >
-                <RefreshIcon/>
-               {t("اعادة المحاولة")}
-            </button>
+                <Button className="try-again" text="اعادة المحاولة" onClick={onClose} icon={<RefreshIcon/>}/>
         </div>
     </div>
 

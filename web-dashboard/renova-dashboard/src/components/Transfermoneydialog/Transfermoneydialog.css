@@ -119,51 +119,6 @@
   gap: 10px;
 }
 
-.Transfer-dialog-footer .Transfer-btn-cancel {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 0;
-  background: transparent;
-  border: 2px solid #e8ecf2;
-  border-radius: 12px;
-  color: #666;
-  font-family: "Tajawal", sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.Transfer-dialog-footer .Transfer-btn-cancel:hover {
-  border-color: #0f1f2f;
-  color: #0f1f2f;
-}
-
-.Transfer-dialog-footer .Transfer-btn-transfer {
-  flex: 1;
-  padding: 12px 0;
-  background: #f07c1f;
-  border: none;
-  border-radius: 12px;
-  color: white;
-  font-family: "Tajawal", sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.Transfer-dialog-footer .Transfer-btn-transfer:hover {
-  background: #d96d1a;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(240, 124, 31, 0.25);
-}
-
 @keyframes slideUp {
   from {
     opacity: 0;

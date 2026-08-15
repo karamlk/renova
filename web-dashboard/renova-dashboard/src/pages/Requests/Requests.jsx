@@ -28,6 +28,7 @@ import Profiledialog from "../../components/Profiledialog/Profiledialog";
 import Confirmdialog from "../../components/Confirmdialog/Confirmdialog";
 import Snackbar from "../../components/Snackbar/Snakbar";
 import Imagedialog from "../../components/Imagedialog/Imagedialog";
+import Button from "../../components/Button/Button";
 //Libraries
 import dayjs from "dayjs";
 
@@ -141,7 +142,7 @@ export default function Requests() {
             <div className="contractor-header">
                 <h3><AssignmentTurnedInIcon sx={{color: "#f07c1f"}}/> {t("طلبات المتعهدين")}</h3>
                 <div className="list-actions">
-                    <button className="btn-refresh" onClick={getContractors}><RefreshIcon sx={{fontSize: "18px"}}/> {t("تحديث")}</button>
+                    <Button className="refresh" onClick={getContractors} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text="تحديث"/>
                 </div>
             </div>
         {contractors.length === 0 ? <div className="no-requests">لا يوجد طلبات</div> :
@@ -170,9 +171,9 @@ export default function Requests() {
                 </div>
             </div>
             <div className="card-actions">
-                <button className="btn-view" onClick={() =>{setshowprofile(true);showContractor(contractor.id)} }><VisibilityIcon sx={{  fontSize: 18}} />{t("عرض")}</button>
-                <button className="btn-approve" onClick={() =>{setSelectedUserId(contractor.id);setshowconfirmdialog(true);} }><CheckIcon sx={{  fontSize: 18}} /> {t("قبول")}</button>
-                <button className="btn-reject" onClick={() =>{setSelectedUserId(contractor.id);setshowrejectdialog(true);} }><CloseIcon sx={{  fontSize: 18}} /> {t("رفض")}</button>
+                <Button className="view" onClick={() =>{setshowprofile(true);showContractor(contractor.id)} } icon={<VisibilityIcon sx={{  fontSize: 18}} />} text="عرض"/>
+                <Button className="approve" onClick={() =>{setSelectedUserId(contractor.id);setshowconfirmdialog(true);} } icon={<CheckIcon sx={{  fontSize: 18}} />} text="قبول"/>
+                <Button className="reject" onClick={() =>{setSelectedUserId(contractor.id);setshowrejectdialog(true);} } icon={<CloseIcon sx={{  fontSize: 18}} />} text="رفض"/>
             </div>
         </div>
 

@@ -3,8 +3,6 @@ import "./Complaints.css";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import CloseIcon from '@mui/icons-material/Close';
@@ -27,6 +25,8 @@ import Confirmdialog from "../../components/Confirmdialog/Confirmdialog";
 import Snackbar from "../../components/Snackbar/Snakbar";
 import Complainthandlingdialog from "../../components/Complainthandlingdialog/Complainthandlingdialog";
 import Complaintdetailsdialog from "../../components/Complaintdetailsdialog/Complaintdetailsdialog";
+import IconBtn from "../../components/IconBtn/IconBtn";
+import Button from "../../components/Button/Button";
 //Context
 import { LoadingContext } from "../../Context/Loadingcontext";
 //Libraries
@@ -241,8 +241,8 @@ export default function Complaints() {
             <div className="complaints-table-header">
                 <h3><FeedbackIcon sx={{ color: "#f07c1f" , fontSize:23}}/> {t("شكاوى المستخدمين")}</h3>
                 <div className="complaints-table-actions">
-                    <button className="complaints-btn-filter" onClick={() => setshowfilterdialog(true)}><FilterAltIcon sx={{fontSize: "18px"}}/> {t("فلترة")}</button>
-                    <button className="complaints-btn-refresh" onClick={()=>{getComplaintsList();setPage(1);}}><RefreshIcon sx={{fontSize: "18px"}}/> {t("تحديث")}</button>
+                    <Button className="filter" onClick={() => setshowfilterdialog(true)} icon={<FilterAltIcon sx={{fontSize: "18px"}}/>} text={"فلترة"}/>
+                    <Button className="refresh" onClick={()=>{getComplaintsList();setPage(1);}} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text={"تحديث"}/>
                 </div>
             </div>
             {complaintsList.length===0?(<div className="no-requests">لاتوجد شكاوى</div>):(
@@ -274,68 +274,23 @@ export default function Complaints() {
                         <td>{complaint?.complained_on.complaints_count}</td>
                         <td>
                             <div className="complaints-actions">
-                                
-                            <Tooltip title={t("عرض")} arrow>
-                                <IconButton className="action-btn" sx={{
-                                        color: "#2196f3",
-                                        backgroundColor: "rgba(33,150,243,0.1)",
-                                        "&:hover": {
-                                        backgroundColor: "#2196f3",
-                                        color: "white",
-                                        },
-                                    }} onClick={()=>{
+                            <IconBtn name={"عرض"} clr={"#2196f3"} bgc={"rgba(33,150,243,0.1)"} h_clr={"white"} h_bgc={"#2196f3"} icon={<VisibilityIcon sx={{fontSize: 24}}/>} className="complaints-action-btn"
+                             onClick={()=>{
                                         setSelectedComplaint(complaint);
                                         if(complaint?.type==="general"){
                                             getComplaintDetails("complaints",complaint?.id);
                                         }else{
                                             getComplaintDetails("no-show-warnings",complaint?.id);
                                         }
-                                        setshowcomplaintsdialog(true);}}>
-                                        <VisibilityIcon sx={{ fontSize: 24 }} />
-                                </IconButton>
-                            </Tooltip>
+                                        setshowcomplaintsdialog(true);}}/>
                             {complaint.status==="open"?(
                                 <>
-                                <Tooltip title={t("قبول الشكوى")} arrow>
-                                    <IconButton className="action-btn" sx={{
-                                        color: "#4CAF50",
-                                        backgroundColor: "rgba(76,175,80,0.1)",
-                                        "&:hover": {
-                                            backgroundColor: "#4CAF50",
-                                            color: "white",
-                                        },
-                                    }} onClick={()=>{setSelectedComplaint(complaint);setshowresolvedialog(true)}}>
-                                        <DoneIcon sx={{ fontSize: 24 }} />
-                                    </IconButton>
-                                </Tooltip>
-
-                            <Tooltip title={t("رفض الشكوى")} arrow>
-                                <IconButton className="action-btn" sx={{
-                                    color: "#e53935",
-                                    backgroundColor: "rgba(229,57,53,0.1)",
-                                    "&:hover": {
-                                        backgroundColor: "#e53935",
-                                        color: "white",
-                                    },
-                                }} onClick={()=>{setSelectedComplaint(complaint);setshowconfirmdialog(true);}} >
-                                    <CloseIcon sx={{ fontSize: 24 }} />
-                                </IconButton>
-                            </Tooltip>
-                            </>
+                                <IconBtn name={"قبول الشكوى"} clr={"#4CAF50"} bgc={"rgba(76,175,80,0.1)"} h_clr={"white"} h_bgc={"#4CAF50"} icon={<DoneIcon sx={{fontSize: 24}}/>} onClick={()=>{setSelectedComplaint(complaint);setshowresolvedialog(true)}}/>
+                                <IconBtn name={"رفض الشكوى"} clr={"#e53935"} bgc={"rgba(229,57,53,0.1)"} h_clr={"white"} h_bgc={"#e53935"} icon={<CloseIcon sx={{fontSize: 24}}/>} onClick={()=>{setSelectedComplaint(complaint);setshowconfirmdialog(true);}}/>
+                                </>
                             ):(<></>)}
                             {(complaint.status==="resolved"||complaint.status==="dismissed"||!complaint.status)?(
-                                <Tooltip title={t("أرشفة")} arrow>
-                                    <IconButton className="action-btn" sx={{
-                                        color: "#FF9800",
-                                        backgroundColor: "rgba(255,152,0,0.1)",
-                                        "&:hover": {
-                                            backgroundColor: "#FF9800",
-                                            color: "white",
-                                        },
-                                    }} onClick={()=>{setSelectedComplaint(complaint);setshowarchivedialog(true)}}>
-                                        <ArchiveIcon sx={{ fontSize: 24 }} />
-                                    </IconButton>
-                                </Tooltip>
+                                <IconBtn name={"أرشفة"} clr={"#FF9800"} bgc={"rgba(255,152,0,0.1)"} h_clr={"white"} h_bgc={"#FF9800"} icon={<ArchiveIcon sx={{fontSize: 24}}/>} onClick={()=>{setSelectedComplaint(complaint);setshowarchivedialog(true)}}/>
                             ):(<></>)}
                             </div>
                         </td>

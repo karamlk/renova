@@ -29,49 +29,6 @@
   gap: 12px;
 }
 
-.btn-refresh {
-  background: transparent;
-  border: 1.5px solid #f07c1f;
-  padding: 8px 15px;
-  border-radius: 10px;
-  color: #f07c1f;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  font-family: "Tajawal", sans-serif;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.btn-refresh:hover {
-  background: #f07c1f;
-  color: white;
-}
-
-.btn-filter {
-  background: transparent;
-  border: 1.5px solid #b8bcbf;
-  padding: 8px 15px;
-  border-radius: 10px;
-  color: #3d424c;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  font-family: "Tajawal", sans-serif;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.btn-filter:hover {
-  background: #3d424c;
-  border-color: #3d424c;
-  color: white;
-}
-
 .table-container {
   overflow-x: auto;
 }
@@ -124,16 +81,6 @@ tr:hover td {
   gap: 10px;
 }
 
-.action-btn {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  transition: all 0.2s ease;
-}
-
-.action-btn:hover {
-  transform: translateY(-2px);
-}
 .page {
   z-index: 9999;
   position: fixed;
@@ -147,26 +94,6 @@ tr:hover td {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.btn-add {
-  background: transparent;
-  border: 1.5px solid #4ed419;
-  padding: 8px 15px;
-  border-radius: 10px;
-  color: #4ed419;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  font-family: "Tajawal", sans-serif;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.btn-add:hover {
-  background: #4ed419;
-  color: white;
 }
 
 .table-footer {

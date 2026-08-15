@@ -13,6 +13,7 @@ import Card from "../../components/Card/Card";
 import TablePagination from "../../components/Pagination/Pagination";
 import Transfermoneydialog from "../../components/Transfermoneydialog/Transfermoneydialog";
 import Snackbar from "../../components/Snackbar/Snakbar";
+import Button from "../../components/Button/Button";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useContext,useEffect } from "react";
@@ -100,7 +101,7 @@ const paginatedtransfer_info = transfer_info.slice((page - 1) * rowsPerPage , pa
             <div class="transfer-table-header">
                 <h3><CurrencyExchangeIcon sx={{ color: "#f07c1f"}}/> {t("التحويلات المالية")}</h3>
                 <div class="transfer-table-actions">
-                    <button class="transfer-btn-outline" onClick={()=>{getfinanceAndtransferinfo()}}><RefreshIcon sx={{fontSize: "18px"}}/> {t("تحديث")}</button>
+                    <Button className="refresh" onClick={()=>{getfinanceAndtransferinfo()}} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text="تحديث"/>
                 </div>
             </div>
             <div class="transfer-table-container">
@@ -131,7 +132,9 @@ const paginatedtransfer_info = transfer_info.slice((page - 1) * rowsPerPage , pa
                             <td>${formatMoney(transfer?.released_amount)}</td>
                             <td>${formatMoney(transfer?.remaining_amount)}</td>
                             <td>
-                                <div className="transfer-table-action"><button className="transfer-open-btn" onClick={()=>{setselectedtransfer_info(transfer);setshowTransfermoneydialog(true)}}><MonetizationOnIcon sx={{fontSize: "19px"}}/>{t("تحويل المبلغ")}</button></div>
+                                <div className="transfer-table-action">
+                                    <Button className="transfer-money" onClick={()=>{setselectedtransfer_info(transfer);setshowTransfermoneydialog(true)}} icon={<MonetizationOnIcon sx={{fontSize: "19px"}}/>} text="تحويل المبلغ"/>
+                                </div>
                             </td>
                         </tr>
                     ))}

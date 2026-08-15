@@ -9,6 +9,8 @@ import { useState } from "react";
 import { useTranslation } from 'react-i18next';
 //Utils
 import {formatMoney} from "../../utils/formatMoney";
+//Components
+import Button from '../Button/Button';
 export default function Transfermoneydialog({onApply,onclose,id,payment_amount,remaining_amount}) {
     const [t] = useTranslation();
     const [amount, setAmount] = useState("");
@@ -63,12 +65,8 @@ export default function Transfermoneydialog({onApply,onclose,id,payment_amount,r
                     </div>
 
                     <div className="Transfer-dialog-footer">
-                        <button type="button" className="Transfer-btn-cancel" onClick={onclose}>
-                            <ClearIcon/> {t("إلغاء")}
-                        </button>
-                        <button type="submit" className="Transfer-btn-transfer" >
-                            <TelegramIcon/> {t("تحويل")}
-                        </button>
+                        <Button type="button" className="cancel" onClick={onclose} text="إلغاء" icon={<ClearIcon/>}/>
+                        <Button type="submit" className="accept" text="تحويل" icon={<TelegramIcon/>}/>
                     </div>
                 </form>
 

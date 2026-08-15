@@ -3,10 +3,12 @@ import './Profiledialog.css';
 //MUI Icons
 import EditIcon from '@mui/icons-material/Edit';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
+import ClearIcon from '@mui/icons-material/Clear';
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
+//Components
+import Button from '../Button/Button';
 export default function Profiledialog({image,first_name,last_name,name,email,images,phone,location,role, onClose,children,showEdit = false,}) {
   const [t]=useTranslation();
   const navigate = useNavigate();
@@ -55,18 +57,11 @@ export default function Profiledialog({image,first_name,last_name,name,email,ima
           {children}
         </div>
         <div className="dialog-footer">
+          <Button className="cancel" onClick={onClose} text="إغلاق" icon={<ClearIcon sx={{ fontSize: '16px' }}/>} />
           {showEdit &&
-           <button className="btn-edit" onClick={() => navigate("/dashboard/usersettings")}>
-              <EditIcon sx={{ fontSize: '16px' }} />
-              {t("تعديل")}
-            </button>}
-            
-        
-          <button className="btn-cancel" onClick={onClose}>
-            {t("إغلاق")}
-          </button>
+          <Button className="accept" onClick={() => navigate("/dashboard/usersettings")} text="تعديل" icon={<EditIcon sx={{ fontSize: '16px' }}/>} />
+          } 
         </div>
-
       </div>
     </div>
   );

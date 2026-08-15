@@ -13,17 +13,15 @@
 .sidebar-header {
   display: flex;
   align-items: center;
-  padding: 5px 15px;
+  padding: 8px 15px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  margin-bottom: 5px;
 }
-.logo-text {
-  margin-top: 20px !important;
-}
+
 .logo-text h2 {
   color: white;
   font-size: 22px;
   font-weight: 800;
+  margin: 0px;
 }
 
 .logo-text h2 span {
@@ -33,10 +31,9 @@
 .logo-text p {
   color: #b8bcbf;
   font-size: 11px;
-  margin-top: 4px;
 }
 
-.sidebar-menu {
+.sidebar-body {
   padding: 18px 15px;
   margin-top: 0px;
   display: flex;
@@ -44,50 +41,26 @@
   flex: 1;
   overflow-y: auto;
 }
-.sidebar-menu::-webkit-scrollbar {
+.sidebar-body a {
+  text-decoration: none;
+}
+.sidebar-body::-webkit-scrollbar {
   width: 5px;
 }
 
-.sidebar-menu::-webkit-scrollbar-track {
+.sidebar-body::-webkit-scrollbar-track {
   background: transparent;
   margin: 10px 0;
 }
 
-.sidebar-menu::-webkit-scrollbar-thumb {
+.sidebar-body::-webkit-scrollbar-thumb {
   background: #f07c1f;
   border-radius: 20px;
   min-height: 40px;
 }
 
-.sidebar-menu::-webkit-scrollbar-thumb:hover {
+.sidebar-body::-webkit-scrollbar-thumb:hover {
   background: #d96d1a;
-}
-.menu-btn {
-  padding: 12px 18px;
-  margin: 4px 0;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #b8bcbf;
-  border-radius: 14px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-.sidebar-menu a {
-  text-decoration: none;
-}
-
-.menu-btn:hover {
-  background: rgba(240, 124, 31, 0.12);
-  color: #f07c1f;
-}
-
-.menu-btn.active {
-  background: #f07c1f;
-  color: #0f1f2f;
-  font-weight: 700;
 }
 
 .menu-btn-logout {
@@ -108,7 +81,7 @@
   background: rgba(240, 62, 31, 0.12);
   color: #f03b1f;
 }
-.sidebar-language {
+.sidebar-footer {
   margin-top: auto;
   padding: 20px;
   display: flex;
@@ -172,29 +145,4 @@
 .list-dropdown.active {
   max-height: 200px;
   opacity: 1;
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  padding: 10px 18px;
-  margin: 4px 8px;
-  gap: 6px;
-  color: #b8bcbf;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s;
-  text-decoration: none;
-}
-
-.dropdown-item:hover {
-  background: rgba(240, 124, 31, 0.08);
-  color: #f07c1f;
-}
-
-.dropdown-item.active {
-  background: rgba(240, 124, 31, 0.15);
-  color: #f07c1f;
 }

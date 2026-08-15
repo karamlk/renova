@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import {createUserRequest}  from "../../api/users";
 //Component
 import Snackbar from "../Snackbar/Snakbar";
+import Button from "../Button/Button";
 export default function Createuser({onClose,onSuccess}) {
     const {t} = useTranslation();
     const [name, setName] = useState('');
@@ -132,14 +133,8 @@ export default function Createuser({onClose,onSuccess}) {
                                 </div>
                             </div>
                             <div className="dialog-footer-user">
-                                <button type="button" className="btn-cancel-user" onClick={onClose}>
-                                    <ClearIcon fontSize="small"/>
-                                    {t("إلغاء")}
-                                </button>
-                                <button type="submit" className="btn-add-user">
-                                    <SaveIcon fontSize="small"/>
-                                    {t("إضافة")}
-                                </button>
+                                <Button type="button" className="cancel" onClick={onClose} text="إلغاء" icon={<ClearIcon fontSize="small"/>}/>
+                                <Button type="submit" className="accept" text="إضافة" icon={<SaveIcon fontSize="small"/>}/>       
                             </div>
                         </form>
                     </div>
