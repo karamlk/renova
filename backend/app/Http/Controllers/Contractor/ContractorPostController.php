@@ -36,14 +36,14 @@ class ContractorPostController extends Controller
     public function index()
     {
         return response()->json([
-            'data' => $this->postService->index()
+             $this->postService->index()
         ]);
     }
 
     public function show($id)
     {
         return response()->json([
-            'data' => $this->postService->show($id)
+             $this->postService->show($id)
         ]);
     }
 

@@ -68,4 +68,12 @@ class ProjectController extends Controller
             'project' => $project,
         ]);
     }
+
+    public function userProjects()
+    {
+        return response()->json([
+            app(ProjectService::class)
+                ->userProjects()
+        ]);
+    }
 }

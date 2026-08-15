@@ -152,6 +152,8 @@ Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
 
     //review
     Route::post('/projects/{project}/review', [ProjectReviewController::class, 'store']);
+
+    Route::get('/user/projects', [ProjectController::class, 'userProjects']);
 });
 
 // ── CONTRACTOR ────────────────────────────────────────────────

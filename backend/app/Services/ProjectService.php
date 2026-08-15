@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Payment;
+use App\Models\Project;
 
 class ProjectService
 {
@@ -133,6 +134,16 @@ class ProjectService
             });
 
     }
-
+    public function userProjects()
+    {
+        return Project::with([
+            'form.reconstructionRequest',
+            'contractor',
+            'engineer',
+        ])
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->get();
+    }
 
 }
