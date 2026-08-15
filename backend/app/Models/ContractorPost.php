@@ -9,22 +9,20 @@ class ContractorPost extends Model
 {
     use HasFactory;
 
+
+
     protected $fillable = [
-
+        'project_id',
         'user_id',
-
         'title',
-
         'description',
-
         'status',
-
         'progress',
     ];
 
-    public function user()
+    public function project()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Project::class);
     }
 
     public function images()
@@ -38,5 +36,9 @@ class ContractorPost extends Model
         return $this->hasMany(
             Like::class
         );
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

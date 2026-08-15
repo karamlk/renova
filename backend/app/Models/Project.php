@@ -50,6 +50,12 @@ class Project extends Model
         return $this->belongsTo(User::class);
     }
 
+
+    public function post()
+    {
+        return $this->hasMany(ContractorPost::class);
+    }
+
     public function engineer()
     {
         return $this->belongsTo(User::class, 'engineer_id');

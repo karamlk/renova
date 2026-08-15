@@ -163,6 +163,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:contractor'])->group(function
     Route::post('/contractor/profile/update', [ContractorProfileController::class, 'update']);
 
     // Posts
+    Route::get('/contractor/projects/available-for-post', [ContractorPostController::class, 'availableProjects']);
     Route::post('/contractor/posts',       [ContractorPostController::class, 'store']);
     Route::post('/contractor/posts/{id}',  [ContractorPostController::class, 'update']);
     Route::delete('/contractor/posts/{id}', [ContractorPostController::class, 'delete']);

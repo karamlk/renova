@@ -19,27 +19,16 @@ class UpdateContractorPostRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+
+        public function rules(): array
     {
         return [
-            //
-            'title' =>
-                'sometimes|string|max:255',
-
-            'description' =>
-                'sometimes|string',
-
-            'status' =>
-                'sometimes|in:completed,in_progress',
-
-            'progress' =>
-                'nullable|integer|min:0|max:100',
-
-            'images' =>
-                'nullable|array',
-
-            'images.*' =>
-                'image|mimes:jpg,jpeg,png',
+            'description' => ['sometimes', 'string'],
+            'status' => ['sometimes', 'in:completed,in_progress'],
+            'progress' => ['sometimes', 'nullable', 'integer', 'min:0', 'max:100'],
+            'images' => ['sometimes', 'array'],
+            'images.*' => ['image', 'max:5120'],
         ];
+
     }
 }

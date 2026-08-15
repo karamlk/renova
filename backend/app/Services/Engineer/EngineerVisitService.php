@@ -79,6 +79,10 @@ class EngineerVisitService
                         $visit->schedule->day_of_week
                     ),
 
+                    'date' => $this->getVisitDate(
+                        $visit->schedule->day_of_week
+                    ),
+
                     'start_time' => substr(
                         $visit->schedule->start_time,
                         0,
@@ -312,8 +316,24 @@ class EngineerVisitService
     }
     private function getVisitDate(string $dayOfWeek): string
     {
-        return Carbon::now()
-            ->nextOrSame($dayOfWeek)
+        $days = [
+            'saturday'  => Carbon::SATURDAY,
+            'sunday'    => Carbon::SUNDAY,
+            'monday'    => Carbon::MONDAY,
+            'tuesday'   => Carbon::TUESDAY,
+            'wednesday' => Carbon::WEDNESDAY,
+            'thursday'  => Carbon::THURSDAY,
+            'friday'    => Carbon::FRIDAY,
+        ];
+
+        $today = Carbon::today();
+
+        $targetDay = $days[strtolower($dayOfWeek)];
+
+        $daysUntil = ($targetDay - $today->dayOfWeekIso + 7) % 7;
+
+        return $today
+            ->addDays($daysUntil)
             ->format('Y-m-d');
     }
 }
