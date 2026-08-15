@@ -30,7 +30,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectReviewController;
 use App\Http\Controllers\SiteVisitController;
 use App\Http\Controllers\User\LikeController;
-use App\Http\Controllers\User\NotificationController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ReconstructionRequestController;
 use Illuminate\Http\Request;
@@ -71,9 +71,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     // Notifications — all roles
-    Route::get('/notifications',            [NotificationController::class, 'index']);
-    Route::get('/notifications/count',      [NotificationController::class, 'unreadCount']);
-    Route::patch('/notifications/read-all', [NotificationController::class, 'markAllRead']);
+    Route::get('notifications',                    [NotificationController::class, 'index']);
+    Route::get('notifications/unread-count',       [NotificationController::class, 'unreadCount']);
+    Route::patch('notifications/read-all',         [NotificationController::class, 'markAllRead']);
+    Route::patch('notifications/{notification}/read', [NotificationController::class, 'markRead']);
+    Route::delete('notifications',                    [NotificationController::class, 'destroyAll']);
 
     // Reconstruction requests — read available to all (contractors browse them)
     Route::get('/reconstruction-requests',       [ReconstructionRequestController::class, 'index']);

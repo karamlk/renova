@@ -20,7 +20,7 @@ class Notification extends Model
 
         'is_read',
 
-        'construction_form_id'
+        'target_path'
     ];
     public function form()
     {

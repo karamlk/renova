@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Engineer;
 use App\Http\Controllers\Controller;
 use App\Models\SiteVisit;
 use App\Services\Engineer\EngineerVisitService;
+use App\Services\NotificationService;
 use App\Services\SiteVisitService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -12,25 +13,43 @@ use Illuminate\Http\JsonResponse;
 class EngineerVisitController extends Controller
 {
     protected $siteVisitService;
+    protected $notificationService;
 
-    public function __construct(SiteVisitService $siteVisitService)
+    public function __construct(SiteVisitService $siteVisitService, NotificationService  $notificationService)
     {
         $this->siteVisitService = $siteVisitService;
+        $this->notificationService = $notificationService;
     }
 
     // ج) قبول أو رفض الزيارة من المهندس نفسه
-    public function respondToVisit(Request $request): JsonResponse
-    {
-        $request->validate([
-            'visit_id' => 'required|exists:site_visits,id',
-            'status'   => 'required|in:accepted,rejected',
-        ]);
+   public function respondToVisit(Request $request): JsonResponse
+{
+    $request->validate([
+        'visit_id' => 'required|exists:site_visits,id',
+        'status'   => 'required|in:accepted,rejected',
+    ]);
 
-        $this->siteVisitService->updateVisitStatusByEngineer
-        (auth()->user(), $request->visit_id, $request->status);
+    $visit = $this->siteVisitService->updateVisitStatusByEngineer(
+        auth()->user(),
+        $request->visit_id,
+        $request->status
+    );
 
-        return response()->json(['message' => 'تم تحديث حالة طلب الزيارة بنجاح.']);
+    // إشعار الأدمن بقرار المهندس
+    if ($request->status === 'accepted') {
+        $this->notificationService->engineerAcceptedVisit(
+            visitId:      $visit->id,
+            engineerName: auth()->user()->name,
+        );
+    } else {
+        $this->notificationService->engineerRejectedVisit(
+            visitId:      $visit->id,
+            engineerName: auth()->user()->name,
+        );
     }
+
+    return response()->json(['message' => 'تم تحديث حالة طلب الزيارة بنجاح.']);
+}
 
 
     public function index(

@@ -6,34 +6,45 @@ use App\Models\ContractorSchedule;
 use App\Models\InspectionRequest;
 use App\Models\ReconstructionRequest;
 use App\Models\SiteVisit;
+use App\Services\NotificationService;
 use Carbon\Carbon;
 
 class InspectionRequestService
 {
-    // إنشاء طلب زيارة
+    public function __construct(
+        protected NotificationService $notificationService
+    ) {}
+
     public function store($request)
     {
         $exists = InspectionRequest::where(
             'reconstruction_request_id',
             $request->reconstruction_request_id
         )
-            ->where(
-                'contractor_id',
-                auth()->id()
-            )
+            ->where('contractor_id', auth()->id())
             ->exists();
 
         if ($exists) {
             abort(422, 'لقد أرسلت عرضاً لهذا الطلب مسبقاً');
         }
 
-        return InspectionRequest::create([
-            'reconstruction_request_id' =>
-            $request->reconstruction_request_id,
-
-            'contractor_id' =>
-            auth()->id(),
+        $inspection = InspectionRequest::create([
+            'reconstruction_request_id' => $request->reconstruction_request_id,
+            'contractor_id'             => auth()->id(),
         ]);
+
+        // جلب عنوان الطلب للإشعار
+        $reconstructionRequest = ReconstructionRequest::find(
+            $request->reconstruction_request_id
+        );
+
+        $this->notificationService->newInspectionRequest(
+            inspectionRequestId: $inspection->id,
+            contractorName: auth()->user()->name,
+            requestTitle: $reconstructionRequest->title,
+        );
+
+        return $inspection;
     }
     // طلبات طلب معين
     public function requestInspections()
