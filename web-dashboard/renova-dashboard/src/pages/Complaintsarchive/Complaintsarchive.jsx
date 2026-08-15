@@ -1,4 +1,5 @@
 import "./Complaintsarchive.css";
+import "../Users/Table.css";
 //MUI Icons
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -145,16 +146,16 @@ export default function Complaintsarchive() {
         archived_at={complaintdetails?.archived_at}
         />
         ))}     
-            <div className="complaints-table">
-            <div className="complaints-table-header">
+            <div className="table-body">
+            <div className="table-header">
                 <h3><ModeCommentIcon sx={{ color: "#f07c1f" , fontSize:23}}/> {t("أرشيف الشكاوى")}</h3>
-                <div className="complaints-table-actions">
+                <div className="table-actions">
                     <Button className="filter" onClick={() => setshowfilterdialog(true)} icon={<FilterAltIcon sx={{fontSize: "18px"}}/>} text={"فلترة"}/>
                     <Button className="refresh" onClick={()=>{getComplaintsArchiveList();setPage(1);}} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text={"تحديث"}/>
                 </div>
             </div>
             {complaintsList.length===0?(<div className="no-requests">لاتوجد شكاوى مؤرشفة</div>):(
-            <div className="complaints-table-container">
+            <div className="table-container">
                 <table>
                     <thead>
                         <tr>
@@ -181,7 +182,7 @@ export default function Complaintsarchive() {
                         <td>{complaint.status?status[complaint?.status]:t("تمت المعالجة تلقائياً")}</td>
                         <td>{complaint?.complained_on.complaints_count}</td>
                         <td>
-                            <div className="complaints-actions">
+                            <div className="actions">
                                 <IconBtn name="عرض" clr="#2196f3" bgc="rgba(33,150,243,0.1)" h_clr="white" h_bgc="#2196f3"  icon={<VisibilityIcon sx={{ fontSize: 24 }} />} 
                                     onClick={()=>{
                                         setSelectedComplaint(complaint);
@@ -201,7 +202,7 @@ export default function Complaintsarchive() {
                 </table>
             </div>
             )}
-            <div className="complaints-table-footer">
+            <div className="table-footer">
                     <TablePagination
                       count={Math.ceil(complaintsList.length / rowsPerPage)}
                       page={page}

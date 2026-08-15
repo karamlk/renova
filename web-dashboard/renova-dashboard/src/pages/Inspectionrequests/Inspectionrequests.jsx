@@ -1,4 +1,5 @@
 import "./Inspectionrequests.css";
+import "../Users/Table.css";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
@@ -109,14 +110,14 @@ export default function Inspectionrequests() {
                 </Engineerlistdialog>)}
 
         <Snackbar msg={msg} isopen={isopen} setisopen={setisopen} severity={"success"}/>
-        <div class="inspection-table">
-            <div class="inspection-table-header">
+        <div class="table-body">
+            <div class="table-header">
                 <h3><AssignmentIcon sx={{ color: "#f07c1f"}}/> {t("طلبات المعاينة")}</h3>
-                <div class="inspection-table-actions">
+                <div class="table-actions">
                     <Button className="refresh" onClick={getInspectionList} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text={"تحديث"}/>                 
                 </div>
             </div>
-            <div class="inspection-table-container">
+            <div class="table-container">
                 {inspections.length ===0 ? <div className="inspection-no-requests">لاتوجد طلبات معاينة</div>:
                     <table>
                     <thead>
@@ -141,12 +142,14 @@ export default function Inspectionrequests() {
                         <td>{inspection?.inspection_request?.request?.user?.name}</td>
                         <td>{type[inspection?.inspection_request?.request?.type]}</td>
                         <td>{dayjs(inspection?.created_at).format("YYYY-MM-DD")}</td>
-                        <td><div className="inspection-location_project"><LocationOnIcon sx={{ color: "#f07c1f"}}/>{inspection?.inspection_request?.request?.location}</div></td>
+                        <td><div className="location"><LocationOnIcon sx={{ color: "#f07c1f"}}/>{inspection?.inspection_request?.request?.location}</div></td>
                         <td>{inspection?.inspection_request?.contractor?.name}</td>
                         <td>{day[inspection?.schedule?.day_of_week]}<br/>{t("من")} {inspection?.schedule?.start_time} {t("الى")} {inspection?.schedule?.end_time}</td>
                         <td>{status[inspection?.status]}</td>
                         <td>
+                          <div className="actions">
                             <Button className="choose-eng" onClick={()=>{setSelectedInspection(inspection?.id);setshowenglistdialog(true); getEngineersList();}} icon={<EngineeringIcon sx={{fontSize: "18px"}}/>} text={"اختيار مهندس"}/>
+                          </div>
                         </td>
                         
                         </tr>
@@ -155,7 +158,7 @@ export default function Inspectionrequests() {
                 </table>
                 }
             </div>
-                <div className="inspection-table-footer">
+                <div className="table-footer">
                   <TablePagination
                     count={Math.ceil(inspections.length / rowsPerPage)}
                     page={page}

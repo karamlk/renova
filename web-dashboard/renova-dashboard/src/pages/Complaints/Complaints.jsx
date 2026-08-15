@@ -1,4 +1,5 @@
 import "./Complaints.css";
+import "../Users/Table.css";
 //MUI Icons
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -237,16 +238,16 @@ export default function Complaints() {
         {profileload && (<div className="page"></div>)}
             <Snackbar msg={msg} isopen={isopen} setisopen={setisopen} severity={severity}/>
         
-            <div className="complaints-table">
-            <div className="complaints-table-header">
+            <div className="table-body">
+            <div className="table-header">
                 <h3><FeedbackIcon sx={{ color: "#f07c1f" , fontSize:23}}/> {t("شكاوى المستخدمين")}</h3>
-                <div className="complaints-table-actions">
+                <div className="table-actions">
                     <Button className="filter" onClick={() => setshowfilterdialog(true)} icon={<FilterAltIcon sx={{fontSize: "18px"}}/>} text={"فلترة"}/>
                     <Button className="refresh" onClick={()=>{getComplaintsList();setPage(1);}} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text={"تحديث"}/>
                 </div>
             </div>
             {complaintsList.length===0?(<div className="no-requests">لاتوجد شكاوى</div>):(
-                            <div className="complaints-table-container">
+            <div className="table-container">
                 <table>
                     <thead>
                         <tr>
@@ -273,7 +274,7 @@ export default function Complaints() {
                         <td>{complaint.status?status[complaint?.status]:t("تمت المعالجة تلقائياً")}</td>
                         <td>{complaint?.complained_on.complaints_count}</td>
                         <td>
-                            <div className="complaints-actions">
+                            <div className="actions">
                             <IconBtn name={"عرض"} clr={"#2196f3"} bgc={"rgba(33,150,243,0.1)"} h_clr={"white"} h_bgc={"#2196f3"} icon={<VisibilityIcon sx={{fontSize: 24}}/>} className="complaints-action-btn"
                              onClick={()=>{
                                         setSelectedComplaint(complaint);
@@ -301,7 +302,7 @@ export default function Complaints() {
                 </table>
             </div>
             )}
-            <div className="complaints-table-footer">
+            <div className="table-footer">
                     <TablePagination
                       count={Math.ceil(complaintsList.length / rowsPerPage)}
                       page={page}

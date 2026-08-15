@@ -1,4 +1,5 @@
 import "./Userpayments.css";
+import "../Users/Table.css";
 //MUI
 import RefreshIcon from '@mui/icons-material/Refresh';
 import PaidIcon from '@mui/icons-material/Paid';
@@ -83,14 +84,14 @@ useEffect(()=>{getUserPayment();},[]);
             profit={userpayment?.form?.profit}
             />
         )}
-        <div class="payment-table">
-            <div class="payment-table-header">
+        <div class="table-body">
+            <div class="table-header">
                 <h3><PaidIcon sx={{ color: "#f07c1f" ,fontSize: "25px" }} /> {t("دفعات المستخدمين")}</h3>
-                <div class="payment-table-actions">
+                <div class="table-actions">
                     <Button className="refresh" onClick={()=>{getUserPayment()}} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text="تحديث"/>
                 </div>
             </div>
-            <div class="payment-table-container">
+            <div class="table-container">
                 {userspaymentlist.length === 0 ? <div className="payment-no-requests">لاتوجد تحويلات</div>:
                     <table>
                     <thead>
@@ -112,13 +113,13 @@ useEffect(()=>{getUserPayment();},[]);
                             <td>#{userspayment?.id}</td>   
                             <td>{userspayment?.form?.reconstruction_request?.title}</td>
                             <td><span className={`payment-type ${userspayment?.type}`}>{type[userspayment?.type]}</span></td>
-                            <td><div className="user-info-td">{userspayment?.user?.name}</div></td>
+                            <td>{userspayment?.user?.name}</td>
                             <td><span className="amount-paid">${formatMoney(userspayment?.amount)}</span></td>
                             <td><span className="amount-released">${formatMoney(userspayment?.released_amount)}</span></td>
                             <td><span className={`transfer-status-badge paid ${userspayment?.status}`}>{status[userspayment?.status]}</span></td>
                             <td>{dayjs(userspayment?.created_at).format("YYYY-MM-DD")}</td>
                             <td>
-                                <div className="payment-table-action">
+                                <div className="actions">
                                     <Button className="view" onClick={()=>{showUserPayment(userspayment.id);}} icon={<VisibilityIcon sx={{fontSize: "19px"}}/>} text="عرض"/>
                             </div>
                             </td>
@@ -128,7 +129,7 @@ useEffect(()=>{getUserPayment();},[]);
                 </table>
                 }
             </div>
-                <div className="payment-table-footer">
+                <div className="table-footer">
                   <TablePagination
                     count={Math.ceil(userspaymentlist.length / rowsPerPage)}
                     page={page}

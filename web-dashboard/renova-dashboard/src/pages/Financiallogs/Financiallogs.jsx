@@ -1,4 +1,5 @@
-import "./Financiallogs.css"
+import "./Financiallogs.css";
+import "../Users/Table.css";
 //MUI
 import RefreshIcon from '@mui/icons-material/Refresh';
 import PaidIcon from '@mui/icons-material/Paid';
@@ -117,15 +118,15 @@ export default function Financiallogs() {
             description={paymentlog?.description}
             />
         )}             
-        <div class="log-table">
-            <div class="log-table-header">
+        <div class="table-body">
+            <div class="table-header">
                 <h3><HistoryIcon sx={{ color: "#f07c1f" ,fontSize: "28px" }} /> {t("سجل الدفعات")}</h3>
-                <div class="log-table-actions">
+                <div class="table-actions">
                     <Button className="filter" onClick={() => setshowfilterdialog(true)} icon={<FilterAltIcon sx={{fontSize: "18px"}}/>} text={"فلترة"}/>
                     <Button className="refresh" onClick={()=>{getPaymentLogs()}} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text={"تحديث"}/>                 
                 </div>
             </div>
-            <div class="log-table-container">
+            <div class="table-container">
                 {paymentlogslist.length === 0 ? <div className="log-no-requests">لاتوجد سجلات</div>:
                     <table>
                     <thead>
@@ -147,13 +148,13 @@ export default function Financiallogs() {
                             <td>#{paymentlog?.id}</td>   
                             <td>#{paymentlog?.payment_id}</td>
                             <td><span className={`log-type final ${paymentlog?.action}`}>{type[paymentlog?.action]}</span></td>
-                            <td><div className="user-info-td">{paymentlog?.from_user?.name}</div></td>
-                            <td><div className="user-info-td">{paymentlog?.to_user?.name}</div></td>
+                            <td>{paymentlog?.from_user?.name}</td>
+                            <td>{paymentlog?.to_user?.name}</td>
                             <td>${formatMoney(paymentlog?.amount)}</td>
                             <td>{paymentlog?.description}</td>
                             <td>{dayjs(paymentlog?.payment?.created_at).format("YYYY-MM-DD || hh:mm:ss  A")}</td>
                             <td>
-                                <div className="log-table-action">
+                                <div className="actions">
                                     <IconBtn name="عرض" clr="#2196f3" bgc="rgba(33,150,243,0.1)" h_clr="white" h_bgc="#2196f3" onClick={()=>{showFinancialLog(paymentlog?.id);}} icon={<VisibilityIcon sx={{ fontSize: 24 }} />} />
                                     <IconBtn name="طباعة" clr="#6C63FF" bgc="rgba(108,99,255,0.1)" h_clr="white" h_bgc="#6C63FF" onClick={()=>{}} icon={<PrintIcon sx={{ fontSize: 25 }} />} />                                            
                                 </div>
@@ -164,7 +165,7 @@ export default function Financiallogs() {
                 </table>
                 }
             </div>
-                <div className="log-table-footer">
+                <div className="table-footer">
                   <TablePagination
                     count={Math.ceil(paymentlogslist.length / rowsPerPage)}
                     page={page}

@@ -1,4 +1,5 @@
 import "./Users.css";
+import "./Table.css";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
@@ -238,7 +239,7 @@ export default function User(){
             }}/>)}
 
             <Snackbar msg={msg} isopen={isopen} setisopen={setisopen} severity={severity}/>
-            <div className="users-table">
+            <div className="table-body">
             <div className="table-header">
                 <h3><GroupIcon sx={{ color: "#f07c1f"}}/> {t("المستخدمين")}</h3>
                 <div className="table-actions">
@@ -269,12 +270,16 @@ export default function User(){
                         return(<tr key={user.id}>
                         <td>
                             <div className="avatar">
-                                {profile?.full_image_url ? <Avatar  src={profile?.full_image_url} alt="img" sx={{ width: 50, height: 50 }} />:<Avatar  alt=""  sx={{ width: 48, height: 48 , color: "#f07c1f", backgroundColor: "rgba(240, 124, 31, 0.1)"   }} />}
+                                {profile?.full_image_url ? <Avatar  src={profile?.full_image_url} alt="img" sx={{ width: 60, height: 60 }} />:<Avatar  alt=""  sx={{ width: 48, height: 48 , color: "#f07c1f", backgroundColor: "rgba(240, 124, 31, 0.1)"   }} />}
                             </div>
                         </td>
                         <td>{user?.name} </td>
                         <td>{profile?.phone? profile?.phone : t("غير موجود")}</td>
-                        <td className="location"><LocationOnIcon sx={{ color: "#f07c1f"}}/>{profile?.location ? profile?.location : t("غير موجود")}</td>
+                        <td>
+                            <div className="location">
+                                <LocationOnIcon sx={{ color: "#f07c1f"}}/>{profile?.location ? profile?.location : t("غير موجود")}
+                            </div>
+                        </td>
                         <td>{role[user?.role_id]}</td>
                         <td>{dayjs(user?.created_at).format("YYYY-MM-DD")}</td>
                         <td>{status[user?.status]}</td>
