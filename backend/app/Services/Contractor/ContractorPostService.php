@@ -15,8 +15,8 @@ class ContractorPostService
     public function availableProjects()
     {
         return Project::with([
-            'constructionForm.reconstructionRequest',
-            'constructionForm.materials',
+            'form.reconstructionRequest',
+            'form.materials',
             'engineer',
         ])
             ->where('contractor_id', auth()->id())
@@ -76,7 +76,7 @@ class ContractorPostService
 
             ,
 
-            'progress' => 100,
+            'progress' => $project->progress,
         ]);
 
 
