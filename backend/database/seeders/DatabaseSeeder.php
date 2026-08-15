@@ -17,42 +17,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            RoleSeeder::class,
+            AdminSeeder::class,
+            ComplaintSeeder::class,
+            NoShowWarningSeeder::class,
+            ProjectSeeder::class,
+            ProjectTaskSeeder::class,
+            PaymentsSeeder::class,
+            PaymentAuditSeeder::class,
+            WalletTransactionSeeder::class,
+            ContractorPostSeeder::class,
+            ProjectReviewSeeder::class
         ]);
     }
-
 }
-$this->call([
-    UserSeeder::class,
-    ContractorProfileSeeder::class,
-]);
-$this->call([
-    UserSeeder::class,
-    ContractorProfileSeeder::class,
-    ReconstructionRequestSeeder::class,
-]);
-$this->call([
-    ContractorScheduleSeeder::class,
-]);
-$this->call([
-    PaymentsSeeder::class,
-    PaymentAuditSeeder::class,
-]);
-
-//   $this->call([
-//             RoleSeeder::class,
-//             AdminSeeder::class,
-//             ComplaintSeeder::class,
-//             NoShowWarningSeeder::class,
-//             ProjectSeeder::class,
-//             ProjectTaskSeeder::class,
-//             PaymentsSeeder::class,
-//             PaymentAuditSeeder::class,
-//             WalletTransactionSeeder::class,
-//             ContractorPostSeeder::class,
-//             ProjectReviewSeeder::class
-//         ]);
