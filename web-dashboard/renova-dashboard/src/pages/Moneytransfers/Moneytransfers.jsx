@@ -1,4 +1,5 @@
 import "./Moneytransfers.css";
+import "../Users/Table.css";
 //MUI
 import Grid from '@mui/material/Grid';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -13,6 +14,8 @@ import Card from "../../components/Card/Card";
 import TablePagination from "../../components/Pagination/Pagination";
 import Transfermoneydialog from "../../components/Transfermoneydialog/Transfermoneydialog";
 import Snackbar from "../../components/Snackbar/Snakbar";
+import Button from "../../components/Button/Button";
+import Norequest from "../../components/Norequest/Norequest";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useContext,useEffect } from "react";
@@ -24,6 +27,7 @@ import {getWaitingReleaseRequest} from "../../api/finance"
 import {transferMoneyRequest} from "../../api/finance"
 //Utils
 import {formatMoney} from "../../utils/formatMoney";
+
 export default function Moneytransfers() {
 const [t] = useTranslation();
 const [finance_info,setfinance_info]=useState({});
@@ -96,15 +100,15 @@ const paginatedtransfer_info = transfer_info.slice((page - 1) * rowsPerPage , pa
                 <Card number={finance_info?.waiting_release} title={t("دفعات بانتظار التحويل")} iconright={<PendingActionsIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
             </Grid>
             <Grid size={12}>
-        <div class="transfer-table">
-            <div class="transfer-table-header">
+        <div class="table-body">
+            <div class="table-header">
                 <h3><CurrencyExchangeIcon sx={{ color: "#f07c1f"}}/> {t("التحويلات المالية")}</h3>
-                <div class="transfer-table-actions">
-                    <button class="transfer-btn-outline" onClick={()=>{getfinanceAndtransferinfo()}}><RefreshIcon sx={{fontSize: "18px"}}/> {t("تحديث")}</button>
+                <div class="table-actions">
+                    <Button className="refresh" onClick={()=>{getfinanceAndtransferinfo()}} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text="تحديث"/>
                 </div>
             </div>
-            <div class="transfer-table-container">
-                {transfer_info.length === 0 ? <div className="transfer-no-requests">{t("لاتوجد تحويلات")}</div>:
+            <div class="table-container">
+                {transfer_info.length === 0 ? (<Norequest text="لا توجد تحويلات"/>):
                     <table>
                     <thead>
                         <tr>
@@ -131,7 +135,9 @@ const paginatedtransfer_info = transfer_info.slice((page - 1) * rowsPerPage , pa
                             <td>${formatMoney(transfer?.released_amount)}</td>
                             <td>${formatMoney(transfer?.remaining_amount)}</td>
                             <td>
-                                <div className="transfer-table-action"><button className="transfer-open-btn" onClick={()=>{setselectedtransfer_info(transfer);setshowTransfermoneydialog(true)}}><MonetizationOnIcon sx={{fontSize: "19px"}}/>{t("تحويل المبلغ")}</button></div>
+                                <div className="actions">
+                                    <Button className="transfer-money" onClick={()=>{setselectedtransfer_info(transfer);setshowTransfermoneydialog(true)}} icon={<MonetizationOnIcon sx={{fontSize: "19px"}}/>} text="تحويل المبلغ"/>
+                                </div>
                             </td>
                         </tr>
                     ))}
@@ -139,7 +145,7 @@ const paginatedtransfer_info = transfer_info.slice((page - 1) * rowsPerPage , pa
                 </table>
                 }
             </div>
-                <div className="transfer-table-footer">
+                <div className="table-footer">
                   <TablePagination
                     count={Math.ceil(transfer_info.length / rowsPerPage)}
                     page={page}

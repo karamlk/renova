@@ -11,6 +11,8 @@ import CheckIcon from '@mui/icons-material/Check';
 //Hooks
 import {useState} from "react";
 import { useTranslation } from 'react-i18next';
+//Components
+import Button from "../../components/Button/Button";
 export default function Complainthandlingdialog({id,complainant_name,complainton_name,onApply,onClose}){
     const {t}=useTranslation();
     const [penalty, setPenalty] = useState("");
@@ -87,14 +89,8 @@ export default function Complainthandlingdialog({id,complainant_name,complainton
                     </div>
 
                     <div className="complaint-dialog-footer">
-                        <button type="button" className="complaint-btn-cancel" onClick={onClose}>
-                            <CloseIcon/>
-                             {t("إلغاء")}
-                        </button>
-                        <button type="submit" className="complaint-btn-process" >
-                            <CheckIcon/>
-                             {t("معالجة")}
-                        </button>
+                        <Button type="button" className="cancel" onClick={onClose} text="إلغاء" icon={<CloseIcon/>}/>
+                        <Button type="submit" className="process" text="معالجة" icon={<CheckIcon/>}/>
                     </div>
 
                 </form>

@@ -3,9 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+// use Database\Seeders\PaymentsSeeder ;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use PaymentsSeeder;
+// use PaymentsSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -41,3 +42,17 @@ $this->call([
     PaymentsSeeder::class,
     PaymentAuditSeeder::class,
 ]);
+
+//   $this->call([
+//             RoleSeeder::class,
+//             AdminSeeder::class,
+//             ComplaintSeeder::class,
+//             NoShowWarningSeeder::class,
+//             ProjectSeeder::class,
+//             ProjectTaskSeeder::class,
+//             PaymentsSeeder::class,
+//             PaymentAuditSeeder::class,
+//             WalletTransactionSeeder::class,
+//             ContractorPostSeeder::class,
+//             ProjectReviewSeeder::class
+//         ]);

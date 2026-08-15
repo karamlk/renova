@@ -6,6 +6,8 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import CheckIcon from '@mui/icons-material/Check';
 //Hooks
 import { useTranslation } from 'react-i18next';
+//Components
+import Button from '../Button/Button';
 export default function Filterdialog({onClose,title,groups,onApply,onReset,selectedFilters,setSelectedFilters}) {
     const [t] = useTranslation();
     return (
@@ -37,14 +39,8 @@ export default function Filterdialog({onClose,title,groups,onApply,onReset,selec
                 ))}
             </div>
             <div className="filter-footer">
-                <button className="btn-reset" onClick={onReset}>
-                    <ReplayIcon/>
-                    {t("إعادة تعيين")}
-                </button>
-                <button className="btn-apply" onClick={()=>{onApply(selectedFilters);}}>
-                    <CheckIcon/>
-                    {t("تطبيق الفلتر")}
-                </button>
+                <Button className="cancel" onClick={onReset} text="إعادة تعيين" icon={<ReplayIcon/>}/>
+                <Button className="accept" onClick={()=>{onApply(selectedFilters);}} text="تطبيق الفلتر" icon={<CheckIcon/>}/>
             </div>
 
         </div>

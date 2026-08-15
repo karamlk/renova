@@ -1,8 +1,12 @@
 import "./Engineerlistdialog.css";
 //MUI Icons
 import EngineeringIcon from '@mui/icons-material/Engineering';
+import ClearIcon from '@mui/icons-material/Clear';
+import CheckIcon from '@mui/icons-material/Check';
 //Hooks
 import { useTranslation } from 'react-i18next';
+//Components
+import Button from '../Button/Button';
 export default function Engineerlistdialog({children,onClose,onApply}) {
     const {t}=useTranslation();
     return(
@@ -17,8 +21,8 @@ export default function Engineerlistdialog({children,onClose,onApply}) {
                 </div>
             </div>
             <div class="eng-dialog-footer">
-                <button class="btn-cancel" onClick={onClose}>{t("إلغاء")}</button>
-                <button class="btn-select" onClick={onApply} >{t("اختيار")}</button>
+                <Button className="cancel" onClick={onClose} text="إلغاء" icon={<ClearIcon/>}/>
+                <Button className="accept" onClick={onApply} text="اختيار" icon={<CheckIcon/>}/>
             </div>
 
         </div>

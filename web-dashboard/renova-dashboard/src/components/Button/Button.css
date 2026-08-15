@@ -1,0 +1,370 @@
+/*refresh*/
+.refresh {
+  background: transparent;
+  border: 1.5px solid #f07c1f;
+  padding: 8px 15px;
+  border-radius: 10px;
+  color: #f07c1f;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: "Tajawal", sans-serif;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.refresh:hover {
+  background: #f07c1f;
+  color: white;
+}
+/*filter*/
+.filter {
+  background: transparent;
+  border: 1.5px solid #b8bcbf;
+  padding: 8px 15px;
+  border-radius: 10px;
+  color: #3d424c;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: "Tajawal", sans-serif;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.filter:hover {
+  background: #3d424c;
+  border-color: #3d424c;
+  color: white;
+}
+/*chosse engineer*/
+.choose-eng {
+  padding: 10px 12px;
+  background: #2196f3;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: "Tajawal", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+  white-space: nowrap;
+}
+
+.choose-eng:hover {
+  background: #1976d2;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
+}
+/*transfer-money*/
+.transfer-money {
+  padding: 10px 12px;
+  background: #4caf50;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: "Tajawal", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  white-space: nowrap;
+}
+.transfer-money:hover {
+  background: #388e3c;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+}
+/*view*/
+.view {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 10px;
+  font-family: "Tajawal", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: #e3f2fd;
+  color: #2196f3;
+}
+.view:hover {
+  background: #1976d2;
+  transform: translateY(-3px);
+  color: white;
+}
+/*approve*/
+.approve {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 10px;
+  font-family: "Tajawal", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: #f07c1f;
+  color: white;
+}
+
+.approve:hover {
+  background: #d96d1a;
+}
+/*reject*/
+.reject {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 10px;
+  font-family: "Tajawal", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: rgba(229, 57, 53, 0.1);
+  color: #e53935;
+  border: 1px solid #ffebee;
+}
+
+.reject:hover {
+  background: #e53935;
+  color: white;
+}
+/*add*/
+.add {
+  background: transparent;
+  border: 1.5px solid #4ed419;
+  padding: 8px 15px;
+  border-radius: 10px;
+  color: #4ed419;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: "Tajawal", sans-serif;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.add:hover {
+  background: #4ed419;
+  color: white;
+}
+/*edit*/
+.edit {
+  padding: 5px 12px;
+  margin-right: 10px;
+  border: 1px solid #e8ecf2;
+  border-radius: 6px;
+  background: transparent;
+  color: #666;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.edit:hover {
+  border-color: #f07c1f;
+  color: #f07c1f;
+}
+/*change password*/
+.change-pass {
+  padding: 10px 16px;
+  border: 1.5px solid #ffebee;
+  border-radius: 10px;
+  background: #fff5f5;
+  color: #e53935;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.change-pass:hover {
+  background: #e53935;
+  color: white;
+}
+/*save*/
+.save {
+  margin-inline-start: auto;
+  padding: 10px 24px;
+  background: #f07c1f;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: fit-content !important;
+  flex-shrink: 0;
+}
+
+.save:hover {
+  background: #d96d1a;
+}
+
+/*cancel*/
+.cancel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+  background: transparent;
+  border: 2px solid #e8ecf2;
+  border-radius: 12px;
+  color: #666;
+  font-family: "Tajawal", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.cancel:hover {
+  border-color: #0f1f2f;
+  color: #0f1f2f;
+}
+/*confirm-cancel*/
+.conf-cancel {
+  flex: 1;
+  padding: 12px;
+  background: #f0f1f3;
+  border: none;
+  border-radius: 12px;
+  color: #3b414c;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.conf-cancel:hover {
+  background: #e8e9eb;
+}
+/*confirm-accept*/
+.conf-accept {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+/*accept*/
+.accept {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+  background: #f07c1f;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: "Tajawal", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  gap: 4px;
+}
+
+.accept:hover {
+  background: #d96d1a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(240, 124, 31, 0.25);
+}
+/*process*/
+.process {
+  flex: 1;
+  padding: 12px 0;
+  background: #4caf50;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: "Tajawal", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.process:hover {
+  background: #388e3c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.25);
+}
+
+.process:active {
+  transform: scale(0.97);
+}
+/*try-again*/
+.try-again {
+  width: 100%;
+  padding: 16px;
+  background: #f07c1f;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: "Tajawal", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  gap: 2px;
+  transition: 0.3s;
+}
+
+.try-again:hover {
+  background: #d96d1a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(240, 124, 31, 0.2);
+}

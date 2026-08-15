@@ -1,4 +1,5 @@
 import "./Projecttable.css";
+import "../../pages/Users/Table.css"
 //Hooks
 import { useTranslation } from 'react-i18next';
 //MUI Icons
@@ -49,11 +50,31 @@ export default function Projecttable() {
     created_at:"2023-01-01",
     progress: 75,
   },
+  {
+    id: 5,
+    name: "مشروع مياه الخير",
+    username:"عمر",
+    location: "رفح",
+    type: "إعادة بناء",
+    status: "مفتوح",
+    created_at:"2023-01-01",
+    progress: 75,
+  },
+  {
+    id: 6,
+    name: "مشروع مياه الخير",
+    username:"عمر",
+    location: "رفح",
+    type: "إعادة بناء",
+    status: "مفتوح",
+    created_at:"2023-01-01",
+    progress: 75,
+  },
 
 ];
     return (
         <div>
-        <div class="projects-table">
+        <div class="table-body">
             <div class="table-header">
                 <h3><AssignmentIcon sx={{ color: "#f07c1f"}}/> {t("أحدث المشاريع")}</h3>
                 <div class="table-actions">

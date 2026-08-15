@@ -1,4 +1,5 @@
 import "./Inspectionrequests.css";
+import "../Users/Table.css";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
@@ -17,10 +18,13 @@ import {chooseEngineerRequest} from "../../api/inspection"
 import Engineerlistdialog from "../../components/Engineerlistdialog/Engineerlistdialog";
 import Snackbar from "../../components/Snackbar/Snakbar";
 import TablePagination from "../../components/Pagination/Pagination";
+import Button from "../../components/Button/Button";
+import Norequest from "../../components/Norequest/Norequest";
 //Libraries
 import dayjs from "dayjs";
 //Context
 import { LoadingContext } from "../../Context/Loadingcontext";
+
 export default function Inspectionrequests() {
     const [t]=useTranslation();
     const [inspections, setInspections] = useState([]);
@@ -107,15 +111,15 @@ export default function Inspectionrequests() {
                 </Engineerlistdialog>)}
 
         <Snackbar msg={msg} isopen={isopen} setisopen={setisopen} severity={"success"}/>
-        <div class="projects-table">
+        <div class="table-body">
             <div class="table-header">
                 <h3><AssignmentIcon sx={{ color: "#f07c1f"}}/> {t("طلبات المعاينة")}</h3>
                 <div class="table-actions">
-                    <button class="btn-outline" onClick={getInspectionList}><RefreshIcon sx={{fontSize: "18px"}}/> {t("تحديث")}</button>
+                    <Button className="refresh" onClick={getInspectionList} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text={"تحديث"}/>                 
                 </div>
             </div>
             <div class="table-container">
-                {inspections.length ===0 ? <div className="no-requests">لاتوجد طلبات معاينة</div>:
+                {inspections.length ===0 ? (<Norequest text="لا يوجد طلبات معاينة"/>):
                     <table>
                     <thead>
                         <tr>
@@ -139,12 +143,14 @@ export default function Inspectionrequests() {
                         <td>{inspection?.inspection_request?.request?.user?.name}</td>
                         <td>{type[inspection?.inspection_request?.request?.type]}</td>
                         <td>{dayjs(inspection?.created_at).format("YYYY-MM-DD")}</td>
-                        <td><div className="location_project"><LocationOnIcon sx={{ color: "#f07c1f"}}/>{inspection?.inspection_request?.request?.location}</div></td>
+                        <td><div className="location"><LocationOnIcon sx={{ color: "#f07c1f"}}/>{inspection?.inspection_request?.request?.location}</div></td>
                         <td>{inspection?.inspection_request?.contractor?.name}</td>
                         <td>{day[inspection?.schedule?.day_of_week]}<br/>{t("من")} {inspection?.schedule?.start_time} {t("الى")} {inspection?.schedule?.end_time}</td>
                         <td>{status[inspection?.status]}</td>
                         <td>
-                            <button className="open-btn" onClick={()=>{setSelectedInspection(inspection?.id);setshowenglistdialog(true); getEngineersList();}}><EngineeringIcon sx={{fontSize: "18px"}}/>{t("اختيار مهندس")}</button>
+                          <div className="actions">
+                            <Button className="choose-eng" onClick={()=>{setSelectedInspection(inspection?.id);setshowenglistdialog(true); getEngineersList();}} icon={<EngineeringIcon sx={{fontSize: "18px"}}/>} text={"اختيار مهندس"}/>
+                          </div>
                         </td>
                         
                         </tr>

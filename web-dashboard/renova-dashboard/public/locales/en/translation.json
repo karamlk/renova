@@ -267,7 +267,14 @@
    "المبلغ المحول": "Transferred Amount",
    "تفاصيل العملية المالية": "Financial Transaction Details",
    "التاريخ": "Date",
-   "طباعة": "Print"
+   "طباعة": "Print",
+   "لا يوجد طلبات": "No Requests Available",
+   "لا يوجد شكاوى مؤرشفة": "No Archived Complaints Available",
+   "لا يوجد شكاوى": "No Complaints Available",
+   "لا يوجد سجلات": "No Records Available",
+   "لا يوجد طلبات معاينة":"No Pending Requests Available",
+   "لا توجد تحويلات": "No Transfers Available",
+   "لا توجد دفعات": "No Payments Available"
    
    
 }

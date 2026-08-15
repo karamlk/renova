@@ -1,4 +1,5 @@
 import "./Users.css";
+import "./Table.css";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
@@ -17,8 +18,6 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import Switch from '@mui/material/Switch';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -33,8 +32,11 @@ import Filterdialog from "../../components/Filterdialog/Filterdialog";
 import Imagedialog from "../../components/Imagedialog/Imagedialog";
 import Createuser from "../../components/Createuser/Createuser";
 import TablePagination from "../../components/Pagination/Pagination";
+import IconBtn from "../../components/IconBtn/IconBtn";
+import Button from "../../components/Button/Button";
 //Libraries
 import dayjs from "dayjs";
+
 export default function User(){
     const [t] = useTranslation();
     const [users,setUsers] = useState([]);
@@ -164,11 +166,7 @@ export default function User(){
             </div>
             <div className="field">
             <span className="label">{t("الشهادة الجامعية")}</span>
-            <Tooltip title={t("عرض PDF")} arrow>
-                <div className="pdf-thumb" onClick={() => window.open(userinfo?.engineer_profile?.full_certificate_file_url, "_blank")}>
-                    <PictureAsPdfIcon sx={{color:"#e53935", fontSize:28}} />
-                </div>
-            </Tooltip>
+            <IconBtn name="عرض PDF" clr="#e53935"  onClick={() => window.open(userinfo?.engineer_profile?.full_certificate_file_url, "_blank")} icon={<PictureAsPdfIcon sx={{color:"#e53935", fontSize:28}} />} />
             </div>
             {userinfo?.engineer_profile?.full_syndicate_card_image_url?
             <div className="img-field">
@@ -241,13 +239,14 @@ export default function User(){
             }}/>)}
 
             <Snackbar msg={msg} isopen={isopen} setisopen={setisopen} severity={severity}/>
-            <div className="users-table">
+            <div className="table-body">
             <div className="table-header">
                 <h3><GroupIcon sx={{ color: "#f07c1f"}}/> {t("المستخدمين")}</h3>
                 <div className="table-actions">
-                    <button className="btn-filter" onClick={() => setshowfilterdialog(true)}><FilterAltIcon sx={{fontSize: "18px"}}/> {t("فلترة")}</button>
-                    <button className="btn-refresh" onClick={() => {getUsers();setPage(1)}}><RefreshIcon sx={{fontSize: "18px"}}/> {t("تحديث")}</button>
-                    <button className="btn-add" onClick={() => setshowadduserdialog(true)}><AddIcon sx={{fontSize: "18px"}}/> {t("إضافة")}</button>
+                    <Button className="filter" onClick={() => setshowfilterdialog(true)} icon={<FilterAltIcon sx={{fontSize: "18px"}}/>} text="فلترة"/>
+                    <Button className="refresh" onClick={() => {getUsers();setPage(1)}} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text="تحديث"/>
+                    <Button className="add" onClick={() => setshowadduserdialog(true)} icon={<AddIcon sx={{fontSize: "18px"}}/>} text="إضافة"/>
+
                 </div>
             </div>
             <div className="table-container">
@@ -271,12 +270,16 @@ export default function User(){
                         return(<tr key={user.id}>
                         <td>
                             <div className="avatar">
-                                {profile?.full_image_url ? <Avatar  src={profile?.full_image_url} alt="img" sx={{ width: 50, height: 50 }} />:<Avatar  alt=""  sx={{ width: 48, height: 48 , color: "#f07c1f", backgroundColor: "rgba(240, 124, 31, 0.1)"   }} />}
+                                {profile?.full_image_url ? <Avatar  src={profile?.full_image_url} alt="img" sx={{ width: 60, height: 60 }} />:<Avatar  alt=""  sx={{ width: 48, height: 48 , color: "#f07c1f", backgroundColor: "rgba(240, 124, 31, 0.1)"   }} />}
                             </div>
                         </td>
                         <td>{user?.name} </td>
                         <td>{profile?.phone? profile?.phone : t("غير موجود")}</td>
-                        <td className="location"><LocationOnIcon sx={{ color: "#f07c1f"}}/>{profile?.location ? profile?.location : t("غير موجود")}</td>
+                        <td>
+                            <div className="location">
+                                <LocationOnIcon sx={{ color: "#f07c1f"}}/>{profile?.location ? profile?.location : t("غير موجود")}
+                            </div>
+                        </td>
                         <td>{role[user?.role_id]}</td>
                         <td>{dayjs(user?.created_at).format("YYYY-MM-DD")}</td>
                         <td>{status[user?.status]}</td>
@@ -284,32 +287,10 @@ export default function User(){
                         <td>
                             <div className="actions">
                             {/* زر العرض */}
-                            <Tooltip title={t("عرض")} arrow>
-                                <IconButton className="action-btn" sx={{
-                                        color: "#2196f3",
-                                        backgroundColor: "rgba(33,150,243,0.1)",
-                                        "&:hover": {
-                                        backgroundColor: "#2196f3",
-                                        color: "white",
-                                        },
-                                    }} onClick={() =>{setshowprofile(true);showUser(user.id);}}>
-                                <VisibilityIcon sx={{ fontSize: 24 }} />
-                                </IconButton>
-                            </Tooltip>
+                            <IconBtn name="عرض" clr="#2196f3" bgc="rgba(33,150,243,0.1)" h_clr="white" h_bgc="#2196f3" onClick={() =>{setshowprofile(true);showUser(user.id);}} icon={<VisibilityIcon sx={{ fontSize: 24 }} />} />
                             {/* زر الحذف */}
-                            {user?.status === "pending"?<></>:  
-                                                          <Tooltip title={t("حذف")} arrow>
-                                <IconButton className="action-btn" sx={{
-                                        color: "#e53935",
-                                        backgroundColor: "rgba(229,57,53,0.1)",
-                                        "&:hover": {
-                                            backgroundColor: "#e53935",
-                                            color: "white",
-                                        },
-                                        }} onClick={()=>{setSelectedUserId(user.id);setshowconfirmdialog(true)}}>
-                                <DeleteIcon sx={{ fontSize: 24 }} />
-                                </IconButton>
-                            </Tooltip>
+                            {user?.status === "pending"?<></>:
+                            <IconBtn name="حذف" clr="#e53935" bgc="rgba(229,57,53,0.1)" h_clr="white" h_bgc="#e53935" onClick={()=>{setSelectedUserId(user.id);setshowconfirmdialog(true)}} icon={<DeleteIcon sx={{ fontSize: 24 }} />} />  
                             }
   
                             </div>

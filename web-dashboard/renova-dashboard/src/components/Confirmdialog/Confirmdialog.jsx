@@ -1,6 +1,8 @@
 import "./Confirmdialog.css";
 //Hooks
 import { useTranslation } from 'react-i18next';
+//Components
+import Button from '../Button/Button';
 export default function Confirmdialog({icon,title , message ,name_btn1,btnColor,name_btn2 , onClose , onConfirm }) {
     const [t] = useTranslation();
     return(
@@ -14,8 +16,8 @@ export default function Confirmdialog({icon,title , message ,name_btn1,btnColor,
                 {t("لا يمكن التراجع عن هذا الإجراء")}
             </p>
             <div className="btn-group">
-                <button className="btn-cancel" onClick={onClose} >{name_btn1}</button>
-                <button className="btn" style={{backgroundColor :btnColor}} onClick={onConfirm} >{name_btn2}</button>
+                <Button  className="conf-cancel" text={name_btn1} onClick={onClose}/>
+                <Button  className="conf-accept" onClick={onConfirm} text={name_btn2} bgc={btnColor}/>
             </div>
         </div>
     </div>

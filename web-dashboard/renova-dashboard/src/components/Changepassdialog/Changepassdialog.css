@@ -113,51 +113,6 @@
   gap: 10px;
 }
 
-.pass-dialog-footer .btn-cancel {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 0;
-  background: transparent;
-  border: 2px solid #e8ecf2;
-  border-radius: 12px;
-  color: #666;
-  font-family: "Tajawal", sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.pass-dialog-footer .btn-cancel:hover {
-  border-color: #0f1f2f;
-  color: #0f1f2f;
-}
-
-.pass-dialog-footer .btn-change {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 0;
-  background: #f07c1f;
-  border: none;
-  border-radius: 12px;
-  color: white;
-  font-family: "Tajawal", sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.3s;
-  gap: 4px;
-}
-
-.pass-dialog-footer .btn-change:hover {
-  background: #d96d1a;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(240, 124, 31, 0.25);
-}
 .page {
   z-index: 9999;
   position: fixed;
@@ -171,4 +126,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
