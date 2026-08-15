@@ -49,9 +49,8 @@ class ContractorPostController extends Controller
 
     public function contractorPosts($id)
     {
-        return response()->json([
-            'data' => $this->postService->contractorPosts($id)
-        ]);
+        return response()->json(
+             $this->postService->contractorPosts($id));
     }
 
     public function update(
@@ -78,6 +77,12 @@ class ContractorPostController extends Controller
     {
         return response()->json([
             $this->postService->allPosts()
+        ]);
+    }
+    public function post($id)
+    {
+        return response()->json([
+            $this->postService->post($id)
         ]);
     }
 }

@@ -54,7 +54,11 @@ Route::post('/password/reset',      [ChangePasswordController::class, 'updatePas
 // Public contractor posts (visible without login)
 
 Route::get('/contractors/{id}/posts',     [ContractorPostController::class, 'contractorPosts']);
+
 Route::get('all_posts',[ContractorPostController::class,'allPosts']);
+
+Route::get('/post/{id}',[ContractorPostController::class,'post']);
+
 
 // ══════════════════════════════════════════════════════════════
 // AUTHENTICATED — Auth only (no role restriction)

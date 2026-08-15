@@ -142,6 +142,20 @@ class ContractorPostService
             ->findOrFail($id);
     }
 
+    public function post ($id)
+    {
+        return ContractorPost::with([
+            'images',
+            'user.contractorProfile',
+            'project.form.reconstructionRequest',
+            'project.form.materials',
+            'project.engineer',
+        ])
+            //->where('user_id', auth()->id())
+            ->withCount('likes')
+            ->findOrFail($id);
+    }
+
 
     /**
      * كل بوستات متعهد معين

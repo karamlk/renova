@@ -147,18 +147,41 @@ class ProjectService
             ->get();
     }
 
+//    public function userProject($id)
+//    {
+//        return Project::with([
+//            'form.reconstructionRequest',
+//            'contractor',
+//            'engineer',
+//        ])
+//            ->where('id', $id)
+//            ->whereHas('form.reconstructionRequest', function ($query) {
+//                $query->where('user_id', auth()->id());
+//            })
+//            ->firstOrFail();
+//    }
     public function userProject($id)
     {
         return Project::with([
             'form.reconstructionRequest',
-            'contractor',
             'engineer',
+            'contractor',
         ])
             ->where('id', $id)
-            ->whereHas('form.reconstructionRequest', function ($query) {
-                $query->where('user_id', auth()->id());
-            })
+            ->where('user_id', auth()->id())
             ->firstOrFail();
     }
+
+//    public function show($id){
+//        return Project::with([
+//            'form.reconstructionRequest',
+//            'engineer',
+//            'user',
+//        ])
+//            ->where('id', $id)
+//            ->where('user_id', auth()->id())
+//            ->firstOrFail();
+//
+//    }
 
 }
