@@ -213,4 +213,17 @@ class ContractorPostService
 
         $post->delete();
     }
+
+    public function allPosts()
+    {
+        return ContractorPost::with([
+            'images',
+            'user.contractorProfile',
+            'project.form.reconstructionRequest',
+            'project.engineer',
+        ])
+            ->withCount('likes')
+            ->latest()
+            ->paginate(10);
+    }
 }

@@ -71,17 +71,17 @@ class ProjectController extends Controller
 
     public function userProjects()
     {
-        return response()->json([
+        return response()->json(
             app(ProjectService::class)
                 ->userProjects()
-        ]);
+        );
     }
 
     public function userProject($id)
     {
-        return response()->json([
+        return response()->json(
             app(ProjectService::class)
                 ->userProject($id)
-        ]);
+        );
     }
 }

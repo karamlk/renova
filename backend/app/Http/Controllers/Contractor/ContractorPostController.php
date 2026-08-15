@@ -74,4 +74,10 @@ class ContractorPostController extends Controller
             'message' => 'تم حذف البوست'
         ]);
     }
+    public function allPosts()
+    {
+        return response()->json([
+            $this->postService->allPosts()
+        ]);
+    }
 }
