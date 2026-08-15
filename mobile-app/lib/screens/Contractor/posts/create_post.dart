@@ -1,0 +1,174 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:renove_provider/extras/theme.dart';
+import 'package:renove_provider/models/Contractor/post/create_post.dart';
+import 'package:renove_provider/providers/Contractor/post_provider.dart';
+import 'package:renove_provider/providers/theme_provider.dart';
+
+class CreateSharedPost extends StatefulWidget {
+  final int projectId;
+  final String status;
+  const CreateSharedPost({super.key, required this.projectId, required this.status});
+
+  @override
+  State<CreateSharedPost> createState() => _CreatePostState();
+}
+
+class _CreatePostState extends State<CreateSharedPost> {
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("إنشاء منشور", style: TextStyle(fontWeight: FontWeight.bold)),
+      ),
+      body: Directionality(
+        textDirection: TextDirection.rtl,
+        child: ListView(
+          padding: EdgeInsets.all(30),
+          children: [
+            TextField(
+              controller: titleController,
+              decoration: InputDecoration(
+                labelText: "العنوان",
+                labelStyle: TextStyle(
+                  color: context.read<ThemeProvider>().isDark ? primarycolor1 : primarycolor2,
+                ),
+                border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+              ),
+            ),
+            SizedBox(height: 40),
+            TextField(
+              controller: descriptionController,
+
+              maxLines: 3,
+              decoration: InputDecoration(
+                alignLabelWithHint: true,
+                labelText: "الوصف",
+                labelStyle: TextStyle(
+                  color: context.read<ThemeProvider>().isDark ? primarycolor1 : primarycolor2,
+                ),
+                border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+              ),
+            ),
+            SizedBox(height: 40),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                backgroundColor: context.watch<ThemeProvider>().isDark
+                    ? Colors.white30
+                    : primarycolor2,
+                foregroundColor: primarycolor1,
+              ),
+              onPressed: () {
+                context.read<PostProvider>().pickPostImages();
+              },
+              child: Row(
+                spacing: 10,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.upload),
+                  Text("رفع صور", style: TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            SizedBox(height: 40),
+            Consumer<PostProvider>(
+              builder: (context, value, child) {
+                if (value.postImages.isEmpty) {
+                  return const SizedBox.shrink();
+                }
+                return SizedBox(
+                  height: 100,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: value.postImages.length,
+                    separatorBuilder: (context, index) => const SizedBox(width: 8),
+                    itemBuilder: (context, index) {
+                      final image = value.postImages[index];
+                      return Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.file(image, width: 100, height: 100, fit: BoxFit.cover),
+                          ),
+                          Positioned(
+                            top: 4,
+                            right: 4,
+                            child: GestureDetector(
+                              onTap: () {
+                                value.removeImage(index);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: const BoxDecoration(
+                                  color: Colors.redAccent,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(Icons.close, color: Colors.white, size: 16),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Consumer<PostProvider>(
+            builder: (context, value, child) => ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 60),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                backgroundColor: context.watch<ThemeProvider>().isDark
+                    ? Colors.white30
+                    : primarycolor2,
+                foregroundColor: primarycolor1,
+              ),
+              onPressed: () async {
+                final post = PostModel(
+                  title: titleController.text,
+                  status: widget.status,
+                  projectId: widget.projectId,
+                  description: descriptionController.text,
+                );
+
+                final response = await value.createPost(post: post, images: value.postImages);
+                if (!context.mounted) return;
+                final result = jsonDecode(response!.body);
+                final message = result['message'] ?? result['error'];
+                print(result);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    content: Text(
+                      message,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.right,
+                      textDirection: TextDirection.rtl,
+                    ),
+                  ),
+                );
+              },
+
+              child: value.isLoading
+                  ? CircularProgressIndicator(color: primarycolor1)
+                  : Text("مشاركة", style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/link.dart';
+import 'package:renove_provider/extras/shared_preferneces.dart';
 import 'package:renove_provider/extras/theme.dart';
 
 import 'package:renove_provider/providers/Contractor/Profile/show_profile_provider.dart';
@@ -14,6 +15,7 @@ import 'package:renove_provider/screens/Contractor/Schedule/schedule_screen.dart
 import 'package:renove_provider/screens/Contractor/construction%20forms/forms_index.dart';
 import 'package:renove_provider/screens/Contractor/construction%20forms/rejected_forms.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/InspectionRequests/show_inspection_request.dart';
+import 'package:renove_provider/screens/Contractor/projects/projects_index.dart';
 import 'package:renove_provider/screens/settings/change_password.dart';
 import 'package:renove_provider/screens/settings/verify_deletetion_screen.dart';
 import 'package:renove_provider/skeletons/setiings_page_skeleton.dart';
@@ -266,6 +268,38 @@ class _HomwMenuContractorState extends State<HomwMenuContractor> {
                         ],
                       ),
                     ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 10,
+                        minimumSize: Size(30, 30),
+
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        backgroundColor: primarycolor2,
+                        foregroundColor: primarycolor1,
+                      ),
+
+                      onPressed: () {
+                        Navigator.of(
+                          context,
+                        ).push(MaterialPageRoute(builder: (context) => ProjectsIndex()));
+                      },
+                      child: Column(
+                        spacing: 20,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.white24,
+                            radius: 35,
+                            child: Icon(Icons.remove_done, size: 35, color: primarycolor1),
+                          ),
+                          Text(
+                            'المشاريع',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(height: 30),
@@ -360,6 +394,7 @@ class _HomwMenuContractorState extends State<HomwMenuContractor> {
                                 final navigate = Navigator.of(context);
 
                                 final response = await context.read<AuthProvider>().logout();
+
                                 if (response == null) {
                                   print("No response");
                                   return;

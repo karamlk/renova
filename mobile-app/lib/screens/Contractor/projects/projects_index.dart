@@ -6,14 +6,14 @@ import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Contractor/posts/create_post.dart';
 import 'package:renove_provider/screens/Contractor/projects/project_details.dart';
 
-class ContractorProjects extends StatefulWidget {
-  const ContractorProjects({super.key});
+class ProjectsIndex extends StatefulWidget {
+  const ProjectsIndex({super.key});
 
   @override
-  State<ContractorProjects> createState() => _ProjectsIndexState();
+  State<ProjectsIndex> createState() => _ProjectsIndexState();
 }
 
-class _ProjectsIndexState extends State<ContractorProjects> {
+class _ProjectsIndexState extends State<ProjectsIndex> {
   @override
   void initState() {
     super.initState();
@@ -28,6 +28,9 @@ class _ProjectsIndexState extends State<ContractorProjects> {
       onRefresh: () async => await context.read<ProjectProvider>().fetchProjects(),
       color: primarycolor1,
       child: Scaffold(
+        appBar: AppBar(
+          title: Text('مشاريعي', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
         body: Padding(
           padding: EdgeInsets.all(20),
           child: Consumer<ProjectProvider>(
@@ -127,13 +130,11 @@ class _ProjectsIndexState extends State<ContractorProjects> {
                               ],
                             ),
                             SizedBox(height: 10),
-
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    minimumSize: Size(130, 50),
+                                    minimumSize: Size(120, 50),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -162,7 +163,7 @@ class _ProjectsIndexState extends State<ContractorProjects> {
                                 ),
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    minimumSize: Size(130, 50),
+                                    minimumSize: Size(120, 50),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
