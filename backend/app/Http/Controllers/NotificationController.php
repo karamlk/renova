@@ -12,7 +12,7 @@ class NotificationController extends Controller
     {
         $notifications = Notification::where('user_id', Auth::id())
             ->latest()
-            ->paginate(20);
+            ->paginate(10);
 
         return response()->json(['data' => $notifications]);
     }
