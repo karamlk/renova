@@ -17,7 +17,7 @@ class ContractorPostController extends Controller
     public function availableProjects()
     {
         return response()->json([
-            'data' => $this->postService->availableProjects()
+             $this->postService->availableProjects()
         ]);
     }
 

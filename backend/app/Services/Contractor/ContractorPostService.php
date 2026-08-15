@@ -16,14 +16,18 @@ class ContractorPostService
     {
         return Project::with([
             'form.reconstructionRequest',
-            'form.materials',
-            'engineer',
+
         ])
             ->where('contractor_id', auth()->id())
-            ->where('status', 'completed')
+
             ->whereDoesntHave('post')
             ->latest()
-            ->get();
+            ->get() ->map(function ($project) {
+                return [
+                    'id' => $project->id,
+                    'title' => $project->form->reconstructionRequest->title,
+                ];
+            });
     }
 
 
@@ -147,7 +151,7 @@ class ContractorPostService
         return ContractorPost::with([
             'images',
             'user.contractorProfile',
-            'project.constructionForm.reconstructionRequest',
+            'project.form.reconstructionRequest',
             'project.engineer',
         ])
             ->where('user_id', $contractorId)
