@@ -28,6 +28,7 @@ import Complainthandlingdialog from "../../components/Complainthandlingdialog/Co
 import Complaintdetailsdialog from "../../components/Complaintdetailsdialog/Complaintdetailsdialog";
 import IconBtn from "../../components/IconBtn/IconBtn";
 import Button from "../../components/Button/Button";
+import Norequest from "../../components/Norequest/Norequest";
 //Context
 import { LoadingContext } from "../../Context/Loadingcontext";
 //Libraries
@@ -246,7 +247,7 @@ export default function Complaints() {
                     <Button className="refresh" onClick={()=>{getComplaintsList();setPage(1);}} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text={"تحديث"}/>
                 </div>
             </div>
-            {complaintsList.length===0?(<div className="no-requests">لاتوجد شكاوى</div>):(
+            {complaintsList.length===0?(<Norequest text="لا يوجد شكاوى"/>):(
             <div className="table-container">
                 <table>
                     <thead>

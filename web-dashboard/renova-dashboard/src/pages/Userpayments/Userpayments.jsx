@@ -8,6 +8,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import TablePagination from "../../components/Pagination/Pagination";
 import Userpaymentdialog from "../../components/Userpaymentdialog/Userpaymentdialog";
 import Button from "../../components/Button/Button";
+import Norequest from "../../components/Norequest/Norequest";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
@@ -92,7 +93,7 @@ useEffect(()=>{getUserPayment();},[]);
                 </div>
             </div>
             <div class="table-container">
-                {userspaymentlist.length === 0 ? <div className="payment-no-requests">لاتوجد تحويلات</div>:
+                {userspaymentlist.length === 0 ? (<Norequest text="لا توجد دفعات"/>):
                     <table>
                     <thead>
                         <tr>

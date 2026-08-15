@@ -13,6 +13,7 @@ import Filterdialog from "../../components/Filterdialog/Filterdialog";
 import Financiallogdialog from "../../components/Financiallogdialog/Financiallogdialog";
 import IconBtn from "../../components/IconBtn/IconBtn";
 import Button from "../../components/Button/Button";
+import Norequest from "../../components/Norequest/Norequest";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
@@ -127,7 +128,7 @@ export default function Financiallogs() {
                 </div>
             </div>
             <div class="table-container">
-                {paymentlogslist.length === 0 ? <div className="log-no-requests">لاتوجد سجلات</div>:
+                {paymentlogslist.length === 0 ? (<Norequest text="لا يوجد سجلات"/>):
                     <table>
                     <thead>
                         <tr>

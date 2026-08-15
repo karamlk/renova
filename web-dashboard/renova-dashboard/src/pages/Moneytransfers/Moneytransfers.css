@@ -1,11 +1,3 @@
-.transfer-no-requests {
-  text-align: center;
-  font-size: 18px;
-  color: #b8bcbf;
-  width: 100%;
-  padding-bottom: 25px;
-}
-
 .page {
   z-index: 9999;
   position: fixed;

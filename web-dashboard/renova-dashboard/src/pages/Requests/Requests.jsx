@@ -29,6 +29,7 @@ import Confirmdialog from "../../components/Confirmdialog/Confirmdialog";
 import Snackbar from "../../components/Snackbar/Snakbar";
 import Imagedialog from "../../components/Imagedialog/Imagedialog";
 import Button from "../../components/Button/Button";
+import Norequest from "../../components/Norequest/Norequest";
 //Libraries
 import dayjs from "dayjs";
 
@@ -145,7 +146,7 @@ export default function Requests() {
                     <Button className="refresh" onClick={getContractors} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text="تحديث"/>
                 </div>
             </div>
-        {contractors.length === 0 ? <div className="no-requests">لا يوجد طلبات</div> :
+        {contractors.length === 0 ? (<Norequest text="لا يوجد طلبات"/>) :
         contractors.map((contractor) => (
             <div className="request-card" key={contractor.id}>
             <div className="card-avatar">

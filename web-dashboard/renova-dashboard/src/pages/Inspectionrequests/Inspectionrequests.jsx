@@ -19,6 +19,7 @@ import Engineerlistdialog from "../../components/Engineerlistdialog/Engineerlist
 import Snackbar from "../../components/Snackbar/Snakbar";
 import TablePagination from "../../components/Pagination/Pagination";
 import Button from "../../components/Button/Button";
+import Norequest from "../../components/Norequest/Norequest";
 //Libraries
 import dayjs from "dayjs";
 //Context
@@ -118,7 +119,7 @@ export default function Inspectionrequests() {
                 </div>
             </div>
             <div class="table-container">
-                {inspections.length ===0 ? <div className="inspection-no-requests">لاتوجد طلبات معاينة</div>:
+                {inspections.length ===0 ? (<Norequest text="لا يوجد طلبات معاينة"/>):
                     <table>
                     <thead>
                         <tr>

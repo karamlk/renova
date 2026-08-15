@@ -22,6 +22,7 @@ import Filterdialog from "../../components/Filterdialog/Filterdialog";
 import Complaintdetailsdialog from "../../components/Complaintdetailsdialog/Complaintdetailsdialog";
 import IconBtn from "../../components/IconBtn/IconBtn";
 import Button from "../../components/Button/Button";
+import Norequest from "../../components/Norequest/Norequest";
 //Context
 import { LoadingContext } from "../../Context/Loadingcontext";
 //Libraries
@@ -154,7 +155,7 @@ export default function Complaintsarchive() {
                     <Button className="refresh" onClick={()=>{getComplaintsArchiveList();setPage(1);}} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text={"تحديث"}/>
                 </div>
             </div>
-            {complaintsList.length===0?(<div className="no-requests">لاتوجد شكاوى مؤرشفة</div>):(
+            {complaintsList.length===0?(<Norequest text="لا يوجد شكاوى مؤرشفة"/>):(
             <div className="table-container">
                 <table>
                     <thead>

@@ -15,6 +15,7 @@ import TablePagination from "../../components/Pagination/Pagination";
 import Transfermoneydialog from "../../components/Transfermoneydialog/Transfermoneydialog";
 import Snackbar from "../../components/Snackbar/Snakbar";
 import Button from "../../components/Button/Button";
+import Norequest from "../../components/Norequest/Norequest";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useContext,useEffect } from "react";
@@ -107,7 +108,7 @@ const paginatedtransfer_info = transfer_info.slice((page - 1) * rowsPerPage , pa
                 </div>
             </div>
             <div class="table-container">
-                {transfer_info.length === 0 ? <div className="transfer-no-requests">{t("لاتوجد تحويلات")}</div>:
+                {transfer_info.length === 0 ? (<Norequest text="لا توجد تحويلات"/>):
                     <table>
                     <thead>
                         <tr>
