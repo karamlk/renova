@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
+    use HasFactory;
     protected $fillable = [
 
         'construction_form_id',
@@ -18,7 +20,16 @@ class Project extends Model
 
         'progress',
 
-        'status'
+        'status',
+        
+        'project_ends_at',
+
+        'warranty_ends_at'
+    ];
+
+    protected $casts = [
+        'project_ends_at'  => 'date',
+        'warranty_ends_at' => 'date',
     ];
 
     public function form()

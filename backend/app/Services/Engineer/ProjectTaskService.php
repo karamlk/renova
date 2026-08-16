@@ -5,6 +5,7 @@ namespace App\Services\Engineer;
 use App\Models\Project;
 use App\Models\ProjectTask;
 use App\Services\PaymentMilestoneService;
+use Carbon\Carbon;
 use Exception;
 
 class ProjectTaskService
@@ -193,10 +194,57 @@ class ProjectTaskService
         ]);
 
         if ($progress >= 100) {
+             $projectEndsAt  = now()->toDateString();
+            $warrantyEndsAt = $this->parseWarrantyPeriod(
+                $project->constructionForm->warranty_period,
+                    Carbon::parse($projectEndsAt)
+                    )->toDateString();
 
             $project->update([
-                'status' => 'completed'
+                'status' => 'completed',
+                'project_ends_at' => $projectEndsAt,
+                'warranty_ends_at'=> $warrantyEndsAt,
             ]);
         }
+    }
+
+    private function parseWarrantyPeriod(string $period, Carbon $from): Carbon
+    {
+        // English
+        if (preg_match('/(\d+)\s*month/i', $period, $matches))
+            return $from->copy()->addMonths((int) $matches[1]);
+
+        if (preg_match('/(\d+)\s*year/i', $period, $matches))
+            return $from->copy()->addYears((int) $matches[1]);
+
+        if (preg_match('/(\d+)\s*week/i', $period, $matches))
+            return $from->copy()->addWeeks((int) $matches[1]);
+
+        // Arabic months
+        if (preg_match('/(\d+)\s*(اشهر|أشهر|شهر|شهور)/u', $period, $matches))
+            return $from->copy()->addMonths((int) $matches[1]);
+
+        // Arabic years
+        if (preg_match('/(\d+)\s*(سنوات|عام|أعوام)/u', $period, $matches))
+            return $from->copy()->addYears((int) $matches[1]);
+
+        // Arabic weeks
+        if (preg_match('/(\d+)\s*(اسبوع|أسبوع|اسابيع|أسابيع)/u', $period, $matches))
+            return $from->copy()->addWeeks((int) $matches[1]);
+
+        // Arabic special cases without number
+        if (preg_match('/أسبوعين|اسبوعين/u', $period))
+            return $from->copy()->addWeeks(2);
+
+        if (preg_match('/سنتين/u', $period))
+            return $from->copy()->addYears(2);
+
+        if (preg_match('/سنة/u', $period))
+            return $from->copy()->addYear();
+
+        // Nothing matched — tell the contractor to fix their input
+        throw new \Exception(
+            'صيغة فترة الضمان غير مدعومة، يرجى كتابتها بشكل واضح مثل: 3 اشهر، 6 months، 1 سنة'
+        );
     }
 }
