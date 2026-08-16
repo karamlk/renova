@@ -149,6 +149,9 @@ class _CreatePostState extends State<CreateSharedPost> {
                 final result = jsonDecode(response!.body);
                 final message = result['message'] ?? result['error'];
                 print(result);
+                if (response.statusCode == 200) {
+                  Navigator.of(context).pop();
+                }
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     behavior: SnackBarBehavior.floating,

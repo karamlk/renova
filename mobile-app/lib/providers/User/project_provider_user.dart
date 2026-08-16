@@ -8,6 +8,7 @@ import 'package:renove_provider/models/User/projects/projects_index.dart';
 
 class ProjectProviderUser extends ChangeNotifier {
   bool isLoading = false;
+  bool isRating = false;
   List<ProjectIndex> projects = [];
   ProjectIndex? selectedProject;
 
@@ -65,6 +66,36 @@ class ProjectProviderUser extends ChangeNotifier {
       return null;
     } finally {
       isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<http.Response?> submitRating({
+    required int id,
+    required int rating,
+    required String comment,
+  }) async {
+    isRating = true;
+    notifyListeners();
+
+    try {
+      final token = await getPrefs("token");
+
+      final response = await http.post(
+        Uri.parse("$link/api/projects/$id/review"),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode({"rating": rating, "comment": comment}),
+      );
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    } finally {
+      isRating = false;
       notifyListeners();
     }
   }

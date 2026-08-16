@@ -62,6 +62,7 @@ class _ProjectsIndexScreenState extends State<ProjectsIndexScreen> {
                 );
               }
               return ListView.builder(
+                key: const PageStorageKey<String>('projects_list'),
                 itemCount: value.projects.length,
                 itemBuilder: (context, index) {
                   final project = value.projects[index];
@@ -137,7 +138,7 @@ class _ProjectsIndexScreenState extends State<ProjectsIndexScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                backgroundColor: context.watch<ThemeProvider>().isDark
+                                backgroundColor: context.read<ThemeProvider>().isDark
                                     ? Colors.white30
                                     : primarycolor2,
                                 foregroundColor: primarycolor1,

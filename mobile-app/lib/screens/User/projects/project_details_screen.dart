@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
+import 'package:renove_provider/providers/Contractor/project_provider.dart';
 import 'package:renove_provider/providers/User/project_provider_user.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
+import 'package:renove_provider/screens/User/projects/review_dialogue.dart';
 
 class ProjectDetailsUserScreen extends StatefulWidget {
   final int projectId;
@@ -26,9 +28,41 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsUserScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('تفاصيل المشروع', style: TextStyle(fontWeight: FontWeight.bold)),
+        actions: [
+          Consumer<ProjectProviderUser>(
+            builder: (context, value, child) => value.selectedProject!.status == 'completed'
+                ? Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(100, 50),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        backgroundColor: context.watch<ThemeProvider>().isDark
+                            ? Colors.white30
+                            : primarycolor2,
+                        foregroundColor: primarycolor1,
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return ReviewDialog(assignmentId: widget.projectId);
+                          },
+                        );
+                      },
+
+                      child: Text('تقييم', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ),
+        ],
       ),
       body: Consumer<ProjectProviderUser>(
         builder: (context, value, child) {
+          if (value.isLoading) {
+            return const SizedBox.shrink();
+          }
           if (value.selectedProject == null) {
             return Center(
               child: Text(
