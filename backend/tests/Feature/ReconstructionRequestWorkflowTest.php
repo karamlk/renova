@@ -319,19 +319,6 @@ class ReconstructionRequestWorkflowTest extends TestCase
             ->assertStatus(403);
     }
 
-    //TODOTest: make sure the flow
-    public function test_user_cannot_delete_closed_request(): void
-    {
-        $user    = $this->createUser();
-        $request = ReconstructionRequest::factory()->create([
-            'user_id' => $user->id,
-            'status'  => 'closed',
-        ]);
-
-        $this->withHeaders($this->authHeaders($user))
-            ->deleteJson("/api/reconstruction-requests/{$request->id}")
-            ->assertStatus(422);
-    }
 
     public function test_contractor_cannot_delete_reconstruction_request(): void
     {

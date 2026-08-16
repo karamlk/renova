@@ -31,6 +31,9 @@ class _ProjectDetailsState extends State<ProjectDetailsScreen> {
       ),
       body: Consumer<ProjectProvider>(
         builder: (context, value, child) {
+          if (value.isLoading) {
+            return const SizedBox.shrink();
+          }
           if (value.details == null) {
             return Center(
               child: Text(

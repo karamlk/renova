@@ -109,6 +109,16 @@ class _InspectionDetailsScreenState extends State<InspectionDetailsScreen> {
                                       if (value.isLoadingSchedules) {
                                         return const Center(child: CircularProgressIndicator());
                                       }
+                                      if (value.schedules.isEmpty) {
+                                        return Center(
+                                          child: Text(
+                                            "لا يوجد أي أوقات متاحة لدى المتعهد الآن.\n يرجى تفقد هذه النافذة باستمرار",
+                                            textAlign: TextAlign.center,
+                                            textDirection: TextDirection.rtl,
+                                            style: TextStyle(color: primarycolor1, fontSize: 20),
+                                          ),
+                                        );
+                                      }
                                       return Consumer<InspectionProvider>(
                                         builder: (context, provider, child) {
                                           return Padding(
