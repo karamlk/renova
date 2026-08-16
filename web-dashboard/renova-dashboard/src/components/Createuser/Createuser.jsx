@@ -17,6 +17,8 @@ import {createUserRequest}  from "../../api/users";
 //Component
 import Snackbar from "../Snackbar/Snakbar";
 import Button from "../Button/Button";
+import Dialogform from "../Dialogform/Dialogform";
+
 export default function Createuser({onClose,onSuccess}) {
     const {t} = useTranslation();
     const [name, setName] = useState('');
@@ -46,100 +48,93 @@ export default function Createuser({onClose,onSuccess}) {
     }
     return(
         <div>
-            {profileload && <div className="page"></div>}
-            {isopen && <Snackbar msg={msg} isopen={isopen} setisopen={setisopen} severity={severity}/>}
-            <div className="overlay-user">
-                <div className="dialog-user">
-                    <div className="dialog-header-user">
-                        <div className="title">
-                            <PersonAddIcon sx={{color:"#f07c1f"}} fontSize="large"/>
-                            <h3>{t("إنشاء حساب مهندس")}</h3>
-                        </div>
-                    </div>
-                    <div className="dialog-body-user">
-                        <form id="addForm" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-                            <div className="form-group-user">
-                                <label for="fullName">
-                                    <PersonIcon sx={{color:"#f07c1f"}} />
-                                   {t("الاسم الكامل")}
-                                </label>
-                                <input
-                                    type="text"
-                                    id="fullName"
-                                    placeholder={t("أدخل الاسم الكامل")}
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    
-                                />
-                            </div>
-                            <div className="form-group-user">
-                                <label for="email">
-                                    <EmailIcon sx={{color:"#f07c1f"}} fontSize="small"/>
-                                        {t("البريد الإلكتروني")}
-                                </label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    placeholder="example@domain.com"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    
-                                />
-                            </div>
-                            <div className="form-group-user">
-                                <label for="password">
-                                    <LockIcon sx={{color:"#f07c1f"}} fontSize="small"/>
-                                    {t("كلمة المرور")}
-                                </label>
-                                <div className="password-wrapper">
+        {profileload && <div className="page"></div>}
+        {isopen && <Snackbar msg={msg} isopen={isopen} setisopen={setisopen} severity={severity}/>}
+            <Dialogform
+        title={"إنشاء حساب مهندس"} 
+        icon={<PersonAddIcon sx={{color:"#f07c1f"}} fontSize="large"/>}
+        h="72vh" 
+        w="460px"
+        b1={<Button type="button" className="cancel" onClick={onClose} text="إلغاء" icon={<ClearIcon fontSize="small"/>}/>}
+        b2={<Button form="addForm" type="submit" className="accept" text="إضافة" icon={<SaveIcon fontSize="small"/>}/> }
+        >
+                <form id="addForm" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+                    <div className="form-group-user">
+                                    <label for="fullName">
+                                        <PersonIcon sx={{color:"#f07c1f"}} />
+                                    {t("الاسم الكامل")}
+                                    </label>
                                     <input
-                                        type={showPassword ? 'text' : 'password'}
-                                        id="password"
-                                        placeholder="••••••••"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        type="text"
+                                        id="fullName"
+                                        placeholder={t("أدخل الاسم الكامل")}
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
                                         
                                     />
-                                    <span className="toggle-pass" onClick={() => {setShowPassword(!showPassword)}}>
-                                        {showPassword ? (
-                                            <VisibilityOffIcon sx={{ color: '#b8bcbf' }} />
-                                        ) : (
-                                            <VisibilityIcon sx={{ color: '#b8bcbf' }} />
-                                        )}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="form-group-user">
-                                <label for="confirmPassword">
-                                    <CheckCircleIcon sx={{color:"#f07c1f"}} fontSize="small" />
-                                    {t("إعادة كلمة المرور")}
-                                </label>
-                                <div className="password-wrapper">
+                    </div>
+                    <div className="form-group-user">
+                                    <label for="email">
+                                        <EmailIcon sx={{color:"#f07c1f"}} fontSize="small"/>
+                                            {t("البريد الإلكتروني")}
+                                    </label>
                                     <input
-                                        type={showConfirmPassword ? 'text' : 'password'}
-                                        id="confirmPassword"
-                                        placeholder="••••••••"
-                                        value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        type="email"
+                                        id="email"
+                                        placeholder="example@domain.com"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         
                                     />
-                                    <span className="toggle-pass" onClick={() => {setShowConfirmPassword(!showConfirmPassword)}}>
-                                        {showConfirmPassword ? (
-                                            <VisibilityOffIcon sx={{ color: '#b8bcbf' }} />
-                                        ) : (
-                                            <VisibilityIcon sx={{ color: '#b8bcbf' }} />
-                                        )}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="dialog-footer-user">
-                                <Button type="button" className="cancel" onClick={onClose} text="إلغاء" icon={<ClearIcon fontSize="small"/>}/>
-                                <Button type="submit" className="accept" text="إضافة" icon={<SaveIcon fontSize="small"/>}/>       
-                            </div>
-                        </form>
                     </div>
-                </div>
-            </div>
+                    <div className="form-group-user">
+                                    <label for="password">
+                                        <LockIcon sx={{color:"#f07c1f"}} fontSize="small"/>
+                                        {t("كلمة المرور")}
+                                    </label>
+                                    <div className="password-wrapper">
+                                        <input
+                                            type={showPassword ? 'text' : 'password'}
+                                            id="password"
+                                            placeholder="••••••••"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            
+                                        />
+                                        <span className="toggle-pass" onClick={() => {setShowPassword(!showPassword)}}>
+                                            {showPassword ? (
+                                                <VisibilityOffIcon sx={{ color: '#b8bcbf' }} />
+                                            ) : (
+                                                <VisibilityIcon sx={{ color: '#b8bcbf' }} />
+                                            )}
+                                        </span>
+                                    </div>
+                    </div>
+                    <div className="form-group-user">
+                                    <label for="confirmPassword">
+                                        <CheckCircleIcon sx={{color:"#f07c1f"}} fontSize="small" />
+                                        {t("إعادة كلمة المرور")}
+                                    </label>
+                                    <div className="password-wrapper">
+                                        <input
+                                            type={showConfirmPassword ? 'text' : 'password'}
+                                            id="confirmPassword"
+                                            placeholder="••••••••"
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            
+                                        />
+                                        <span className="toggle-pass" onClick={() => {setShowConfirmPassword(!showConfirmPassword)}}>
+                                            {showConfirmPassword ? (
+                                                <VisibilityOffIcon sx={{ color: '#b8bcbf' }} />
+                                            ) : (
+                                                <VisibilityIcon sx={{ color: '#b8bcbf' }} />
+                                            )}
+                                        </span>
+                                    </div>
+                    </div>
+                </form>            
+            </Dialogform>
         </div>
     )
 }

@@ -4,6 +4,7 @@ import { useState,useContext } from "react";
 import { useTranslation } from 'react-i18next';
 //Commponents
 import Profiledialog from "../Profiledialog/Profiledialog";
+import Notificationlist from "../Notificationlist/Notificationlist";
 //MUI Icons
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Avatar from '@mui/material/Avatar';
@@ -13,6 +14,7 @@ import {UserContext} from "../../Context/UserContext";
 export default function Topbar() {
     const [t]=useTranslation();
     const [showprofile, setshowprofile] = useState(false);
+    const [shownotification, setshownotification] = useState(false);
     const {user}=useContext(UserContext);
     let role ={ 1:"مدير النظام", 2:"مستخدم", 3:"متعهد", 4:"مهندس"}
     return (  
@@ -29,12 +31,13 @@ export default function Topbar() {
          onClose={() => setshowprofile(false)}
          showEdit={true}
           />)}
+        {shownotification && (<Notificationlist/>)}
             <div className="title">
                 <h1>{t("مرحباً،")} <span>{user?.profile?.first_name + " " +user?.profile?.last_name}</span></h1>
                 <p>{t("نظرة عامة على أداء نظام إعادة الإعمار")}</p>
             </div>
             <div className="user-section">
-                <div className="notification">
+                <div className="notification" onClick={() =>{shownotification ? setshownotification(false) : setshownotification(true)} }>
                     <NotificationsIcon fontSize="medium"/>
                     <div className="notification-badge">3</div>
                 </div>

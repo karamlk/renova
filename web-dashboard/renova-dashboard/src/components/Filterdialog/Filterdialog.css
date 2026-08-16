@@ -1,49 +1,4 @@
-.filter-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
-}
-
-.filter-dialog {
-  background: white;
-  border-radius: 24px;
-  width: 420px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-  animation: slideUp 0.3s ease;
-  overflow: hidden;
-}
-
-.filter-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 30px 24px 0px 24px;
-  border-top: 5px solid #f07c1f;
-}
-
-.filter-header .filter-title {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.filter-header .filter-title h3 {
-  font-size: 19px;
-  font-weight: 700;
-  color: #0f1f2f;
-  margin: 0;
-}
-
-.filter-header .filter-close-btn {
+.filter-close-btn {
   width: 24px;
   height: 24px;
   border: none;
@@ -57,18 +12,15 @@
   transition: 0.3s;
 }
 
-.filter-header .filter-close-btn:hover {
+.filter-close-btn:hover {
   background: #999999eb;
   color: white;
 }
 
-/* ===== المحتوى ===== */
-.filter-body {
-  padding: 16px 24px 24px 24px;
-}
 .filter-group {
   margin-top: 15px;
 }
+
 .filter-group .group-label {
   font-size: 14px;
   font-weight: 600;
@@ -118,11 +70,4 @@
   font-size: 14px;
   color: #3b414c;
   font-weight: 500;
-}
-
-/* ===== أزرار النافذة ===== */
-.filter-footer {
-  padding: 0 24px 24px 24px;
-  display: flex;
-  gap: 10px;
 }

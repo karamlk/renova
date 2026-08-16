@@ -1,87 +1,13 @@
-.dialog-overlay {
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
-  animation: fadeIn 0.3s ease;
-}
-
-.dialog-profile {
-  background: white;
-  border-radius: 20px;
-  height: 630px;
-  width: 500px;
-  max-height: 90vh;
-  margin-right: 160px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
-  animation: slideUp 0.3s ease;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-/*********************************/
-.dialog-body::-webkit-scrollbar {
-  width: 5px;
-}
-
-.dialog-body::-webkit-scrollbar-track {
-  background: transparent;
-  margin: 10px 0;
-}
-
-.dialog-body::-webkit-scrollbar-thumb {
-  background: #f07c1f;
-  border-radius: 20px;
-  min-height: 40px;
-}
-
-.dialog-body::-webkit-scrollbar-thumb:hover {
-  background: #d96d1a;
-}
-/********************************/
-
-.dialog-header {
-  flex-shrink: 0;
-  padding: 0px 24px 18px 24px;
-  border-bottom: 1px solid #f0f1f3;
-}
-
-.dialog-header .title {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.dialog-header .title h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: #0f1f2f;
-  margin: 0;
-  font-family: "Tajawal", sans-serif;
-}
-
-.dialog-body {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 16px 24px 16px 24px;
-  scrollbar-gutter: stable;
-}
-
 .profile-row {
   display: flex;
   align-items: center;
   gap: 15px;
-  margin-bottom: 16px;
-  padding-bottom: 14px;
+  margin-bottom: 10px;
+  padding: 10px 12px;
   border-bottom: 1px solid #f0f1f3;
 }
 
-.profile-row .info h4 {
+.profile-row .profile-info h4 {
   font-size: 18px;
   font-weight: 700;
   color: #0f1f2f;
@@ -89,38 +15,39 @@
   font-family: "Tajawal", sans-serif;
 }
 
-.profile-row .info .role {
+.profile-row .profile-info .profile-role {
   font-size: 14px;
   color: #b8bcbf;
   font-weight: 500;
   font-family: "Tajawal", sans-serif;
 }
 
-.field {
+.profile-field {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
+  padding: 12px 2px;
   border-bottom: 1px solid #f5f5f6;
 }
 
-.field:last-child {
+.profile-field:last-child {
   border-bottom: none;
 }
 
-.field .label {
+.profile-field .profile-label {
   font-size: 15px;
   color: #b8bcbf;
   font-weight: 500;
   font-family: "Tajawal", sans-serif;
 }
 
-.field .value {
+.profile-field .profile-value {
   font-size: 15px;
   font-weight: 500;
   color: #0f1f2f;
   font-family: "Tajawal", sans-serif;
 }
+
 .img-field {
   padding: 12px 0px;
 }
@@ -179,13 +106,4 @@
 .cert-thumb:hover {
   border-color: #f07c1f;
   transform: scale(1.05);
-}
-
-.dialog-footer {
-  flex-shrink: 0;
-  padding: 20px 24px 20px 24px;
-  margin-left: 10px;
-  margin-right: 10px;
-  display: flex;
-  gap: 10px;
 }

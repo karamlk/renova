@@ -14,6 +14,8 @@ import {updatePasswordRequest} from "../../api/auth";
 //Components
 import Snackbar from "../../components/Snackbar/Snakbar";
 import Button from "../../components/Button/Button";
+import Dialogform from "../Dialogform/Dialogform"
+
 export default function Changepassdialog({onClose,onSuccess,onError}) {
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -56,17 +58,15 @@ export default function Changepassdialog({onClose,onSuccess,onError}) {
         <div>
     {profileload && <div className="page"></div>}
     {isopen && <Snackbar msg={msg} isopen={isopen} setisopen={setisopen} severity={severity}/>}
-    <div className="pass-dialog-overlay" >
-        <div className="pass-dialog-box">
-            <div className="pass-dialog-header">
-                <div className="pass-title">
-                    <LockIcon sx={{color:"#f07c1f"}}/>
-                    <h3 id="sub-title">تغيير كلمة المرور</h3>
-                </div>
-            </div>
-            <div className="pass-dialog-body">
+        <Dialogform
+        title={"تغيير كلمة المرور"} 
+        icon={<LockIcon sx={{color:"#f07c1f"}}/>}
+        h="480px" 
+        w="450px"
+        b1={<Button type="button" className="cancel" onClick={onClose} text="إلغاء" icon={<ClearIcon/>}/>}
+        b2={<Button form="passwordForm" type="submit" className="accept" text="تغيير" icon={<SaveIcon/>}/>}
+        >
                 <form id="passwordForm" onSubmit={(e)=>{e.preventDefault();changePassword(oldPassword,newPassword,confirmPassword)}} >
-
                     <div className="pass-form-group">
                         <label for="oldPassword">
                             <LockIcon sx={{color:"#f07c1f"}} fontSize="small"/> كلمة المرور الحالية
@@ -112,6 +112,7 @@ export default function Changepassdialog({onClose,onSuccess,onError}) {
                             </span>
                         </div>
                     </div>
+
                     <div className="pass-form-group">
                         <label for="confirmPassword">
                             <CheckCircleIcon sx={{color:"#f07c1f"}} fontSize="small"/> تأكيد كلمة المرور
@@ -134,17 +135,8 @@ export default function Changepassdialog({onClose,onSuccess,onError}) {
                             </span>
                         </div>
                     </div>
-                    <div className="pass-dialog-footer">
-                        <Button type="button" className="cancel" onClick={onClose} text="إلغاء" icon={<ClearIcon/>}/>
-                        <Button type="submit" className="accept" text="تغيير" icon={<SaveIcon/>}/>    
-                    </div>
-
                 </form>
-
-            </div>
-
-        </div>
-    </div>
+        </Dialogform>
     </div>
     )
 }
