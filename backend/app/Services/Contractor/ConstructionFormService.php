@@ -13,12 +13,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Payment;
 use App\Models\Wallet;
+use App\Services\NotificationService;
 use App\Services\WalletService;
+use Illuminate\Support\Facades\Auth;
 use Mpdf\Mpdf;
 
 class ConstructionFormService
 {
-
+   public function __construct(
+        protected NotificationService $notificationService
+    ) {}
 
     public function createForm(array $data, $file = null): ConstructionForm
     {
@@ -72,38 +76,39 @@ class ConstructionFormService
             'status' => $finalStatus,
             'engineer_notes' => $notes
         ]);
-        if ($status === 'engineer_approved') {
+        // if ($status === 'engineer_approved') {
 
-            app(\App\Services\NotificationService::class)
-                ->send(
+        //     app(\App\Services\NotificationService::class)
+        //         ->send(
 
-                    $form->reconstructionRequest->user_id,
+        //             $form->reconstructionRequest->user_id,
 
-                    'استمارة جديدة',
+        //             'استمارة جديدة',
 
-                    'وصلتك استمارة جديدة للمراجعة.',
+        //             'وصلتك استمارة جديدة للمراجعة.',
 
-                    'construction_form',
+        //             'construction_form',
 
-                    $form->id,
+        //             $form->id,
 
-                    $form->id
-                );
+        //             $form->id
+        //         );
 
-        }if($status === 'engineer_rejected'){
+        // }
+    //     if($status === 'engineer_rejected'){
 
-        Notification::create([
+    //     Notification::create([
 
-            'user_id' => $form->contractor_id,
+    //         'user_id' => $form->contractor_id,
 
-            'title' => 'تم رفض الاستمارة',
+    //         'title' => 'تم رفض الاستمارة',
 
-            'message' => 'قام المهندس برفض الاستمارة، يرجى مراجعة الملاحظات وإعادة التعديل.',
+    //         'message' => 'قام المهندس برفض الاستمارة، يرجى مراجعة الملاحظات وإعادة التعديل.',
 
-            'construction_form_id' => $form->id
+    //         'construction_form_id' => $form->id
 
-        ]);
-    }
+    //     ]);
+    // }
         return $form;
     }
 
@@ -239,19 +244,25 @@ class ConstructionFormService
 
             'status' => 'active'
         ]);
-        app(\App\Services\NotificationService::class)
-            ->send(
+        // app(\App\Services\NotificationService::class)
+        //     ->send(
 
-                $form->reconstructionRequest->user_id,
+        //         $form->reconstructionRequest->user_id,
 
-                'تم بدء المشروع',
+        //         'تم بدء المشروع',
 
-                'تم اعتماد المشروع وبدأ التنفيذ.',
+        //         'تم اعتماد المشروع وبدأ التنفيذ.',
 
-                'project',
+        //         'project',
 
-                $form->id
-            );
+        //         $form->id
+        //     );
+        
+            $this->notificationService->newPayment(
+            paymentId: $payment->id,
+            userName: Auth::user()->name,
+            amount: $payment->amount,
+        );
         app(\App\Services\InvoiceService::class)
             ->create($payment);
 
