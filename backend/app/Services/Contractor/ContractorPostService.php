@@ -235,8 +235,12 @@ class ContractorPostService
             'user.contractorProfile',
             'project.form.reconstructionRequest',
             'project.engineer',
+
         ])
             ->withCount('likes')
+            ->withExists(['likes as is_liked' => function ($query) {
+                $query->where('user_id', auth()->id());
+            }])
             ->latest()
             ->get();
 

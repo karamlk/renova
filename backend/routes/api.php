@@ -56,11 +56,6 @@ Route::post('/password/reset',      [ChangePasswordController::class, 'updatePas
 
 // Public contractor posts (visible without login)
 
-Route::get('/contractors/{id}/posts',     [ContractorPostController::class, 'contractorPosts']);
-
-Route::get('all_posts',[ContractorPostController::class,'allPosts']);
-
-Route::get('/post/{id}',[ContractorPostController::class,'post']);
 
 
 // ══════════════════════════════════════════════════════════════
@@ -118,6 +113,12 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(fun
     Route::get('/invoice/{invoice}/pdf',[InvoiceController::class,'pdf']);
 
     //Route::get('/contractor/profile/{id}',         [ContractorProfileController::class, 'show']);
+
+    Route::get('/contractors/{id}/posts',     [ContractorPostController::class, 'contractorPosts']);
+
+    Route::get('all_posts',[ContractorPostController::class,'allPosts']);
+
+    Route::get('/post/{id}',[ContractorPostController::class,'post']);
 
 
 
