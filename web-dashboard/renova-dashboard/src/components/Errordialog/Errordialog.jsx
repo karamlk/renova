@@ -11,9 +11,9 @@ export default function Errordialog({message ,onClose}){
 
     return (
     <div>
-        <div className="dialog-overlay" id="dialogOverlay">
-        <div className="dialog-box">
-            <div className="icon-wrapper">
+        <div className="error-dialog-overlay" id="dialogOverlay">
+        <div className="error-dialog-box">
+            <div className="error-icon-wrapper">
                 <GppMaybeIcon sx={{fontSize: 50 , color:"#e53935" ,}}/>
             </div>
             <h3>{t("فشل المصادقة")}</h3>

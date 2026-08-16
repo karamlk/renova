@@ -8,22 +8,20 @@ import CheckIcon from '@mui/icons-material/Check';
 import { useTranslation } from 'react-i18next';
 //Components
 import Button from '../Button/Button';
+import Dialogform from "../Dialogform/Dialogform";
 export default function Filterdialog({onClose,title,groups,onApply,onReset,selectedFilters,setSelectedFilters}) {
     const [t] = useTranslation();
     return (
-    <div className="filter-overlay">
-        <div className="filter-dialog">
-        
-            <div className="filter-header">
-                <div className="filter-title">
-                    <FilterAltIcon sx={{color:"#f07c1f" ,fontSize:30}} />
-                    <h3>{t(title)}</h3>
-                </div>
-                <button className="filter-close-btn" onClick={onClose}>
-                    <ClearIcon fontSize="small"/>
-                </button>
-            </div>
-            <div className="filter-body">
+        <div>
+    <Dialogform
+        title={title} 
+        icon={<FilterAltIcon sx={{color:"#f07c1f" ,fontSize:30}} />}
+        h="60vh" 
+        w="460px"
+        b1={<Button className="cancel" onClick={onReset} text="إعادة تعيين" icon={<ReplayIcon/>}/>}
+        b2={<Button className="accept" onClick={()=>{onApply(selectedFilters);}} text="تطبيق الفلتر" icon={<CheckIcon/>}/>}
+        closebtn={<button className="filter-close-btn" onClick={onClose}><ClearIcon fontSize="small"/></button>}
+        >
                 {groups.map((group) => (
                     <div className="filter-group" key={group.name}>
                     <span className="group-label">{group.icon}{t(group.subtitle)}</span>
@@ -36,14 +34,8 @@ export default function Filterdialog({onClose,title,groups,onApply,onReset,selec
                         ))}
                     </div>
                 </div>
-                ))}
-            </div>
-            <div className="filter-footer">
-                <Button className="cancel" onClick={onReset} text="إعادة تعيين" icon={<ReplayIcon/>}/>
-                <Button className="accept" onClick={()=>{onApply(selectedFilters);}} text="تطبيق الفلتر" icon={<CheckIcon/>}/>
-            </div>
-
+                ))}            
+        </Dialogform>
         </div>
-    </div>
     )
 }

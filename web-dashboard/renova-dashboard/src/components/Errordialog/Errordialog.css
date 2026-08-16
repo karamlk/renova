@@ -1,4 +1,4 @@
-.dialog-overlay {
+.error-dialog-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -13,7 +13,7 @@
   justify-content: center;
 }
 
-.dialog-box {
+.error-dialog-box {
   background: #0f1f2f;
   border-radius: 28px;
   width: 480px;
@@ -29,7 +29,7 @@
   justify-content: center;
 }
 
-.icon-wrapper {
+.error-icon-wrapper {
   width: 90px;
   height: 90px;
   background: rgba(229, 57, 53, 0.12);

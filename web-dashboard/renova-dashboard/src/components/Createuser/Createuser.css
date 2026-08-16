@@ -1,56 +1,5 @@
-.overlay-user {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
-}
-
-.dialog-user {
-  background: white;
-  border-radius: 24px;
-  border-top: 5px solid #f07c1f;
-  max-width: 460px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: hidden;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
-  animation: slideUp 0.3s ease;
-}
-
-.dialog-header-user {
-  display: flex;
-  align-items: center;
-  padding: 5px 24px 18px 24px;
-  border-bottom: 1px solid #f0f1f3;
-}
-
-.dialog-header-user .title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.dialog-header-user .title h3 {
-  font-size: 20px;
-  font-weight: 700;
-  color: #0f1f2f;
-  margin: 0;
-  font-family: "Tajawal", sans-serif;
-}
-
-.dialog-body-user {
-  padding: 20px 18px 24px 18px;
-}
-
 .form-group-user {
+  margin-top: 16px;
   margin-bottom: 16px;
 }
 
@@ -103,11 +52,6 @@
 }
 .toggle-pass:hover svg {
   color: #f07c1f !important;
-}
-.dialog-footer-user {
-  padding: 30px 1px 0px 1px;
-  display: flex;
-  gap: 10px;
 }
 
 .page {

@@ -11,23 +11,21 @@ import { useTranslation } from 'react-i18next';
 import {formatMoney} from "../../utils/formatMoney";
 //Components
 import Button from '../Button/Button';
+import Dialogform from '../Dialogform/Dialogform';
+
 export default function Transfermoneydialog({onApply,onclose,id,payment_amount,remaining_amount}) {
     const [t] = useTranslation();
     const [amount, setAmount] = useState("");
     return (
     <>
-     <div className="Transfer-dialog-overlay" >
-        <div className="Transfer-dialog-box">
-
-            <div className="Transfer-dialog-header">
-                <div className="Transfer-title">
-                    <MonetizationOnIcon sx={{color: "#f07c1f" , fontSize: "28px"}}/>
-                    <h3>{t("تحويل المبلغ")}</h3>
-                </div>
-            </div>
-
-
-            <div className="Transfer-dialog-body">
+    <Dialogform
+        title={"تحويل المبلغ"} 
+        icon={<MonetizationOnIcon sx={{color: "#f07c1f" , fontSize: "28px"}}/>}
+        h="46vh" 
+        w="480px"
+        b1={<Button type="button" className="cancel" onClick={onclose} text="إلغاء" icon={<ClearIcon/>}/>}
+        b2={<Button form="Transfer-form" type="submit" className="accept" text="تحويل" icon={<TelegramIcon/>}/>}
+        >
                 <div className="Transfer-payment-info">
                     <div>
                         <span className="Transfer-label">{t("رقم الدفعة")}</span>
@@ -43,8 +41,7 @@ export default function Transfermoneydialog({onApply,onclose,id,payment_amount,r
                     </div>
                 </div>
 
-
-                <form onSubmit={(e) => {e.preventDefault();onApply(amount);}}>
+                <form id="Transfer-form" onSubmit={(e) => {e.preventDefault();onApply(amount);}}>
                     <div className="Transfer-form-group">
                         <label htmlFor="amount">
                             <AttachMoneyIcon sx={{color: "#f07c1f" , fontSize: "21px"}}/>
@@ -63,17 +60,8 @@ export default function Transfermoneydialog({onApply,onclose,id,payment_amount,r
                             />
                         </div>
                     </div>
-
-                    <div className="Transfer-dialog-footer">
-                        <Button type="button" className="cancel" onClick={onclose} text="إلغاء" icon={<ClearIcon/>}/>
-                        <Button type="submit" className="accept" text="تحويل" icon={<TelegramIcon/>}/>
-                    </div>
                 </form>
-
-            </div>
-
-        </div>
-    </div>
+        </Dialogform>
     </>
     )
    

@@ -13,6 +13,7 @@ import {useState} from "react";
 import { useTranslation } from 'react-i18next';
 //Components
 import Button from "../../components/Button/Button";
+import Dialogform from "../Dialogform/Dialogform";
 export default function Complainthandlingdialog({id,complainant_name,complainton_name,onApply,onClose}){
     const {t}=useTranslation();
     const [penalty, setPenalty] = useState("");
@@ -23,16 +24,15 @@ export default function Complainthandlingdialog({id,complainant_name,complainton
     }
     return(
         <div>
-    <div className="complaint-dialog-overlay" >
-        <div className="complaint-dialog-box" >
-
-            <div className="complaint-dialog-header">
-                <div className="complaint-title">
-                    <CheckCircleIcon sx={{color: '#4CAF50'}}/>
-                    <h3>{t("معالجة الشكوى")}</h3>
-                </div>
-            </div>
-
+    <Dialogform
+        title={"معالجة الشكوى"} 
+        icon={<CheckCircleIcon sx={{color: '#4CAF50'}}/>}
+        h="81vh" 
+        w="500px"
+        b1={<Button type="button" className="cancel" onClick={onClose} text="إلغاء" icon={<CloseIcon/>}/>}
+        b2={<Button form="complaintForm" type="submit" className="process" text="معالجة" icon={<CheckIcon/>}/>}
+        borderclr="#4CAF50"
+        >
                 <div class="complaint-card">
                     <div class="item">
                         <TagIcon sx={{color: '#4CAF50'}}/>
@@ -49,10 +49,7 @@ export default function Complainthandlingdialog({id,complainant_name,complainton
                         <span class="label">{t("المشكى عليه")}:</span>
                         <span class="value">{complainton_name}</span>
                     </div>
-                </div>
-
-
-            <div className="complaint-dialog-body">
+                </div>   
                 <form id="complaintForm" onSubmit={handleAccept}>
                     <div className="complaint-form-group">
                         <label for="discount">
@@ -85,20 +82,9 @@ export default function Complainthandlingdialog({id,complainant_name,complainton
                             value={reason}
                             onChange={(e)=>setReason(e.target.value)}
                         ></textarea>
-
                     </div>
-
-                    <div className="complaint-dialog-footer">
-                        <Button type="button" className="cancel" onClick={onClose} text="إلغاء" icon={<CloseIcon/>}/>
-                        <Button type="submit" className="process" text="معالجة" icon={<CheckIcon/>}/>
-                    </div>
-
-                </form>
-
-            </div>
-
-        </div>
-    </div>
+                </form>         
+        </Dialogform>
         </div>
     )
 }

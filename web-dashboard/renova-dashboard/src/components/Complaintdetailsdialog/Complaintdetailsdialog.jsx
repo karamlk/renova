@@ -12,6 +12,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import Avatar from '@mui/material/Avatar';
 //Components
 import Imagedialog from "../../components/Imagedialog/Imagedialog";
+import Dialogform from "../Dialogform/Dialogform";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState } from "react";
@@ -35,24 +36,13 @@ export default function Complaintdetailsdialog({
          let display_status=status ? status : "auto";
     return(
         <>
-        {openimage && (<Imagedialog
-            src={selectedImage}
-            onClose={() => setopenimage(false)}
-        />)}
-        <div className="complaints-dialog-overlay" id="dialogOverlay">
-        <div className="complaints-dialog-box" >
-
-            <div className="complaints-dialog-header">
-                <div className="complaints-title">
-                    <DescriptionIcon sx={{color: '#f07c1f' , fontSize: 30}} />
-                    <h3>{t("تفاصيل الشكوى")}</h3>
-                </div>
-                <div className="complaints-close-btn" onClick={onClose}>
-                    <ClearIcon/>
-                </div>
-            </div>
-
-            <div className="complaints-dialog-body">
+        {openimage && (<Imagedialog src={selectedImage} onClose={() => setopenimage(false)}/>)}
+         <Dialogform
+        title={"تفاصيل الشكوى"} 
+        icon={<DescriptionIcon sx={{color: '#f07c1f' , fontSize: 30}} />}
+        h="90vh" 
+        w="700px"
+        closebtn={<div className="complaints-close-btn" onClick={onClose}><ClearIcon/></div>}>
                 <div className="complaints-section">
                     <div className="complaints-section-main-title">
                         <div className="complaints-sub-title">
@@ -159,7 +149,6 @@ export default function Complaintdetailsdialog({
                 )}
 
 
-         
                 <div className="complaints-section">
                     <div className="complaints-section-title"><InventoryIcon sx={{color: '#f07c1f', fontSize: 21}}/>{t("الأرشفة")}</div>
                     <div className="complaints-info-grid">
@@ -168,10 +157,7 @@ export default function Complaintdetailsdialog({
                     </div>
                 </div>
 
-            </div>
-
-        </div>
-    </div>
-        </>
+        </Dialogform>   
+    </>
     )
 }

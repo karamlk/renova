@@ -148,29 +148,29 @@ export default function User(){
          children={
             (userinfo.role_id === 4 ?
                 ( <>
-            <div className="field">
-            <span className="label">{t("الاختصاص")}</span>
-            <span className="value">{userinfo?.engineer_profile?.specialization}</span>
+            <div className="profile-field">
+            <span className="profile-label">{t("الاختصاص")}</span>
+            <span className="profile-value">{userinfo?.engineer_profile?.specialization}</span>
             </div>
-            <div className="field">
-            <span className="label">{t("الرقم النقابي")}</span>
-            <span className="value">{userinfo?.engineer_profile?.syndicate_number}</span>
+            <div className="profile-field">
+            <span className="profile-label">{t("الرقم النقابي")}</span>
+            <span className="profile-value">{userinfo?.engineer_profile?.syndicate_number}</span>
             </div>
-            <div className="field">
-            <span className="label">{t("الدرجة العلمية")}</span>
-            <span className="value">{userinfo?.engineer_profile?.degree}</span>
+            <div className="profile-field">
+            <span className="profile-label">{t("الدرجة العلمية")}</span>
+            <span className="profile-value">{userinfo?.engineer_profile?.degree}</span>
             </div>
-             <div className="field">
-            <span className="label">{t("سنوات الخبرة")}</span>
-            <span className="value">{userinfo?.engineer_profile?.years_of_experience} سنوات</span>
+             <div className="profile-field">
+            <span className="profile-label">{t("سنوات الخبرة")}</span>
+            <span className="profile-value">{userinfo?.engineer_profile?.years_of_experience} سنوات</span>
             </div>
-            <div className="field">
-            <span className="label">{t("الشهادة الجامعية")}</span>
+            <div className="profile-field">
+            <span className="profile-label">{t("الشهادة الجامعية")}</span>
             <IconBtn name="عرض PDF" clr="#e53935"  onClick={() => window.open(userinfo?.engineer_profile?.full_certificate_file_url, "_blank")} icon={<PictureAsPdfIcon sx={{color:"#e53935", fontSize:28}} />} />
             </div>
             {userinfo?.engineer_profile?.full_syndicate_card_image_url?
             <div className="img-field">
-            <span className="label">{t("الصور")}</span>
+            <span className="profile-label">{t("الصور")}</span>
             <div className="cert-thumb" onClick={(e)=>{
                  e.stopPropagation();
                  setSelectedImage(userinfo?.engineer_profile?.full_syndicate_card_image_url);
@@ -180,13 +180,13 @@ export default function User(){
             </>)
            :userinfo.role_id === 3 ?
            (<>
-            <div className="field">
-            <span className="label">{t("اسم الشركة")}</span>
-            <span className="value">{userinfo?.contractor_profile?.company_name}</span>
+            <div className="profile-field">
+            <span className="profile-label">{t("اسم الشركة")}</span>
+            <span className="profile-value">{userinfo?.contractor_profile?.company_name}</span>
             </div>
             {userinfo?.contractor_profile.full_commercial_record_url?
             <div className="img-field">
-            <span className="label">{t("الصور")}</span>
+            <span className="profile-label">{t("الصور")}</span>
             <div className="cert-thumb" onClick={(e)=>{
                  e.stopPropagation();
                  setSelectedImage(userinfo?.contractor_profile?.full_commercial_record_url);

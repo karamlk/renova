@@ -1,67 +1,3 @@
-/* ===== نافذة اختيار المهندس ===== */
-.eng-dialog-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
-}
-
-.eng-dialog-box {
-  background: white;
-  border-radius: 20px;
-  max-width: 520px;
-  width: 100%;
-  max-height: 80vh;
-  overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
-  animation: slideUp 0.3s ease;
-}
-
-/* ===== رأس النافذة ===== */
-.eng-dialog-header {
-  padding: 18px 22px 15px 22px;
-  border-bottom: 1px solid #f0f1f3;
-}
-
-.eng-dialog-header h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: #0f1f2f;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* ===== محتوى النافذة ===== */
-.eng-dialog-body {
-  padding: 0px 18px;
-  max-height: 60vh;
-  overflow-y: auto;
-}
-
-.eng-dialog-body::-webkit-scrollbar {
-  width: 4px;
-}
-
-.eng-dialog-body::-webkit-scrollbar-track {
-  background: #f0f1f3;
-  border-radius: 10px;
-}
-
-.eng-dialog-body::-webkit-scrollbar-thumb {
-  background: #f07c1f;
-  border-radius: 10px;
-}
-
-/* ===== قائمة المهندسين ===== */
 .engineer-item {
   display: flex;
   align-items: center;
@@ -106,11 +42,4 @@
 .engineer-item.selected {
   background: rgba(240, 124, 31, 0.06);
   border-color: #f07c1f;
-}
-/* ===== أزرار النافذة ===== */
-.eng-dialog-footer {
-  padding: 20px 22px;
-  border-top: 1px solid #f0f1f3;
-  display: flex;
-  gap: 10px;
 }

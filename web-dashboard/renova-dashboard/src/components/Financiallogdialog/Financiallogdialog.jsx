@@ -11,24 +11,21 @@ import {formatMoney} from "../../utils/formatMoney";
 import dayjs from "dayjs";
 //Hooks
 import { useTranslation } from 'react-i18next';
+//Components
+import Dialogform from "../Dialogform/Dialogform";
+
 export default function Financiallogdialog({onClose,log_id,payment_id,log_type,amount,log_date,from_user,to_user,description}) {
      const {t} = useTranslation();
      let type = {first_payment:t("الدفعة الأولى") , second_payment:t("الدفعة الثانية") , final_payment:t("الدفعة الأخيرة"),release:t("محولة")}
     return (
     <>
-        <div className="log-dialog-overlay" >
-        <div className="log-dialog-box" >
-
-            <div className="log-dialog-header">
-                <div className="log-title">
-                    <ReceiptIcon sx={{color:'#f07c1f' , fontSize: "28px"}}/>
-                    <h3>{t("تفاصيل العملية المالية")}</h3>
-                </div>
-                <div className="log-close-btn">
-                    <ClearIcon onClick={onClose}/>
-                </div>
-            </div>
-            <div className="log-dialog-body">
+      <Dialogform
+        title={"تفاصيل العملية المالية"} 
+        icon={<ReceiptIcon sx={{color:'#f07c1f' , fontSize: "27px"}}/>}
+        h="65vh" 
+        w="460px"
+        closebtn={<button className="log-close-btn" onClick={onClose}><ClearIcon fontSize="small"/></button>}
+        >
                 <div className="log-section">
                     <div className="log-section-title"><InfoIcon sx={{color:'#f07c1f' , fontSize: "18px"}}/>{t("معلومات العملية")}</div>
                     <div className="log-detail-grid">
@@ -66,10 +63,7 @@ export default function Financiallogdialog({onClose,log_id,payment_id,log_type,a
                        {description}
                     </div>
                 </div>
+        </Dialogform>
 
-            </div>
-
-        </div>
-    </div>
     </>)
 }

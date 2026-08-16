@@ -12,6 +12,9 @@ import {formatMoney} from "../../utils/formatMoney";
 import dayjs from "dayjs";
 //Hooks
 import { useTranslation } from 'react-i18next';
+//Components
+import Dialogform from "../Dialogform/Dialogform";
+
 export default function Userpaymentdialog({onClose,id,p_type,amount,released_amount,p_status,date,
     pr_name,pr_type,pr_total_cost,pr_status,warranty_period,execution_duration,
     user_n,cons_n,eng_n,
@@ -22,19 +25,13 @@ export default function Userpaymentdialog({onClose,id,p_type,amount,released_amo
         let project_type={restoration:t("ترميم") , construction:t("بناء") , finishing:t("إكساء")};
     return (
     <>
-    <div className="userpayment-dialog-overlay" >
-        <div className="userpayment-dialog-box">
-
-            <div className="userpayment-dialog-header">
-                <div className="userpayment-title">
-                    <ReceiptIcon sx={{color:'#f07c1f' , fontSize: "28px"}}/>
-                    <h3>{t("تفاصيل الدفعة")}</h3>
-                </div>
-                <div className="userpayment-close-btn" onClick={onClose}>
-                    <ClearIcon/>
-                </div>
-            </div>
-            <div className="userpayment-dialog-body">
+     <Dialogform
+        title={"تفاصيل الدفعة"} 
+        icon={<ReceiptIcon sx={{color:'#f07c1f' , fontSize: "28px"}}/>}
+        h="92vh" 
+        w="650px"
+        closebtn={<div className="userpayment-close-btn" onClick={onClose}><ClearIcon/></div>}
+        >
                 <div className="userpayment-section">
                     <div className="userpayment-section-title"><InfoIcon sx={{color:'#f07c1f' , fontSize: "20px"}}/>{t("معلومات الدفعة")}</div>
                     <div className="userpayment-detail-grid">
@@ -71,10 +68,9 @@ export default function Userpaymentdialog({onClose,id,p_type,amount,released_amo
                         <div className="userpayment-detail-item"><span className="userpayment-label">{t("مدة الإنجاز")}:</span><span className="userpayment-value">
                                 {execution_duration}</span></div>                                     
                         </div>
-                    </div>
+                </div>
               
 
-    
                 <div className="userpayment-section">
                     <div className="userpayment-section-title"><PeopleAltIcon sx={{color:'#f07c1f' , fontSize: "20px"}}/>{t("الأطراف")}</div>
                     <div className="userpayment-detail-grid">
@@ -105,11 +101,7 @@ export default function Userpaymentdialog({onClose,id,p_type,amount,released_amo
                         </div>
                     </div>
                 </div>
-
-            </div>
-
-        </div>
-    </div>
+        </Dialogform>
         </>
     );
 }
