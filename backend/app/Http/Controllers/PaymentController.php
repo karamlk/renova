@@ -104,4 +104,11 @@ class PaymentController extends Controller
 
         );
     }
+    public function showPayment($id)
+    {
+        return response()->json([
+            app(PaymentService::class)
+                ->showPayment($id)
+        ]);
+    }
 }

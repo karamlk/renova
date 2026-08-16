@@ -33,6 +33,7 @@ use App\Http\Controllers\User\LikeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ReconstructionRequestController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -118,6 +119,13 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(fun
 
 
 
+});
+
+
+
+Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer'])->group(function () {
+    Route::get('/wallet', [WalletController::class, 'financialAccount']);
+    Route::get('/payments/{payment}', [PaymentController::class, 'showPayment']);
 });
 
 // ── USER (customer) ───────────────────────────────────────────

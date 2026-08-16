@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\PaymentAudit;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
 use Exception;
@@ -65,5 +66,35 @@ class WalletService
                 'description' => $description
             ]);
         });
+    }
+
+    public function myFinancialAccount()
+    {
+        $userId = auth()->id();
+
+        $wallet = Wallet::where(
+            'user_id',
+            $userId
+        )->firstOrFail();
+
+        $audits = PaymentAudit::with([
+            'fromUser:id,name',
+            'toUser:id,name',
+            'payment.invoice'
+        ])
+            ->where(function ($query) use ($userId) {
+                $query->where('from_user_id', $userId)
+                    ->orWhere('to_user_id', $userId);
+            })
+            ->latest()
+            ->paginate(10);
+
+        return [
+            'balance' => $wallet->balance,
+
+            'card_number' => $wallet->card_number,
+
+            'transactions' => $audits
+        ];
     }
 }

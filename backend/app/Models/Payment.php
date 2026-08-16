@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Payment extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
 
         'construction_form_id',
@@ -44,5 +44,8 @@ class Payment extends Model
         return $this->hasOne(Invoice::class);
     }
 
-
+    public function audits()
+    {
+        return $this->hasMany(PaymentAudit::class);
+    }
 }

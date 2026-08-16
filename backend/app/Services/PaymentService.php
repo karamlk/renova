@@ -297,4 +297,29 @@ class PaymentService
 
         ]);
     }
+
+    public function showPayment($id)
+    {
+        $userId = auth()->id();
+
+        $payment = Payment::with([
+            'user:id,name',
+            'invoice',
+           // 'form.reconstructionRequest',
+            'audits.fromUser:id,name',
+            'audits.toUser:id,name',
+        ])
+//            ->where(function ($query) use ($userId) {
+//
+//                $query->where('user_id', $userId)
+//                    ->orWhereHas('audits', function ($q) use ($userId) {
+//                        $q->where('from_user_id', $userId)
+//                            ->orWhere('to_user_id', $userId);
+//                    });
+//
+//            })
+            ->findOrFail($id);
+
+        return $payment;
+    }
 }
