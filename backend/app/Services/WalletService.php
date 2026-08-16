@@ -87,7 +87,7 @@ class WalletService
                     ->orWhere('to_user_id', $userId);
             })
             ->latest()
-            ->paginate(10);
+            ->get();
 
         return [
             'balance' => $wallet->balance,

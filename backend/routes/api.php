@@ -22,6 +22,7 @@ use App\Http\Controllers\Engineer\EngineerProfileController;
 use App\Http\Controllers\Engineer\EngineerProjectController;
 use App\Http\Controllers\Engineer\EngineerVisitController;
 use App\Http\Controllers\Engineer\ProjectTaskController;
+use App\Http\Controllers\FcmTokenController;
 use App\Http\Controllers\InspectionRequestController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentAuditController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectReviewController;
 use App\Http\Controllers\SiteVisitController;
+use App\Http\Controllers\TestNotificationController;
 use App\Http\Controllers\User\LikeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\User\ProfileController;
@@ -126,6 +128,8 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(fun
 Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer'])->group(function () {
     Route::get('/wallet', [WalletController::class, 'financialAccount']);
     Route::get('/payments/{payment}', [PaymentController::class, 'showPayment']);
+    Route::post('/fcm-token', [FcmTokenController::class, 'update']);
+    Route::get('/test-notification', [TestNotificationController::class, 'send']);
 });
 
 // ── USER (customer) ───────────────────────────────────────────

@@ -2,43 +2,80 @@
 
 namespace App\Services;
 
-use App\Models\User;
-use Kreait\Firebase\Contract\Messaging;
+use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\Notification;
+use Kreait\Firebase\Messaging\Notification as FirebaseNotification;
 
 class FirebaseNotificationService
 {
-    public function __construct(
-        private Messaging $messaging
-    ) {}
+    protected $messaging;
 
-    // إرسال لمستخدم مباشرة
-    public function sendToUser(
-        User $user,
+    public function __construct()
+    {
+        $factory = (new Factory)
+            ->withServiceAccount(
+                storage_path('backend/firebase/firebase-credentials.json')
+            );
+
+        $this->messaging = $factory->createMessaging();
+    }
+
+    public function send(
+        string $token,
         string $title,
-        string $body
-    ): void {
+        string $body,
+        array $data = []
+    ) {
+        $message = CloudMessage::new()
+            ->withToken($token)
+            ->withNotification(
+                FirebaseNotification::create($title, $body)
+            )
+            ->withData($data);
 
-        if (!$user->fcm_token) {
-            return;
-        }
-
-        $notification = Notification::create(
-            $title,
-            $body
-        );
-
-        $message = CloudMessage::withTarget(
-            'token',
-            $user->fcm_token
-        )->withNotification(
-            $notification
-        );
-
-        $this->messaging->send($message);
+        return $this->messaging->send($message);
     }
 }
+//
+//namespace App\Services;
+//
+//use App\Models\User;
+//use Kreait\Firebase\Contract\Messaging;
+//use Kreait\Firebase\Messaging\CloudMessage;
+//use Kreait\Firebase\Messaging\Notification;
+//
+//class FirebaseNotificationService
+//{
+//    public function __construct(
+//        private Messaging $messaging
+//    ) {}
+//
+//    // إرسال لمستخدم مباشرة
+//    public function sendToUser(
+//        User $user,
+//        string $title,
+//        string $body
+//    ): void {
+//
+//        if (!$user->fcm_token) {
+//            return;
+//        }
+//
+//        $notification = Notification::create(
+//            $title,
+//            $body
+//        );
+//
+//        $message = CloudMessage::withTarget(
+//            'token',
+//            $user->fcm_token
+//        )->withNotification(
+//            $notification
+//        );
+//
+//        $this->messaging->send($message);
+//    }
+//}
 
 //app(FirebaseNotificationService::class)->sendToUser(
 //    $user,
