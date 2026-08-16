@@ -138,6 +138,8 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(fun
 
     Route::get('/post/{id}',[ContractorPostController::class,'post']);
 
+    Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
+
 
 
 });
@@ -176,7 +178,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
     Route::post('construction-forms/{constructionForm}/confirm-payment', [ConstructionFormController::class, 'confirmPayment']);
 
     // Likes
-    Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
+  //  Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
 
     //invoice
     Route::get('/my-invoices',[InvoiceController::class,'myInvoices']);
@@ -228,7 +230,6 @@ Route::middleware(['auth:sanctum', 'active', 'role:contractor'])->group(function
     Route::get('construction-forms/{form}',                     [ConstructionFormController::class, 'show']);
 
     // Likes
-    Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
 
     //invoice
     Route::get('contractor/invoices',[InvoiceController::class,'contractorInvoices']);
