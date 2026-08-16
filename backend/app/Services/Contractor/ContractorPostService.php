@@ -151,8 +151,11 @@ class ContractorPostService
             'project.form.materials',
             'project.engineer',
         ])
-            //->where('user_id', auth()->id())
+            ->where('user_id', auth()->id())
             ->withCount('likes')
+            ->withExists(['likes as is_liked' => function ($query) {
+                $query->where('user_id', auth()->id());
+            }])
             ->findOrFail($id);
     }
 
@@ -170,6 +173,9 @@ class ContractorPostService
         ])
             ->where('user_id', $contractorId)
             ->withCount('likes')
+            ->withExists(['likes as is_liked' => function ($query) {
+                $query->where('user_id', auth()->id());
+            }])
             ->latest()
             ->get();
     }

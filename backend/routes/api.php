@@ -102,6 +102,20 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer'])->
     // Route::get('complaints/{complaint}',         [ComplaintController::class, 'show']);
     Route::post('no-show-warnings',              [NoShowWarningController::class, 'store']);
     // Route::get('no-show-warnings/{warning}',     [NoShowWarningController::class, 'show']);
+
+    Route::get('/wallet', [WalletController::class, 'financialAccount']);
+    Route::get('/payments/{payment}', [PaymentController::class, 'showPayment']);
+
+    Route::post('/fcm-token', [FcmTokenController::class, 'update']);
+    Route::get('/test-notification', [TestNotificationController::class, 'send']);
+
+    //Route::get('/wallet/financial-account', [WalletController::class, 'financialAccount']);
+
+
+
+    // مسار التحويل المالي
+    Route::post('/wallet/transfer', [WalletController::class, 'transfer']);
+
 });
 
 // User & contractor
@@ -126,12 +140,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(fun
 
 
 
-Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer'])->group(function () {
-    Route::get('/wallet', [WalletController::class, 'financialAccount']);
-    Route::get('/payments/{payment}', [PaymentController::class, 'showPayment']);
-    Route::post('/fcm-token', [FcmTokenController::class, 'update']);
-    Route::get('/test-notification', [TestNotificationController::class, 'send']);
-});
+
 
 // ── USER (customer) ───────────────────────────────────────────
 Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
@@ -223,6 +232,8 @@ Route::middleware(['auth:sanctum', 'active', 'role:contractor'])->group(function
 
     Route::get('/contractor/projects', [ProjectController::class, 'myProjects']);
     Route::get('/contractor/projects/{project}', [ProjectController::class, 'show']);
+
+    Route::get('/wallet/contractor-engineers', [WalletController::class, 'getEngineersForTransfer']);
 
 });
 
