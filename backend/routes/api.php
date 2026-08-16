@@ -90,6 +90,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 // ACTIVE USERS — Auth + active account required
 // ══════════════════════════════════════════════════════════════
 
+Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
+    Route::get('/payments/pending', [PaymentController::class, 'pending']);
+});
+
 // USER (customer) and ADMIN
 Route::middleware(['auth:sanctum', 'active', 'role:user,admin'])->group(function () {
     Route::post('/user/profile',        [ProfileController::class, 'store']);
@@ -158,7 +162,6 @@ Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
     Route::get('/showForm/{id}', [ConstructionFormController::class, 'showForm']);
 
     // Payments
-    Route::get('/payments/pending',                 [PaymentController::class, 'pending']);
     Route::post('/payments/{payment}/send-otp',     [PaymentController::class, 'sendOtp']);
     Route::post('/payments/{payment}/pay',          [PaymentController::class, 'pay']);
     Route::post('construction-forms/{constructionForm}/confirm-payment', [ConstructionFormController::class, 'confirmPayment']);
