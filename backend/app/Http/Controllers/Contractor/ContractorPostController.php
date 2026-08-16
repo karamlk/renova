@@ -75,9 +75,9 @@ class ContractorPostController extends Controller
     }
     public function allPosts()
     {
-        return response()->json([
+        return response()->json(
             $this->postService->allPosts()
-        ]);
+        );
     }
     public function post($id)
     {

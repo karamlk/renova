@@ -238,6 +238,7 @@ class ContractorPostService
         ])
             ->withCount('likes')
             ->latest()
-            ->paginate(10);
+            ->get();
+
     }
 }
