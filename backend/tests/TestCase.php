@@ -5,6 +5,7 @@ namespace Tests;
 use App\Models\ConstructionForm;
 use App\Models\ContractorSchedule;
 use App\Models\InspectionRequest;
+use App\Models\Project;
 use App\Models\ReconstructionRequest;
 use App\Models\Role;
 use App\Models\SiteVisit;
@@ -44,6 +45,7 @@ abstract class TestCase extends BaseTestCase
     }
 
     // ── Helper: create a full project chain ──────────
+    // ── Helper: create a full project chain ──────────
     protected function createFullProject(array $attrs = []): array
     {
         $user       = $this->createUser();
@@ -67,17 +69,41 @@ abstract class TestCase extends BaseTestCase
         $siteVisit = SiteVisit::factory()->create([
             'inspection_request_id' => $inspectionRequest->id,
             'schedule_id'           => $schedule->id,
-            'engineer_id'           => $engineer->id,
+            'engineer_id'            => $engineer->id,
             'status'                => 'accepted',
         ]);
 
-        $form = ConstructionForm::factory()->approved()->withTotalCost(1000000)->create([
-            'reconstruction_request_id' => $request->id,
-            'contractor_id'             => $contractor->id,
-            'engineer_id'               => $engineer->id,
-        ]);
+        $form = ConstructionForm::factory()
+            ->approved()
+            ->withTotalCost(1000000)
+            ->create([
+                'reconstruction_request_id' => $request->id,
+                'contractor_id'             => $contractor->id,
+                'engineer_id'               => $engineer->id,
+            ]);
 
-        return compact('user', 'contractor', 'engineer', 'request', 'inspectionRequest', 'schedule', 'siteVisit', 'form');
+        $project = Project::factory()->create(array_merge([
+            'construction_form_id' => $form->id,
+            'contractor_id'        => $contractor->id,
+            'engineer_id'          => $engineer->id,
+            'user_id'              => $user->id,
+            'progress'             => 100,
+            'status'               => 'active',
+            'project_ends_at'      => '2026-06-30',
+            'warranty_ends_at'     => '2029-06-30',
+        ], $attrs));
+
+        return compact(
+            'user',
+            'contractor',
+            'engineer',
+            'request',
+            'inspectionRequest',
+            'schedule',
+            'siteVisit',
+            'form',
+            'project'
+        );
     }
 
     // ── Helper: login and get token ──────────────────
