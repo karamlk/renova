@@ -6,6 +6,7 @@ use App\Models\Complaint;
 use App\Models\ComplaintImage;
 use App\Models\ConstructionForm;
 use App\Models\NoShowWarning;
+use App\Models\Project;
 use App\Models\Role;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
@@ -47,7 +48,27 @@ class ComplaintService
             $complainedOnId   = $customerId;
             $complainedOnRole = Role::where('name', 'user')->firstOrFail();
         }
+        $project = Project::where('construction_form_id', $form->id)->first();
 
+        abort_if(
+            is_null($project),
+            422,
+            'لا يمكن تقديم شكوى على مشروع لم يكتمل بعد'
+        );
+
+        abort_if(
+            is_null($project->warranty_ends_at),
+            422,
+            'لم يكتمل المشروع بعد، الضمان لم يبدأ'
+        );
+
+        $now = now()->toDateString();
+
+        abort_if(
+            !($now >= $project->project_ends_at && $now <= $project->warranty_ends_at),
+            422,
+            'لا يمكن تقديم شكوى إلا خلال فترة الضمان بعد انتهاء المشروع'
+        );
         $complaint = Complaint::create([
             'complainant_id'        => $complainant->id,
             'complained_on_id'      => $complainedOnId,
