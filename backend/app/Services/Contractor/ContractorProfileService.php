@@ -84,7 +84,7 @@ class ContractorProfileService
 
         return response()->json([
             'id' => $user->id,
-            'name' => $user->name,
+            'user' => $user,
             'profile' => $user->contractorProfile,
             'average_rating' => $averageRating
                 ? round($averageRating, 1)
