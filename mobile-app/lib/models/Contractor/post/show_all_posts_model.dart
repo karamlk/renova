@@ -8,8 +8,8 @@ class ShowAllPostsModel {
   final double progress;
   final String? createdAt;
   final DateTime? updatedAt;
-  final int likesCount;
-  final bool isLiked;
+  int likesCount;
+  bool isLiked;
   final List<PostImageModel> images;
   final PostUserModel? user;
   final PostProjectModel? project;

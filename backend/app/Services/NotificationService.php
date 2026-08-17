@@ -14,19 +14,22 @@ class NotificationService
 
     public function notifyAdmin(
         string $type,
-        string $title,
-        string $message,
+        string $titleKey,
+        string $messageKey,
+        array $messageParams,
         string $targetPath,
         ?int $relatedId = null
     ): void {
         $admin = $this->getAdmin();
 
-        if (!$admin) return;
+        if (!$admin) {
+            return;
+        }
 
         Notification::create([
             'user_id'     => $admin->id,
-            'title'       => $title,
-            'message'     => $message,
+            'title'       => json_encode(['key' => $titleKey]),
+            'message'     => json_encode(['key' => $messageKey, 'params' => $messageParams]),
             'type'        => $type,
             'target_path' => $targetPath,
             'related_id'  => $relatedId,
@@ -34,14 +37,13 @@ class NotificationService
         ]);
     }
 
-    // ── Specific notification methods ─────────────────
-
     public function newUser(User $user): void
     {
         $this->notifyAdmin(
             type: 'new_user',
-            title: 'مستخدم جديد',
-            message: "انضم مستخدم جديد إلى المنصة: {$user->name}",
+            titleKey: 'notifications.new_user_title',
+            messageKey: 'notifications.new_user_message',
+            messageParams: ['name' => $user->name],
             targetPath: 'users',
             relatedId: $user->id,
         );
@@ -51,8 +53,9 @@ class NotificationService
     {
         $this->notifyAdmin(
             type: 'new_contractor',
-            title: 'متعهد جديد يطلب الموافقة',
-            message: "تقدّم متعهد جديد للتسجيل: {$contractor->name}، يرجى مراجعة طلبه",
+            titleKey: 'notifications.new_contractor_title',
+            messageKey: 'notifications.new_contractor_message',
+            messageParams: ['name' => $contractor->name],
             targetPath: 'requests',
             relatedId: $contractor->id,
         );
@@ -62,8 +65,9 @@ class NotificationService
     {
         $this->notifyAdmin(
             type: 'inspection_request',
-            title: 'طلب زيارة ميدانية جديد',
-            message: "أرسل المتعهد {$contractorName} طلب زيارة ميدانية للطلب: {$requestTitle}",
+            titleKey: 'notifications.inspection_request_title',
+            messageKey: 'notifications.inspection_request_message',
+            messageParams: ['contractor_name' => $contractorName, 'request_title' => $requestTitle],
             targetPath: 'inspection_requests',
             relatedId: $inspectionRequestId,
         );
@@ -73,19 +77,23 @@ class NotificationService
     {
         $this->notifyAdmin(
             type: 'complaint',
-            title: 'شكوى جديدة',
-            message: "قدّم {$complainantName} شكوى جديدة تتطلب المراجعة",
+            titleKey: 'notifications.complaint_title',
+            messageKey: 'notifications.complaint_message',
+            messageParams: ['name' => $complainantName],
             targetPath: 'complaints',
             relatedId: $complaintId,
         );
     }
-
+    
     public function newNoShowWarning(int $warningId, string $reporterName): void
     {
         $this->notifyAdmin(
-            type: 'complaint',
-            title: 'تحذير غياب جديد',
-            message: "أبلغ {$reporterName} عن غياب في زيارة ميدانية",
+            type: 'complaint', 
+            titleKey: 'notifications.no_show_warning_title',
+            messageKey: 'notifications.no_show_warning_message',
+            messageParams: [
+                'name' => $reporterName,
+            ],
             targetPath: 'complaints',
             relatedId: $warningId,
         );
@@ -95,18 +103,24 @@ class NotificationService
     {
         $this->notifyAdmin(
             type: 'payment',
-            title: 'دفعة جديدة',
-            message: "أجرى {$userName} دفعة بقيمة {$amount}",
+            titleKey: 'notifications.payment_title',
+            messageKey: 'notifications.payment_message',
+            messageParams: ['name' => $userName, 'amount' => $amount],
             targetPath: 'userpayments',
             relatedId: $paymentId,
         );
     }
+
     public function engineerAcceptedVisit(int $visitId, string $engineerName): void
     {
         $this->notifyAdmin(
             type: 'inspection_request',
-            title: 'مهندس قبل الزيارة الميدانية',
-            message: "قبل المهندس {$engineerName} الزيارة الميدانية رقم ({$visitId})",
+            titleKey: 'notifications.engineer_accepted_visit_title',
+            messageKey: 'notifications.engineer_accepted_visit_message',
+            messageParams: [
+                'name' => $engineerName,
+                'id'   => $visitId,
+            ],
             targetPath: 'inspection_requests',
             relatedId: $visitId,
         );
@@ -116,8 +130,12 @@ class NotificationService
     {
         $this->notifyAdmin(
             type: 'inspection_request',
-            title: 'مهندس رفض الزيارة الميدانية',
-            message: "رفض المهندس {$engineerName} الزيارة الميدانية رقم ({$visitId})، يرجى تعيين مهندس بديل",
+            titleKey: 'notifications.engineer_rejected_visit_title',
+            messageKey: 'notifications.engineer_rejected_visit_message',
+            messageParams: [
+                'name' => $engineerName,
+                'id'   => $visitId,
+            ],
             targetPath: 'inspection_requests',
             relatedId: $visitId,
         );

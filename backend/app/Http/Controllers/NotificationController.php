@@ -14,7 +14,28 @@ class NotificationController extends Controller
             ->latest()
             ->paginate(10);
 
-        return response()->json(['data' => $notifications]);
+        $transformed = $notifications->through(function ($notification) {
+            return [
+                'id'          => $notification->id,
+                'user_id'     =>   Auth::id(),
+                'is_read'     => (bool) $notification->is_read,
+                'type'        => $notification->type,
+                'target_path' => $notification->target_path,
+                'related_id'  => $notification->related_id,
+                'created_at'  => $notification->created_at ? $notification->created_at->format('Y-m-d H:i') : null,
+
+                'ar' => [
+                    'title'   => $this->translateField($notification->title, 'ar'),
+                    'message' => $this->translateField($notification->message, 'ar'),
+                ],
+                'en' => [
+                    'title'   => $this->translateField($notification->title, 'en'),
+                    'message' => $this->translateField($notification->message, 'en'),
+                ],
+            ];
+        });
+
+        return response()->json($transformed, 200);
     }
 
     public function unreadCount()
@@ -59,5 +80,23 @@ class NotificationController extends Controller
         return response()->json([
             'message' => 'تم حذف جميع الإشعارات بنجاح'
         ]);
+    }
+
+    protected function translateField(?string $rawField, string $lang): ?string
+    {
+        if (empty($rawField)) {
+            return null;
+        }
+
+        $decoded = json_decode($rawField, true);
+
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded) && isset($decoded['key'])) {
+            $key = $decoded['key'];
+            $params = $decoded['params'] ?? [];
+
+            return __($key, $params, $lang);
+        }
+
+        return $rawField;
     }
 }

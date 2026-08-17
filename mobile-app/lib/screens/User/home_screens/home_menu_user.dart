@@ -15,6 +15,7 @@ import 'package:renove_provider/screens/User/construction%20forms/recieved_forms
 import 'package:renove_provider/screens/User/invoices/invoices_index.dart';
 import 'package:renove_provider/screens/User/payments/payments_index.dart';
 import 'package:renove_provider/screens/User/projects/projects_index_screen.dart';
+import 'package:renove_provider/screens/User/wallet/user_wallet_index_screen.dart';
 import 'package:renove_provider/screens/settings/change_password.dart';
 import 'package:renove_provider/screens/settings/verify_deletetion_screen.dart';
 import 'package:renove_provider/skeletons/setiings_page_skeleton.dart';
@@ -253,6 +254,38 @@ class _HomeMenuUserState extends State<HomeMenuUser> {
                           Text(
                             'المشاريع',
                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 10,
+                        minimumSize: Size(30, 30),
+
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        backgroundColor: primarycolor2,
+                        foregroundColor: primarycolor1,
+                      ),
+
+                      onPressed: () {
+                        Navigator.of(
+                          context,
+                        ).push(MaterialPageRoute(builder: (context) => UserWalletIndexScreen()));
+                      },
+                      child: Column(
+                        spacing: 20,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.white24,
+                            radius: 35,
+                            child: Icon(Icons.wallet, size: 35, color: primarycolor1),
+                          ),
+                          Text(
+                            'المحفظة',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),

@@ -1,4 +1,4 @@
-class ShowPostDetails {
+class PostDetailsUser {
   final int id;
   final int projectId;
   final int userId;
@@ -14,7 +14,7 @@ class ShowPostDetails {
   final PostUserModel? user;
   final PostProjectModel? project;
 
-  ShowPostDetails({
+  PostDetailsUser({
     required this.id,
     required this.projectId,
     required this.userId,
@@ -31,8 +31,8 @@ class ShowPostDetails {
     required this.isLiked,
   });
 
-  factory ShowPostDetails.fromJson(Map<String, dynamic> json) {
-    return ShowPostDetails(
+  factory PostDetailsUser.fromJson(Map<String, dynamic> json) {
+    return PostDetailsUser(
       id: json['id'] ?? 0,
       projectId: json['project_id'] ?? 0,
       userId: json['user_id'] ?? 0,

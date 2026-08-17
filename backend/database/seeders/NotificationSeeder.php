@@ -13,150 +13,108 @@ class NotificationSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = User::whereHas(
-            'role',
-            fn ($q) => $q->where('name', 'admin')
-        )->first();
-
+        $admin = User::whereHas('role', fn($q) => $q->where('name', 'admin'))->first();
         if (!$admin) {
             return;
         }
 
         $user = User::where('email', 'seed_user@renova.com')->first();
         $contractor = User::where('email', 'seed_contractor@renova.com')->first();
-        $engineer = User::where('email', 'seed_engineer@renova.com')->first();
-
         $inspection = InspectionRequest::first();
-        $complaint = Complaint::first();
         $payment = Payment::first();
 
-        // ─────────────────────────────────────────────
-        // مستخدم جديد
-        // ─────────────────────────────────────────────
         if ($user) {
             Notification::firstOrCreate(
+                ['user_id' => $admin->id, 'type' => 'new_user', 'related_id' => $user->id],
                 [
-                    'user_id' => $admin->id,
-                    'type' => 'new_user',
-                    'related_id' => $user->id,
-                ],
-                [
-                    'title' => 'مستخدم جديد',
-                    'message' => "انضم مستخدم جديد إلى المنصة: {$user->name}",
+                    'title' => json_encode(['key' => 'notifications.new_user_title']),
+                    'message' => json_encode(['key' => 'notifications.new_user_message', 'params' => ['name' => $user->name]]),
                     'target_path' => 'users',
                     'is_read' => false,
                 ]
             );
         }
 
-        // ─────────────────────────────────────────────
-        // متعهد جديد
-        // ─────────────────────────────────────────────
         if ($contractor) {
             Notification::firstOrCreate(
+                ['user_id' => $admin->id, 'type' => 'new_contractor', 'related_id' => $contractor->id],
                 [
-                    'user_id' => $admin->id,
-                    'type' => 'new_contractor',
-                    'related_id' => $contractor->id,
-                ],
-                [
-                    'title' => 'متعهد جديد يطلب الموافقة',
-                    'message' => "تقدّم متعهد جديد للتسجيل: {$contractor->name}، يرجى مراجعة طلبه",
+                    'title' => json_encode(['key' => 'notifications.new_contractor_title']),
+                    'message' => json_encode(['key' => 'notifications.new_contractor_message', 'params' => ['name' => $contractor->name]]),
                     'target_path' => 'requests',
                     'is_read' => false,
                 ]
             );
         }
 
-        // ─────────────────────────────────────────────
-        // طلب زيارة ميدانية
-        // ─────────────────────────────────────────────
-        if ($inspection && $contractor) {
-            Notification::firstOrCreate(
-                [
-                    'user_id' => $admin->id,
-                    'type' => 'inspection_request',
-                    'related_id' => $inspection->id,
-                ],
-                [
-                    'title' => 'طلب زيارة ميدانية جديد',
-                    'message' => "أرسل المتعهد {$contractor->name} طلب زيارة ميدانية",
-                    'target_path' => 'inspection_requests',
-                    'is_read' => false,
-                ]
-            );
-        }
-
-        // ─────────────────────────────────────────────
-        // شكوى
-        // ─────────────────────────────────────────────
-        if ($complaint && $user) {
-            Notification::firstOrCreate(
-                [
-                    'user_id' => $admin->id,
-                    'type' => 'complaint',
-                    'related_id' => $complaint->id,
-                ],
-                [
-                    'title' => 'شكوى جديدة',
-                    'message' => "قدّم {$user->name} شكوى جديدة تتطلب المراجعة",
-                    'target_path' => 'complaints',
-                    'is_read' => false,
-                ]
-            );
-        }
-
-        // ─────────────────────────────────────────────
-        // تحذير غياب
-        // ─────────────────────────────────────────────
+        // Attendance No-Show Warning Alert
         Notification::firstOrCreate(
             [
-                'user_id' => $admin->id,
-                'type' => 'complaint',
+                'user_id'    => $admin->id,
+                'type'       => 'complaint',
                 'related_id' => 999,
+                'title'      => json_encode(['key' => 'notifications.no_show_warning_title']),
             ],
             [
-                'title' => 'تحذير غياب جديد',
-                'message' => 'تم الإبلاغ عن غياب في زيارة ميدانية',
+                'message'     => json_encode([
+                    'key'    => 'notifications.no_show_warning_message',
+                    'params' => ['name' => 'PlatformEngine'],
+                ]),
                 'target_path' => 'complaints',
-                'is_read' => false,
+                'is_read'     => false,
             ]
         );
-
-        // ─────────────────────────────────────────────
-        // دفعة جديدة
-        // ─────────────────────────────────────────────
+        
         if ($payment && $user) {
             Notification::firstOrCreate(
+                ['user_id' => $admin->id, 'type' => 'payment', 'related_id' => $payment->id],
                 [
-                    'user_id' => $admin->id,
-                    'type' => 'payment',
-                    'related_id' => $payment->id,
-                ],
-                [
-                    'title' => 'دفعة جديدة',
-                    'message' => "أجرى {$user->name} دفعة بقيمة {$payment->amount}",
+                    'title' => json_encode(['key' => 'notifications.payment_title']),
+                    'message' => json_encode(['key' => 'notifications.payment_message', 'params' => ['name' => $user->name, 'amount' => $payment->amount]]),
                     'target_path' => 'userpayments',
                     'is_read' => false,
                 ]
             );
         }
 
-        // ─────────────────────────────────────────────
-        // مهندس قبل الزيارة
-        // ─────────────────────────────────────────────
+        $engineer = User::where('email', 'seed_engineer@renova.com')->first();
+
+     // Engineer Accepted Visit
         if ($inspection && $engineer) {
             Notification::firstOrCreate(
                 [
-                    'user_id' => $admin->id,
-                    'type' => 'inspection_request',
+                    'user_id'    => $admin->id,
+                    'type'       => 'inspection_request',
                     'related_id' => $inspection->id,
+                    'title'      => json_encode(['key' => 'notifications.engineer_accepted_visit_title']),
                 ],
                 [
-                    'title' => 'مهندس قبل الزيارة الميدانية',
-                    'message' => "قبل المهندس {$engineer->name} الزيارة الميدانية رقم ({$inspection->id})",
+                    'message'     => json_encode([
+                        'key'    => 'notifications.engineer_accepted_visit_message',
+                        'params' => ['name' => $engineer->name, 'id' => $inspection->id],
+                    ]),
                     'target_path' => 'inspection_requests',
-                    'is_read' => false,
+                    'is_read'     => false,
+                ]
+            );
+        }
+
+        // Engineer Rejected Visit
+        if ($inspection && $engineer) {
+            Notification::firstOrCreate(
+                [
+                    'user_id'    => $admin->id,
+                    'type'       => 'inspection_request',
+                    'related_id' => $inspection->id,
+                    'title'      => json_encode(['key' => 'notifications.engineer_rejected_visit_title']),
+                ],
+                [
+                    'message'     => json_encode([
+                        'key'    => 'notifications.engineer_rejected_visit_message',
+                        'params' => ['name' => $engineer->name, 'id' => $inspection->id],
+                    ]),
+                    'target_path' => 'inspection_requests',
+                    'is_read'     => false,
                 ]
             );
         }

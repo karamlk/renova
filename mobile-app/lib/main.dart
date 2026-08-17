@@ -11,6 +11,7 @@ import 'package:renove_provider/providers/Contractor/contractor_schedule_provide
 import 'package:renove_provider/providers/Contractor/post_provider.dart';
 import 'package:renove_provider/providers/Contractor/project_provider.dart';
 import 'package:renove_provider/providers/Contractor/user_requests_provider.dart';
+import 'package:renove_provider/providers/Contractor/wallet_provider.dart';
 import 'package:renove_provider/providers/User/Inspection/inspection_provider.dart';
 import 'package:renove_provider/providers/User/Profile/edit_profile_provider.dart';
 import 'package:renove_provider/providers/User/construction%20forms/contrsution_forms_provider.dart';
@@ -19,8 +20,10 @@ import 'package:renove_provider/providers/User/construction_index_provider.dart'
 import 'package:renove_provider/providers/User/construction_request_provider.dart';
 import 'package:renove_provider/providers/User/invoices_provider.dart';
 import 'package:renove_provider/providers/User/payments_provider.dart';
+import 'package:renove_provider/providers/User/posts_user_provider.dart';
 import 'package:renove_provider/providers/User/project_provider_user.dart';
 import 'package:renove_provider/providers/User/request_details_provider.dart';
+import 'package:renove_provider/providers/User/user_wallet_provider.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
 import 'package:renove_provider/providers/navigation_provider.dart';
 import 'package:renove_provider/providers/User/Profile/create_profile_provider.dart';
@@ -67,6 +70,9 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ProjectProvider()),
         ChangeNotifierProvider(create: (_) => PostProvider()),
         ChangeNotifierProvider(create: (_) => ProjectProviderUser()),
+        ChangeNotifierProvider(create: (_) => PostsUserProvider()),
+        ChangeNotifierProvider(create: (_) => WalletProvider()),
+        ChangeNotifierProvider(create: (_) => UserWalletProvider()),
       ],
       child: MyApp(isDark: isDark),
     ),

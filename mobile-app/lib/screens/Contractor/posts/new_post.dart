@@ -7,29 +7,99 @@ import 'package:renove_provider/models/Contractor/post/create_post.dart';
 import 'package:renove_provider/providers/Contractor/post_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 
-class CreateSharedPost extends StatefulWidget {
-  final int projectId;
-  final String status;
-  const CreateSharedPost({super.key, required this.projectId, required this.status});
+class NewPost extends StatefulWidget {
+  const NewPost({super.key});
 
   @override
-  State<CreateSharedPost> createState() => _CreatePostState();
+  State<NewPost> createState() => _NewPostState();
 }
 
-class _CreatePostState extends State<CreateSharedPost> {
+class _NewPostState extends State<NewPost> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  String? selectedProject;
+  int? projectId;
+  String? status;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("إنشاء منشور", style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text('منشور جديد', style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: ListView(
           padding: EdgeInsets.all(30),
           children: [
+            Consumer<PostProvider>(
+              builder: (context, value, child) => ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  backgroundColor: context.watch<ThemeProvider>().isDark
+                      ? Colors.white30
+                      : primarycolor2,
+                  foregroundColor: primarycolor1,
+                ),
+                onPressed: () async {
+                  final response = await value.fetchProjectPosts();
+                  if (!context.mounted) return;
+
+                  if (response?.statusCode == 200) {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        if (value.newPost.isEmpty) {
+                          return Center(
+                            child: Text(
+                              'لا يوجد أي مشاريع للنشر',
+                              style: TextStyle(fontWeight: FontWeight.bold, color: primarycolor1),
+                            ),
+                          );
+                        }
+                        return ListView.builder(
+                          padding: EdgeInsets.all(30),
+                          itemCount: value.newPost.length,
+                          itemBuilder: (context, index) {
+                            final newpost = value.newPost[index];
+                            return Card(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: Size(double.infinity, 60),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  backgroundColor: context.watch<ThemeProvider>().isDark
+                                      ? Colors.white30
+                                      : primarycolor2,
+                                  foregroundColor: primarycolor1,
+                                ),
+                                onPressed: () {
+                                  projectId = newpost.id;
+                                  selectedProject = newpost.title;
+                                  status = newpost.status;
+                                  setState(() {});
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  newpost.title,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  }
+                },
+                child: Text(
+                  selectedProject ?? 'اختر مشروعا',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            SizedBox(height: 30),
             TextField(
               controller: titleController,
               decoration: InputDecoration(
@@ -139,8 +209,8 @@ class _CreatePostState extends State<CreateSharedPost> {
               onPressed: () async {
                 final post = PostModel(
                   title: titleController.text,
-                  status: widget.status,
-                  projectId: widget.projectId,
+                  status: status.toString(),
+                  projectId: projectId!.toInt(),
                   description: descriptionController.text,
                 );
 
