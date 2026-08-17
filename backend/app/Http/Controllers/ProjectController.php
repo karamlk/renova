@@ -84,4 +84,41 @@ class ProjectController extends Controller
                 ->userProject($id)
         );
     }
+
+
+    public function index()
+    {
+        // جلب جميع المشاريع مع كافة علاقاتها
+        $projects = Project::with([
+            'form',
+            'tasks',
+            'review',
+            'user',
+            'engineer',
+            'contractor',
+        ])->get();
+
+        return response()->json([
+            'message' => 'تم جلب جميع المشاريع بنجاح',
+            'data'    => $projects
+        ], 200);
+    }
+
+    public function show_project($id)
+    {
+        // البحث عن المشروع وجلب كافة علاقاته أو إرجاع خطأ 404 إذا لم يوجد
+        $project = Project::with([
+            'form',
+            'tasks',
+            'review',
+            'user',
+            'engineer',
+            'contractor',
+        ])->findOrFail($id);
+
+        return response()->json([
+            'message' => 'تم جلب تفاصيل المشروع بنجاح',
+            'data'    => $project
+        ], 200);
+    }
 }

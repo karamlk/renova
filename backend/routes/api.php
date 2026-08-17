@@ -24,6 +24,7 @@ use App\Http\Controllers\Engineer\EngineerProjectController;
 use App\Http\Controllers\Engineer\EngineerVisitController;
 use App\Http\Controllers\Engineer\ProjectTaskController;
 use App\Http\Controllers\FcmTokenController;
+use App\Http\Controllers\Foundation\DonationCampaignController;
 use App\Http\Controllers\Foundation\FoundationVerificationController;
 use App\Http\Controllers\InspectionRequestController;
 use App\Http\Controllers\InvoiceController;
@@ -194,6 +195,8 @@ Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
 
     Route::post('/foundation/verification', [FoundationVerificationController::class, 'store']
     );
+
+    Route::post('/foundation/donation-campaigns', [DonationCampaignController::class, 'store']);
 });
 
 // ── CONTRACTOR ────────────────────────────────────────────────
@@ -354,7 +357,8 @@ Route::middleware(['auth:sanctum', 'active', 'role:admin'])->prefix('admin')->gr
 
     Route::get('/foundations/verification/{id}', [FoundationVerificationController::class, 'show']);
 
-
+    Route::get('/projects',[ProjectController::class,'index']);
+    Route::get('/project/{project}',[ProjectController::class,'show_project']);
 });
 
 
