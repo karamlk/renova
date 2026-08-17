@@ -31,6 +31,9 @@ class InspectionRequestSeeder extends Seeder
             SiteVisit::create([
                 'inspection_request_id' => $inspection->id,
                 'schedule_id'           => $schedule->id,
+                'visit_date'            => \Carbon\Carbon::now()
+                    ->next($schedule->day_of_week)
+                    ->format('Y-m-d'),
             ]);
         });
     }
