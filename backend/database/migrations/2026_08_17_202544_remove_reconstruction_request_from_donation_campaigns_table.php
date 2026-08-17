@@ -10,8 +10,13 @@ return new class extends Migration
     {
         Schema::table('donation_campaigns', function (Blueprint $table) {
 
-            // حذف الـ foreign key القديم
-            $table->dropForeign('dc_reconstruction_request_fk');
+            if (Schema::getConnection()->getDriverName() === 'sqlite') {
+                // SQLite
+                $table->dropForeign(['reconstruction_request_id']);
+            } else {
+                // MySQL
+                $table->dropForeign('dc_reconstruction_request_fk');
+            }
 
             // حذف العمود
             $table->dropColumn('reconstruction_request_id');
