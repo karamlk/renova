@@ -45,16 +45,24 @@ use Illuminate\Support\Facades\Route;
 // PUBLIC ROUTES — No auth required
 // ══════════════════════════════════════════════════════════════
 
-Route::post('/register',            [AuthController::class, 'register']);
-Route::post('/login',               [AuthController::class, 'login']);
-Route::post('/otp/resend',          [AuthController::class, 'resendOtp']);
-Route::post('/otp/verify',          [AuthController::class, 'verify']);
-Route::post('/verify-otp',          [AuthController::class, 'verifyOtp']);
+Route::middleware('throttle:5,1')->group(function () {
 
-Route::post('/password/forgot',     [PasswordResetController::class, 'sendOtp']);
-Route::post('/verify-otp/password', [PasswordResetController::class, 'verifyOtp']);
-Route::post('/set-new-password',    [PasswordResetController::class, 'setNewPassword']);
-Route::post('/password/reset',      [ChangePasswordController::class, 'updatePassword']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login',    [AuthController::class, 'login']);
+    Route::post('/otp/verify',          [AuthController::class, 'verify']);
+    Route::post('/verify-otp',          [AuthController::class, 'verifyOtp']);
+});
+
+
+// OTP + Password Recovery
+Route::middleware('throttle:3,10')->group(function () {
+
+    Route::post('/otp/resend',          [AuthController::class, 'resendOtp']);
+    Route::post('/password/forgot',     [PasswordResetController::class, 'sendOtp']);
+    Route::post('/verify-otp/password', [PasswordResetController::class, 'verifyOtp']);
+    Route::post('/set-new-password',    [PasswordResetController::class, 'setNewPassword']);
+    Route::post('/password/reset',      [ChangePasswordController::class, 'updatePassword']);
+});
 
 // Public contractor posts (visible without login)
 
@@ -64,14 +72,11 @@ Route::post('/password/reset',      [ChangePasswordController::class, 'updatePas
 // AUTHENTICATED — Auth only (no role restriction)
 // ══════════════════════════════════════════════════════════════
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::post('/password/change', [ChangePasswordController::class, 'change']);
-
-    Route::post('/delete-request',  [AccountDeletionController::class, 'requestDeletion']);
-    Route::post('/confirm-deletion', [AccountDeletionController::class, 'confirmDeletion']);
 
 
     // Notifications — all roles
@@ -88,26 +93,28 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 });
 
+Route::middleware(['auth:sanctum', 'throttle:3,1440'])->group(function () {
+
+    Route::post('/delete-request', [AccountDeletionController::class, 'requestDeletion']);
+    Route::post('/confirm-deletion', [AccountDeletionController::class, 'confirmDeletion']);
+});
+
 // ══════════════════════════════════════════════════════════════
 // ACTIVE USERS — Auth + active account required
 // ══════════════════════════════════════════════════════════════
 
-Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
+Route::middleware(['auth:sanctum', 'active', 'role:user', 'throttle:60,1'])->group(function () {
     Route::get('/payments/pending', [PaymentController::class, 'pending']);
 });
 
 // USER (customer) and ADMIN
-Route::middleware(['auth:sanctum', 'active', 'role:user,admin'])->group(function () {
+Route::middleware(['auth:sanctum', 'active', 'role:user,admin', 'throttle:60,1'])->group(function () {
     Route::post('/user/profile',        [ProfileController::class, 'store']);
     Route::get('/user/profile',         [ProfileController::class, 'show']);
     Route::post('/user/profile/update', [ProfileController::class, 'update']);
 });
 
-Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer'])->group(function () {
-    // Route::get('my-complaints',                  [ComplaintController::class, 'myComplaints']);
-    // Route::get('complaints/{complaint}',         [ComplaintController::class, 'show']);
-    Route::post('no-show-warnings',              [NoShowWarningController::class, 'store']);
-    // Route::get('no-show-warnings/{warning}',     [NoShowWarningController::class, 'show']);
+Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer', 'throttle:60,1'])->group(function () {
 
     Route::get('/wallet', [WalletController::class, 'financialAccount']);
     Route::get('/payments/{payment}', [PaymentController::class, 'showPayment']);
@@ -126,8 +133,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer'])->
 });
 
 // User & contractor
-Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(function () {
-    Route::post('complaints',[ComplaintController::class, 'store']);
+Route::middleware(['auth:sanctum', 'active', 'role:user,contractor', 'throttle:60,1'])->group(function () {
 
     //invoices
     Route::get('/invoice/{invoice}',[InvoiceController::class,'show']);
@@ -147,12 +153,18 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(fun
 
 });
 
+Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer', 'throttle:10,1440'])->group(function () {
+    Route::post('no-show-warnings', [NoShowWarningController::class, 'store']);
+});
 
+Route::middleware(['auth:sanctum', 'active', 'role:user,contractor', 'throttle:10,1440'])->group(function () {
+    Route::post('complaints', [ComplaintController::class, 'store']);
+});
 
 
 
 // ── USER (customer) ───────────────────────────────────────────
-Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
+Route::middleware(['auth:sanctum', 'active', 'role:user', 'throttle:60,1'])->group(function () {
     //Route::get('/post/{id}',[ContractorPostController::class,'post']);
     // Reconstruction requests — write
     Route::post('/reconstruction-requests',       [ReconstructionRequestController::class, 'store']);
@@ -175,10 +187,6 @@ Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
     Route::get('/receivedForms', [ConstructionFormController::class, 'receivedForms']);
     Route::get('/showForm/{id}', [ConstructionFormController::class, 'showForm']);
 
-    // Payments
-    Route::post('/payments/{payment}/send-otp',     [PaymentController::class, 'sendOtp']);
-    Route::post('/payments/{payment}/pay',          [PaymentController::class, 'pay']);
-    Route::post('construction-forms/{constructionForm}/confirm-payment', [ConstructionFormController::class, 'confirmPayment']);
 
     // Likes
   //  Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
@@ -196,8 +204,14 @@ Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
     );
 });
 
+Route::middleware(['auth:sanctum', 'active', 'role:user', 'throttle:10,10'])->group(function () {
+  Route::post('/payments/{payment}/send-otp',     [PaymentController::class, 'sendOtp']);
+  Route::post('/payments/{payment}/pay',          [PaymentController::class, 'pay']);
+  Route::post('construction-forms/{constructionForm}/confirm-payment', [ConstructionFormController::class, 'confirmPayment']);
+});
+
 // ── CONTRACTOR ────────────────────────────────────────────────
-Route::middleware(['auth:sanctum', 'active', 'role:contractor'])->group(function () {
+Route::middleware(['auth:sanctum', 'active', 'role:contractor', 'throttle:60,1'])->group(function () {
 
     // Profile
     Route::post('/contractor/profile',        [ContractorProfileController::class, 'store']);
@@ -248,7 +262,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:contractor'])->group(function
 });
 
 // ── ENGINEER ──────────────────────────────────────────────────
-Route::middleware(['auth:sanctum', 'active', 'role:engineer'])->group(function () {
+Route::middleware(['auth:sanctum', 'active', 'role:engineer', 'throttle:60,1'])->group(function () {
 
     // Profile
     Route::get('engineer/profile',  [EngineerProfileController::class, 'show']);
@@ -289,7 +303,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:engineer'])->group(function (
 // ADMIN
 // ══════════════════════════════════════════════════════════════
 
-Route::middleware(['auth:sanctum', 'active', 'role:admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth:sanctum', 'active', 'role:admin', 'throttle:60,1'])->prefix('admin')->group(function () {
 
     // Contractor approval (old routes kept for compatibility)
     Route::get('/contractors/pending',      [ContractorController::class, 'pending']);
@@ -329,7 +343,6 @@ Route::middleware(['auth:sanctum', 'active', 'role:admin'])->prefix('admin')->gr
     Route::get('/finance/report',           [FinanceController::class, 'report']);
     Route::get('/payments',                 [PaymentController::class, 'index']);
     Route::get('/payments/{payment}',       [PaymentController::class, 'show']);
-    Route::post('/payments/{payment}/release', [PaymentController::class, 'release']);
     Route::get('/payment-audits',           [PaymentAuditController::class, 'index']);
     Route::get('/payment-audits/{payment_audit}', [PaymentAuditController::class, 'show']);
 
@@ -357,6 +370,9 @@ Route::middleware(['auth:sanctum', 'active', 'role:admin'])->prefix('admin')->gr
 
 });
 
+Route::middleware(['auth:sanctum', 'active', 'role:admin', 'throttle:10,10'])->prefix('admin')->group(function () {
+Route::post('/payments/{payment}/release', [PaymentController::class, 'release']);
+});
 
 use App\Services\FirebaseNotificationService;
 
