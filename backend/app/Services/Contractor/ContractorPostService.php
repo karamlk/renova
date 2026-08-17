@@ -25,6 +25,7 @@ class ContractorPostService
             ->get() ->map(function ($project) {
                 return [
                     'id' => $project->id,
+                    'status'=>$project->status,
                     'title' => $project->form->reconstructionRequest->title,
                 ];
             });
