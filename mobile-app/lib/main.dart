@@ -23,6 +23,7 @@ import 'package:renove_provider/providers/User/payments_provider.dart';
 import 'package:renove_provider/providers/User/posts_user_provider.dart';
 import 'package:renove_provider/providers/User/project_provider_user.dart';
 import 'package:renove_provider/providers/User/request_details_provider.dart';
+import 'package:renove_provider/providers/User/user_wallet_provider.dart';
 import 'package:renove_provider/providers/auth_provider.dart';
 import 'package:renove_provider/providers/navigation_provider.dart';
 import 'package:renove_provider/providers/User/Profile/create_profile_provider.dart';
@@ -71,6 +72,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ProjectProviderUser()),
         ChangeNotifierProvider(create: (_) => PostsUserProvider()),
         ChangeNotifierProvider(create: (_) => WalletProvider()),
+        ChangeNotifierProvider(create: (_) => UserWalletProvider()),
       ],
       child: MyApp(isDark: isDark),
     ),

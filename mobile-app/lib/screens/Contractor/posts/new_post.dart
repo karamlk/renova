@@ -78,6 +78,7 @@ class _NewPostState extends State<NewPost> {
                                   projectId = newpost.id;
                                   selectedProject = newpost.title;
                                   status = newpost.status;
+                                  setState(() {});
                                   Navigator.of(context).pop();
                                 },
                                 child: Text(

@@ -17,6 +17,7 @@ class PostProvider extends ChangeNotifier {
   List<ShowAllPostsModel> posts = [];
   ShowPostDetails? detail;
   List<NewPost> newPost = [];
+  bool isLiking = false;
 
   String formatDate(String date) {
     String timeStamp = date;
@@ -126,10 +127,10 @@ class PostProvider extends ChangeNotifier {
   }
 
   Future<http.Response?> fetchPostDetails({required int id}) async {
-    isLoading = true;
-
+    isLiking = true;
     notifyListeners();
 
+    notifyListeners();
     try {
       final token = await getPrefs("token");
 
@@ -150,7 +151,7 @@ class PostProvider extends ChangeNotifier {
       print(e);
       return null;
     } finally {
-      isLoading = false;
+      isLiking = false;
       notifyListeners();
     }
   }

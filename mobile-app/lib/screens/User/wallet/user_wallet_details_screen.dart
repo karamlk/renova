@@ -5,22 +5,23 @@ import 'package:renove_provider/models/Contractor/projects/projects_index.dart';
 import 'package:renove_provider/providers/Contractor/project_provider.dart';
 import 'package:renove_provider/providers/Contractor/wallet_provider.dart';
 import 'package:renove_provider/providers/User/invoices_provider.dart';
+import 'package:renove_provider/providers/User/user_wallet_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 
-class WalletDetails extends StatefulWidget {
+class UserWalletDetailsScreen extends StatefulWidget {
   final int id;
-  const WalletDetails({super.key, required this.id});
+  const UserWalletDetailsScreen({super.key, required this.id});
 
   @override
-  State<WalletDetails> createState() => _ProjectDetailsState();
+  State<UserWalletDetailsScreen> createState() => _ProjectDetailsState();
 }
 
-class _ProjectDetailsState extends State<WalletDetails> {
+class _ProjectDetailsState extends State<UserWalletDetailsScreen> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<WalletProvider>().fetchPaymentDetails(widget.id);
+      context.read<UserWalletProvider>().fetchPaymentDetails(widget.id);
     });
   }
 
@@ -30,7 +31,7 @@ class _ProjectDetailsState extends State<WalletDetails> {
       appBar: AppBar(
         title: Text('تفاصيل الدفعة', style: TextStyle(fontWeight: FontWeight.bold)),
       ),
-      body: Consumer<WalletProvider>(
+      body: Consumer<UserWalletProvider>(
         builder: (context, value, child) {
           if (value.isLoading) {
             return const SizedBox.shrink();

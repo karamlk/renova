@@ -3,35 +3,37 @@ import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/Contractor/wallet_provider.dart';
+import 'package:renove_provider/providers/User/user_wallet_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Contractor/wallet/wallet_details.dart';
+import 'package:renove_provider/screens/User/wallet/user_wallet_details_screen.dart';
 
-class WalletIndex extends StatefulWidget {
-  const WalletIndex({super.key});
+class UserWalletIndexScreen extends StatefulWidget {
+  const UserWalletIndexScreen({super.key});
 
   @override
-  State<WalletIndex> createState() => _WalletIndexState();
+  State<UserWalletIndexScreen> createState() => _UserWalletIndexState();
 }
 
-class _WalletIndexState extends State<WalletIndex> {
+class _UserWalletIndexState extends State<UserWalletIndexScreen> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<WalletProvider>().fetchWallet();
+      context.read<UserWalletProvider>().fetchWallet();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async => context.read<WalletProvider>().fetchWallet(),
+      onRefresh: () async => context.read<UserWalletProvider>().fetchWallet(),
       color: primarycolor1,
       child: Scaffold(
         appBar: AppBar(
           title: Text('المحفظة', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
-        body: Consumer<WalletProvider>(
+        body: Consumer<UserWalletProvider>(
           builder: (context, value, child) {
             if (value.isLoading) {
               return const SizedBox.shrink();
@@ -46,6 +48,7 @@ class _WalletIndexState extends State<WalletIndex> {
             }
             return SafeArea(
               child: ListView(
+                key: const PageStorageKey<String>('wallet_list'),
                 padding: EdgeInsets.all(25),
                 children: [
                   Text("الرصيد", style: TextStyle(fontSize: 18), textAlign: TextAlign.right),
@@ -133,7 +136,7 @@ class _WalletIndexState extends State<WalletIndex> {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            WalletDetails(id: trans.paymentId!.toInt()),
+                                            UserWalletDetailsScreen(id: trans.paymentId!.toInt()),
                                       ),
                                     );
                                   },
