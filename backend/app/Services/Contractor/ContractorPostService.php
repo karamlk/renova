@@ -67,10 +67,8 @@ class ContractorPostService
             'user_id' => auth()->id(),
 
             // اسم المشروع مأخوذ من طلب إعادة الإعمار
-            'title' =>
-                $project->form
-                    ->reconstructionRequest
-                    ->title,
+            'title' =>$request->title
+               ,
 
             // الوصف الجديد الذي يدخله المتعهد
             'description' => $request->description,

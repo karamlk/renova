@@ -65,4 +65,67 @@ class FoundationVerificationService
             return $verification->load('documents');
         });
     }
+
+    public function pending()
+    {
+        return FoundationVerificationRequest::with([
+            'user.profile',
+            'documents'
+        ])
+            ->where('status', 'pending')
+            ->latest()
+            ->get();
+    }
+
+    public function approve($id)
+    {
+        $request = FoundationVerificationRequest::findOrFail($id);
+
+        if ($request->status !== 'pending') {
+            abort(422, 'طلب التوثيق تمت معالجته مسبقاً');
+        }
+
+        $request->update([
+            'status' => 'approved',
+            'rejection_reason' => null,
+        ]);
+
+        return $request->load([
+            'user.profile',
+            'documents'
+        ]);
+    }
+
+    public function reject($id, $reason = null)
+    {
+        $request = FoundationVerificationRequest::findOrFail($id);
+
+        if ($request->status !== 'pending') {
+            abort(422, 'طلب التوثيق تمت معالجته مسبقاً');
+        }
+
+        $request->update([
+            'status' => 'rejected',
+            'rejection_reason' => $reason,
+        ]);
+
+        return $request->load([
+            'user.profile',
+            'documents'
+        ]);
+    }
+
+    public function show($id)
+    {
+        $request = FoundationVerificationRequest::with([
+            'user.profile',
+            'documents'
+        ])->find($id);
+
+        if (!$request) {
+            abort(404, 'طلب توثيق الجمعية غير موجود');
+        }
+
+        return $request;
+    }
 }

@@ -12,17 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('foundation_verification_documents', function (Blueprint $table) {
+
             $table->id();
 
-            $table->foreignId('foundation_verification_request_id')
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->foreignId('foundation_verification_request_id');
 
             $table->string('document');
 
             $table->string('type')->nullable();
 
             $table->timestamps();
+
+            $table->foreign(
+                'foundation_verification_request_id',
+                'fvd_request_fk'
+            )
+                ->references('id')
+                ->on('foundation_verification_requests')
+                ->cascadeOnDelete();
         });
     }
 

@@ -24,6 +24,7 @@ use App\Http\Controllers\Engineer\EngineerProjectController;
 use App\Http\Controllers\Engineer\EngineerVisitController;
 use App\Http\Controllers\Engineer\ProjectTaskController;
 use App\Http\Controllers\FcmTokenController;
+use App\Http\Controllers\Foundation\FoundationVerificationController;
 use App\Http\Controllers\InspectionRequestController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentAuditController;
@@ -116,7 +117,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer'])->
 
     //Route::get('/wallet/financial-account', [WalletController::class, 'financialAccount']);
 
-    Route::get('post/{post}',[ContractorPostController::class,'post']);
+
 
 
     // مسار التحويل المالي
@@ -138,7 +139,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(fun
 
     Route::get('all_posts',[ContractorPostController::class,'allPosts']);
 
-   // Route::get('/post/{id}',[ContractorPostController::class,'post']);
+    Route::get('/post/{id}',[ContractorPostController::class,'post']);
 
     Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
 
@@ -190,6 +191,9 @@ Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
 
     Route::get('/user/projects', [ProjectController::class, 'userProjects']);
     Route::get('/user/projects/{id}', [ProjectController::class, 'userProject']);
+
+    Route::post('/foundation/verification', [FoundationVerificationController::class, 'store']
+    );
 });
 
 // ── CONTRACTOR ────────────────────────────────────────────────
@@ -340,6 +344,16 @@ Route::middleware(['auth:sanctum', 'active', 'role:admin'])->prefix('admin')->gr
 
     //analytics
     Route::get('/analytics/summary', [AnalyticsController::class, 'index']);
+
+    //foundation
+    Route::get('/foundations/verification/pending', [FoundationVerificationController::class, 'pending']);
+
+    Route::post('/foundations/{id}/approve', [FoundationVerificationController::class, 'approve']);
+
+    Route::post('/foundations/{id}/reject', [FoundationVerificationController::class, 'reject']);
+
+    Route::get('/foundations/verification/{id}', [FoundationVerificationController::class, 'show']);
+
 
 });
 

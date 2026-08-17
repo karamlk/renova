@@ -19,4 +19,13 @@ class FoundationVerificationDocument extends Model
             'foundation_verification_request_id'
         );
     }
+    protected $appends = ['full_document'];
+
+    public function getfullDocumentAttribute()
+    {
+        // تأكد أن الحقل يحتوي على قيمة قبل بناء الرابط
+        return $this->document
+            ?asset ('/storage/' . $this->document)
+            : null;
+    }
 }
