@@ -19,7 +19,7 @@ import {NotificationcountContext} from "../../Context/NotificationcountContext";
 //Labraries
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import "dayjs/locale/ar";
+
 //Hooks
 import { useTranslation } from "react-i18next";
 export default function Notificationlist({notifications ,onclick_nav , onclick_r , onclick_ra ,onclick_m,hasMore,loadingMore,delete_all}){
@@ -47,15 +47,15 @@ export default function Notificationlist({notifications ,onclick_nav , onclick_r
                 
                 <div className="notification-item">
                     <NavLink to={notification?.target_path} className="notification-info" onClick={() => {
-                                if (notification.is_read === 0) {
+                                if (notification.is_read === false) {
                                     onclick_r(notification.id);
                                 }
                                 onclick_nav();
                             }}>
                         <div className="notification-icon"><NotificationsIcon/></div>
                         <div className="content">
-                            <div className="title">{t(notification?.title)}</div>
-                            <div className="desc">{notification?.message}</div>
+                            <div className="title">{notification?.[code]?.title}</div>
+                            <div className="desc">{notification?.[code]?.message}</div>
                             <div className="time">
                                 <AccessTimeIcon sx={{fontSize:"15px"}}/>
                                  <div className="realtime">{dayjs(notification?.created_at.replace("Z", "")).fromNow()}</div>
@@ -63,7 +63,7 @@ export default function Notificationlist({notifications ,onclick_nav , onclick_r
                         </div>
                     </NavLink>
                     <div className="actions">
-                        {notification.is_read === 0 ?
+                        {notification.is_read === false ?
                         (<Button className="un-read" text="اعتبره مقروء" icon={<CheckIcon sx={{fontSize:"15px"}}/>} onClick={()=>{onclick_r(notification?.id)}}/>):
                         (<Button className="is-read" text="مقروء" />)}
                     </div>

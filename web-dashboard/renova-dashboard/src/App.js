@@ -12,6 +12,7 @@ import Complaintsarchive from "./pages/Complaintsarchive/Complaintsarchive";
 import Moneytransfers from "./pages/Moneytransfers/Moneytransfers";
 import Financiallogs from "./pages/Financiallogs/Financiallogs";
 import Userpayments from "./pages/Userpayments/Userpayments";
+import Verificationrequests from "./pages/verificationrequests/verificationrequests";
 //auth
 import ProtectedRoute from "./auth/ProtectedRoute";
 import AuthGate from "./auth/AuthGate";
@@ -62,8 +63,12 @@ function App() {
                     element={<Complaintsarchive />}
                   />
                   <Route
-                    path="inspections_requests"
+                    path="inspection_requests"
                     element={<Inspectionrequests />}
+                  />
+                  <Route
+                    path="verification_requests"
+                    element={<Verificationrequests />}
                   />
                   <Route path="usersettings" element={<Usersettings />} />
                 </Route>
