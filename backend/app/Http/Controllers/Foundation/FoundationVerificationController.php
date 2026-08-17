@@ -34,7 +34,7 @@ class FoundationVerificationController extends Controller
 
         return response()->json([
             'message' =>
-                'تم إرسال طلب توثيق الـ Foundation بنجاح',
+                'تم إرسال طلب توثيق الجمعية بنجاح',
 
             'data' => $verification
         ], 201);

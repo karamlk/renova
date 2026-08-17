@@ -24,6 +24,7 @@ use App\Http\Controllers\Engineer\EngineerProjectController;
 use App\Http\Controllers\Engineer\EngineerVisitController;
 use App\Http\Controllers\Engineer\ProjectTaskController;
 use App\Http\Controllers\FcmTokenController;
+use App\Http\Controllers\Foundation\DonationCampaignController;
 use App\Http\Controllers\Foundation\FoundationVerificationController;
 use App\Http\Controllers\InspectionRequestController;
 use App\Http\Controllers\InvoiceController;
@@ -202,6 +203,8 @@ Route::middleware(['auth:sanctum', 'active', 'role:user', 'throttle:60,1'])->gro
 
     Route::post('/foundation/verification', [FoundationVerificationController::class, 'store']
     );
+
+    Route::post('/foundation/donation-campaigns', [DonationCampaignController::class, 'store']);
 });
 
 Route::middleware(['auth:sanctum', 'active', 'role:user', 'throttle:10,10'])->group(function () {
@@ -367,7 +370,8 @@ Route::middleware(['auth:sanctum', 'active', 'role:admin', 'throttle:60,1'])->pr
 
     Route::get('/foundations/verification/{id}', [FoundationVerificationController::class, 'show']);
 
-
+    Route::get('/projects',[ProjectController::class,'index']);
+    Route::get('/project/{project}',[ProjectController::class,'show_project']);
 });
 
 Route::middleware(['auth:sanctum', 'active', 'role:admin', 'throttle:10,10'])->prefix('admin')->group(function () {
