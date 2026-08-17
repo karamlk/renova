@@ -23,6 +23,7 @@ import {rejectContractorRequest} from "../../api/contractors";
 //Hooks
 import { useEffect, useState,useContext } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 //Components
 import Profiledialog from "../../components/Profiledialog/Profiledialog";
 import Confirmdialog from "../../components/Confirmdialog/Confirmdialog";
@@ -47,6 +48,7 @@ export default function Requests() {
     const [openimage,setopenimage] = useState(false);
     const [selectedImage, setSelectedImage] = useState("");
     const {setisloading}=useContext(LoadingContext);
+    const navigate = useNavigate();
     let status = {"pending":"قيد الانتظار","approved":"مقبول","rejected":"مرفوض"}
     let role ={ 1:t("مدير النظام"), 2:t("مستخدم"), 3:t("متعهد"), 4:t("مهندس")}
     //Requests
@@ -112,6 +114,7 @@ export default function Requests() {
             }}><img src={contractorinfo?.contractor_profile?.full_commercial_record_url} alt="Commercial Record" /></div>
         </div>}
          onClose={() => setshowprofile(false)}
+         onClick={() => {setshowprofile(false);navigate("/dashboard/usersettings")}}
           />)
         )}
         {showconfirmdialog && (<Confirmdialog

@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import { useTranslation } from 'react-i18next';
 //Components
 import Dialogform from "../Dialogform/Dialogform";
+import IconBtn from "../IconBtn/IconBtn";
 
 export default function Financiallogdialog({onClose,log_id,payment_id,log_type,amount,log_date,from_user,to_user,description}) {
      const {t} = useTranslation();
@@ -24,7 +25,7 @@ export default function Financiallogdialog({onClose,log_id,payment_id,log_type,a
         icon={<ReceiptIcon sx={{color:'#f07c1f' , fontSize: "27px"}}/>}
         h="65vh" 
         w="460px"
-        closebtn={<button className="log-close-btn" onClick={onClose}><ClearIcon fontSize="small"/></button>}
+        closebtn={<IconBtn h="28px" w="28px" name="" clr="#999" bgc="#f5f5f5" onClick={onClose} icon={<ClearIcon/>}/>}
         >
                 <div className="log-section">
                     <div className="log-section-title"><InfoIcon sx={{color:'#f07c1f' , fontSize: "18px"}}/>{t("معلومات العملية")}</div>

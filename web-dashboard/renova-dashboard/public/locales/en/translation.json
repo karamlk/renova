@@ -274,7 +274,25 @@
    "لا يوجد سجلات": "No Records Available",
    "لا يوجد طلبات معاينة":"No Pending Requests Available",
    "لا توجد تحويلات": "No Transfers Available",
-   "لا توجد دفعات": "No Payments Available"
+   "لا توجد دفعات": "No Payments Available",
+   "الكل مقروء": "All Read",
+   "حذف الكل": "Delete All",
+   "الإشعارات": "Notifications",
+   "لا يوجد إشعارات": "No Notifications Available",
+   "جاري التحميل...": "Loading...",
+   "عرض المزيد": "Show More",
+   "اعتبره مقروء": "Mark as Read",
+   "مقروء": "Read",
+   "مستخدم جديد": "New User",
+   "متعهد جديد يطلب الموافقة": "New User Requesting Approval",
+   "طلب زيارة ميدانية جديد": "New Field Visit Request",
+   "شكوى جديدة": "New Complaint",
+   "تحذير غياب جديد": "New Absence Warning",
+   "دفعة جديدة": "New Payment"
+   
+   
+
+
    
    
 }

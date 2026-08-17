@@ -50,6 +50,7 @@ let type = {first_payment:t("الدفعة الأولى") , second_payment:t("ا�
                     await setfinance_info(response_finance.data);
                     let response_transfer = await getWaitingReleaseRequest();
                     await settransfer_info(response_transfer.data)
+
                 }finally{
                     setisloading(false);
                  }
@@ -136,7 +137,7 @@ const paginatedtransfer_info = transfer_info.slice((page - 1) * rowsPerPage , pa
                             <td>${formatMoney(transfer?.remaining_amount)}</td>
                             <td>
                                 <div className="actions">
-                                    <Button className="transfer-money" onClick={()=>{setselectedtransfer_info(transfer);setshowTransfermoneydialog(true)}} icon={<MonetizationOnIcon sx={{fontSize: "19px"}}/>} text="تحويل المبلغ"/>
+                                    <Button className="transfer-money" onClick={()=>{setselectedtransfer_info(transfer);setshowTransfermoneydialog(true)}} icon={<MonetizationOnIcon sx={{fontSize: "19px"}}/>} text="تحويل المبلغ"/>                                           
                                 </div>
                             </td>
                         </tr>

@@ -157,7 +157,6 @@ export default function Financiallogs() {
                             <td>
                                 <div className="actions">
                                     <IconBtn name="عرض" clr="#2196f3" bgc="rgba(33,150,243,0.1)" h_clr="white" h_bgc="#2196f3" onClick={()=>{showFinancialLog(paymentlog?.id);}} icon={<VisibilityIcon sx={{ fontSize: 24 }} />} />
-                                    <IconBtn name="طباعة" clr="#6C63FF" bgc="rgba(108,99,255,0.1)" h_clr="white" h_bgc="#6C63FF" onClick={()=>{}} icon={<PrintIcon sx={{ fontSize: 25 }} />} />                                            
                                 </div>
                             </td>
                         </tr>

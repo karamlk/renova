@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\Complaint\ComplaintController as AdminComplaintController;
 use App\Http\Controllers\Admin\Complaint\NoShowWarningController as AdminNoShowWarningController;
 use App\Http\Controllers\Admin\ContractorController;
@@ -336,6 +337,10 @@ Route::middleware(['auth:sanctum', 'active', 'role:admin'])->prefix('admin')->gr
     Route::get('/invoice/{invoice}',[InvoiceController::class,'show']);
     Route::get('/invoice/{invoice}/pdf',[InvoiceController::class,'pdf']);
     Route::get('invoices',[InvoiceController::class,'adminInvoices']);
+
+    //analytics
+    Route::get('/analytics/summary', [AnalyticsController::class, 'index']);
+
 });
 
 
