@@ -279,9 +279,14 @@ class ComplaintWorkflowTest extends TestCase
     public function test_cannot_report_before_visit_end_time(): void
     {
         $project = $this->createFullProject();
+
         $project['schedule']->update([
             'start_time' => '22:00:00',
             'end_time'   => '23:59:00',
+        ]);
+
+        $project['siteVisit']->update([
+            'visit_date' => now()->format('Y-m-d'),
         ]);
 
         $this->withHeaders($this->authHeaders($project['user']))
@@ -667,7 +672,7 @@ class ComplaintWorkflowTest extends TestCase
         ]);
 
         NoShowWarning::factory()->create([
-            'site_visit_id'    => SiteVisit::factory()->create()->id, 
+            'site_visit_id'    => SiteVisit::factory()->create()->id,
             'reporter_id'      => $project['user']->id,
             'reported_id'      => $project['contractor']->id,
             'reporter_role_id' => $userRoleId,
