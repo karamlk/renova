@@ -4,11 +4,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/models/Contractor/post/show_post_details.dart';
 import 'package:renove_provider/providers/Contractor/post_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
+import 'package:renove_provider/screens/Contractor/posts/new_post.dart';
 
 class HomeScreenContractor extends StatefulWidget {
   const HomeScreenContractor({super.key});
@@ -18,21 +20,14 @@ class HomeScreenContractor extends StatefulWidget {
 }
 
 class _HomeScreenContractorState extends State<HomeScreenContractor> {
-  int currentImage = 0;
-  late PageController pageController;
+  bool isLikes = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<PostProvider>().fetchAllPosts();
-      pageController = PageController();
     });
-  }
-
-  @override
-  void dispose() {
-    pageController.dispose();
-    super.dispose();
   }
 
   @override
@@ -48,7 +43,9 @@ class _HomeScreenContractorState extends State<HomeScreenContractor> {
 
           isExtended: true,
 
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewPost()));
+          },
           label: Text('منشور جديد', style: TextStyle(fontWeight: FontWeight.bold)),
           icon: Icon(Icons.add),
         ),
@@ -56,6 +53,12 @@ class _HomeScreenContractorState extends State<HomeScreenContractor> {
           padding: const EdgeInsets.all(10),
           child: Consumer<PostProvider>(
             builder: (context, value, child) => ListView.builder(
+              padding: EdgeInsets.only(
+                left: 10,
+                top: 10,
+                right: 10,
+                bottom: kFloatingActionButtonMargin + 72, // Clears standard FAB height + margin
+              ),
               itemCount: value.posts.length,
               itemBuilder: (context, index) {
                 final post = value.posts[index];
@@ -109,9 +112,31 @@ class _HomeScreenContractorState extends State<HomeScreenContractor> {
                                 ),
                               ],
                             ),
-                            Text(
-                              value.formatDate(post.createdAt ?? "لا يوجد تاريخ"),
-                              style: TextStyle(color: Colors.grey),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  value.formatDate(post.createdAt ?? "لا يوجد تاريخ"),
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(double.minPositive, 20),
+                                    backgroundColor: context.watch<ThemeProvider>().isDark
+                                        ? primarycolor2
+                                        : primarycolor2,
+                                    foregroundColor: context.watch<ThemeProvider>().isDark
+                                        ? primarycolor1
+                                        : primarycolor1,
+
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  child: Text(post.user!.contractorProfile!.firstName),
+                                ),
+                              ],
                             ),
                             SizedBox(height: 10),
                             Text(post.description),
@@ -179,9 +204,11 @@ class _HomeScreenContractorState extends State<HomeScreenContractor> {
                                   ),
                                 ),
                                 onPressed: () async {
-                                  final response = await value.fetchPostDetails(id: post.id);
-                                  if (response?.statusCode == 200) {
-                                    final detail = value.detail;
+                                  final response = await value.addLike(post.id);
+                                  if (response!.statusCode == 200) {
+                                    await value.fetchPostDetails(id: post.id);
+                                    post.isLiked = value.detail!.isLiked;
+                                    post.likesCount = value.detail!.likesCount;
                                   }
                                 },
                                 child: Row(
@@ -199,7 +226,7 @@ class _HomeScreenContractorState extends State<HomeScreenContractor> {
                                     Transform.translate(
                                       offset: const Offset(0, -2.5),
                                       child: Icon(
-                                        color: value.isLiked ? primarycolor1 : Colors.grey,
+                                        color: post.isLiked ? primarycolor1 : Colors.grey,
                                         Icons.arrow_upward_rounded,
                                       ),
                                     ),

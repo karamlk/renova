@@ -1,0 +1,93 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:renove_provider/extras/link.dart';
+import 'package:renove_provider/extras/shared_preferneces.dart';
+import 'package:renove_provider/models/User/posts/all_posts.dart';
+import 'package:renove_provider/models/User/posts/post_details_user.dart';
+
+class PostsUserProvider extends ChangeNotifier {
+  bool isLoading = false;
+  List<File> postImages = [];
+  List<AllPosts> posts = [];
+  PostDetailsUser? detail;
+
+  String formatDate(String date) {
+    String timeStamp = date;
+    String dateOnly = timeStamp.split('T')[0];
+    return dateOnly;
+  }
+
+  Future<http.Response?> fetchAllPosts() async {
+    isLoading = true;
+
+    notifyListeners();
+
+    try {
+      final token = await getPrefs('token');
+      final response = await http.get(
+        Uri.parse("$link/api/all_posts"),
+        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+
+        posts = data.map((json) => AllPosts.fromJson(json as Map<String, dynamic>)).toList();
+      }
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<http.Response?> addLike(int id) async {
+    final token = await getPrefs('token');
+    try {
+      final response = await http.post(
+        Uri.parse("$link/api/posts/$id/like"),
+        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+      );
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<http.Response?> fetchPostDetails({required int id}) async {
+    isLoading = true;
+
+    notifyListeners();
+
+    try {
+      final token = await getPrefs("token");
+
+      final response = await http.get(
+        Uri.parse("$link/api/post/$id"),
+        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+
+        if (data.isNotEmpty) {
+          detail = PostDetailsUser.fromJson(data.first as Map<String, dynamic>);
+        }
+      }
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+}

@@ -25,15 +25,15 @@ class ShowContractorProfileModel {
     final data = json['data'];
 
     return ShowContractorProfileModel(
-      firstName: data['first_name'] ?? '',
-      lastName: data['last_name'] ?? '',
-      email: data['user']['email'] ?? '',
-      phone: data['phone'] ?? '',
-      location: data['location'] ?? '',
-      companyName: data['company_name'] ?? '',
-      commercialRecord: data['commercial_record_url'] ?? '',
-      image: data['image_url'] ?? '',
-      role: data['user']['role']['name'],
+      firstName: data['original']['profile']['first_name'] ?? '',
+      lastName: data['original']['profile']['last_name'] ?? '',
+      email: data['original']['user']['email'] ?? '',
+      phone: data['original']['profile']['phone'] ?? '',
+      location: data['original']['profile']['location'] ?? '',
+      companyName: data['original']['profile']['company_name'] ?? '',
+      commercialRecord: data['original']['profile']['commercial_record_url'] ?? '',
+      image: data['original']['profile']['image_url'] ?? '',
+      role: data['original']['user']['role']['name'],
     );
   }
 }

@@ -511,6 +511,7 @@ class _ReceivedFormsDetailsState extends State<ReceivedFormsDetails> {
                           .read<ContrsutionFormsProvider>()
                           .details
                           ?.status;
+                      print(currentStatus);
                       switch (currentStatus) {
                         case "pending_user":
                           showModalBottomSheet(
