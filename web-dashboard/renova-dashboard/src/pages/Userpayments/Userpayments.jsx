@@ -4,11 +4,13 @@ import "../Users/Table.css";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import PaidIcon from '@mui/icons-material/Paid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import PrintIcon from '@mui/icons-material/Print';
 //Components
 import TablePagination from "../../components/Pagination/Pagination";
 import Userpaymentdialog from "../../components/Userpaymentdialog/Userpaymentdialog";
 import Button from "../../components/Button/Button";
 import Norequest from "../../components/Norequest/Norequest";
+import IconBtn from "../../components/IconBtn/IconBtn";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
@@ -17,6 +19,7 @@ import { LoadingContext } from "../../Context/Loadingcontext";
 //Api
 import {getUserPaymentRequest} from "../../api/finance";
 import {showUserPaymentRequest} from "../../api/finance";
+import {printUserBillRequest} from "../../api/finance";
 //Utils
 import {formatMoney} from "../../utils/formatMoney";
 //Libraries
@@ -58,7 +61,36 @@ async function showUserPayment(id){
      }               
     
      
-}
+    }  
+async function printUserBill(id){
+try {
+        const response = await printUserBillRequest(id);
+        const pdfBlob = response.data;
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        const iframe = document.createElement("iframe");
+
+        iframe.style.position = "fixed";
+        iframe.style.width = "0";
+        iframe.style.height = "0";
+        iframe.style.border = "0";
+        iframe.style.left = "-9999px";
+        iframe.src = pdfUrl;
+        document.body.appendChild(iframe);
+        
+        iframe.onload = () => {
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+                URL.revokeObjectURL(pdfUrl);
+            }, 1000);
+        };
+
+    } catch (error) {
+        console.error("فشل طباعة الفاتورة:", error);
+    }
+} 
 useEffect(()=>{getUserPayment();},[]);
     return (
         <>
@@ -121,7 +153,8 @@ useEffect(()=>{getUserPayment();},[]);
                             <td>{dayjs(userspayment?.created_at).format("YYYY-MM-DD")}</td>
                             <td>
                                 <div className="actions">
-                                    <Button className="view" onClick={()=>{showUserPayment(userspayment.id);}} icon={<VisibilityIcon sx={{fontSize: "19px"}}/>} text="عرض"/>
+                                    <IconBtn name="طباعة" clr="#6C63FF" bgc="rgba(108,99,255,0.1)" h_clr="white" h_bgc="#6C63FF" onClick={()=>{printUserBill(userspayment?.invoice?.id)}} icon={<PrintIcon sx={{ fontSize: 25 }} />} />
+                                    <IconBtn name="عرض" clr="#2196f3" bgc="rgba(33,150,243,0.1)" h_clr="white" h_bgc="#2196f3" onClick={()=>{showUserPayment(userspayment.id);}} icon={<VisibilityIcon sx={{fontSize: "24px"}}/>}/>
                             </div>
                             </td>
                         </tr>

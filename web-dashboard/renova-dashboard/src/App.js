@@ -18,7 +18,7 @@ import AuthGate from "./auth/AuthGate";
 //Context
 import { LoadingContext } from "./Context/Loadingcontext";
 import UserProvider from "./Context/UserContext";
-
+import NotificationCountProvider from "./Context/NotificationcountContext";
 //Hooks
 import { useState } from "react";
 import { useEffect } from "react";
@@ -35,40 +35,42 @@ function App() {
   return (
     <LoadingContext.Provider value={{ isloading, setisloading }}>
       <UserProvider>
-        <div className="App">
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <AuthGate>
-                  <Login />
-                </AuthGate>
-              }
-            />
+        <NotificationCountProvider>
+          <div className="App">
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <AuthGate>
+                    <Login />
+                  </AuthGate>
+                }
+              />
 
-            <Route element={<ProtectedRoute />}>
-              <Route path="/dashboard" element={<Dashboard />}>
-                <Route index element={<Navigate to="homepage" replace />} />
-                <Route path="homepage" element={<Homepage />} />
-                <Route path="users" element={<Users />} />
-                <Route path="requests" element={<Requests />} />
-                <Route path="complaints" element={<Complaints />} />
-                <Route path="moneytransfers" element={<Moneytransfers />} />
-                <Route path="userpayments" element={<Userpayments />} />
-                <Route path="Financiallogs" element={<Financiallogs />} />
-                <Route
-                  path="complaintsarchive"
-                  element={<Complaintsarchive />}
-                />
-                <Route
-                  path="inspections_requests"
-                  element={<Inspectionrequests />}
-                />
-                <Route path="usersettings" element={<Usersettings />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/dashboard" element={<Dashboard />}>
+                  <Route index element={<Navigate to="homepage" replace />} />
+                  <Route path="homepage" element={<Homepage />} />
+                  <Route path="users" element={<Users />} />
+                  <Route path="requests" element={<Requests />} />
+                  <Route path="complaints" element={<Complaints />} />
+                  <Route path="moneytransfers" element={<Moneytransfers />} />
+                  <Route path="userpayments" element={<Userpayments />} />
+                  <Route path="Financiallogs" element={<Financiallogs />} />
+                  <Route
+                    path="complaintsarchive"
+                    element={<Complaintsarchive />}
+                  />
+                  <Route
+                    path="inspections_requests"
+                    element={<Inspectionrequests />}
+                  />
+                  <Route path="usersettings" element={<Usersettings />} />
+                </Route>
               </Route>
-            </Route>
-          </Routes>
-        </div>
+            </Routes>
+          </div>
+        </NotificationCountProvider>
       </UserProvider>
     </LoadingContext.Provider>
   );

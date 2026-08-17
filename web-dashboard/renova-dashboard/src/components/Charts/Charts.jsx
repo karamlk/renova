@@ -3,13 +3,13 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import Box from '@mui/material/Box';
 import { useTranslation } from 'react-i18next';
 
-export default function Circlechart(){
+export default function Circlechart({v1,v2,v3}){
     const [t] = useTranslation();
     localStorage.getItem("i18nextLng");
     const data = [
-    { value: 9, label: t('بناء') , color:'#F07C1F' },
-    { value: 10, label: t('ترميم'), color:'#3b414c' },
-    { value: 15, label: t('إكساء'), color:'#b8bcbf' },
+    { value: v1, label: t('بناء') , color:'#F07C1F' },
+    { value: v2, label: t('ترميم'), color:'#3b414c' },
+    { value: v3, label: t('إكساء'), color:'#b8bcbf' },
     ];
     const size = {
         width: 300,
@@ -25,10 +25,10 @@ export default function Circlechart(){
     );
 }
 
-export function Linerchart(){
+export function Linerchart({ data = [] }){
     const [t] = useTranslation();
-    const uData = [0, 5, 10, 15, 20, 25, 30,35,40,45,50,55];
-    const xLabels = [t('يناير'),t('فبراير'),t('مارس'),t('ابريل'),t('ماي'),t('يونيو'),t('يوليو'),t('اغسطس'),t('سبتمبر'),t('اكتوبر'),t('نوفمبر'),t('ديسمبر')];
+    const uData = data.map(item => item.count);
+    const xLabels = data.map(item => t(item.month_name));  
     return(
       <Box sx={{ width: "100%",minWidth: 650, height: 300 ,paddingRight: '35px',overflow: "visible",direction: 'ltr'}}>
             <LineChart

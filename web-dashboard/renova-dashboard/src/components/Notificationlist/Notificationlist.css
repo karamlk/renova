@@ -1,7 +1,7 @@
 .notifications-dropdown {
   position: absolute;
-  top: 105px;
-  left: 280px;
+  top: calc(100% + 10px);
+  inset-inline-start: -220px;
   width: 450px;
   display: flex;
   flex-direction: column;
@@ -59,10 +59,10 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: flex-start;
   padding-bottom: 15px;
-  padding-top: 35px;
+  padding-top: 0;
 }
 
 .dropdown-body::-webkit-scrollbar {
@@ -98,6 +98,7 @@
   align-items: center;
   gap: 8px;
   margin: 0px;
+  text-decoration: none;
 }
 
 .notification-item .notification-icon {
@@ -135,4 +136,9 @@
   display: flex;
   align-items: center;
   gap: 2px;
+}
+.noti-btns {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }

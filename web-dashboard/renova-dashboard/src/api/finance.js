@@ -21,6 +21,12 @@ export async function showUserPaymentRequest(id) {
   let response = await api.get(`/admin/payments/${id}`);
   return response;
 }
+export async function printUserBillRequest(id) {
+  let response = await api.get(`/admin/invoice/${id}/pdf`, {
+    responseType: "blob",
+  });
+  return response;
+}
 ////////////////////////////////
 export async function getpaymentLogsRequest() {
   let response = await api.get("/admin/payment-audits");

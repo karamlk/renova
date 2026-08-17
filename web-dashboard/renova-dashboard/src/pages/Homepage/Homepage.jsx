@@ -4,11 +4,11 @@ import { Grid } from '@mui/material';
 //Components
 import Card from "../../components/Card/Card"
 import Cardchart from "../../components/Cardchart/Cardchart";
-import Projecttable from "../../components/Projecttable/Projecttable";
 import Circlechart from "../../components/Charts/Charts";
 import {Linerchart} from "../../components/Charts/Charts";
 //Hooks
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect,useContext } from "react";
 //MUI Icons
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import PersonIcon from '@mui/icons-material/Person';
@@ -17,24 +17,49 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import BarChartIcon from '@mui/icons-material/BarChart';
-
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+//api
+import {getDashboardRequest} from "../../api/homepage";
+//Context
+import { LoadingContext } from "../../Context/Loadingcontext";
+//Utils
+import {formatMoney} from "../../utils/formatMoney";
 export default function Homepage() {
     const [t] = useTranslation();
+    const [dashboard_info, setdashboard_info] = useState({
+    counters: {},
+    project_type_percentages: {},
+    monthly_completions: [],
+    latest_projects: []
+});
+    const {setisloading}=useContext(LoadingContext);
+    //Request
+    async function getDashboard() {
+        setisloading(true);
+        let response = await getDashboardRequest();
+        
+        await setdashboard_info(response.data);
+        setisloading(false);
+    }
+    useEffect(() => {
+        getDashboard();
+    }, []);
     return (
         <div>
             <Grid container spacing={2}>
                 {/*Cards*/}
                 <Grid size={3}>
-                    <Card number="58" title={t("إجمالي المشاريع")} iconright={<ApartmentIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
+                    <Card number={dashboard_info?.counters?.total_projects} title={t("إجمالي المشاريع")} iconright={<ApartmentIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
                 </Grid>
                 <Grid size={3}>
-                    <Card number="100" title={t("إجمالي المستخدمين")} iconright={<PersonIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
+                    <Card number={dashboard_info?.counters?.total_users} title={t("إجمالي المستخدمين")} iconright={<PersonIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
                 </Grid>
                 <Grid size={3}>
-                    <Card number="25" title={t("المشاريع المكتملة")} iconright={<DoneAllIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
+                    <Card number={dashboard_info?.counters?.completed_projects} title={t("المشاريع المكتملة")} iconright={<DoneAllIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
                 </Grid>
                 <Grid size={3}>
-                    <Card number="25M" title={t("إجمالي الربح")} iconright={<AttachMoneyIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
+                    <Card number={`${formatMoney(dashboard_info?.counters?.total_profit)}$`} title={t("إجمالي الربح")} iconright={<AttachMoneyIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
                 </Grid>
                 {/*CardsCharts*/}
                 <Grid size={12}>
@@ -42,17 +67,59 @@ export default function Homepage() {
                 </Grid>
                 <Grid size={6}>
                     <Cardchart title={t("نسبة المشاريع حسب النوع")} icon={<DonutLargeIcon sx={{ color: "#f07c1f" }} fontSize="medium" />}>
-                        <Circlechart/>
+                        <Circlechart 
+                        v1={dashboard_info?.project_type_percentages?.construction} 
+                        v2={dashboard_info?.project_type_percentages?.restoration} 
+                        v3={dashboard_info?.project_type_percentages?.finishing}/>
                     </Cardchart>
                 </Grid>
                 <Grid size={6}>
                     <Cardchart title={t("إنجاز المشاريع")} icon={<TrendingUpIcon sx={{ color: "#f07c1f" }} fontSize="medium" />}>
-                        <Linerchart/>
+                        <Linerchart data={dashboard_info?.monthly_completions}/>
                     </Cardchart>
                 </Grid>
                 {/*Tabels*/}
                 <Grid size={12}>
-                    <Projecttable/>
+                    <div class="table-body">
+                        <div class="table-header">
+                            <h3><AssignmentIcon sx={{ color: "#f07c1f"}}/> {t("أحدث المشاريع")}</h3>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>{t("اسم المشروع")}</th>
+                                        <th>{t("صاحب المشروع")}</th>
+                                        <th>{t("الموقع")}</th>
+                                        <th>{t("النوع")}</th>
+                                        <th>{t("الحالة")}</th>
+                                        <th>{t("تاريخ الإنشاء")}</th>
+                                        <th>{t("التقدم")}</th>
+                                    </tr>
+                                </thead>
+                            <tbody>
+                                {dashboard_info?.latest_projects.map((project) => (
+                                    <tr key={project.id}>
+                                    <td>{project.title}</td>
+                                    <td>{project.user_name}</td>
+                                    <td className="location"><LocationOnIcon sx={{ color: "#f07c1f"}}/>{project.location}</td>
+                                    <td>{project.type}</td>
+                                    <td>{project.status}</td>
+                                    <td>{project.created_at?project.created_at:"-"}</td>
+                                    <td>
+                                        <div className="progress">
+                                        <div className="progress-bar">
+                                            <div className="progress-fill" style={{ width: `${project.progress}%` }}></div>
+                                        </div>
+                                        <span>{project.progress}%</span>
+                                        </div>
+                                    </td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </Grid>
             </Grid>
         </div>
