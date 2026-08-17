@@ -197,4 +197,16 @@ class User extends Authenticatable
             'contractor_id'
         );
     }
+    public function foundationVerificationRequests()
+    {
+        return $this->hasMany(
+            FoundationVerificationRequest::class
+        );
+    }
+    public function latestFoundationVerification()
+    {
+        return $this->hasOne(
+            FoundationVerificationRequest::class
+        )->latestOfMany();
+    }
 }

@@ -115,6 +115,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer'])->
 
     //Route::get('/wallet/financial-account', [WalletController::class, 'financialAccount']);
 
+    Route::get('post/{post}',[ContractorPostController::class,'post']);
 
 
     // مسار التحويل المالي
@@ -136,7 +137,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(fun
 
     Route::get('all_posts',[ContractorPostController::class,'allPosts']);
 
-    Route::get('/post/{id}',[ContractorPostController::class,'post']);
+   // Route::get('/post/{id}',[ContractorPostController::class,'post']);
 
     Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
 
@@ -150,7 +151,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor'])->group(fun
 
 // ── USER (customer) ───────────────────────────────────────────
 Route::middleware(['auth:sanctum', 'active', 'role:user'])->group(function () {
-
+    //Route::get('/post/{id}',[ContractorPostController::class,'post']);
     // Reconstruction requests — write
     Route::post('/reconstruction-requests',       [ReconstructionRequestController::class, 'store']);
     Route::post('/reconstruction-requests/{id}',  [ReconstructionRequestController::class, 'update']);

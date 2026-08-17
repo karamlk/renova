@@ -142,8 +142,47 @@ class ContractorPostService
             ->findOrFail($id);
     }
 
-    public function post ($id)
+//    public function post ($id)
+//    {
+//        return ContractorPost::with([
+//            'images',
+//            'user.contractorProfile',
+//            'project.form.reconstructionRequest',
+//            'project.form.materials',
+//            'project.engineer',
+//        ])
+//            ->where('user_id', auth()->id())
+//            ->withCount('likes')
+//            ->withExists(['likes as is_liked' => function ($query) {
+//                $query->where('user_id', auth()->id());
+//            }])
+//            ->findOrFail($id);
+//    }
+    public function post($id)
     {
+        $currentUserId = auth()->id();
+        $post = ContractorPost::find($id);
+
+        // 1. إذا كان المنشور غير موجود أصلاً في الداتابيز
+        if (!$post) {
+            return response()->json(['error' => 'المنشور غير موجود في قاعدة البيانات أساساً'], 404);
+        }
+
+        // 2. إذا كان المستخدم غير مسجل دخول (Token مفقود)
+        if (!$currentUserId) {
+            return response()->json(['error' => 'لم يتم التعرف على المستخدم، تأكد من إرسال الـ Token'], 401);
+        }
+
+        // 3. إذا كان المنشور موجود ولكن يخص مستخدماً آخر
+//        if ($post->user_id !== $currentUserId) {
+//            return response()->json([
+//                'error' => 'المنشور عائد لمستخدم آخر',
+//                'post_owner_id' => $post->user_id,
+//                'your_user_id' => $currentUserId
+//            ], 403);
+//        }
+
+        // الكود الطبيعي في حال تطابق البيانات
         return ContractorPost::with([
             'images',
             'user.contractorProfile',
@@ -151,12 +190,11 @@ class ContractorPostService
             'project.form.materials',
             'project.engineer',
         ])
-            ->where('user_id', auth()->id())
             ->withCount('likes')
-            ->withExists(['likes as is_liked' => function ($query) {
-                $query->where('user_id', auth()->id());
+            ->withExists(['likes as is_liked' => function ($query) use ($currentUserId) {
+                $query->where('user_id', $currentUserId);
             }])
-            ->findOrFail($id);
+            ->find($id);
     }
 
 
