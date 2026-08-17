@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 import { useTranslation } from 'react-i18next';
 //Components
 import Dialogform from "../Dialogform/Dialogform";
+import IconBtn from "../IconBtn/IconBtn";
 
 export default function Userpaymentdialog({onClose,id,p_type,amount,released_amount,p_status,date,
     pr_name,pr_type,pr_total_cost,pr_status,warranty_period,execution_duration,
@@ -30,8 +31,7 @@ export default function Userpaymentdialog({onClose,id,p_type,amount,released_amo
         icon={<ReceiptIcon sx={{color:'#f07c1f' , fontSize: "28px"}}/>}
         h="92vh" 
         w="650px"
-        closebtn={<div className="userpayment-close-btn" onClick={onClose}><ClearIcon/></div>}
-        >
+        closebtn={<IconBtn h="28px" w="28px" name="" clr="#999" bgc="#f5f5f5" onClick={onClose} icon={<ClearIcon/>}/>}>
                 <div className="userpayment-section">
                     <div className="userpayment-section-title"><InfoIcon sx={{color:'#f07c1f' , fontSize: "20px"}}/>{t("معلومات الدفعة")}</div>
                     <div className="userpayment-detail-grid">

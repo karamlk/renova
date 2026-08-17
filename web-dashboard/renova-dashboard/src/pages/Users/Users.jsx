@@ -3,6 +3,7 @@ import "./Table.css";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState,useEffect,useContext } from "react";
+import { useNavigate } from "react-router-dom";
 //api
 import {getUsersRequest} from "../../api/users";
 import {getUserProfileRequest} from "../../api/users";
@@ -55,6 +56,7 @@ export default function User(){
     const {setisloading}=useContext(LoadingContext);
     const [severity, setseverity] = useState("");
     const [page, setPage] = useState(1);
+    const navigate = useNavigate();
 
     const rowsPerPage = 12;
     const paginatedUsers = users.slice((page - 1) * rowsPerPage , page * rowsPerPage);
@@ -196,6 +198,7 @@ export default function User(){
                 </>):null
             )}
          onClose={() => setshowprofile(false)}
+         onClick={() => {setshowprofile(false);navigate("/dashboard/usersettings")}}
           />)
         )}
 

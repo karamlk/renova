@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 //Components
 import Button from '../Button/Button';
 import Dialogform from "../Dialogform/Dialogform";
+import IconBtn from "../IconBtn/IconBtn";
 export default function Filterdialog({onClose,title,groups,onApply,onReset,selectedFilters,setSelectedFilters}) {
     const [t] = useTranslation();
     return (
@@ -20,7 +21,7 @@ export default function Filterdialog({onClose,title,groups,onApply,onReset,selec
         w="460px"
         b1={<Button className="cancel" onClick={onReset} text="إعادة تعيين" icon={<ReplayIcon/>}/>}
         b2={<Button className="accept" onClick={()=>{onApply(selectedFilters);}} text="تطبيق الفلتر" icon={<CheckIcon/>}/>}
-        closebtn={<button className="filter-close-btn" onClick={onClose}><ClearIcon fontSize="small"/></button>}
+        closebtn={<IconBtn h="28px" w="28px" name="" clr="#999" bgc="#f5f5f5" onClick={onClose} icon={<ClearIcon/>}/>}
         >
                 {groups.map((group) => (
                     <div className="filter-group" key={group.name}>

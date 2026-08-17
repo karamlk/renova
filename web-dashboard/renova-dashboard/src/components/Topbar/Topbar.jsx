@@ -2,6 +2,7 @@ import "./Topbar.css";
 //Hooks
 import { useState,useContext,useEffect } from "react";
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from "react-router-dom";
 //Commponents
 import Profiledialog from "../Profiledialog/Profiledialog";
 import Notificationlist from "../Notificationlist/Notificationlist";
@@ -29,6 +30,7 @@ export default function Topbar() {
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
+    const navigate = useNavigate();
     let role ={ 1:"مدير النظام", 2:"مستخدم", 3:"متعهد", 4:"مهندس"}
     //Request
     async function getNotificationList(pageNumber = 1) {
@@ -118,6 +120,7 @@ useEffect(() => {
          phone={user?.profile?.phone}
          location={user?.profile?.location}
          role={role[user?.role_id]}
+         onClick={() => {setshowprofile(false);navigate("/dashboard/usersettings")}}
          onClose={() => setshowprofile(false)}
          showEdit={true}
           />)}

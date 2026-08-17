@@ -13,6 +13,7 @@ import Avatar from '@mui/material/Avatar';
 //Components
 import Imagedialog from "../../components/Imagedialog/Imagedialog";
 import Dialogform from "../Dialogform/Dialogform";
+import IconBtn from "../IconBtn/IconBtn";
 //Hooks
 import { useTranslation } from 'react-i18next';
 import { useState } from "react";
@@ -42,7 +43,7 @@ export default function Complaintdetailsdialog({
         icon={<DescriptionIcon sx={{color: '#f07c1f' , fontSize: 30}} />}
         h="90vh" 
         w="700px"
-        closebtn={<div className="complaints-close-btn" onClick={onClose}><ClearIcon/></div>}>
+        closebtn={<IconBtn h="28px" w="28px" name="" clr="#999" bgc="#f5f5f5" onClick={onClose} icon={<ClearIcon/>}/>}>
                 <div className="complaints-section">
                     <div className="complaints-section-main-title">
                         <div className="complaints-sub-title">

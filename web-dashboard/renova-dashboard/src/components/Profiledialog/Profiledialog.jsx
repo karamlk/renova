@@ -6,13 +6,11 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ClearIcon from '@mui/icons-material/Clear';
 //Hooks
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from "react-router-dom";
 //Components
 import Button from '../Button/Button';
 import Dialogform from "../Dialogform/Dialogform";
-export default function Profiledialog({image,first_name,last_name,name,email,images,phone,location,role, onClose,children,showEdit = false,}) {
+export default function Profiledialog({image,first_name,last_name,name,email,images,phone,location,role,onClick, onClose,children,showEdit = false,}) {
   const [t]=useTranslation();
-  const navigate = useNavigate();
     return (
     <Dialogform
         title={"معلومات الحساب"} 
@@ -21,7 +19,7 @@ export default function Profiledialog({image,first_name,last_name,name,email,ima
         w="480px"
         b1={<Button className="cancel" onClick={onClose} text="إغلاق" icon={<ClearIcon sx={{ fontSize: '16px' }}/>} />}
         b2={showEdit &&
-          <Button className="accept" onClick={() => navigate("/dashboard/usersettings")} text="تعديل" icon={<EditIcon sx={{ fontSize: '16px' }}/>} />
+          <Button className="accept" onClick={onClick} text="تعديل" icon={<EditIcon sx={{ fontSize: '16px' }}/>} />
         }>
                <div className="profile-row">
             {image} 
