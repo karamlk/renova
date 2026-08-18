@@ -20,7 +20,7 @@ class SiteVisit extends Model
      protected $casts = [
         'visit_date' => 'date',
     ];
-    
+
     public function engineer()
     {
         return $this->belongsTo(User::class, 'engineer_id');
@@ -39,4 +39,9 @@ class SiteVisit extends Model
             'schedule_id'
         );
     }
+    public function contractor()
+    {
+        return $this->belongsTo(User::class, 'contractor_id');
+    }
+
 }

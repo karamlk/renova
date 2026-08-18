@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\SiteVisit;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class SiteVisitService
 {
@@ -68,7 +69,7 @@ class SiteVisitService
 
     // Check the assigned user actually has the engineer role
         $engineer = User::findOrFail($engineerId);
-        
+
         abort_if(
             $engineer->role->name !== 'engineer',
             422,
@@ -86,19 +87,60 @@ class SiteVisitService
     /**
      * 3. تحديث حالة الزيارة من قِبل المهندس (قبول أو رفض)
      */
-    public function updateVisitStatusByEngineer(User $engineer, int $visitId, string $status): SiteVisit
-    {
-        // التأكد أن الزيارة مفرزة لهذا المهندس بالذات وحالتها الحالية pending
+    public function updateVisitStatusByEngineer(
+        User $engineer,
+        int $visitId,
+        string $status
+    ): SiteVisit {
+
         $visit = SiteVisit::where('id', $visitId)
             ->where('engineer_id', $engineer->id)
             ->where('status', 'pending')
             ->firstOrFail();
 
         if (in_array($status, ['accepted', 'rejected'])) {
-            $visit->update(['status' => $status]);
+
+            $visit->update([
+                'status' => $status
+            ]);
+
+            if ($status === 'accepted') {
+
+                $contractor = $visit->schedule->contractor;
+
+                if ($contractor) {
+
+                    // إشعار الويب - لا نغير نظامه
+                    event(new \App\Events\AppEvent(
+                        $contractor->id,
+                        'تم تعيين مهندس للزيارة',
+                        'تم تعيين مهندس للقيام بزيارة الموقع.',
+                        'site_visit',
+                        'site-visits',
+                        $visit->id
+                    ));
+
+                    // إشعار الموبايل FCM
+                    if ($contractor->fcm_token) {
+
+                        app(
+                            \App\Services\FirebaseNotificationService::class
+                        )->send(
+                            $contractor->fcm_token,
+                            'تم تعيين مهندس للزيارة',
+                            'تم تعيين مهندس للقيام بزيارة الموقع.',
+                            [
+                                'type' => 'site_visit',
+                                'target_path' => 'site-visits',
+                                'related_id' => (string) $visit->id,
+                            ]
+                        );
+                    }
+                }
+            }
         }
 
-        return $visit;
+        return $visit->fresh();
     }
     /**
      * جلب الزيارات الميدانية المعلقة (التي بلا مهندس أو التي رُفضت من المهندسين)
