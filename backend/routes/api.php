@@ -206,6 +206,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user', 'throttle:60,1'])->gro
     Route::get('/user/projects/{id}', [ProjectController::class, 'userProject']);
 
     Route::post('/foundation/verification', [FoundationVerificationController::class, 'store']);
+
     Route::post('/foundation/donation-campaigns', [DonationCampaignController::class, 'store']);
     Route::get('/foundation/donation-campaigns', [DonationCampaignController::class, 'index']);
     Route::get('/foundation/donation-campaigns/{id}', [DonationCampaignController::class, 'show']);
@@ -390,16 +391,23 @@ Route::post('/payments/{payment}/release', [PaymentController::class, 'release']
 use App\Services\FirebaseNotificationService;
 
 
-Route::post('/test-firebase', function (
-    FirebaseNotificationService $firebase
-) {
+//Route::post('/test-firebase', function (
+//    FirebaseNotificationService $firebase
+//) {
+//
+//    $token = request('token');
+//
+//    return $firebase->send(
+//        $token,
+//        'تجربة إشعار 🔔',
+//        'هذا إشعار تجريبي من منصة ReNova'
+//    );
+//
+//});
+Route::post('/test-firebase', function () {
 
-    $token = request('token');
-
-    return $firebase->send(
-        $token,
-        'تجربة إشعار 🔔',
-        'هذا إشعار تجريبي من منصة ReNova'
-    );
-
+    return response()->json([
+        'all_request_data' => request()->all(),
+        'token' => request('token'),
+    ]);
 });

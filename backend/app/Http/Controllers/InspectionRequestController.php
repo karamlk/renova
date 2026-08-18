@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\AcceptInspectionRequest;
 use App\Models\InspectionRequest;
+use App\Models\ReconstructionRequest;
 use App\Services\Contractor\InspectionRequestService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,6 +29,44 @@ class InspectionRequestController
         $inspection =
             $this->inspectionService
                 ->store($request);
+
+        $reconstructionRequest = ReconstructionRequest::with('user')
+            ->findOrFail($request->reconstruction_request_id);
+
+        $user = $reconstructionRequest->user;
+        // تسجيل الإشعار في قاعدة البيانات
+        event(new \App\Events\AppEvent(
+            $user->id,
+            'طلب زيارة جديد',
+            'لديك طلب زيارة متعلق بطلب إعادة الإعمار الخاص بك.',
+            'inspection_request',
+            'inspections',
+            $inspection->id
+        ));
+        // إرسال Push Notification
+        if ($user->fcm_token) {
+
+            app(
+                \App\Services\FirebaseNotificationService::class
+            )->send(
+                $user->fcm_token,
+
+                'طلب زيارة جديد',
+
+                'لديك طلب زيارة متعلق بطلب إعادة الإعمار الخاص بك.',
+
+                [
+                    'type' =>
+                        'inspection_request',
+
+                    'target_path' =>
+                        'inspections',
+
+                    'related_id' =>
+                        (string) $inspection->id,
+                ]
+            );
+        }
 
         return response()->json([
 
