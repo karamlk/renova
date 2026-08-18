@@ -97,11 +97,42 @@ class FoundationVerificationService
             'rejection_reason' => null,
         ]);
 
+        $user = $request->user;
+
+        if ($user) {
+
+            event(new \App\Events\AppEvent(
+                $user->id,
+                'تم قبول طلب توثيق الجمعية',
+                'تم قبول طلب توثيق الجمعية بنجاح.',
+                'foundation_verification',
+                'foundation-verification',
+                $request->id
+            ));
+
+            if ($user->fcm_token) {
+
+                app(
+                    \App\Services\FirebaseNotificationService::class
+                )->send(
+                    $user->fcm_token,
+                    'تم قبول طلب توثيق الجمعية',
+                    'تم قبول طلب توثيق الجمعية بنجاح.',
+                    [
+                        'type' => 'foundation_verification',
+                        'target_path' => 'foundation-verification',
+                        'related_id' => (string) $request->id,
+                    ]
+                );
+            }
+        }
+
         return $request->load([
             'user.profile',
             'documents'
         ]);
     }
+
 
     public function reject($id)
     {
@@ -115,6 +146,40 @@ class FoundationVerificationService
             'status' => 'rejected',
             'rejection_reason' => $request->rejection_reason,
         ]);
+
+        $user = $request->user;
+
+        if ($user) {
+
+            $message = $request->rejection_reason
+                ? 'تم رفض طلب توثيق الجمعية. سبب الرفض: ' . $request->rejection_reason
+                : 'تم رفض طلب توثيق الجمعية.';
+
+            event(new \App\Events\AppEvent(
+                $user->id,
+                'تم رفض طلب توثيق الجمعية',
+                $message,
+                'foundation_verification',
+                'foundation-verification',
+                $request->id
+            ));
+
+            if ($user->fcm_token) {
+
+                app(
+                    \App\Services\FirebaseNotificationService::class
+                )->send(
+                    $user->fcm_token,
+                    'تم رفض طلب توثيق الجمعية',
+                    $message,
+                    [
+                        'type' => 'foundation_verification',
+                        'target_path' => 'foundation-verification',
+                        'related_id' => (string) $request->id,
+                    ]
+                );
+            }
+        }
 
         return $request->load([
             'user.profile',

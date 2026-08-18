@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Notification extends Model
 {
     use SoftDeletes;
-    
+
     protected $fillable = [
 
         'user_id',
@@ -32,4 +32,7 @@ class Notification extends Model
             'construction_form_id'
         );
     }
+    protected $casts = [
+        'is_read' => 'boolean',
+    ];
 }

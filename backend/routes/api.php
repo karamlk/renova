@@ -125,8 +125,9 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer', 't
     Route::get('/test-notification', [TestNotificationController::class, 'send']);
 
     //Route::get('/wallet/financial-account', [WalletController::class, 'financialAccount']);
-
-
+    Route::get('/notifications', [NotificationController::class, 'indexFirebase']);
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCountFirebase']);
 
 
     // مسار التحويل المالي

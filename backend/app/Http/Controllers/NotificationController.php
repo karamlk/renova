@@ -47,6 +47,7 @@ class NotificationController extends Controller
         return response()->json(['count' => $count]);
     }
 
+
     public function markAllRead()
     {
         Notification::where('user_id', Auth::id())
@@ -98,5 +99,49 @@ class NotificationController extends Controller
         }
 
         return $rawField;
+    }
+
+    public function indexFirebase()
+    {
+        $notifications = Notification::where(
+            'user_id',
+            auth()->id()
+        )
+            ->latest()
+            ->get();
+
+        return response()->json(
+            $notifications
+        );
+    }
+
+    public function markAsRead($id)
+    {
+        $notification = Notification::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        $notification->update([
+            'is_read' => true
+        ]);
+
+        return response()->json([
+            'message' => 'تم تعليم الإشعار كمقروء',
+            'data' => $notification
+        ]);
+    }
+
+    public function unreadCountFirebase()
+    {
+        $count = Notification::where(
+            'user_id',
+            auth()->id()
+        )
+            ->where('is_read', false)
+            ->count();
+
+        return response()->json([
+            'unread_count' => $count
+        ]);
     }
 }
