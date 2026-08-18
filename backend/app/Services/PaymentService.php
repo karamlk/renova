@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Payment;
 use App\Models\PaymentAudit;
+use App\Models\Project;
 use App\Models\Wallet;
 use Exception;
 use Illuminate\Http\Request; //
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PaymentService
 {
-     public function __construct(
+    public function __construct(
         protected NotificationService $notificationService
     ) {}
     public function pay(
@@ -110,6 +111,19 @@ class PaymentService
         if ($payment->status != 'paid') {
 
             abort(422,  'هذه الدفعة غير جاهزة للتحويل');
+        }
+
+        $project = $payment->form->project;
+
+        if (
+            $payment->type === 'final_payment'
+            && $project
+            && $this->isWarrantyPeriod($project)
+        ) {
+            abort(
+                422,
+                'لا يمكن تحويل الدفعة النهائية خلال فترة الضمان'
+            );
         }
 
         $remaining =
@@ -305,21 +319,35 @@ class PaymentService
         $payment = Payment::with([
             'user:id,name',
             'invoice',
-           // 'form.reconstructionRequest',
+            // 'form.reconstructionRequest',
             'audits.fromUser:id,name',
             'audits.toUser:id,name',
         ])
-//            ->where(function ($query) use ($userId) {
-//
-//                $query->where('user_id', $userId)
-//                    ->orWhereHas('audits', function ($q) use ($userId) {
-//                        $q->where('from_user_id', $userId)
-//                            ->orWhere('to_user_id', $userId);
-//                    });
-//
-//            })
+            //            ->where(function ($query) use ($userId) {
+            //
+            //                $query->where('user_id', $userId)
+            //                    ->orWhereHas('audits', function ($q) use ($userId) {
+            //                        $q->where('from_user_id', $userId)
+            //                            ->orWhere('to_user_id', $userId);
+            //                    });
+            //
+            //            })
             ->findOrFail($id);
 
         return $payment;
+    }
+
+    private function isWarrantyPeriod(Project $project): bool
+    {
+        if (!$project->project_ends_at || !$project->warranty_ends_at) {
+            return false;
+        }
+
+        $now = now();
+
+        return $now->between(
+            $project->project_ends_at->startOfDay(),
+            $project->warranty_ends_at->endOfDay()
+        );
     }
 }
