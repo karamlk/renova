@@ -14,6 +14,7 @@ class SiteVisitService
             'inspectionRequest.request',
             'schedule'
         ])
+            ->whereNotNull('engineer_id')
             ->whereHas(
                 'inspectionRequest',
                 function ($query) {

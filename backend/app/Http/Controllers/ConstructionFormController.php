@@ -205,7 +205,7 @@ class ConstructionFormController extends Controller
             ->whereIn('status', [
                 'pending_user',
                 'waiting_payment_otp',
-                'user_approved'
+                //'user_approved'
             ])
             ->latest()
             ->get();
