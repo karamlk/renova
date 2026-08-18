@@ -13,6 +13,8 @@ import Moneytransfers from "./pages/Moneytransfers/Moneytransfers";
 import Financiallogs from "./pages/Financiallogs/Financiallogs";
 import Userpayments from "./pages/Userpayments/Userpayments";
 import Verificationrequests from "./pages/verificationrequests/verificationrequests";
+import Constructionprojects from "./pages/Constructionprojects/Constructionprojects";
+import Projectsarchive from "./pages/Projectsarchive/Projectsarchive";
 //auth
 import ProtectedRoute from "./auth/ProtectedRoute";
 import AuthGate from "./auth/AuthGate";
@@ -59,9 +61,14 @@ function App() {
                   <Route path="userpayments" element={<Userpayments />} />
                   <Route path="Financiallogs" element={<Financiallogs />} />
                   <Route
+                    path="Construction_projects"
+                    element={<Constructionprojects />}
+                  />
+                  <Route
                     path="complaintsarchive"
                     element={<Complaintsarchive />}
                   />
+                  <Route path="projectsarchive" element={<Projectsarchive />} />
                   <Route
                     path="inspection_requests"
                     element={<Inspectionrequests />}

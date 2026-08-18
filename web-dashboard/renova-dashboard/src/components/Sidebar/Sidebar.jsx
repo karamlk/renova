@@ -46,7 +46,7 @@ export default function Sidebar() {
         <div className="sidebar-body">
 
             <SidebarBtn icon={<HomeIcon sx={{fontSize: "25px"}}/>} text="الصفحة الرئيسية" link="homepage"/>
-            <SidebarBtn icon={<ApartmentIcon sx={{fontSize: "25px"}}/>} text="المشاريع" link="projects"/> 
+            <SidebarBtn icon={<ApartmentIcon sx={{fontSize: "25px"}}/>} text="المشاريع" link="Construction_projects"/> 
             <SidebarBtn icon={<GroupIcon sx={{fontSize: "25px"}}/>} text="المستخدمين" link="users"/>
 
             <div className="container">
@@ -96,7 +96,7 @@ export default function Sidebar() {
                         </div>
                 </div>
                 <div className="list-dropdown">
-                    {/*<SidebarBtn icon={<ApartmentIcon sx={{fontSize: "20px"}}/>} text="أرشيف المشاريع" link="projectsarchive" className="dropdown-item"/>*/}
+                    <SidebarBtn icon={<ApartmentIcon sx={{fontSize: "20px"}}/>} text="أرشيف المشاريع" link="projectsarchive" className="dropdown-item"/>
                     <SidebarBtn icon={<ModeCommentIcon sx={{fontSize: "20px"}} />} text="أرشيف الشكاوى" link="complaintsarchive" className="dropdown-item"/>
                 </div>
             </div>

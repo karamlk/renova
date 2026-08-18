@@ -249,7 +249,6 @@ export default function User(){
                     <Button className="filter" onClick={() => setshowfilterdialog(true)} icon={<FilterAltIcon sx={{fontSize: "18px"}}/>} text="فلترة"/>
                     <Button className="refresh" onClick={() => {getUsers();setPage(1)}} icon={<RefreshIcon sx={{fontSize: "18px"}}/>} text="تحديث"/>
                     <Button className="add" onClick={() => setshowadduserdialog(true)} icon={<AddIcon sx={{fontSize: "18px"}}/>} text="إضافة"/>
-
                 </div>
             </div>
             <div className="table-container">
