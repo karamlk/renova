@@ -311,6 +311,38 @@ class PaymentWorkflowTest extends TestCase
         );
     }
 
+     public function test_admin_cannot_release_final_payment_to_contractor_during_warranty(): void
+    {
+        $admin   = $this->createAdmin();
+        $project = $this->createFullProject();
+
+        $admin->wallet->update(['balance' => 1000000]);
+
+        $payment = Payment::factory()->create([
+            'construction_form_id' => $project['form']->id,
+            'user_id'              => $project['user']->id,
+            'amount'               => 300000,
+            'type'                 => 'final_payment',
+            'status'               => 'paid',
+            'released_amount'      => 0,
+        ]);
+
+        $contractorBalanceBefore = $project['contractor']->wallet->balance;
+
+        $response = $this->withHeaders($this->authHeaders($admin))
+            ->postJson("/api/admin/payments/{$payment->id}/release", [
+                'amount' => 150000,
+            ]);
+
+        $response->assertStatus(422);
+
+        $project['contractor']->wallet->refresh();
+        $this->assertEquals(
+            $contractorBalanceBefore ,
+            $project['contractor']->wallet->balance
+        );
+    }
+
     public function test_admin_cannot_release_more_than_payment_amount(): void
     {
         $admin   = $this->createAdmin();
