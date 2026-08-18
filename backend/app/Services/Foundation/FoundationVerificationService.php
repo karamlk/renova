@@ -4,6 +4,7 @@ namespace App\Services\Foundation;
 
 use App\Models\FoundationVerificationRequest;
 use App\Models\FoundationVerificationDocument;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\DB;
 
 class FoundationVerificationService
@@ -33,13 +34,13 @@ class FoundationVerificationService
                     'user_id' => $user->id,
 
                     'foundation_name' =>
-                        $request->foundation_name,
+                    $request->foundation_name,
 
                     'description' =>
-                        $request->description,
+                    $request->description,
 
                     'registration_number' =>
-                        $request->registration_number,
+                    $request->registration_number,
 
                     'status' => 'pending',
                 ]);
@@ -53,14 +54,20 @@ class FoundationVerificationService
 
                 FoundationVerificationDocument::create([
                     'foundation_verification_request_id' =>
-                        $verification->id,
+                    $verification->id,
 
                     'document' => $path,
 
                     'type' =>
-                        $document->getClientOriginalExtension(),
+                    $document->getClientOriginalExtension(),
                 ]);
             }
+
+            app(NotificationService::class)->newFoundationVerification(
+                verificationId: $verification->id,
+                foundationName: $verification->foundation_name,
+                userName: $user->name
+            );
 
             return $verification->load('documents');
         });
