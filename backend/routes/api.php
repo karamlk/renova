@@ -201,10 +201,11 @@ Route::middleware(['auth:sanctum', 'active', 'role:user', 'throttle:60,1'])->gro
     Route::get('/user/projects', [ProjectController::class, 'userProjects']);
     Route::get('/user/projects/{id}', [ProjectController::class, 'userProject']);
 
-    Route::post('/foundation/verification', [FoundationVerificationController::class, 'store']
-    );
-
+    Route::post('/foundation/verification', [FoundationVerificationController::class, 'store']);
     Route::post('/foundation/donation-campaigns', [DonationCampaignController::class, 'store']);
+    Route::get('/foundation/donation-campaigns', [DonationCampaignController::class, 'index']);
+    Route::get('/foundation/donation-campaigns/{id}', [DonationCampaignController::class, 'show']);
+    Route::delete('/foundation/donation-campaigns/{id}', [DonationCampaignController::class, 'destroy']);
 });
 
 Route::middleware(['auth:sanctum', 'active', 'role:user', 'throttle:10,10'])->group(function () {

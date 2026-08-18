@@ -58,4 +58,38 @@ class DonationCampaignController extends Controller
 
         ], 201);
     }
+
+    public function index(
+        DonationCampaignService $service
+    ) {
+        $campaigns = $service->index();
+
+        return response()->json([
+            'message' => 'تم جلب حملات التبرع بنجاح',
+            'data' => $campaigns
+        ]);
+    }
+
+    public function show(
+        $id,
+        DonationCampaignService $service
+    ) {
+        $campaign = $service->show($id);
+
+        return response()->json([
+            'message' => 'تم جلب تفاصيل حملة التبرع بنجاح',
+            'data' => $campaign
+        ]);
+    }
+
+    public function destroy(
+        $id,
+        DonationCampaignService $service
+    ) {
+        $service->destroy($id);
+
+        return response()->json([
+            'message' => 'تم حذف حملة التبرع بنجاح'
+        ]);
+    }
 }

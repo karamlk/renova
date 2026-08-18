@@ -92,4 +92,58 @@ class DonationCampaignService
             ]);
         });
     }
+
+    public function index()
+    {
+        $foundation = FoundationVerificationRequest::where(
+            'user_id',
+            auth()->id()
+        )
+            ->where('status', 'approved')
+            ->firstOrFail();
+
+        return DonationCampaign::where(
+            'foundation_verification_request_id',
+            $foundation->id
+        )
+            ->with('images')
+            ->latest()
+            ->get();
+    }
+
+    public function show($id)
+    {
+        $foundation = FoundationVerificationRequest::where(
+            'user_id',
+            auth()->id()
+        )
+            ->where('status', 'approved')
+            ->firstOrFail();
+
+        return DonationCampaign::where(
+            'foundation_verification_request_id',
+            $foundation->id
+        )
+            ->with('images')
+            ->findOrFail($id);
+    }
+
+    public function destroy($id)
+    {
+        $foundation = FoundationVerificationRequest::where(
+            'user_id',
+            auth()->id()
+        )
+            ->where('status', 'approved')
+            ->firstOrFail();
+
+        $campaign = DonationCampaign::where(
+            'foundation_verification_request_id',
+            $foundation->id
+        )->findOrFail($id);
+
+        $campaign->delete();
+
+        return true;
+    }
 }

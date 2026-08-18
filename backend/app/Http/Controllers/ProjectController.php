@@ -90,7 +90,7 @@ class ProjectController extends Controller
     {
         // جلب جميع المشاريع مع كافة علاقاتها
         $projects = Project::with([
-            'form',
+            'form.reconstructionRequest',
             'tasks',
             'review',
             'user',
@@ -108,7 +108,7 @@ class ProjectController extends Controller
     {
         // البحث عن المشروع وجلب كافة علاقاته أو إرجاع خطأ 404 إذا لم يوجد
         $project = Project::with([
-            'form',
+            'form.reconstructionRequest',
             'tasks',
             'review',
             'user',
