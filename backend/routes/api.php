@@ -382,6 +382,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:admin', 'throttle:60,1'])->pr
     Route::patch('/projects/{id}/archive', [ProjectController::class, 'archive']);
     Route::get('/projects/archived', [ProjectController::class, 'archived']);
     Route::patch('/projects/{id}/restore', [ProjectController::class, 'restore']);
+    Route::get('/projects/archived/{id}', [ProjectController::class, 'archivedShow']);
 });
 
 Route::middleware(['auth:sanctum', 'active', 'role:admin', 'throttle:10,10'])->prefix('admin')->group(function () {

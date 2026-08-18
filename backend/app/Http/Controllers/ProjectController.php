@@ -161,4 +161,22 @@ class ProjectController extends Controller
             'message' => 'تم إلغاء أرشفة المشروع بنجاح'
         ], 200);
     }
+    public function archivedShow($id)
+    {
+        $project = Project::onlyTrashed()
+            ->with([
+                'form.reconstructionRequest',
+                'tasks',
+                'review',
+                'user',
+                'engineer',
+                'contractor',
+            ])
+            ->findOrFail($id);
+
+        return response()->json([
+            'message' => 'تم جلب المشروع المؤرشف بنجاح',
+            'data' => $project
+        ], 200);
+    }
 }
