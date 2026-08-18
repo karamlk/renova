@@ -76,39 +76,109 @@ class ConstructionFormService
             'status' => $finalStatus,
             'engineer_notes' => $notes
         ]);
-        // if ($status === 'engineer_approved') {
 
-        //     app(\App\Services\NotificationService::class)
-        //         ->send(
+        if ($status === 'engineer_rejected') {
 
-        //             $form->reconstructionRequest->user_id,
+            $contractor = \App\Models\User::find(
+                $form->contractor_id
+            );
 
-        //             'استمارة جديدة',
+            if ($contractor) {
 
-        //             'وصلتك استمارة جديدة للمراجعة.',
+                event(new \App\Events\AppEvent(
+                    $contractor->id,
+                    'تم رفض الاستمارة',
+                    'قام المهندس برفض الاستمارة. يرجى مراجعة ملاحظات المهندس.',
+                    'form',
+                    'forms',
+                    $form->id
+                ));
+                if ($contractor->fcm_token) {
 
-        //             'construction_form',
+                    app(
+                        \App\Services\FirebaseNotificationService::class
+                    )->send(
+                        $contractor->fcm_token,
+                        'تم رفض الاستمارة',
+                        'قام المهندس برفض الاستمارة. يرجى مراجعة ملاحظات المهندس.',
+                        [
+                            'type' => 'form',
+                            'target_path' => 'forms',
+                            'related_id' => (string) $form->id,
+                        ]
+                    );
+                }
+            }
+        }
+        if ($status === 'engineer_approved') {
 
-        //             $form->id,
+            /*
+             * -------------------------------------------------
+             * إشعار المتعهد
+             * -------------------------------------------------
+             */
 
-        //             $form->id
-        //         );
+            $contractor = \App\Models\User::find(
+                $form->contractor_id
+            );
 
-        // }
-    //     if($status === 'engineer_rejected'){
+            if ($contractor) {
 
-    //     Notification::create([
+                event(new \App\Events\AppEvent(
+                    $contractor->id,
+                    'تمت الموافقة على الاستمارة',
+                    'قام المهندس بالموافقة على الاستمارة.',
+                    'form',
+                    'forms',
+                    $form->id
+                ));
+                if ($contractor->fcm_token) {
 
-    //         'user_id' => $form->contractor_id,
+                    app(
+                        \App\Services\FirebaseNotificationService::class
+                    )->send(
+                        $contractor->fcm_token,
+                        'تمت الموافقة على الاستمارة',
+                        'قام المهندس بالموافقة على الاستمارة.',
+                        [
+                            'type' => 'form',
+                            'target_path' => 'forms',
+                            'related_id' => (string)$form->id,
+                        ]
+                    );
+                }
+            }
+            $user = $form
+                ->reconstructionRequest
+                ->user;
 
-    //         'title' => 'تم رفض الاستمارة',
+            if ($user) {
 
-    //         'message' => 'قام المهندس برفض الاستمارة، يرجى مراجعة الملاحظات وإعادة التعديل.',
+                event(new \App\Events\AppEvent(
+                    $user->id,
+                    'لديك استمارة للتدقيق',
+                    'قام المهندس بالموافقة على الاستمارة، يرجى مراجعتها.',
+                    'form',
+                    'forms',
+                    $form->id
+                ));
+                if ($user->fcm_token) {
 
-    //         'construction_form_id' => $form->id
-
-    //     ]);
-    // }
+                    app(
+                        \App\Services\FirebaseNotificationService::class
+                    )->send(
+                        $user->fcm_token,
+                        'لديك استمارة للتدقيق',
+                        'قام المهندس بالموافقة على الاستمارة، يرجى مراجعتها.',
+                        [
+                            'type' => 'form',
+                            'target_path' => 'forms',
+                            'related_id' => (string)$form->id,
+                        ]
+                    );
+                }
+            }
+        }
         return $form;
     }
 
@@ -133,20 +203,142 @@ class ConstructionFormService
                 'user_notes' => $notes
             ]);
 
-            return $form;
+            $contractor = \App\Models\User::find(
+                $form->contractor_id
+            );
+
+            if ($contractor) {
+
+                event(new \App\Events\AppEvent(
+                    $contractor->id,
+                    'تم رفض الاستمارة',
+                    'قام المستخدم برفض الاستمارة الخاصة بالمشروع.',
+                    'form',
+                    'construction_forms',
+                    $form->id
+                ));
+                if ($contractor->fcm_token) {
+
+                    app(
+                        \App\Services\FirebaseNotificationService::class
+                    )->send(
+                        $contractor->fcm_token,
+                        'تم رفض الاستمارة',
+                        'قام المستخدم برفض الاستمارة الخاصة بالمشروع.',
+                        [
+                            'type' => 'form',
+                            'target_path' => 'construction_forms',
+                            'related_id' => (string) $form->id,
+                        ]
+                    );
+                }
+            }
+            $engineer = \App\Models\User::find(
+                $form->engineer_id
+            );
+
+            if ($engineer) {
+
+                event(new \App\Events\AppEvent(
+                    $engineer->id,
+                    'تم رفض الاستمارة',
+                    'قام المستخدم برفض الاستمارة الخاصة بالمشروع.',
+                    'form',
+                    'construction_forms',
+                    $form->id
+                ));
+                if ($engineer->fcm_token) {
+
+                    app(
+                        \App\Services\FirebaseNotificationService::class
+                    )->send(
+                        $engineer->fcm_token,
+                        'تم رفض الاستمارة',
+                        'قام المستخدم برفض الاستمارة الخاصة بالمشروع.',
+                        [
+                            'type' => 'form',
+                            'target_path' => 'construction_forms',
+                            'related_id' => (string) $form->id,
+                        ]
+                    );
+                }
+            }
+
+                return $form;
         }
 
         $form->update([
             'status' => 'waiting_payment_otp',
             'user_notes' => $notes
         ]);
+        $contractor = \App\Models\User::find(
+            $form->contractor_id
+        );
 
+        if ($contractor) {
+
+            event(new \App\Events\AppEvent(
+                $contractor->id,
+                'تمت الموافقة على الاستمارة',
+                'قام المستخدم بالموافقة على الاستمارة الخاصة بالمشروع.',
+                'form',
+                'construction_forms',
+                $form->id
+            ));
+            if ($contractor->fcm_token) {
+
+                app(
+                    \App\Services\FirebaseNotificationService::class
+                )->send(
+                    $contractor->fcm_token,
+                    'تمت الموافقة على الاستمارة',
+                    'قام المستخدم بالموافقة على الاستمارة الخاصة بالمشروع.',
+                    [
+                        'type' => 'form',
+                        'target_path' => 'construction_forms',
+                        'related_id' => (string) $form->id,
+                    ]
+                );
+            }
+        }
+        $engineer = \App\Models\User::find(
+            $form->engineer_id
+        );
+
+        if ($engineer) {
+
+            event(new \App\Events\AppEvent(
+                $engineer->id,
+                'تمت الموافقة على الاستمارة',
+                'قام المستخدم بالموافقة على الاستمارة الخاصة بالمشروع.',
+                'form',
+                'construction_forms',
+                $form->id
+            ));
+            if ($engineer->fcm_token) {
+
+                app(
+                    \App\Services\FirebaseNotificationService::class
+                )->send(
+                    $engineer->fcm_token,
+                    'تمت الموافقة على الاستمارة',
+                    'قام المستخدم بالموافقة على الاستمارة الخاصة بالمشروع.',
+                    [
+                        'type' => 'form',
+                        'target_path' => 'construction_forms',
+                        'related_id' => (string) $form->id,
+                    ]
+                );
+            }
+        }
         app(OtpService::class)->send(
             $form->reconstructionRequest->user
         );
 
         return $form;
     }
+
+
     public function completePayment(
         ConstructionForm $form
     ): ConstructionForm
@@ -208,23 +400,23 @@ class ConstructionFormService
             'description' =>
                 "تم تحويل الدفعة الأولى للمشروع {$form->id}"
         ]);
-        PaymentAudit::create([
-
-            'payment_id' => $payment->id,
-
-            'from_user_id' =>
-                $form->reconstructionRequest->user_id,
-
-            'to_user_id' =>
-                $form->contractor_id,
-
-            'amount' => $amount,
-
-            'action' => 'first_payment',
-
-            'description' =>
-                "تم تحويل الدفعة الأولى للمشروع {$form->id}"
-        ]);
+//        PaymentAudit::create([
+//
+//            'payment_id' => $payment->id,
+//
+//            'from_user_id' =>
+//                $form->reconstructionRequest->user_id,
+//
+//            'to_user_id' =>
+//                $form->contractor_id,
+//
+//            'amount' => $amount,
+//
+//            'action' => 'first_payment',
+//
+//            'description' =>
+//                "تم تحويل الدفعة الأولى للمشروع {$form->id}"
+//        ]);
         $form->reconstructionRequest->update([
             'status' => 'closed'
         ]);
@@ -257,7 +449,7 @@ class ConstructionFormService
 
         //         $form->id
         //     );
-        
+
             $this->notificationService->newPayment(
             paymentId: $payment->id,
             userName: Auth::user()->name,

@@ -95,7 +95,48 @@ class InspectionRequestService
             'status' => 'accepted'
         ]);
 
+        $contractor = $schedule->contractor;
+
+        if ($contractor && $contractor) {
+
+            $contractorUser = $contractor;
+
+            /*
+             * تسجيل الإشعار في قاعدة البيانات
+             */
+            event(new \App\Events\AppEvent(
+                $contractorUser->id,
+                'تم قبول طلب الزيارة',
+                'قام المستخدم بقبول طلب الزيارة الخاص بك.',
+                'inspection_request',
+                'inspections',
+                $inspection->id
+            ));
+
+            if ($contractorUser->fcm_token) {
+
+                app(
+                    \App\Services\FirebaseNotificationService::class
+                )->send(
+                    $contractorUser->fcm_token,
+
+                    'تم قبول طلب الزيارة',
+
+                    'قام المستخدم بقبول طلب الزيارة الخاص بك.',
+
+                    [
+                        'type' => 'inspection_request',
+
+                        'target_path' => 'inspections',
+
+                        'related_id' =>
+                            (string)$inspection->id,
+                    ]
+                );
+            }
+        }
         return $inspection;
+
     }
 
     // رفض
@@ -112,7 +153,50 @@ class InspectionRequestService
 
             'status' => 'rejected'
         ]);
+        $contractor = $inspection
 
+            ->contractor;
+
+        if ($contractor && $contractor) {
+
+            $contractorUser = $contractor;
+
+            /*
+             * تسجيل الإشعار
+             */
+            event(new \App\Events\AppEvent(
+                $contractorUser->id,
+                'تم رفض طلب الزيارة',
+                'قام المستخدم برفض طلب الزيارة الخاص بك.',
+                'inspection_request',
+                'inspections',
+                $inspection->id
+            ));
+            /*
+         * FCM
+         */
+            if ($contractorUser->fcm_token) {
+
+                app(
+                    \App\Services\FirebaseNotificationService::class
+                )->send(
+                    $contractorUser->fcm_token,
+
+                    'تم رفض طلب الزيارة',
+
+                    'قام المستخدم برفض طلب الزيارة الخاص بك.',
+
+                    [
+                        'type' => 'inspection_request',
+
+                        'target_path' => 'inspections',
+
+                        'related_id' =>
+                            (string) $inspection->id,
+                    ]
+                );
+            }
+        }
         return $inspection;
     }
 }
