@@ -71,6 +71,130 @@ class ProjectTaskService
         ]);
     }
 
+//    public function completeTask(
+//        ProjectTask $task
+//    ): ProjectTask
+//    {
+//        if ($task->is_completed) {
+//
+//            throw new Exception(
+//                'المهمة منجزة مسبقاً'
+//            );
+//        }
+//
+//        if (
+//            $task->project->engineer_id
+//            != auth()->id()
+//        ) {
+//            throw new Exception(
+//                'لا يمكنك تعديل هذه المهمة'
+//            );
+//        }
+//
+//        $task->update([
+//            'is_completed' => true
+//        ]);
+//
+//        /*
+//         * تحديث نسبة إنجاز المشروع
+//         */
+//        $this->updateProjectProgress(
+//            $task->project
+//        );
+//
+//        /*
+//         * جلب المشروع مع النسبة الجديدة
+//         */
+//        $project = $task->project->fresh();
+//
+//        /*
+//         * فحص الدفعات
+//         */
+//        app(PaymentMilestoneService::class)
+//            ->checkMilestones($project);
+//
+//        /*
+//         * =====================================================
+//         * إشعار المستخدم حسب نسبة الإنجاز
+//         * =====================================================
+//         */
+//
+//        $user = $project->user;
+//
+//        if ($user) {
+//
+//            /*
+//             * =================================================
+//             * المشروع وصل 100%
+//             * =================================================
+//             */
+//
+//            if ($project->progress >= 100) {
+//
+//                event(new \App\Events\AppEvent(
+//                    $user->id,
+//                    'اكتمل المشروع',
+//                    'اكتمل المشروع بنسبة 100%، يرجى دفع الدفعة الأخيرة.',
+//                    'payment',
+//                    'projects',
+//                    $project->id
+//                ));
+//
+//                if ($user->fcm_token) {
+//
+//                    app(
+//                        \App\Services\FirebaseNotificationService::class
+//                    )->send(
+//                        $user->fcm_token,
+//                        'اكتمل المشروع',
+//                        'اكتمل المشروع بنسبة 100%، يرجى دفع الدفعة الأخيرة.',
+//                        [
+//                            'type' => 'payment',
+//                            'target_path' => 'projects',
+//                            'related_id' =>
+//                                (string) $project->id,
+//                        ]
+//                    );
+//                }
+//
+//                /*
+//                 * =================================================
+//                 * المشروع وصل 50% أو أكثر
+//                 * =================================================
+//                 */
+//
+//            } elseif ($project->progress >= 50) {
+//
+//                event(new \App\Events\AppEvent(
+//                    $user->id,
+//                    'وصل المشروع إلى 50%',
+//                    'وصل إنجاز المشروع إلى 50% أو أكثر، يرجى دفع الدفعة الثانية.',
+//                    'payment',
+//                    'projects',
+//                    $project->id
+//                ));
+//
+//                if ($user->fcm_token) {
+//
+//                    app(
+//                        \App\Services\FirebaseNotificationService::class
+//                    )->send(
+//                        $user->fcm_token,
+//                        'وصل المشروع إلى 50%',
+//                        'وصل إنجاز المشروع إلى 50% أو أكثر، يرجى دفع الدفعة الثانية.',
+//                        [
+//                            'type' => 'payment',
+//                            'target_path' => 'projects',
+//                            'related_id' =>
+//                                (string) $project->id,
+//                        ]
+//                    );
+//                }
+//            }
+//        }
+//
+//        return $task->fresh();
+//    }
     public function completeTask(
         ProjectTask $task
     ): ProjectTask
@@ -91,100 +215,234 @@ class ProjectTaskService
             );
         }
 
+        /*
+         * إكمال المهمة
+         */
         $task->update([
             'is_completed' => true
         ]);
 
         /*
-         * تحديث نسبة إنجاز المشروع
+         * تحديث نسبة المشروع
          */
         $this->updateProjectProgress(
             $task->project
         );
 
         /*
-         * جلب المشروع مع النسبة الجديدة
+         * المشروع بعد التحديث
          */
         $project = $task->project->fresh();
 
         /*
-         * فحص الدفعات
+         * فحص وإنشاء الدفعات
          */
         app(PaymentMilestoneService::class)
             ->checkMilestones($project);
-
-        /*
-         * =====================================================
-         * إشعار المستخدم حسب نسبة الإنجاز
-         * =====================================================
-         */
-
         $user = $project->user;
 
         if ($user) {
 
-            /*
-             * =================================================
-             * المشروع وصل 100%
-             * =================================================
-             */
+            // إشعار عند إنجاز كل مهمة
+            event(new \App\Events\AppEvent(
+                $user->id,
+                'تم إنجاز مهمة',
+                'تم إنجاز المهمة "' . $task->title .
+                '"، ونسبة إنجاز المشروع الآن ' .
+                $project->progress . '%.',
+                'task_completed',
+                'projects',
+                $project->id
+            ));
 
-            if ($project->progress >= 100) {
+            // Push Notification
+            if ($user->fcm_token) {
+
+                app(
+                    \App\Services\FirebaseNotificationService::class
+                )->send(
+                    $user->fcm_token,
+                    'تم إنجاز مهمة',
+                    'تم إنجاز المهمة "' . $task->title .
+                    '"، ونسبة إنجاز المشروع الآن ' .
+                    $project->progress . '%.',
+                    [
+                        'type' => 'task_completed',
+                        'target_path' => 'projects',
+                        'related_id' => (string) $project->id,
+                    ]
+                );
+            }
+        }
+        /*
+         * المستخدم صاحب المشروع
+         */
+        $user = $project->user;
+
+        if (!$user) {
+            return $task->fresh();
+        }
+
+
+        /*
+         * =====================================================
+         * الدفعة الأخيرة - عند 100%
+         * =====================================================
+         */
+
+        if ($project->progress >= 100) {
+
+            /*
+             * هل تم إرسال إشعار الدفعة الأخيرة مسبقاً؟
+             */
+            $alreadyNotified =
+                \App\Models\Notification::where(
+                    'user_id',
+                    $user->id
+                )
+                    ->where(
+                        'type',
+                        'final_payment'
+                    )
+                    ->where(
+                        'related_id',
+                        $project->id
+                    )
+                    ->exists();
+
+
+            /*
+             * إذا لم يُرسل الإشعار سابقاً
+             */
+            if (!$alreadyNotified) {
 
                 event(new \App\Events\AppEvent(
+
                     $user->id,
+
                     'اكتمل المشروع',
+
                     'اكتمل المشروع بنسبة 100%، يرجى دفع الدفعة الأخيرة.',
-                    'payment',
+
+                    'final_payment',
+
                     'projects',
+
                     $project->id
+
                 ));
 
+
+                /*
+                 * Firebase
+                 */
                 if ($user->fcm_token) {
 
                     app(
                         \App\Services\FirebaseNotificationService::class
                     )->send(
+
                         $user->fcm_token,
+
                         'اكتمل المشروع',
+
                         'اكتمل المشروع بنسبة 100%، يرجى دفع الدفعة الأخيرة.',
+
                         [
-                            'type' => 'payment',
-                            'target_path' => 'projects',
+
+                            'type' =>
+                                'final_payment',
+
+                            'target_path' =>
+                                'projects',
+
                             'related_id' =>
                                 (string) $project->id,
                         ]
                     );
                 }
+            }
 
-                /*
-                 * =================================================
-                 * المشروع وصل 50% أو أكثر
-                 * =================================================
-                 */
 
-            } elseif ($project->progress >= 50) {
+            /*
+             * لا نفحص 50%
+             */
+            return $task->fresh();
+        }
+
+
+        /*
+         * =====================================================
+         * الدفعة الثانية - عند 50%
+         * =====================================================
+         */
+
+        if ($project->progress >= 50) {
+
+            /*
+             * هل تم إرسال إشعار الدفعة الثانية مسبقاً؟
+             */
+            $alreadyNotified =
+                \App\Models\Notification::where(
+                    'user_id',
+                    $user->id
+                )
+                    ->where(
+                        'type',
+                        'second_payment'
+                    )
+                    ->where(
+                        'related_id',
+                        $project->id
+                    )
+                    ->exists();
+
+
+            /*
+             * إذا لم يُرسل سابقاً فقط
+             */
+            if (!$alreadyNotified) {
 
                 event(new \App\Events\AppEvent(
+
                     $user->id,
+
                     'وصل المشروع إلى 50%',
+
                     'وصل إنجاز المشروع إلى 50% أو أكثر، يرجى دفع الدفعة الثانية.',
-                    'payment',
+
+                    'second_payment',
+
                     'projects',
+
                     $project->id
+
                 ));
 
+
+                /*
+                 * Firebase
+                 */
                 if ($user->fcm_token) {
 
                     app(
                         \App\Services\FirebaseNotificationService::class
                     )->send(
+
                         $user->fcm_token,
+
                         'وصل المشروع إلى 50%',
+
                         'وصل إنجاز المشروع إلى 50% أو أكثر، يرجى دفع الدفعة الثانية.',
+
                         [
-                            'type' => 'payment',
-                            'target_path' => 'projects',
+
+                            'type' =>
+                                'second_payment',
+
+                            'target_path' =>
+                                'projects',
+
                             'related_id' =>
                                 (string) $project->id,
                         ]
@@ -192,6 +450,7 @@ class ProjectTaskService
                 }
             }
         }
+
 
         return $task->fresh();
     }

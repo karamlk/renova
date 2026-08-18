@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
+use App\Events\AppEvent;
 use App\Models\Payment;
 use App\Models\Project;
-use App\Services\NotificationService;
 use Exception;
 
 class PaymentMilestoneService
 {
-    public function checkMilestones(Project $project)
+    public function checkMilestones(Project $project): void
     {
         // جلب الاستمارة المرتبطة بالمشروع
         $form = $project->form;
@@ -40,6 +40,7 @@ class PaymentMilestoneService
             ->where('is_completed', true)
             ->sum('percentage');
 
+
         /*
         |--------------------------------------------------------------------------
         | الدفعة الثانية - عند 50%
@@ -52,10 +53,7 @@ class PaymentMilestoneService
                 'construction_form_id',
                 $project->construction_form_id
             )
-                ->where(
-                    'type',
-                    'second_payment'
-                )
+                ->where('type', 'second_payment')
                 ->exists();
 
             if (!$exists) {
@@ -81,8 +79,23 @@ class PaymentMilestoneService
 
                 ]);
 
+                /*
+                |--------------------------------------------------------------------------
+                | إشعار المستخدم
+                |--------------------------------------------------------------------------
+                */
+
+                event(new AppEvent(
+                    $project->user_id,
+                    'حان موعد الدفعة الثانية',
+                    'تم إنجاز 50% أو أكثر من المشروع، يرجى دفع الدفعة الثانية.',
+                    'second_payment',
+                    'payments',
+                    $payment->id
+                ));
             }
         }
+
 
         /*
         |--------------------------------------------------------------------------
@@ -103,32 +116,20 @@ class PaymentMilestoneService
     private function createFinalPayment(
         Project $project,
         float $totalCost
-    ) {
+    ): void {
 
         $exists = Payment::where(
-
             'construction_form_id',
-
             $project->construction_form_id
-
         )
-            ->where(
-
-                'type',
-
-                'final_payment'
-
-            )
+            ->where('type', 'final_payment')
             ->exists();
 
         if ($exists) {
-
             return;
         }
 
-
         $amount = $totalCost * 0.20;
-
 
         $payment = Payment::create([
 
@@ -149,5 +150,19 @@ class PaymentMilestoneService
 
         ]);
 
+        /*
+        |--------------------------------------------------------------------------
+        | إشعار المستخدم بالدفعة الأخيرة
+        |--------------------------------------------------------------------------
+        */
+
+        event(new AppEvent(
+            $project->user_id,
+            'حان موعد الدفعة الأخيرة',
+            'تم إنجاز المشروع بالكامل، يرجى دفع الدفعة الأخيرة.',
+            'final_payment',
+            'payments',
+            $payment->id
+        ));
     }
 }

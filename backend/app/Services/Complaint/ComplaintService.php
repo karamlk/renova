@@ -85,7 +85,29 @@ class ComplaintService
             complaintId: $complaint->id,
             complainantName: Auth::user()->name,
         );
+        event(new \App\Events\AppEvent(
+            $complainedOnId,
+            'تم تقديم شكوى ضدك',
+             'قام احدهم بتقديم شكوى ضدك',
+            'complaint',
+            'complaints',
+            $complaint->id
+        ));
 
+        $complainedOnUser = \App\Models\User::find($complainedOnId);
+
+        if ($complainedOnUser?->fcm_token) {
+            app(\App\Services\FirebaseNotificationService::class)->send(
+                $complainedOnUser->fcm_token,
+                'تم تقديم شكوى ضدك',
+                'قام احدهم بتقديم شكوى ضدك',
+                [
+                    'type' => 'complaint',
+                    'target_path' => 'complaints',
+                    'related_id' => (string) $complaint->id,
+                ]
+            );
+        }
         $this->storeImages($request, $complaint);
 
         return $complaint->load('images');

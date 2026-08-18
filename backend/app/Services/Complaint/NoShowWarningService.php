@@ -54,7 +54,7 @@ class NoShowWarningService
                 422,
                 'لا يمكن تقديم بلاغ الغياب قبل انتهاء وقت الزيارة'
             );
-            
+
             // ── 3. تحديد المشاركين في الزيارة ───────────────────────────
             $contractorId = $siteVisit->inspectionRequest->contractor_id;
             $customerId   = $siteVisit->inspectionRequest->request->user_id;
@@ -134,6 +134,28 @@ class NoShowWarningService
                 reporterName: Auth::user()->name,
             );
 
+            event(new \App\Events\AppEvent(
+                $reportedId,
+                'تم تقديم شكوى ضدك',
+                 ' قام احدهم بتقديم شكوى غياب ضدك',
+                'no_show_warning',
+                'no_show_warnings',
+                $warning->id
+            ));
+          //  $reportedUser = User::findOrFail($reportedId);
+
+            if ($reportedUser->fcm_token) {
+                app(\App\Services\FirebaseNotificationService::class)->send(
+                    $reportedUser->fcm_token,
+                    'تم تقديم شكوى ضدك',
+                     'قام احدهم بتقديم شكوى غياب ضدك.',
+                    [
+                        'type' => 'no_show_warning',
+                        'target_path' => 'no_show_warnings',
+                        'related_id' => (string) $warning->id,
+                    ]
+                );
+            }
             // ── 11. التحقق من عدد التحذيرات غير المعاقب عليها ───────────
             $unpunishedCount = NoShowWarning::where('reported_id', $reportedId)
                 ->where('penalty_applied', false)
