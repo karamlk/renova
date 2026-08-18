@@ -168,9 +168,9 @@ class ProjectController extends Controller
                 'form.reconstructionRequest',
                 'tasks',
                 'review',
-                'user',
-                'engineer',
-                'contractor',
+                'user.profile',
+                'engineer.engineerProfile',
+                'contractor.contractorProfile',
             ])
             ->findOrFail($id);
 
