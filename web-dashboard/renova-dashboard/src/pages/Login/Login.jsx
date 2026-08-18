@@ -61,7 +61,7 @@ export default function Login() {
               <span><CheckCircleIcon sx={{ color: '#f07c1f' }}/>  {t("تقارير فورية")}</span>
             </div>
           </div>
-          <div className="footer-text">© 2024 Renova</div>
+          <div className="footer-text">© 2026 Renova</div>
         </div>
 
         <div className="form-side">

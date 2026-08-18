@@ -25,6 +25,8 @@ import {getDashboardRequest} from "../../api/homepage";
 import { LoadingContext } from "../../Context/Loadingcontext";
 //Utils
 import {formatMoney} from "../../utils/formatMoney";
+//Libraries
+import dayjs from "dayjs";
 export default function Homepage() {
     const [t] = useTranslation();
     const [dashboard_info, setdashboard_info] = useState({
@@ -102,10 +104,10 @@ export default function Homepage() {
                                     <tr key={project.id}>
                                     <td>{project.title}</td>
                                     <td>{project.user_name}</td>
-                                    <td className="location"><LocationOnIcon sx={{ color: "#f07c1f"}}/>{project.location}</td>
+                                    <td ><div className="location"><LocationOnIcon sx={{ color: "#f07c1f"}}/>{project.location}</div></td>
                                     <td>{project.type}</td>
                                     <td>{project.status}</td>
-                                    <td>{project.created_at?project.created_at:"-"}</td>
+                                    <td>{project.created_at?dayjs(project?.created_at).format("YYYY-MM-DD"):"-"}</td>
                                     <td>
                                         <div className="progress">
                                         <div className="progress-bar">
