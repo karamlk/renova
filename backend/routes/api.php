@@ -121,7 +121,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer', 't
     Route::get('/wallet', [WalletController::class, 'financialAccount']);
     Route::get('/payments/{payment}', [PaymentController::class, 'showPayment']);
 
-    Route::post('/fcm-token', [FcmTokenController::class, 'update']);
+    Route::put('/fcm-token', [FcmTokenController::class, 'update']);
     Route::get('/test-notification', [TestNotificationController::class, 'send']);
 
     //Route::get('/wallet/financial-account', [WalletController::class, 'financialAccount']);

@@ -34,6 +34,7 @@ class User extends Authenticatable
         'role_id',
         'status',
         'is_active',
+        'fcm_token',
     ];
 
     /**
