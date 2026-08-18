@@ -5,7 +5,7 @@ import SidebarBtn from "../SidebarBtn/SidebarBtn";
 //Hooks
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-// Material UI Icons
+// MUI 
 import HomeIcon from '@mui/icons-material/Home';
 import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -21,6 +21,8 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import HistoryIcon from '@mui/icons-material/History';
+import FindInPageIcon from '@mui/icons-material/FindInPage';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 //api
 import {logoutRequest} from "../../api/auth";
 
@@ -42,11 +44,27 @@ export default function Sidebar() {
                 </div>
         </div>
         <div className="sidebar-body">
+
             <SidebarBtn icon={<HomeIcon sx={{fontSize: "25px"}}/>} text="الصفحة الرئيسية" link="homepage"/>
-           {/*<SidebarBtn icon={<ApartmentIcon sx={{fontSize: "25px"}}/>} text="المشاريع" link="projects"/>*/} 
+            <SidebarBtn icon={<ApartmentIcon sx={{fontSize: "25px"}}/>} text="المشاريع" link="projects"/> 
             <SidebarBtn icon={<GroupIcon sx={{fontSize: "25px"}}/>} text="المستخدمين" link="users"/>
-            <SidebarBtn icon={<AccessTimeFilledIcon sx={{fontSize: "25px"}}/>} text="طلبات المتعهدين" link="requests"/>
-            <SidebarBtn icon={<AssignmentIcon sx={{fontSize: "25px"}}/>} text="طلبات المعاينة" link="inspections_requests"/>
+
+            <div className="container">
+                <div className="list-btn">
+                        <div className="list-title-btn">
+                            <AssignmentIcon />
+                            <span>{t("الطلبات")}</span>
+                        </div>
+                        <div className="arrow">
+                            <ArrowDropDownIcon/>
+                        </div>
+                </div>
+                <div className="list-dropdown">
+                    <SidebarBtn icon={<AccessTimeFilledIcon sx={{fontSize: "25px"}}/>} text="طلبات المتعهدين" link="requests" className="dropdown-item"/>
+                    <SidebarBtn icon={<FindInPageIcon sx={{fontSize: "25px"}}/>} text="طلبات المعاينة" link="inspection_requests" className="dropdown-item"/>
+                    <SidebarBtn icon={<VerifiedUserIcon sx={{fontSize: "25px"}}/>} text="طلبات التوثيق" link="verification_requests" className="dropdown-item"/>
+                </div>
+            </div>
 
             <div className="container">
                 <div className="list-btn">

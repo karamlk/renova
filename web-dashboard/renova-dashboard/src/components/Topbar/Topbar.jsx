@@ -36,7 +36,7 @@ export default function Topbar() {
     async function getNotificationList(pageNumber = 1) {
     try {
                 const response = await getNotificationListRequest(pageNumber);
-                const result = response.data.data;
+                const result = response.data;
                 if (pageNumber === 1) {
                     setNotifications(result.data);
                 } else {
@@ -137,7 +137,7 @@ useEffect(() => {
                 </div>
                 {shownotification && (<Notificationlist 
                             notifications={notifications} 
-                            onclick_nav={()=>{setshownotification(false)}}
+                            onclick_nav={()=>{getNotificationCount();setshownotification(false);}}
                             onclick_r={readNotification}
                             onclick_ra={()=>{readAllNotification()}}
                             onclick_m={()=>{loadMoreNotifications()}}

@@ -167,6 +167,8 @@ class NoShowWarningSeeder extends Seeder
                 'schedule_id'           => $schedule->id,
                 'engineer_id'           => $engineer->id,
                 'status'                => 'accepted',
+            ], [
+                'visit_date' => \Carbon\Carbon::now()->previous('monday')->format('Y-m-d'),
             ]);
 
             $projects[] = [

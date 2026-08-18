@@ -81,9 +81,14 @@ class InspectionRequestService
             abort(403, 'غير مصرح');
         }
 
+        $schedule = ContractorSchedule::findOrFail($data['schedule_id']);
+
         SiteVisit::create([
             'inspection_request_id' => $inspection->id,
-            'schedule_id' => $data['schedule_id'],
+            'schedule_id'           => $schedule->id,
+            'visit_date'            => Carbon::now()
+                ->next($schedule->day_of_week)
+                ->format('Y-m-d'),
         ]);
 
         $inspection->update([

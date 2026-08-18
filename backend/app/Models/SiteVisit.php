@@ -13,8 +13,14 @@ class SiteVisit extends Model
         'inspection_request_id',
         'schedule_id',
         'engineer_id',
-        'status'
+        'status',
+        'visit_date'
     ];
+
+     protected $casts = [
+        'visit_date' => 'date',
+    ];
+    
     public function engineer()
     {
         return $this->belongsTo(User::class, 'engineer_id');

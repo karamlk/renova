@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
             PaymentAuditSeeder::class,
             WalletTransactionSeeder::class,
             ContractorPostSeeder::class,
-            ProjectReviewSeeder::class
+            ProjectReviewSeeder::class,
+            NotificationSeeder::class
         ]);
     }
 }

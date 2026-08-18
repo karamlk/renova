@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class NoShowWarningService
 {
-     public function __construct(
+    public function __construct(
         protected NotificationService $notificationService
     ) {}
     // ─────────────────────────────────────────────────
@@ -38,19 +38,23 @@ class NoShowWarningService
                 'لا يمكن تقديم بلاغ غياب على زيارة لم تُقبل بعد'
             );
 
-            // ── 2. التحقق من وقت انتهاء الزيارة ─────────────────────────
-            // TODO: عندما يضيف  عمود visit_date لجدول site_visits
-            // استبدل هذا الكود بـ:
-            // $visitDate = Carbon::parse($siteVisit->visit_date);
-            // $endDateTime = Carbon::parse($visitDate->format('Y-m-d') . ' ' . $siteVisit->schedule->end_time);
-            // abort_if($now->lessThan($endDateTime), 422, 'لا يمكن تقديم بلاغ الغياب قبل انتهاء وقت الزيارة');
-            $now = Carbon::now();
+            // ── 2. التحقق أن تاريخ الزيارة محدد وأن وقتها قد انتهى فعلاً ──
             abort_if(
-                $now->format('H:i:s') < $siteVisit->schedule->end_time,
+                is_null($siteVisit->visit_date),
+                422,
+                'تاريخ الزيارة غير محدد'
+            );
+
+            $visitEndsAt = Carbon::parse(
+                $siteVisit->visit_date->format('Y-m-d') . ' ' . $siteVisit->schedule->end_time
+            );
+
+            abort_if(
+                Carbon::now()->lt($visitEndsAt),
                 422,
                 'لا يمكن تقديم بلاغ الغياب قبل انتهاء وقت الزيارة'
             );
-
+            
             // ── 3. تحديد المشاركين في الزيارة ───────────────────────────
             $contractorId = $siteVisit->inspectionRequest->contractor_id;
             $customerId   = $siteVisit->inspectionRequest->request->user_id;

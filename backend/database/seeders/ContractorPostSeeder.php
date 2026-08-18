@@ -49,7 +49,7 @@ class ContractorPostSeeder extends Seeder
                 'description' =>
                     'Construction of a two-story residential building currently in '
                     . 'the structural construction phase.',
-                'status' => 'in_progress',
+                'status' => 'active',
                 'progress' => 65,
             ],
 
@@ -58,7 +58,7 @@ class ContractorPostSeeder extends Seeder
                 'description' =>
                     'Interior and exterior finishing work for a commercial building, '
                     . 'including painting, flooring and installation work.',
-                'status' => 'in_progress',
+                'status' => 'active',
                 'progress' => 40,
             ],
         ];
