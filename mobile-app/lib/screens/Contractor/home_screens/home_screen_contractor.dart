@@ -56,6 +56,14 @@ class _HomeScreenContractorState extends State<HomeScreenContractor> {
               if (value.isLoading) {
                 return Center(child: CircularProgressIndicator(color: primarycolor1));
               }
+              if (value.posts.isEmpty) {
+                return Center(
+                  child: Text(
+                    "لا توجد أي منشورات للعرض",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                );
+              }
               return ListView.builder(
                 padding: EdgeInsets.only(
                   left: 10,
