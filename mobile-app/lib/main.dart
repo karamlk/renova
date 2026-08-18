@@ -19,6 +19,7 @@ import 'package:renove_provider/providers/User/construction%20forms/contrsution_
 import 'package:renove_provider/providers/User/construction_index_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:renove_provider/providers/User/foundation_provider.dart';
+import 'package:renove_provider/providers/User/notifications_provider.dart';
 import 'firebase_options.dart';
 import 'package:renove_provider/providers/User/construction_request_provider.dart';
 import 'package:renove_provider/providers/User/invoices_provider.dart';
@@ -82,6 +83,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => WalletProvider()),
         ChangeNotifierProvider(create: (_) => UserWalletProvider()),
         ChangeNotifierProvider(create: (_) => FoundationProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationsProvider()),
       ],
       child: MyApp(isDark: isDark),
     ),

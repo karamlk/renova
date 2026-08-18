@@ -11,7 +11,7 @@ import 'package:renove_provider/screens/User/home_screens/inspection_index_scree
 import 'package:renove_provider/screens/User/home_screens/requests_index_list.dart';
 
 import 'package:renove_provider/screens/User/home_screens/home_screen_user.dart';
-import 'package:renove_provider/screens/User/notifications/notifications_page_user.dart';
+import 'package:renove_provider/screens/User/notifications/notifications_index_user.dart';
 import 'package:renove_provider/screens/settings/user_settings.dart';
 import 'package:renove_provider/screens/User/Profile/show_profile_screen.dart';
 
@@ -36,7 +36,7 @@ class HomeMainUser extends StatelessWidget {
           onPressed: () {
             Navigator.of(
               context,
-            ).push(MaterialPageRoute(builder: (context) => NotificationsPageUser()));
+            ).push(MaterialPageRoute(builder: (context) => NotificationsIndexUser()));
           },
           icon: Icon(Icons.notifications),
         ),
