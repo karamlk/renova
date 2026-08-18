@@ -92,4 +92,25 @@ class DonationCampaignController extends Controller
             'message' => 'تم حذف حملة التبرع بنجاح'
         ]);
     }
+    public function activeCampaigns(
+        DonationCampaignService $service
+    ) {
+        $campaigns = $service->activeCampaigns();
+
+        return response()->json(
+
+            $campaigns
+        );
+    }
+
+    public function donationCampaignDetails(
+        $id,
+        DonationCampaignService $service
+    ) {
+        $campaign = $service->donationCampaignDetails($id);
+
+        return response()->json(
+
+             $campaign);
+    }
 }

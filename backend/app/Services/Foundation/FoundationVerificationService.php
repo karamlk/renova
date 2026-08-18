@@ -96,7 +96,7 @@ class FoundationVerificationService
         ]);
     }
 
-    public function reject($id, $reason = null)
+    public function reject($id)
     {
         $request = FoundationVerificationRequest::findOrFail($id);
 
@@ -106,7 +106,7 @@ class FoundationVerificationService
 
         $request->update([
             'status' => 'rejected',
-            'rejection_reason' => $reason,
+            'rejection_reason' => $request->rejection_reason,
         ]);
 
         return $request->load([

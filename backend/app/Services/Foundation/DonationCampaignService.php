@@ -5,6 +5,7 @@ namespace App\Services\Foundation;
 use App\Models\DonationCampaign;
 use App\Models\DonationCampaignImage;
 use App\Models\FoundationVerificationRequest;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class DonationCampaignService
@@ -34,6 +35,10 @@ class DonationCampaignService
             $request,
             $foundation
         ) {
+            $startDate = Carbon::parse($request->starts_at)->startOfDay();
+            $today = Carbon::today();
+            $status = $startDate->lessThanOrEqualTo($today) ? 'active' : 'pending';
+
 
             $campaign = DonationCampaign::create([
 
@@ -62,7 +67,8 @@ class DonationCampaignService
                 'ends_at' =>
                     $request->ends_at,
 
-                'status' => 'pending',
+                'status' => $status,
+
             ]);
 
 
@@ -109,6 +115,7 @@ class DonationCampaignService
             ->with('images')
             ->latest()
             ->get();
+
     }
 
     public function show($id)
@@ -145,5 +152,33 @@ class DonationCampaignService
         $campaign->delete();
 
         return true;
+    }
+    private function updateExpiredStatus(DonationCampaign $campaign)
+    {
+        if (
+            $campaign->ends_at->isPast() &&
+            in_array($campaign->status, ['pending', 'active'])
+        ) {
+            $campaign->update([
+                'status' => 'expired'
+            ]);
+        }
+
+        return $campaign;
+    }
+
+    public function activeCampaigns()
+    {
+        return DonationCampaign::where('status', 'active')
+            ->whereDate('ends_at', '>=', now()->toDateString())
+            ->with('images')
+            ->latest()
+            ->get();
+    }
+
+    public function donationCampaignDetails($id)
+    {
+        return DonationCampaign::with('images')
+            ->findOrFail($id);
     }
 }

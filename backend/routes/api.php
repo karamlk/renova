@@ -17,6 +17,7 @@ use App\Http\Controllers\Contractor\ContractorPostController;
 use App\Http\Controllers\Contractor\ContractorProfileController;
 use App\Http\Controllers\Contractor\ScheduleController;
 use App\Http\Controllers\ConstructionFormController;
+use App\Http\Controllers\DonationController;
 use App\Http\Controllers\Engineer\EngineerDashboardController;
 use App\Http\Controllers\Engineer\EngineerFormController;
 use App\Http\Controllers\Engineer\EngineerProfileController;
@@ -150,6 +151,9 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor', 'throttle:6
 
     Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
 
+    Route::post('/donation-campaigns/{campaign}/donate', [DonationController::class, 'store']);
+    Route::get('/donation-campaigns/active', [DonationCampaignController::class, 'activeCampaigns']);
+    Route::get('/donation-campaigns/{id}', [DonationCampaignController::class, 'donationCampaignDetails']);
 
 
 });
@@ -373,6 +377,10 @@ Route::middleware(['auth:sanctum', 'active', 'role:admin', 'throttle:60,1'])->pr
 
     Route::get('/projects',[ProjectController::class,'index']);
     Route::get('/project/{project}',[ProjectController::class,'show_project']);
+
+    Route::patch('/projects/{id}/archive', [ProjectController::class, 'archive']);
+    Route::get('/projects/archived', [ProjectController::class, 'archived']);
+    Route::patch('/projects/{id}/restore', [ProjectController::class, 'restore']);
 });
 
 Route::middleware(['auth:sanctum', 'active', 'role:admin', 'throttle:10,10'])->prefix('admin')->group(function () {

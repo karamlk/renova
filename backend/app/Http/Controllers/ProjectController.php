@@ -121,4 +121,44 @@ class ProjectController extends Controller
             'data'    => $project
         ], 200);
     }
+
+    public function archive($id)
+    {
+        $project = Project::findOrFail($id);
+
+        $project->delete();
+
+        return response()->json([
+            'message' => 'تم أرشفة المشروع بنجاح'
+        ], 200);
+    }
+
+    public function archived()
+    {
+        $projects = Project::onlyTrashed()
+            ->with([
+                'form.reconstructionRequest',
+                'tasks',
+                'review',
+                'user',
+                'engineer',
+                'contractor',
+            ])
+            ->get();
+
+        return response()->json([
+            'message' => 'تم جلب المشاريع المؤرشفة بنجاح',
+            'data' => $projects
+        ], 200);
+    }
+    public function restore($id)
+    {
+        $project = Project::withTrashed()->findOrFail($id);
+
+        $project->restore();
+
+        return response()->json([
+            'message' => 'تم إلغاء أرشفة المشروع بنجاح'
+        ], 200);
+    }
 }

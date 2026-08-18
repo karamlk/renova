@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
-    use HasFactory;
+    use HasFactory ,SoftDeletes;
     protected $fillable = [
 
         'construction_form_id',
@@ -21,10 +22,11 @@ class Project extends Model
         'progress',
 
         'status',
-        
+
         'project_ends_at',
 
-        'warranty_ends_at'
+        'warranty_ends_at',
+
     ];
 
     protected $casts = [
