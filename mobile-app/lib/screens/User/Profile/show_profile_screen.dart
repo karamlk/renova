@@ -9,6 +9,8 @@ import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/User/Profile/show_profile_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/User/Profile/edit_user_profile_screen.dart';
+import 'package:renove_provider/screens/User/foundations/verification_screen.dart';
+import 'package:renove_provider/screens/settings/verify_deletetion_screen.dart';
 import 'package:renove_provider/skeletons/profile_page_skeleton.dart';
 
 class ShowprofileScreen extends StatefulWidget {
@@ -31,16 +33,11 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('ملفك الشخصي', style: TextStyle(fontWeight: FontWeight.bold)),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: primarycolor1,
-                backgroundColor: primarycolor2,
-              ),
-              onPressed: () {
+        title: Text('ملفك الشخصي', style: TextStyle(fontWeight: FontWeight.bold)),
+        actions: [
+          PopupMenuButton(
+            onSelected: (value) {
+              if (value == "تعديل") {
                 final profile = context.read<ShowprofileProvider>().showProfileModel;
 
                 if (profile == null) return;
@@ -49,17 +46,37 @@ class _ShowprofileScreenState extends State<ShowprofileScreen> {
                   context,
                   MaterialPageRoute(builder: (_) => EditUserProfileScreen(profile: profile)),
                 );
-              },
-              child: Row(
-                spacing: 5,
-                children: [
-                  Text("تعديل", style: TextStyle(fontWeight: FontWeight.bold)),
-                  Icon(Icons.edit),
-                ],
-              ),
-            ),
-          ],
-        ),
+              }
+              if (value == "توثيق") {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (context) => VerificationScreen()));
+              }
+            },
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  value: 'تعديل',
+                  child: Row(
+                    textDirection: TextDirection.rtl,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    spacing: 8,
+                    children: [Icon(Icons.edit), Text('تعديل')],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: "توثيق",
+                  child: Row(
+                    textDirection: TextDirection.rtl,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    spacing: 8,
+                    children: [Icon(Icons.domain_verification_rounded), Text('توثيق')],
+                  ),
+                ),
+              ];
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),

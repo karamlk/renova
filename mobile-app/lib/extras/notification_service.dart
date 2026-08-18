@@ -18,24 +18,27 @@ class NotificationService {
     );
 
     final token = await _messaging.getToken();
-    await storePrefs('fcm_token', token.toString());
-
-    Future<void> sendFcm() async {
-      try {
-        final token = getPrefs('token');
-        final fcm = getPrefs('fcm_token');
-        final response = await http.post(
-          Uri.parse('$link/api/fcm-token'),
-          headers: {'Accept': 'application/json', 'Authorization': 'Bearer YOUR_LOGIN_TOKEN'},
-          body: {'fcm_token': fcm},
-        );
-        print(jsonDecode(response.body));
-      } catch (e) {
-        print(e);
-      }
+    if (token != null) {
+      await storePrefs('fcm_token', token);
     }
 
     print("FCM TOKEN:");
     print(token);
+  }
+
+  Future<void> sendFcm() async {
+    try {
+      final token = await getPrefs('token');
+      final fcm = await getPrefs('fcm_token');
+      final response = await http.post(
+        Uri.parse('$link/api/fcm-token'),
+        headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+        body: {'fcm_token': fcm},
+      );
+      print('SEND FCM RESPONSE ');
+      print(jsonDecode(response.body));
+    } catch (e) {
+      print(e);
+    }
   }
 }

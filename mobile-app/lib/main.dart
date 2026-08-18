@@ -18,6 +18,7 @@ import 'package:renove_provider/providers/User/Profile/edit_profile_provider.dar
 import 'package:renove_provider/providers/User/construction%20forms/contrsution_forms_provider.dart';
 import 'package:renove_provider/providers/User/construction_index_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:renove_provider/providers/User/foundation_provider.dart';
 import 'firebase_options.dart';
 import 'package:renove_provider/providers/User/construction_request_provider.dart';
 import 'package:renove_provider/providers/User/invoices_provider.dart';
@@ -32,7 +33,7 @@ import 'package:renove_provider/providers/User/Profile/create_profile_provider.d
 import 'package:renove_provider/providers/User/Profile/show_profile_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:renove_provider/screens/Contractor/home_screens/home_main_contractor.dart';
 
 import 'package:renove_provider/screens/User/home_screens/home_main_user.dart';
@@ -44,6 +45,7 @@ void main() async {
   final notificationService = NotificationService();
 
   await notificationService.initialize();
+  await notificationService.sendFcm();
   final authProvider = AuthProvider();
   await authProvider.loadUser();
   final pref = await SharedPreferences.getInstance();
@@ -79,6 +81,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => PostsUserProvider()),
         ChangeNotifierProvider(create: (_) => WalletProvider()),
         ChangeNotifierProvider(create: (_) => UserWalletProvider()),
+        ChangeNotifierProvider(create: (_) => FoundationProvider()),
       ],
       child: MyApp(isDark: isDark),
     ),

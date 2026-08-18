@@ -60,7 +60,11 @@ class _HomeScreenContractorState extends State<HomeScreenContractor> {
                 return Center(
                   child: Text(
                     "لا توجد أي منشورات للعرض",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: primarycolor1,
+                    ),
                   ),
                 );
               }

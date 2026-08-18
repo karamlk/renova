@@ -12,6 +12,7 @@ import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';
 import 'package:renove_provider/screens/User/Profile/show_profile_screen.dart';
 import 'package:renove_provider/screens/User/construction%20forms/recieved_forms.dart';
+import 'package:renove_provider/screens/User/foundations/donations_index_screen.dart';
 import 'package:renove_provider/screens/User/invoices/invoices_index.dart';
 import 'package:renove_provider/screens/User/payments/payments_index.dart';
 import 'package:renove_provider/screens/User/projects/projects_index_screen.dart';
@@ -284,6 +285,38 @@ class _HomeMenuUserState extends State<HomeMenuUser> {
                           ),
                           Text(
                             'المحفظة',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 10,
+                        minimumSize: Size(30, 30),
+
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        backgroundColor: primarycolor2,
+                        foregroundColor: primarycolor1,
+                      ),
+
+                      onPressed: () {
+                        Navigator.of(
+                          context,
+                        ).push(MaterialPageRoute(builder: (context) => DonationsIndexScreen()));
+                      },
+                      child: Column(
+                        spacing: 20,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.white24,
+                            radius: 35,
+                            child: Icon(Icons.volunteer_activism, size: 35, color: primarycolor1),
+                          ),
+                          Text(
+                            'التبرعات',
                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                             textAlign: TextAlign.center,
                           ),
