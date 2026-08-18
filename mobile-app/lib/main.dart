@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:renove_provider/extras/notification_service.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/Contractor/Inspection/inspection_provider.dart';
 import 'package:renove_provider/providers/Contractor/Profile/create_profile_provider.dart';
@@ -16,7 +17,8 @@ import 'package:renove_provider/providers/User/Inspection/inspection_provider.da
 import 'package:renove_provider/providers/User/Profile/edit_profile_provider.dart';
 import 'package:renove_provider/providers/User/construction%20forms/contrsution_forms_provider.dart';
 import 'package:renove_provider/providers/User/construction_index_provider.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:renove_provider/providers/User/construction_request_provider.dart';
 import 'package:renove_provider/providers/User/invoices_provider.dart';
 import 'package:renove_provider/providers/User/payments_provider.dart';
@@ -30,14 +32,18 @@ import 'package:renove_provider/providers/User/Profile/create_profile_provider.d
 import 'package:renove_provider/providers/User/Profile/show_profile_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
 import 'package:renove_provider/screens/Auth/login_screen.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:renove_provider/screens/Contractor/home_screens/home_main_contractor.dart';
-import 'package:renove_provider/screens/Contractor/home_screens/home_screen_contractor.dart';
+
 import 'package:renove_provider/screens/User/home_screens/home_main_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final notificationService = NotificationService();
+
+  await notificationService.initialize();
   final authProvider = AuthProvider();
   await authProvider.loadUser();
   final pref = await SharedPreferences.getInstance();
