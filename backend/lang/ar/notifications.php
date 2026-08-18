@@ -24,4 +24,7 @@ return [
 
     'no_show_warning_title' => 'تحذير غياب جديد',
     'no_show_warning_message' => 'أبلغ :name عن غياب في زيارة ميدانية',
+
+    'foundation_verification_title'   => 'طلب توثيق مؤسسة جديد',
+    'foundation_verification_message' => 'قدّم المستخدم :user_name طلب توثيق للمؤسسة: :foundation_name',
 ];

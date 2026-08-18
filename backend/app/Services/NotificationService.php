@@ -84,11 +84,11 @@ class NotificationService
             relatedId: $complaintId,
         );
     }
-    
+
     public function newNoShowWarning(int $warningId, string $reporterName): void
     {
         $this->notifyAdmin(
-            type: 'complaint', 
+            type: 'complaint',
             titleKey: 'notifications.no_show_warning_title',
             messageKey: 'notifications.no_show_warning_message',
             messageParams: [
@@ -138,6 +138,21 @@ class NotificationService
             ],
             targetPath: 'inspection_requests',
             relatedId: $visitId,
+        );
+    }
+
+    public function newFoundationVerification(int $verificationId, string $foundationName, string $userName): void
+    {
+        $this->notifyAdmin(
+            type: 'foundation',
+            titleKey: 'notifications.foundation_verification_title',
+            messageKey: 'notifications.foundation_verification_message',
+            messageParams: [
+                'foundation_name' => $foundationName,
+                'user_name'       => $userName,
+            ],
+            targetPath: 'verification_requests',
+            relatedId: $verificationId,
         );
     }
 }

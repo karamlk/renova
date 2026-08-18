@@ -24,4 +24,7 @@ return [
 
     'no_show_warning_title' => 'New No-Show Warning',
     'no_show_warning_message' => ':name has officially logged a no-show attendance alert regarding a scheduled field visit.',
+
+    'foundation_verification_title'   => 'New Foundation Verification Request',
+    'foundation_verification_message' => 'User :user_name submitted a foundation verification request for: :foundation_name',
 ];

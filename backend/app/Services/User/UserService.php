@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Wallet;
 use App\Services\Auth\OtpService;
 use App\Services\NotificationService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
@@ -24,46 +25,40 @@ class UserService
 
     public function register(array $data)
     {
-        $role = Role::where('name', $data['role'])->first();
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'otp_verified' => false,
-            'role_id' => $role->id,
+        return DB::transaction(function () use ($data) {
 
-            'status' => $data['role'] === 'contractor'
-                ? 'pending'
-                : 'approved',
-        ]);
+            $role = Role::where('name', $data['role'])->firstOrFail();
 
-        if ($data['role'] === 'user') {
-            $this->notificationService->newUser($user);
-        } elseif ($data['role'] === 'contractor') {
-            $this->notificationService->newContractor($user);
-        }
+            $user = User::create([
+                'name'         => $data['name'],
+                'email'        => $data['email'],
+                'password'     => Hash::make($data['password']),
+                'otp_verified' => false,
+                'role_id'      => $role->id,
+                'status'       => $data['role'] === 'contractor' ? 'pending' : 'approved',
+            ]);
 
-        Wallet::create([
+            if ($data['role'] === 'user') {
+                $this->notificationService->newUser($user);
+            } elseif ($data['role'] === 'contractor') {
+                $this->notificationService->newContractor($user);
+            }
 
-            'user_id' => $user->id,
+            Wallet::create([
+                'user_id'     => $user->id,
+                'balance'     => rand(1000, 5000),
+                'card_number' => str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT)
+            ]);
 
-            'balance' => rand(1000, 5000),
+            $this->otpService->send($user);
 
-            'card_number' => str_pad(
-                rand(0, 9999),
-                4,
-                '0',
-                STR_PAD_LEFT
-            )
-        ]);
-        $this->otpService->send($user);
+            $token = $user->createToken('auth_token')->plainTextToken;
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return [
-            'user' => $user,
-            'token' => $token
-        ];
+            return [
+                'user'  => $user,
+                'token' => $token
+            ];
+        });
     }
     public function login(array $data): string
     {
