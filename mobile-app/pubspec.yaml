@@ -49,6 +49,8 @@ dependencies:
   url_launcher: ^6.3.0
   firebase_core: ^4.13.0
   firebase_messaging: ^16.5.0
+  flutter_launcher_icons: "^0.14.4"
+  flutter_native_splash: "^2.4.0"
 
 dev_dependencies:
   flutter_test:
@@ -107,3 +109,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_launcher_icons:
+  image_path: "assets/photo_2026-08-19_08-45-07.jpg"
+  android: true
+  ios: true

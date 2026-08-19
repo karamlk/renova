@@ -158,8 +158,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 );
                 final response = await value.verifyFoundation(verify: verifyData);
                 final result = jsonDecode(response!.body);
-                final message = result['message'];
-                final error = result['error'];
+                final message = result['message'] ?? result['error'];
+
                 if (!context.mounted) return;
                 if (response.statusCode == 200 || response.statusCode == 422) {
                   Navigator.of(context).pop();
@@ -180,7 +180,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        error,
+                        message,
                         textAlign: TextAlign.right,
                         textDirection: TextDirection.rtl,
                       ),

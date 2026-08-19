@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:renove_provider/extras/link.dart';
 import 'package:renove_provider/extras/shared_preferneces.dart';
+import 'package:renove_provider/models/User/notifications/notification_details.dart';
 import 'package:renove_provider/models/User/notifications/notifications_index.dart';
 
 class NotificationsProvider extends ChangeNotifier {
   List<NotificationItem> notifications = [];
+  bool isLoading = false;
   bool isLoadingNotifications = false;
-
+  NotificationDetailsModel? notification;
   Future<http.Response?> fetchNotifications() async {
     isLoadingNotifications = true;
+
     notifyListeners();
 
     try {
@@ -35,6 +38,36 @@ class NotificationsProvider extends ChangeNotifier {
       return null;
     } finally {
       isLoadingNotifications = false;
+      notifyListeners();
+    }
+  }
+
+  Future<http.Response?> fetchNotificationDetails(int id) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final token = await getPrefs("token");
+
+      final response = await http.patch(
+        Uri.parse("$link/api/notifications/$id/read"),
+        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+      );
+
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+
+        final result = NotificationDetailsResponse.fromJson(jsonData);
+
+        notification = result.data;
+      }
+
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    } finally {
+      isLoading = false;
       notifyListeners();
     }
   }

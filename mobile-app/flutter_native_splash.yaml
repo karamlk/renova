@@ -1,0 +1,8 @@
+flutter_native_splash:
+  color: "#FFFFFF" # Background color of your splash screen (use your hex code)
+  image: "assets/photo_2026-08-19_08-45-07.jpg" # Path to your splash image
+
+  # Optional properties for Android 12+ support
+  android_12:
+    color: "#FFFFFF"
+    image: "assets/photo_2026-08-19_08-45-07.jpg"

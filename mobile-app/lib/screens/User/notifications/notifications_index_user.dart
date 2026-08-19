@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:renove_provider/extras/theme.dart';
 import 'package:renove_provider/providers/User/notifications_provider.dart';
 import 'package:renove_provider/providers/theme_provider.dart';
+import 'package:renove_provider/screens/User/notifications/notification_details_read.dart';
 
 class NotificationsIndexUser extends StatefulWidget {
   const NotificationsIndexUser({super.key});
@@ -53,7 +55,7 @@ class _NotificationsPageUserState extends State<NotificationsIndexUser> {
               return Directionality(
                 textDirection: TextDirection.rtl,
                 child: ListView.builder(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(30),
                   itemCount: value.notifications.length,
                   itemBuilder: (context, index) {
                     final notifi = value.notifications[index];
@@ -63,7 +65,13 @@ class _NotificationsPageUserState extends State<NotificationsIndexUser> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         backgroundColor: Colors.white30,
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => NotificationDetailsRead(id: notifi.id),
+                          ),
+                        );
+                      },
                       child: SizedBox(
                         width: double.infinity,
                         child: Padding(
