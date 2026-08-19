@@ -104,9 +104,9 @@ class ComplaintServiceTest extends TestCase
             'penalty_percentage' => 10,
         ]);
 
-        // held = 1,000,000 × 30% = 300,000
-        // penalty = 300,000 × 10% = 30,000
-        $expectedPenalty = 1000000 * 0.30 * (10 / 100);
+        // held = 1,000,000 × 20% = 200,000
+        // penalty = 200,000 × 10% = 20,000
+        $expectedPenalty = 1000000 * 0.20 * (10 / 100);
 
         $project['user']->wallet->refresh();
         $this->assertEquals(
@@ -139,8 +139,8 @@ class ComplaintServiceTest extends TestCase
         $complaint->refresh();
 
         $this->assertEquals(10, $complaint->penalty_percentage);
-        $this->assertEquals(30000, $complaint->penalty_amount);
-        $this->assertEquals(30000, $complaint->compensation_amount);
+        $this->assertEquals(20000, $complaint->penalty_amount);
+        $this->assertEquals(20000, $complaint->compensation_amount);
     }
 
     public function test_resolve_without_penalty_does_not_move_money(): void
