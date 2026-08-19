@@ -81,18 +81,9 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
     Route::post('/password/change', [ChangePasswordController::class, 'change']);
 
 
-    // Notifications — all roles
-    Route::get('notifications',                    [NotificationController::class, 'index']);
-    Route::get('notifications/unread-count',       [NotificationController::class, 'unreadCount']);
-    Route::patch('notifications/read-all',         [NotificationController::class, 'markAllRead']);
-    Route::patch('notifications/{notification}/read', [NotificationController::class, 'markRead']);
-    Route::delete('notifications',                    [NotificationController::class, 'destroyAll']);
-
     // Reconstruction requests — read available to all (contractors browse them)
     Route::get('/reconstruction-requests',       [ReconstructionRequestController::class, 'index']);
     Route::get('/reconstruction-requests/{id}',  [ReconstructionRequestController::class, 'show']);
-
-
 });
 
 Route::middleware(['auth:sanctum', 'throttle:3,1440'])->group(function () {
@@ -132,31 +123,28 @@ Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer', 't
 
     // مسار التحويل المالي
     Route::post('/wallet/transfer', [WalletController::class, 'transfer']);
-
 });
 
 // User & contractor
 Route::middleware(['auth:sanctum', 'active', 'role:user,contractor', 'throttle:60,1'])->group(function () {
 
     //invoices
-    Route::get('/invoice/{invoice}',[InvoiceController::class,'show']);
-    Route::get('/invoice/{invoice}/pdf',[InvoiceController::class,'pdf']);
+    Route::get('/invoice/{invoice}', [InvoiceController::class, 'show']);
+    Route::get('/invoice/{invoice}/pdf', [InvoiceController::class, 'pdf']);
 
     //Route::get('/contractor/profile/{id}',         [ContractorProfileController::class, 'show']);
 
     Route::get('/contractors/{id}/posts',     [ContractorPostController::class, 'contractorPosts']);
 
-    Route::get('all_posts',[ContractorPostController::class,'allPosts']);
+    Route::get('all_posts', [ContractorPostController::class, 'allPosts']);
 
-    Route::get('/post/{id}',[ContractorPostController::class,'post']);
+    Route::get('/post/{id}', [ContractorPostController::class, 'post']);
 
     Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
 
     Route::post('/donation-campaigns/{campaign}/donate', [DonationController::class, 'store']);
     Route::get('/donation-campaigns/active', [DonationCampaignController::class, 'activeCampaigns']);
     Route::get('/donation-campaigns/{id}', [DonationCampaignController::class, 'donationCampaignDetails']);
-
-
 });
 
 Route::middleware(['auth:sanctum', 'active', 'role:user,contractor,engineer', 'throttle:10,1440'])->group(function () {
@@ -195,10 +183,10 @@ Route::middleware(['auth:sanctum', 'active', 'role:user', 'throttle:60,1'])->gro
 
 
     // Likes
-  //  Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
+    //  Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike']);
 
     //invoice
-    Route::get('/my-invoices',[InvoiceController::class,'myInvoices']);
+    Route::get('/my-invoices', [InvoiceController::class, 'myInvoices']);
 
     //review
     Route::post('/projects/{project}/review', [ProjectReviewController::class, 'store']);
@@ -214,9 +202,9 @@ Route::middleware(['auth:sanctum', 'active', 'role:user', 'throttle:60,1'])->gro
 });
 
 Route::middleware(['auth:sanctum', 'active', 'role:user', 'throttle:10,10'])->group(function () {
-  Route::post('/payments/{payment}/send-otp',     [PaymentController::class, 'sendOtp']);
-  Route::post('/payments/{payment}/pay',          [PaymentController::class, 'pay']);
-  Route::post('construction-forms/{constructionForm}/confirm-payment', [ConstructionFormController::class, 'confirmPayment']);
+    Route::post('/payments/{payment}/send-otp',     [PaymentController::class, 'sendOtp']);
+    Route::post('/payments/{payment}/pay',          [PaymentController::class, 'pay']);
+    Route::post('construction-forms/{constructionForm}/confirm-payment', [ConstructionFormController::class, 'confirmPayment']);
 });
 
 // ── CONTRACTOR ────────────────────────────────────────────────
@@ -245,7 +233,7 @@ Route::middleware(['auth:sanctum', 'active', 'role:contractor', 'throttle:60,1']
 
     // Inspection requests — contractor sends
     Route::post('/inspection-requests', [InspectionRequestController::class, 'store']);
-    Route::get('/contractor/reconstruction-requests',[ReconstructionRequestController::class,'index']);
+    Route::get('/contractor/reconstruction-requests', [ReconstructionRequestController::class, 'index']);
 
     // Site visits
     Route::get('/contractor/visits', [SiteVisitController::class, 'contractorVisits']);
@@ -261,13 +249,12 @@ Route::middleware(['auth:sanctum', 'active', 'role:contractor', 'throttle:60,1']
     // Likes
 
     //invoice
-    Route::get('contractor/invoices',[InvoiceController::class,'contractorInvoices']);
+    Route::get('contractor/invoices', [InvoiceController::class, 'contractorInvoices']);
 
     Route::get('/contractor/projects', [ProjectController::class, 'myProjects']);
     Route::get('/contractor/projects/{project}', [ProjectController::class, 'show']);
 
     Route::get('/wallet/contractor-engineers', [WalletController::class, 'getEngineersForTransfer']);
-
 });
 
 // ── ENGINEER ──────────────────────────────────────────────────
@@ -305,7 +292,6 @@ Route::middleware(['auth:sanctum', 'active', 'role:engineer', 'throttle:60,1'])-
 
     // Dashboard
     Route::get('/dashboard', [EngineerDashboardController::class, 'index']);
-
 });
 
 // ══════════════════════════════════════════════════════════════
@@ -360,9 +346,9 @@ Route::middleware(['auth:sanctum', 'active', 'role:admin', 'throttle:60,1'])->pr
     Route::get('/projects/finished-payments', [ProjectController::class, 'finishedPayments']);
 
     //invoices
-    Route::get('/invoice/{invoice}',[InvoiceController::class,'show']);
-    Route::get('/invoice/{invoice}/pdf',[InvoiceController::class,'pdf']);
-    Route::get('invoices',[InvoiceController::class,'adminInvoices']);
+    Route::get('/invoice/{invoice}', [InvoiceController::class, 'show']);
+    Route::get('/invoice/{invoice}/pdf', [InvoiceController::class, 'pdf']);
+    Route::get('invoices', [InvoiceController::class, 'adminInvoices']);
 
     //analytics
     Route::get('/analytics/summary', [AnalyticsController::class, 'index']);
@@ -376,17 +362,23 @@ Route::middleware(['auth:sanctum', 'active', 'role:admin', 'throttle:60,1'])->pr
 
     Route::get('/foundations/verification/{id}', [FoundationVerificationController::class, 'show']);
 
-    Route::get('/projects',[ProjectController::class,'index']);
-    Route::get('/project/{project}',[ProjectController::class,'show_project']);
+    Route::get('/projects', [ProjectController::class, 'index']);
+    Route::get('/project/{project}', [ProjectController::class, 'show_project']);
 
     Route::patch('/projects/{id}/archive', [ProjectController::class, 'archive']);
     Route::get('/projects/archived', [ProjectController::class, 'archived']);
     Route::patch('/projects/{id}/restore', [ProjectController::class, 'restore']);
     Route::get('/projects/archived/{id}', [ProjectController::class, 'archivedShow']);
+
+    Route::get('notifications',                    [NotificationController::class, 'index']);
+    Route::get('notifications/unread-count',       [NotificationController::class, 'unreadCount']);
+    Route::patch('notifications/read-all',         [NotificationController::class, 'markAllRead']);
+    Route::patch('notifications/{notification}/read', [NotificationController::class, 'markRead']);
+    Route::delete('notifications',                    [NotificationController::class, 'destroyAll']);
 });
 
 Route::middleware(['auth:sanctum', 'active', 'role:admin', 'throttle:10,10'])->prefix('admin')->group(function () {
-Route::post('/payments/{payment}/release', [PaymentController::class, 'release']);
+    Route::post('/payments/{payment}/release', [PaymentController::class, 'release']);
 });
 
 use App\Services\FirebaseNotificationService;
