@@ -185,8 +185,8 @@ class ComplaintService
 
                 $form = ConstructionForm::findOrFail($complaint->construction_form_id);
 
-                // المبلغ المحجوز = 30% من التكلفة الكلية
-                $heldAmount    = $form->total_cost * 0.30;
+                // المبلغ المحجوز = 20% من التكلفة الكلية
+                $heldAmount    = $form->total_cost * 0.20;
                 $penaltyAmount = $heldAmount * ($penaltyPercentage / 100);
 
                 // TODO: make the warrenty as a date to use it here
