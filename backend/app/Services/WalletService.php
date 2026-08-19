@@ -15,13 +15,14 @@ class WalletService
         Wallet $wallet,
         float $amount,
         string $description = null
-    )
-    {
+    ) {
         DB::transaction(function () use (
             $wallet,
             $amount,
             $description
         ) {
+
+            $wallet = Wallet::lockForUpdate()->find($wallet->id);
 
             $wallet->increment(
                 'balance',
@@ -41,12 +42,11 @@ class WalletService
         Wallet $wallet,
         float $amount,
         string $description = null
-    )
-    {
+    ) {
         if (
             $wallet->balance < $amount
         ) {
-             abort(422, 'الرصيد غير كافٍ');
+            abort(422, 'الرصيد غير كافٍ');
         }
 
         DB::transaction(function () use (
@@ -54,6 +54,7 @@ class WalletService
             $amount,
             $description
         ) {
+            $wallet = Wallet::lockForUpdate()->find($wallet->id);
 
             $wallet->decrement(
                 'balance',

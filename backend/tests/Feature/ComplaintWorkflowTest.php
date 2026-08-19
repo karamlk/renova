@@ -523,9 +523,9 @@ class ComplaintWorkflowTest extends TestCase
             ])
             ->assertStatus(200);
 
-        // held = total_cost × 30% = 1,000,000 × 30% = 300,000
-        // penalty = 300,000 × 10% = 30,000
-        $expectedPenalty = 1000000 * 0.30 * (10 / 100);
+        // held = total_cost × 20% = 1,000,000 × 20% = 200,000
+        // penalty = 200,000 × 10% = 20,000
+        $expectedPenalty = 1000000 * 0.20 * (10 / 100);
 
         $project['user']->wallet->refresh();
         $this->assertEquals(

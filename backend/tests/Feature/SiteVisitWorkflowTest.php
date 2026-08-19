@@ -28,6 +28,7 @@ class SiteVisitWorkflowTest extends TestCase
     {
         $user       = $this->createUser();
         $contractor = $this->createContractor();
+        $engineer = $this->createEngineer();
 
         $request = ReconstructionRequest::factory()->create(['user_id' => $user->id]);
         $inspection = InspectionRequest::factory()->create([
@@ -39,6 +40,7 @@ class SiteVisitWorkflowTest extends TestCase
         SiteVisit::factory()->create([
             'inspection_request_id' => $inspection->id,
             'schedule_id'           => $schedule->id,
+            'engineer_id'          => $engineer
         ]);
 
         $response = $this->withHeaders($this->authHeaders($contractor))
