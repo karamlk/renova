@@ -1,7 +1,7 @@
 import axios from "axios";
 import { loginRequest } from "./auth";
 const api = axios.create({
-  baseURL: "http://192.168.137.63:8000/api",
+  baseURL: "http://127.0.0.1:8000/api",
   headers: {
     Accept: "application/json",
   },
