@@ -25,3 +25,16 @@
 .lang-btn .lang-text {
   color: rgba(255, 255, 255, 0.8);
 }
+@media (max-width: 600px) {
+  .lang-btn {
+    width: 45px;
+    height: 45px;
+    padding: 0;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .lang-btn .lang-text {
+    display: none;
+  }
+}

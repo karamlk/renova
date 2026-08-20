@@ -18,19 +18,3 @@
   align-items: center;
   gap: 3px;
 }
-
-.footer-links {
-  display: flex;
-  gap: 25px;
-}
-
-.footer-links a {
-  color: #b8bcbf;
-  text-decoration: none;
-  font-size: 13px;
-  transition: color 0.2s;
-}
-
-.footer-links a:hover {
-  color: #f07c1f;
-}

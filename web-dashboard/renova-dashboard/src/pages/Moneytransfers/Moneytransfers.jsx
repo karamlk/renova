@@ -85,19 +85,19 @@ const paginatedtransfer_info = transfer_info.slice((page - 1) * rowsPerPage , pa
         remaining_amount={selectedtransfer_info.remaining_amount}
         />}
         <Grid container spacing={2}>
-            <Grid size={2.4}>
+            <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
                 <Card number={`$${formatMoney(finance_info?.admin_balance)}`} title={t("رصيد المنصة")} iconright={<AccountBalanceWalletIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
             </Grid>
-            <Grid size={2.4}>
+            <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
                 <Card number={`$${formatMoney(finance_info?.total_received)}`} title={t("إجمالي المبالغ المستلمة")} iconright={<PaymentsIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
             </Grid>
-            <Grid size={2.4}>
+            <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
                 <Card number={`$${formatMoney(finance_info?.total_released)}`} title={t("إجمالي المبالغ المحَولة")} iconright={<CurrencyExchangeIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
             </Grid>
-            <Grid size={2.4}>
+            <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
                 <Card number={finance_info?.pending_payments} title={t("دفعات بانتظار الدفع")} iconright={<RequestQuoteIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
             </Grid>
-            <Grid size={2.4}>
+            <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
                 <Card number={finance_info?.waiting_release} title={t("دفعات بانتظار التحويل")} iconright={<PendingActionsIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
             </Grid>
             <Grid size={12}>

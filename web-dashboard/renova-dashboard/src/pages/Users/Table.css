@@ -113,3 +113,48 @@ tr:hover td {
   transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
+@media (max-width: 600px) {
+  .table-body {
+    margin-top: 15px;
+    border-radius: 16px;
+  }
+
+  .table-header {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .table-header h3 {
+    font-size: 16px;
+  }
+
+  .table-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 650px;
+  }
+
+  th {
+    padding: 13px 16px;
+    font-size: 13px;
+  }
+
+  td {
+    padding: 13px 16px;
+    font-size: 13px;
+  }
+
+  .table-footer {
+    padding: 15px 10px;
+  }
+}

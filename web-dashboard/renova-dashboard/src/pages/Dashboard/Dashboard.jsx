@@ -57,7 +57,7 @@ export default function Dashboard() {
         </Grid>
         {/*body*/}
         {isloading && (<Loadingicon/>)}
-          <Grid size={10} >
+          <Grid size={10} sx={{ minWidth: 0 }}>
             <div className="body">
           <Grid container spacing={0}>
             {/*TopBar*/}

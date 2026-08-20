@@ -35,6 +35,8 @@ export default function Homepage() {
     monthly_completions: [],
     latest_projects: []
 });
+    let type={restoration:t("ترميم") , construction:t("بناء") , finishing:t("إكساء")};
+    let status={active:t("نشط"), completed:t("مكتمل"), cancelled:t("ملغي")}
     const {setisloading}=useContext(LoadingContext);
     //Request
     async function getDashboard() {
@@ -51,23 +53,23 @@ export default function Homepage() {
         <div>
             <Grid container spacing={2}>
                 {/*Cards*/}
-                <Grid size={3}>
+                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <Card number={dashboard_info?.counters?.total_projects} title={t("إجمالي المشاريع")} iconright={<ApartmentIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
                 </Grid>
-                <Grid size={3}>
+                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <Card number={dashboard_info?.counters?.total_users} title={t("إجمالي المستخدمين")} iconright={<PersonIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
                 </Grid>
-                <Grid size={3}>
+                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <Card number={dashboard_info?.counters?.completed_projects} title={t("المشاريع المكتملة")} iconright={<DoneAllIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
                 </Grid>
-                <Grid size={3}>
+                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <Card number={`${formatMoney(dashboard_info?.counters?.total_profit)}$`} title={t("إجمالي الربح")} iconright={<AttachMoneyIcon sx={{ color: "#f07c1f" }} fontSize="large" />} />
                 </Grid>
                 {/*CardsCharts*/}
                 <Grid size={12}>
                     <div className="chart-title"><BarChartIcon sx={{ color: "#f07c1f" ,fontSize:35 }}/><h3>{t("التحليل و الإحصائيات")}</h3></div>
                 </Grid>
-                <Grid size={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                     <Cardchart title={t("نسبة المشاريع حسب النوع")} icon={<DonutLargeIcon sx={{ color: "#f07c1f" }} fontSize="medium" />}>
                         <Circlechart 
                         v1={dashboard_info?.project_type_percentages?.construction} 
@@ -75,7 +77,7 @@ export default function Homepage() {
                         v3={dashboard_info?.project_type_percentages?.finishing}/>
                     </Cardchart>
                 </Grid>
-                <Grid size={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                     <Cardchart title={t("إنجاز المشاريع")} icon={<TrendingUpIcon sx={{ color: "#f07c1f" }} fontSize="medium" />}>
                         <Linerchart data={dashboard_info?.monthly_completions}/>
                     </Cardchart>
@@ -105,8 +107,8 @@ export default function Homepage() {
                                     <td>{project.title}</td>
                                     <td>{project.user_name}</td>
                                     <td ><div className="location"><LocationOnIcon sx={{ color: "#f07c1f"}}/>{project.location}</div></td>
-                                    <td>{project.type}</td>
-                                    <td>{project.status}</td>
+                                    <td>{type[project.type]}</td>
+                                    <td>{status[project.status]}</td>
                                     <td>{project.created_at?dayjs(project?.created_at).format("YYYY-MM-DD"):"-"}</td>
                                     <td>
                                         <div className="progress">

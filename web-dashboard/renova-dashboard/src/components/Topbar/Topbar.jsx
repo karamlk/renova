@@ -98,12 +98,11 @@ export default function Topbar() {
         }
     }
 useEffect(() => {
-    getNotificationList(1);
     getNotificationCount();
+
     const interval = setInterval(() => {
-        getNotificationList(1);
         getNotificationCount();
-    }, 5000);
+    }, 60000);
 
     return () => {
         clearInterval(interval);
@@ -131,7 +130,13 @@ useEffect(() => {
             </div>
         <div className="user-section">
             <div className="notification-wrapper">
-                <div className="notification" onClick={() =>{shownotification ? setshownotification(false) : setshownotification(true)} }>
+                <div className="notification" 
+                     onClick={() =>{if (!shownotification) {
+                            setPage(1);
+                            setHasMore(true);
+                            getNotificationList(1);
+                        }
+                        setshownotification(!shownotification);} }>
                     <NotificationsIcon fontSize="medium"/>
                     <div className="notification-badge">{N_count}</div>
                 </div>

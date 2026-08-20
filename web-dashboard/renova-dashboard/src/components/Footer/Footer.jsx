@@ -11,9 +11,7 @@ export default function Footer() {
                 <span>© 2026 {t("نظام إعادة الإعمار - جميع الحقوق محفوظة")}</span>
             </div>
             <div className="footer-links">
-                <a href="#">{t("الشروط والأحكام")}</a>
-                <a href="#">{t("سياسة الخصوصية")}</a>
-                <a href="#">{t("اتصل بنا")}</a>
+                
             </div>
         </div>
     )

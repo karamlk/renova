@@ -8,8 +8,8 @@
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
 }
-
 .sidebar-header {
   display: flex;
   align-items: center;
@@ -145,4 +145,83 @@
 .list-dropdown.active {
   max-height: 200px;
   opacity: 1;
+}
+/* ============================= */
+/* Mobile Sidebar */
+/* ============================= */
+
+@media (max-width: 600px) {
+  .sidebar {
+    width: 70px;
+    min-width: 70px;
+  }
+
+  /* إخفاء الشعار والنص */
+  .logo-text {
+    display: none;
+  }
+
+  .sidebar-header {
+    justify-content: center;
+    padding: 10px 5px;
+  }
+
+  /* محتوى السايدبار */
+  .sidebar-body {
+    padding: 15px 8px;
+    align-items: center;
+  }
+
+  /* الأزرار الرئيسية */
+  .menu-btn,
+  .menu-btn-logout,
+  .list-btn {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    margin: 5px 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0;
+  }
+
+  /* إخفاء نصوص الأزرار */
+  .menu-btn span,
+  .menu-btn-logout span,
+  .list-btn span {
+    display: none;
+  }
+
+  /* الأيقونات */
+  .menu-btn svg,
+  .menu-btn-logout svg,
+  .list-btn svg {
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  /* سهم الـ dropdown */
+  .arrow {
+    display: none;
+  }
+
+  /* عناصر الـ dropdown */
+  .list-dropdown {
+    display: none;
+  }
+
+  /* Footer الخاص بالـ sidebar */
+  .sidebar-footer {
+    padding: 10px 5px;
+    justify-content: center;
+  }
+
+  /* زر Logout */
+  .menu-btn-logout {
+    width: 50px;
+    height: 50px;
+  }
 }

@@ -252,3 +252,133 @@
   left: 20px;
   z-index: 1000;
 }
+/* =========================
+   Responsive Login
+   ========================= */
+
+@media (max-width: 900px) {
+  .login-page {
+    padding: 15px;
+  }
+
+  .login-container {
+    max-width: 750px;
+  }
+
+  .info-side,
+  .form-side {
+    padding: 40px 30px;
+  }
+
+  .info-side .brand h2 {
+    font-size: 26px;
+  }
+
+  .info-side .info-text h3 {
+    font-size: 22px;
+  }
+
+  .form-side h3 {
+    font-size: 21px;
+  }
+}
+@media (max-width: 600px) {
+  .login-page {
+    min-height: 100vh;
+    height: auto;
+    padding: 15px;
+    overflow-y: auto;
+  }
+
+  .login-container {
+    width: 100%;
+    max-width: 430px;
+    flex-direction: column;
+    border-radius: 22px;
+  }
+
+  .info-side {
+    min-height: auto;
+    padding: 25px 22px;
+    gap: 20px;
+  }
+
+  .brand img {
+    width: 65px;
+    height: 65px;
+  }
+
+  .logo-text {
+    margin-top: 8px;
+  }
+
+  .info-side .brand h2 {
+    font-size: 24px;
+  }
+
+  .info-side .brand p {
+    font-size: 11px;
+  }
+
+  .info-side .info-text h3 {
+    font-size: 21px;
+    margin-bottom: 8px;
+  }
+
+  .info-side .info-text p {
+    font-size: 13px;
+    line-height: 1.7;
+    max-width: none;
+  }
+
+  .info-side .info-text .features {
+    margin-top: 15px;
+    gap: 7px;
+  }
+
+  .info-side .info-text .features span {
+    font-size: 13px;
+  }
+
+  .info-side .footer-text {
+    display: none;
+  }
+
+  .form-side {
+    padding: 30px 22px;
+  }
+
+  .form-side h3 {
+    font-size: 21px;
+  }
+
+  .form-side .sub {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group input,
+  .pass-lab input {
+    box-sizing: border-box;
+    padding: 13px 14px;
+  }
+
+  .pass-lab input {
+    padding-left: 48px;
+  }
+
+  .btn-submit {
+    margin-top: 25px;
+    padding: 13px;
+    font-size: 16px;
+  }
+
+  .login-language {
+    top: 15px;
+    left: 15px;
+  }
+}
