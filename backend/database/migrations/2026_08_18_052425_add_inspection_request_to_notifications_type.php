@@ -7,6 +7,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (config('database.default') !== 'sqlite') {
         DB::statement("
             ALTER TABLE notifications
             MODIFY type ENUM(
@@ -17,10 +18,12 @@ return new class extends Migration
                 'inspection_request'
             ) NOT NULL
         ");
+        }
     }
 
     public function down(): void
     {
+        if (config('database.default') !== 'sqlite') {
         DB::statement("
             ALTER TABLE notifications
             MODIFY type ENUM(
@@ -30,5 +33,6 @@ return new class extends Migration
                 'campaign_donation'
             ) NOT NULL
         ");
+        }
     }
 };
