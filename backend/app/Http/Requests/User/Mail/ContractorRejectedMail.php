@@ -4,10 +4,11 @@ namespace App\Http\Requests\User\Mail;
 
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ContractorRejectedMail extends Mailable
+class ContractorRejectedMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 

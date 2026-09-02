@@ -2,11 +2,13 @@
 
 namespace App\Services\Admin;
 
+use App\Mail\EngineerAccountCreated;
 use App\Models\EngineerProfile;
 use App\Models\User;
 use App\Models\UserProfile;
 use App\Models\Wallet;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserManagementService
 {
@@ -34,8 +36,7 @@ class UserManagementService
     public function updateStatus(
         User $user,
         string $status
-    )
-    {
+    ) {
         $user->update([
             'status' => $status
         ]);
@@ -48,7 +49,7 @@ class UserManagementService
     }
     public function contractors()
     {
-        return User::with('role','contractorProfile')
+        return User::with('role', 'contractorProfile')
             ->whereHas('role', function ($query) {
 
                 $query->where(
@@ -60,7 +61,7 @@ class UserManagementService
     }
     public function engineers()
     {
-        return User::with('role','profile','engineerProfile')
+        return User::with('role', 'profile', 'engineerProfile')
             ->whereHas('role', function ($query) {
 
                 $query->where(
@@ -87,7 +88,8 @@ class UserManagementService
         return $user->fresh();
     }
 
-    public function createEngineerAccount(array $data): User {
+    public function createEngineerAccount(array $data): User
+    {
         // خطوة اختيارية: التأكد من تطابق كلمة المرور والتأكيد داخل الدالة
         if (!isset($data['password_confirmation']) || $data['password'] !== $data['password_confirmation']) {
             throw new \Illuminate\Http\Exceptions\HttpResponseException(
@@ -107,14 +109,23 @@ class UserManagementService
             'role_id'  => 4,
             'status'   => 'approved',
         ]);
+
+        Mail::to($engineer->email)
+            ->queue(
+                new EngineerAccountCreated(
+                    $engineer->email,
+                    $data['password']
+                )
+            );
+
         Wallet::create([
 
             'user_id' => $engineer->id,
 
-            'balance' => rand(1000,5000),
+            'balance' => rand(1000, 5000),
 
             'card_number' => str_pad(
-                rand(0,9999),
+                rand(0, 9999),
                 4,
                 '0',
                 STR_PAD_LEFT
@@ -139,5 +150,4 @@ class UserManagementService
 
         return $engineer;
     }
-
 }

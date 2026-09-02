@@ -39,10 +39,12 @@ class ContractorController extends Controller
         $user->update([
             'status' => 'approved'
         ]);
+
         Mail::to($user->email)
-            ->send(
+            ->queue(
                 new ContractorApprovedMail($user)
             );
+
         return response()->json([
             'message' => 'تم قبول المتعهد'
         ]);
@@ -56,8 +58,9 @@ class ContractorController extends Controller
         $user->update([
             'status' => 'rejected'
         ]);
+
         Mail::to($user->email)
-            ->send(
+            ->queue(
                 new ContractorRejectedMail($user)
             );
 

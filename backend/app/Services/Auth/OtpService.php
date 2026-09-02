@@ -2,6 +2,7 @@
 
 namespace App\Services\Auth;
 
+use App\Http\Requests\User\Mail\OtpMail;
 use App\Models\Otp;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
@@ -81,10 +82,7 @@ class OtpService
 
     protected function sendMail(User $user, $code)
     {
-        Mail::raw("رمز التحقق الخاص بك هو: $code", function ($message) use ($user) {
-            $message->to($user->email)
-                ->subject('رمز التحقق OTP');
-        });
+        Mail::to($user->email)->queue(new OtpMail((string) $code));
     }
     public function verifyPaymentOtp(User $user, string $code): bool
     {

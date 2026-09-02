@@ -3,24 +3,22 @@
 namespace App\Http\Requests\User\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class OtpMail extends Mailable
+class OtpMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public $code;
-
-    public function __construct($code)
-    {
-        $this->code = $code;
-    }
+    public function __construct(public string $code) {}
 
     public function build()
     {
-        return $this->subject('رمز التحقق OTP')
-            ->view('emails.otp')
-            ->with(['code' => $this->code]);
+        return $this
+            ->subject('رمز التحقق OTP')
+            ->text('emails.otp-plain', [
+                'code' => $this->code,
+            ]);
     }
 }
